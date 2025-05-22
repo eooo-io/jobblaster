@@ -111,8 +111,14 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {resumes.map((resume: any) => (
+    <div className="space-y-4">
+      {/* Debug info */}
+      <div className="text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded">
+        Debug: {JSON.stringify(resumes?.[0], null, 2).slice(0, 200)}...
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {resumes.map((resume: any) => (
         <Card 
           key={resume.id}
           className={`group cursor-pointer transition-all hover:shadow-md ${
