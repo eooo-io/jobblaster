@@ -416,7 +416,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       )}
                       
                       {job.highlights && job.highlights.length > 0 && (
-                        <ul className="text-gray-700 space-y-1 text-xs">
+                        <ul className="text-gray-700 space-y-0.5 text-xs">
                           {job.highlights.map((highlight: string, idx: number) => (
                             <li key={idx} className="flex items-start">
                               <span className="text-blue-600 mr-2 mt-1">•</span>
