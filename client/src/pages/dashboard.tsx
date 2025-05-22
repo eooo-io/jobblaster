@@ -6,6 +6,7 @@ import MatchScorer from "@/components/match-scorer";
 import CoverLetterGenerator from "@/components/cover-letter-generator";
 import ResumePreview from "@/components/resume-preview";
 import ResumeSelector from "@/components/resume-selector";
+import JobSearch from "@/components/job-search";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
@@ -129,7 +130,7 @@ export default function Dashboard() {
 
         {/* Content Grid */}
         <div className="flex-1 overflow-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 p-4 lg:p-6 min-h-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 p-4 lg:p-6 min-h-0">
             <div className="min-h-0 overflow-hidden">
               <ResumeEditor 
                 selectedResume={selectedResume}
@@ -142,6 +143,9 @@ export default function Dashboard() {
                 onJobSelect={setSelectedJob}
                 selectedResume={selectedResume}
               />
+            </div>
+            <div className="min-h-0 overflow-hidden xl:block lg:col-span-2 xl:col-span-1">
+              <JobSearch />
             </div>
           </div>
 
