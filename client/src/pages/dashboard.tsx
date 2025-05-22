@@ -14,15 +14,15 @@ export default function Dashboard() {
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50">
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
       <Sidebar />
       
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col overflow-hidden lg:ml-0 pt-16 lg:pt-0">
         {/* Header */}
-        <header className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+        <header className="bg-white dark:bg-gray-900 border-b border-slate-200 dark:border-gray-700 px-4 lg:px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">Resume Builder & Job Matcher</h2>
-            <p className="text-slate-600">Upload your resume and find the perfect job match</p>
+            <h2 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white">Resume Builder & Job Matcher</h2>
+            <p className="text-sm lg:text-base text-slate-600 dark:text-gray-300">Upload your resume and find the perfect job match</p>
           </div>
           <div className="flex items-center space-x-4">
             <Button className="bg-blue-600 hover:bg-blue-700">
