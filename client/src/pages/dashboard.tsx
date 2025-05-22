@@ -12,6 +12,7 @@ import type { Resume, JobPosting } from "@shared/schema";
 export default function Dashboard() {
   const [selectedResume, setSelectedResume] = useState<Resume | null>(null);
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
+  const [selectedTheme, setSelectedTheme] = useState<string>("modern");
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
@@ -49,9 +50,26 @@ export default function Dashboard() {
           </div>
 
           {/* Bottom Panel */}
-          <div className="bg-white border-t border-slate-200 p-6">
+          <div className="bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 p-6">
+            {/* Theme Selector */}
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
+                Preview Theme
+              </label>
+              <select 
+                value={selectedTheme} 
+                onChange={(e) => setSelectedTheme(e.target.value)}
+                className="block w-full max-w-xs px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white"
+              >
+                <option value="modern">Modern</option>
+                <option value="james-clark">James Clark Professional</option>
+                <option value="classic">Classic</option>
+                <option value="minimal">Minimal</option>
+              </select>
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <ResumePreview resume={selectedResume} />
+              <ResumePreview resume={selectedResume} theme={selectedTheme} />
               <MatchScorer 
                 resume={selectedResume} 
                 job={selectedJob} 
