@@ -321,7 +321,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               
               {/* Resume List */}
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {resumes && Array.isArray(resumes) && resumes.length > 0 ? (
+                {resumes && resumes.length > 0 ? (
                   resumes.map((resume: any) => (
                     <div 
                       key={resume.id}
