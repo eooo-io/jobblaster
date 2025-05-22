@@ -26,6 +26,23 @@ export default function Dashboard() {
             <p className="text-sm lg:text-base text-slate-600 dark:text-gray-300">Upload your resume and find the perfect job match</p>
           </div>
           <div className="flex items-center space-x-4">
+            {/* Theme Selector */}
+            <div className="flex items-center space-x-2">
+              <label className="text-sm font-medium text-slate-700 dark:text-gray-300">
+                Theme:
+              </label>
+              <select 
+                value={selectedTheme} 
+                onChange={(e) => setSelectedTheme(e.target.value)}
+                className="px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white text-sm"
+              >
+                <option value="modern">Modern</option>
+                <option value="james-clark">James Clark Professional</option>
+                <option value="classic">Classic</option>
+                <option value="minimal">Minimal</option>
+              </select>
+            </div>
+            
             <Button 
               className="bg-blue-600 hover:bg-blue-700"
               onClick={() => {
@@ -72,28 +89,9 @@ export default function Dashboard() {
             className="bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 p-6 transition-all duration-300"
           >
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Resume Preview</h2>
-                  <p className="text-slate-600 dark:text-gray-300">See how your resume looks in different themes</p>
-                </div>
-                
-                {/* Theme Selector */}
-                <div className="flex items-center space-x-4">
-                  <label className="text-sm font-medium text-slate-700 dark:text-gray-300">
-                    Theme:
-                  </label>
-                  <select 
-                    value={selectedTheme} 
-                    onChange={(e) => setSelectedTheme(e.target.value)}
-                    className="px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white"
-                  >
-                    <option value="modern">Modern</option>
-                    <option value="james-clark">James Clark Professional</option>
-                    <option value="classic">Classic</option>
-                    <option value="minimal">Minimal</option>
-                  </select>
-                </div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Resume Preview</h2>
+                <p className="text-slate-600 dark:text-gray-300">See how your resume looks with the selected theme</p>
               </div>
 
               {/* Large Preview */}
