@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { FileText, Calendar, Palette, Edit2, Save, X, Star, ChevronDown, FolderOpen } from 'lucide-react';
+import { FileText, Calendar, Palette, Edit2, Save, X, Star, ChevronDown, FolderOpen, Clock } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 
@@ -237,6 +237,16 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                             <div className="flex items-center gap-1">
                               <Palette className="h-3 w-3" />
                               <span className="capitalize">{resume.theme}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              <span>
+                                {new Date(resume.createdAt).toLocaleTimeString('en-US', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: false
+                                })}
+                              </span>
                             </div>
                             <div className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
