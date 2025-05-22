@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Upload, User, Camera } from "lucide-react";
+import { Upload, User, Camera, Key, Eye, EyeOff } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -15,6 +15,8 @@ export default function Profile() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [apiKey, setApiKey] = useState(user?.openaiApiKey || "");
 
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
@@ -53,6 +55,42 @@ export default function Profile() {
     },
   });
 
+  const updateApiKeyMutation = useMutation({
+    mutationFn: async (newApiKey: string) => {
+      const response = await fetch("/api/update-profile", {
+        method: "POST",
+        body: JSON.stringify({ openaiApiKey: newApiKey }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update API key");
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "OpenAI API key updated successfully",
+      });
+      
+      // Refresh user data
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Update Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -83,6 +121,12 @@ export default function Profile() {
   const handleUpload = () => {
     if (selectedFile) {
       uploadMutation.mutate(selectedFile);
+    }
+  };
+
+  const handleApiKeyUpdate = () => {
+    if (apiKey.trim()) {
+      updateApiKeyMutation.mutate(apiKey.trim());
     }
   };
 
@@ -155,6 +199,65 @@ export default function Profile() {
                 >
                   {uploadMutation.isPending ? "Uploading..." : "Upload"}
                 </Button>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* OpenAI API Configuration */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Key className="w-5 h-5" />
+            <span>AI Integration</span>
+          </CardTitle>
+          <CardDescription>
+            Configure your OpenAI API key for AI-powered resume optimization and job matching
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="apiKey">OpenAI API Key</Label>
+            <div className="flex space-x-2 mt-1">
+              <div className="relative flex-1">
+                <Input
+                  id="apiKey"
+                  type={showApiKey ? "text" : "password"}
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="sk-..."
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowApiKey(!showApiKey)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                >
+                  {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+              <Button
+                onClick={handleApiKeyUpdate}
+                disabled={updateApiKeyMutation.isPending || !apiKey.trim()}
+              >
+                {updateApiKeyMutation.isPending ? "Saving..." : "Save"}
+              </Button>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">
+              Your API key is stored securely and only used for your AI features. 
+              Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">OpenAI Platform</a>.
+            </p>
+            {user?.openaiApiKey && (
+              <div className="flex items-center space-x-2 mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-sm text-green-700">API key configured - AI features are enabled</span>
+              </div>
+            )}
+            {!user?.openaiApiKey && (
+              <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                <span className="text-sm text-yellow-700">No API key - AI features are disabled</span>
               </div>
             )}
           </div>

@@ -151,6 +151,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update profile settings
+  app.post("/api/update-profile", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const { openaiApiKey } = req.body;
+      
+      const updatedUser = await storage.updateUser(userId, { openaiApiKey });
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({ 
+        message: "Profile updated successfully",
+        openaiApiKey: updatedUser.openaiApiKey
+      });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
   // Resumes (protected routes)
   app.get("/api/resumes", requireAuth, async (req, res) => {
     try {

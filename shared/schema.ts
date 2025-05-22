@@ -19,6 +19,7 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   email: text("email"),
   profilePicture: text("profile_picture"), // URL or base64 encoded image
+  openaiApiKey: text("openai_api_key"), // User's personal OpenAI API key
   createdAt: timestamp("created_at").defaultNow(),
 });
 

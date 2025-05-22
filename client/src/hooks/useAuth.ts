@@ -6,6 +6,7 @@ interface User {
   username: string;
   email: string | null;
   profilePicture: string | null;
+  openaiApiKey: string | null;
 }
 
 export function useAuth() {

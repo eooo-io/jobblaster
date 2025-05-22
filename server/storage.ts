@@ -89,6 +89,7 @@ export class MemStorage implements IStorage {
       id,
       email: insertUser.email || null,
       profilePicture: null,
+      openaiApiKey: null,
       createdAt: new Date()
     };
     this.users.set(id, user);
