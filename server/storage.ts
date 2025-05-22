@@ -138,6 +138,31 @@ export class MemStorage implements IStorage {
     return updated;
   }
 
+  async getDefaultResume(userId: number): Promise<Resume | undefined> {
+    return Array.from(this.resumes.values()).find(
+      resume => resume.userId === userId && resume.isDefault
+    );
+  }
+
+  async setDefaultResume(userId: number, resumeId: number): Promise<Resume | undefined> {
+    // First, remove default flag from all user's resumes
+    Array.from(this.resumes.values())
+      .filter(resume => resume.userId === userId)
+      .forEach(resume => {
+        this.resumes.set(resume.id, { ...resume, isDefault: false });
+      });
+    
+    // Then set the specified resume as default
+    const resume = this.resumes.get(resumeId);
+    if (resume && resume.userId === userId) {
+      const defaultResume = { ...resume, isDefault: true };
+      this.resumes.set(resumeId, defaultResume);
+      return defaultResume;
+    }
+    
+    return undefined;
+  }
+
   async deleteResume(id: number): Promise<boolean> {
     return this.resumes.delete(id);
   }
