@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,13 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   const [jsonContent, setJsonContent] = useState<any>(null);
   const { toast } = useToast();
+
+  // Auto-load selected resume into JSON editor
+  useEffect(() => {
+    if (selectedResume?.jsonData) {
+      setJsonContent(selectedResume.jsonData);
+    }
+  }, [selectedResume]);
 
   const { data: resumes, isLoading: resumesLoading } = useQuery({
     queryKey: ['/api/resumes'],
@@ -279,10 +286,10 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         </div>
 
         {/* JSON Editor */}
-        <div className="flex-1 p-6">
-          <div className="h-full">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="font-medium text-slate-900">JSON Editor</h4>
+        <div className="flex-1 p-3 lg:p-6 min-h-0">
+          <div className="h-full flex flex-col">
+            <div className="flex items-center justify-between mb-2 lg:mb-4">
+              <h4 className="font-medium text-slate-900 dark:text-white text-sm lg:text-base">JSON Editor</h4>
               <Button
                 variant="ghost"
                 size="sm"
@@ -297,11 +304,13 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                 Validate
               </Button>
             </div>
-            <JsonEditor
-              value={selectedResume?.jsonData || jsonContent}
-              onChange={handleJsonChange}
-              height="300px"
-            />
+            <div className="flex-1 min-h-0">
+              <JsonEditor
+                value={selectedResume?.jsonData || jsonContent}
+                onChange={handleJsonChange}
+                height="250px"
+              />
+            </div>
           </div>
 
           {/* Saved Resumes CRUD Section */}
