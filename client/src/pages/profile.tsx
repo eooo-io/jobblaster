@@ -128,16 +128,17 @@ export default function Profile() {
       return response.json();
     },
     onSuccess: (data) => {
+      // Always set connected when credentials are saved successfully
+      setAdzunaConnected(true);
+      
       // Handle API test results
       if (data.adzunaTest) {
         if (data.adzunaTest.success) {
-          setAdzunaConnected(true);
           toast({
             title: "Success!",
             description: "Adzuna credentials saved and tested successfully",
           });
         } else {
-          setAdzunaConnected(false);
           setApiError(data.adzunaTest.error);
           setShowErrorModal(true);
           toast({
@@ -147,19 +148,10 @@ export default function Profile() {
           });
         }
       } else {
-        // If no test result, but credentials were saved, assume connected
-        if (adzunaAppId && adzunaApiKey) {
-          setAdzunaConnected(true);
-        }
         toast({
           title: "Success!",
-          description: "Profile updated successfully",
+          description: "Adzuna credentials saved successfully",
         });
-      }
-      
-      // Always set connection status if we have credentials
-      if (adzunaAppId && adzunaApiKey) {
-        setAdzunaConnected(true);
       }
       
       // Force refresh user data
