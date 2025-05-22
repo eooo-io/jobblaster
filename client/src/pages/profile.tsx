@@ -322,6 +322,8 @@ export default function Profile() {
                   <Input
                     id="adzunaAppId"
                     type="text"
+                    value={adzunaAppId}
+                    onChange={(e) => setAdzunaAppId(e.target.value)}
                     placeholder="Your Adzuna App ID"
                     className="mt-1"
                   />
@@ -331,6 +333,8 @@ export default function Profile() {
                   <Input
                     id="adzunaApiKey"
                     type="password"
+                    value={adzunaApiKey}
+                    onChange={(e) => setAdzunaApiKey(e.target.value)}
                     placeholder="Your Adzuna API Key"
                     className="mt-1"
                   />
@@ -341,8 +345,13 @@ export default function Profile() {
                 <p className="text-xs text-gray-500">
                   Get your credentials from <a href="https://developer.adzuna.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Adzuna Developer Portal</a>
                 </p>
-                <Button size="sm" variant="outline">
-                  Save Credentials
+                <Button 
+                  size="sm" 
+                  variant="outline"
+                  onClick={() => updateAdzunaMutation.mutate({ appId: adzunaAppId, apiKey: adzunaApiKey })}
+                  disabled={updateAdzunaMutation.isPending || !adzunaAppId.trim() || !adzunaApiKey.trim()}
+                >
+                  {updateAdzunaMutation.isPending ? "Saving..." : "Save Credentials"}
                 </Button>
               </div>
             </div>
