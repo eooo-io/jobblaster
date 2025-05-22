@@ -70,7 +70,9 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       return response.json();
     },
     onSuccess: () => {
+      // Force a complete refresh of the resumes data
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      queryClient.refetchQueries({ queryKey: ['/api/resumes'] });
       toast({
         title: "Default resume updated!",
       });
