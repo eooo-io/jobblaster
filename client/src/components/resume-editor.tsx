@@ -235,15 +235,15 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
       <CardContent className="flex-1 flex flex-col p-0">
         {/* Upload Section */}
-        <div className="p-6 border-b border-slate-200 dark:border-gray-700">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="p-3 lg:p-6 border-b border-slate-200 dark:border-gray-700">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
             {/* File Upload */}
-            <div className="border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-blue-600 transition-colors">
-              <div className="w-10 h-10 bg-blue-600/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <CloudUpload className="text-blue-600 text-lg" />
+            <div className="border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-lg p-3 lg:p-6 text-center hover:border-blue-600 transition-colors">
+              <div className="w-8 h-8 lg:w-10 lg:h-10 bg-blue-600/10 rounded-lg flex items-center justify-center mx-auto mb-2 lg:mb-3">
+                <CloudUpload className="text-blue-600 text-sm lg:text-lg" />
               </div>
-              <h4 className="text-base font-medium text-slate-900 dark:text-white mb-2">Upload File</h4>
-              <p className="text-sm text-slate-600 dark:text-gray-300 mb-3">Drop your resume.json file here</p>
+              <h4 className="text-sm lg:text-base font-medium text-slate-900 dark:text-white mb-1 lg:mb-2">Upload File</h4>
+              <p className="text-xs lg:text-sm text-slate-600 dark:text-gray-300 mb-2 lg:mb-3">Drop your resume.json file here</p>
               <label htmlFor="resume-upload">
                 <Button className="bg-blue-600 hover:bg-blue-700" size="sm" asChild>
                   <span>Choose File</span>
@@ -259,12 +259,12 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
             </div>
 
             {/* Save Resume */}
-            <div className="border-2 border-dashed border-green-300 dark:border-green-600 rounded-lg p-6 text-center hover:border-green-600 transition-colors">
-              <div className="w-10 h-10 bg-green-600/10 rounded-lg flex items-center justify-center mx-auto mb-3">
-                <RefreshCw className="text-green-600 text-lg" />
+            <div className="border-2 border-dashed border-green-300 dark:border-green-600 rounded-lg p-3 lg:p-6 text-center hover:border-green-600 transition-colors">
+              <div className="w-8 h-8 lg:w-10 lg:h-10 bg-green-600/10 rounded-lg flex items-center justify-center mx-auto mb-2 lg:mb-3">
+                <RefreshCw className="text-green-600 text-sm lg:text-lg" />
               </div>
-              <h4 className="text-base font-medium text-slate-900 dark:text-white mb-2">Save Resume</h4>
-              <p className="text-sm text-slate-600 dark:text-gray-300 mb-3">Validate and save your JSON</p>
+              <h4 className="text-sm lg:text-base font-medium text-slate-900 dark:text-white mb-1 lg:mb-2">Save Resume</h4>
+              <p className="text-xs lg:text-sm text-slate-600 dark:text-gray-300 mb-2 lg:mb-3">Validate and save your JSON</p>
               <Button
                 className="bg-green-600 hover:bg-green-700"
                 size="sm"
