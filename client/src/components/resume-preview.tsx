@@ -542,11 +542,11 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               
               {/* Contact Information */}
               <div className="text-xs text-gray-600 dark:text-gray-400 space-x-2 flex flex-wrap justify-center gap-x-3">
-                {basics.email && <span>📧 {basics.email}</span>}
-                {basics.phone && <span>📞 {basics.phone}</span>}
-                {basics.url && <span>🌐 {basics.url}</span>}
+                {basics.email && <span><i className="fas fa-envelope mr-1"></i>{basics.email}</span>}
+                {basics.phone && <span><i className="fas fa-phone mr-1"></i>{basics.phone}</span>}
+                {basics.url && <span><i className="fas fa-globe mr-1"></i>{basics.url}</span>}
                 {basics.location?.city && (
-                  <span>📍 {basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
+                  <span><i className="fas fa-map-marker-alt mr-1"></i>{basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
                 )}
               </div>
               
