@@ -52,6 +52,7 @@ export default function Dashboard() {
                   <option value="modern">Modern</option>
                   <option value="classic">Classic</option>
                   <option value="minimal">Minimal</option>
+                  <option value="lucide">Lucide</option>
                   <option value="debug">Debug</option>
                 </select>
               </div>
@@ -97,6 +98,7 @@ export default function Dashboard() {
                   <option value="modern">Modern</option>
                   <option value="classic">Classic</option>
                   <option value="minimal">Minimal</option>
+                  <option value="lucide">Lucide</option>
                   <option value="debug">Debug</option>
                 </select>
               </div>
