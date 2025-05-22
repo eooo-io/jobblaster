@@ -234,30 +234,30 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Contact Information */}
               <div className="mb-8">
                 <h3 className="text-lg font-bold mb-4 px-3 py-2 rounded" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
-                  INFORMATIONS
+                  CONTACT
                 </h3>
                 <div className="space-y-3 text-sm">
                   {basics.location?.city && (
                     <div className="flex items-center">
-                      <span className="mr-2">📍</span>
+                      <i className="fas fa-map-marker-alt mr-3 w-4 text-center"></i>
                       <span>{basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
                     </div>
                   )}
                   {basics.phone && (
                     <div className="flex items-center">
-                      <span className="mr-2">📞</span>
+                      <i className="fas fa-phone mr-3 w-4 text-center"></i>
                       <span>{basics.phone}</span>
                     </div>
                   )}
                   {basics.email && (
                     <div className="flex items-center">
-                      <span className="mr-2">✉️</span>
+                      <i className="fas fa-envelope mr-3 w-4 text-center"></i>
                       <span className="break-all">{basics.email}</span>
                     </div>
                   )}
                   {basics.url && (
                     <div className="flex items-center">
-                      <span className="mr-2">🔗</span>
+                      <i className="fas fa-globe mr-3 w-4 text-center"></i>
                       <span className="break-all text-blue-200">{basics.url}</span>
                     </div>
                   )}
@@ -265,7 +265,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                     <>
                       {basics.profiles.map((profile: any, index: number) => (
                         <div key={index} className="flex items-center">
-                          <span className="mr-2">🐦</span>
+                          <i className="fab fa-twitter mr-3 w-4 text-center"></i>
                           <span className="text-blue-200">{profile.username || profile.url}</span>
                         </div>
                       ))}
@@ -278,7 +278,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {skills.length > 0 && (
                 <div className="mb-8">
                   <h3 className="text-lg font-bold mb-4 px-3 py-2 rounded" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
-                    SOFT SKILLS
+                    SKILLS
                   </h3>
                   <div className="space-y-2 text-sm">
                     {skills.map((skill: any, index: number) => (
