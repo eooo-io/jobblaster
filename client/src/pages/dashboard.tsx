@@ -142,6 +142,7 @@ export default function Dashboard() {
               <JobAnalyzer 
                 selectedJob={selectedJob}
                 onJobSelect={setSelectedJob}
+                selectedResume={selectedResume}
               />
             </div>
           </div>
@@ -170,13 +171,7 @@ export default function Dashboard() {
 
           {/* Bottom Panel */}
           <div className="bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 p-4 lg:p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
-              <div className="min-w-0">
-                <MatchScorer 
-                  resume={selectedResume} 
-                  job={selectedJob} 
-                />
-              </div>
+            <div className="max-w-4xl mx-auto">
               <div className="min-w-0">
                 <CoverLetterGenerator 
                   resume={selectedResume} 

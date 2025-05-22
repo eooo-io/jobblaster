@@ -9,14 +9,16 @@ import { Badge } from "@/components/ui/badge";
 import { Clipboard, Upload, Link, Plus, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import type { JobPosting } from "@shared/schema";
+import MatchScorer from "@/components/match-scorer";
+import type { JobPosting, Resume } from "@shared/schema";
 
 interface JobAnalyzerProps {
   selectedJob: JobPosting | null;
   onJobSelect: (job: JobPosting) => void;
+  selectedResume?: Resume | null;
 }
 
-export default function JobAnalyzer({ selectedJob, onJobSelect }: JobAnalyzerProps) {
+export default function JobAnalyzer({ selectedJob, onJobSelect, selectedResume }: JobAnalyzerProps) {
   const [activeTab, setActiveTab] = useState<"paste" | "upload" | "url">("paste");
   const [jobDescription, setJobDescription] = useState("");
   const [parsedData, setParsedData] = useState<any>(null);
@@ -213,6 +215,14 @@ export default function JobAnalyzer({ selectedJob, onJobSelect }: JobAnalyzerPro
               </div>
             )}
           </div>
+        </div>
+
+        {/* Match Score Section */}
+        <div className="border-b border-slate-200 p-6">
+          <MatchScorer 
+            resume={selectedResume} 
+            job={selectedJob} 
+          />
         </div>
 
         {/* Parsed Job Data */}
