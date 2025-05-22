@@ -21,6 +21,11 @@ export default function Profile() {
   const [apiKey, setApiKey] = useState(user?.openaiApiKey || "");
   const [adzunaAppId, setAdzunaAppId] = useState(user?.adzunaAppId || "");
   const [adzunaApiKey, setAdzunaApiKey] = useState(user?.adzunaApiKey || "");
+  
+  // Error modal state
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [apiError, setApiError] = useState(null);
+  const [adzunaConnected, setAdzunaConnected] = useState(false);
 
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
@@ -113,11 +118,31 @@ export default function Profile() {
       
       return response.json();
     },
-    onSuccess: () => {
-      toast({
-        title: "Success!",
-        description: "Adzuna credentials saved successfully",
-      });
+    onSuccess: (data) => {
+      // Handle API test results
+      if (data.adzunaTest) {
+        if (data.adzunaTest.success) {
+          setAdzunaConnected(true);
+          toast({
+            title: "Success!",
+            description: "Adzuna credentials saved and tested successfully",
+          });
+        } else {
+          setAdzunaConnected(false);
+          setApiError(data.adzunaTest.error);
+          setShowErrorModal(true);
+          toast({
+            title: "Credentials Saved",
+            description: "Credentials saved but API test failed. Check error details.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        toast({
+          title: "Success!",
+          description: "Profile updated successfully",
+        });
+      }
       
       // Refresh user data
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
@@ -303,16 +328,16 @@ export default function Profile() {
                   <h4 className="font-medium text-gray-900">Adzuna</h4>
                   <p className="text-sm text-gray-600">Global job search engine aggregating positions from hundreds of job boards</p>
                 </div>
-                {user?.adzunaAppId && user?.adzunaApiKey && (
-                  <div className="flex items-center space-x-2 px-3 py-1 bg-green-50 border border-green-200 rounded-full">
+                {adzunaConnected && (user?.adzunaAppId && user?.adzunaApiKey) && (
+                  <div className="flex items-center space-x-2 px-3 py-1 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-full">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    <span className="text-xs text-green-700 font-medium">Connected</span>
+                    <span className="text-xs text-green-700 dark:text-green-300 font-medium">Connected</span>
                   </div>
                 )}
-                {(!user?.adzunaAppId || !user?.adzunaApiKey) && (
-                  <div className="flex items-center space-x-2 px-3 py-1 bg-gray-50 border border-gray-200 rounded-full">
+                {(!adzunaConnected || !user?.adzunaAppId || !user?.adzunaApiKey) && (
+                  <div className="flex items-center space-x-2 px-3 py-1 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full">
                     <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    <span className="text-xs text-gray-600 font-medium">Not Connected</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">Not Connected</span>
                   </div>
                 )}
               </div>
