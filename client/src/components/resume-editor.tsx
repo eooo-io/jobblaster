@@ -314,7 +314,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
           </div>
 
           {/* Saved Resumes CRUD Section */}
-          <div className="border-t border-slate-200 bg-slate-50 dark:bg-gray-800 dark:border-gray-600">
+          <div className="border-t-4 border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-600 min-h-[200px]">
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white">JSON Resumes</h3>
