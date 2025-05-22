@@ -20,7 +20,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const [jsonContent, setJsonContent] = useState<any>(null);
   const { toast } = useToast();
 
-  const { data: resumes } = useQuery({
+  const { data: resumes, isLoading: resumesLoading } = useQuery({
     queryKey: ['/api/resumes'],
   });
 
@@ -321,7 +321,11 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               
               {/* Resume List */}
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {Array.isArray(resumes) && resumes.length > 0 ? (
+                {resumesLoading ? (
+                  <div className="text-center py-4 text-slate-500 dark:text-gray-400">
+                    <p>Loading resumes...</p>
+                  </div>
+                ) : resumes && resumes.length > 0 ? (
                   resumes.map((resume: any) => (
                     <div 
                       key={resume.id}
