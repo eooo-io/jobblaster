@@ -388,7 +388,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                               {job.startDate && formatDate(job.startDate)}
                               {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Current"}
                             </span>
-                            <h4 className="text-base font-bold text-gray-900">
+                            <h4 className="text-sm font-bold text-gray-900">
                               {job.position || "Position"}
                             </h4>
                           </div>
