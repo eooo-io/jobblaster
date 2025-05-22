@@ -120,7 +120,266 @@ function formatDate(dateStr: string | undefined): string {
   return date.getFullYear().toString();
 }
 
+function getSkillPercentage(level: string): number {
+  const levelMap: { [key: string]: number } = {
+    'beginner': 30,
+    'intermediate': 60,
+    'advanced': 80,
+    'expert': 95,
+    'master': 100
+  };
+  return levelMap[level.toLowerCase()] || 80;
+}
+
+function getFluencyPercentage(fluency: string): number {
+  const fluencyMap: { [key: string]: number } = {
+    'elementary': 40,
+    'limited': 50,
+    'professional': 80,
+    'full professional': 90,
+    'native': 100,
+    'bilingual': 100
+  };
+  return fluencyMap[fluency.toLowerCase()] || 80;
+}
+
 function getThemeStyles(theme: string): string {
+  if (theme === "james-clark") {
+    return `
+      body {
+        font-family: 'Arial', sans-serif;
+        line-height: 1.4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        background: #f5f5f5;
+      }
+      .resume {
+        max-width: 8.5in;
+        margin: 0 auto;
+        background: white;
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      }
+      .header {
+        background: linear-gradient(135deg, #6366F1 0%, #7C3AED 100%);
+        color: white;
+        padding: 2em;
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 2em;
+      }
+      .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 2em;
+        flex: 1;
+      }
+      .profile-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        font-weight: bold;
+        flex-shrink: 0;
+      }
+      .name {
+        font-size: 3em;
+        font-weight: bold;
+        margin: 0 0 0.2em 0;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+      .title {
+        font-size: 1.2em;
+        margin: 0;
+        opacity: 0.9;
+      }
+      .contact-info {
+        position: absolute;
+        top: 2em;
+        right: 2em;
+        text-align: right;
+        font-size: 0.9em;
+      }
+      .contact-info div {
+        margin-bottom: 0.5em;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0.5em;
+      }
+      .main-content {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 0;
+        min-height: 600px;
+      }
+      .sidebar {
+        background: #f8f9ff;
+        padding: 2em 1.5em;
+        border-right: 1px solid #e5e7eb;
+      }
+      .content {
+        padding: 2em;
+      }
+      .section {
+        margin-bottom: 2em;
+      }
+      .section-title {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        margin-bottom: 1em;
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #1f2937;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .section-icon {
+        width: 20px;
+        height: 20px;
+        background: #6366F1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .skill-item {
+        margin-bottom: 1em;
+      }
+      .skill-name {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.3em;
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+      .skill-bar {
+        height: 8px;
+        background: #e5e7eb;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      .skill-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #6366F1, #7C3AED);
+        border-radius: 4px;
+      }
+      .language-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1em;
+        margin-top: 1em;
+      }
+      .language-item {
+        text-align: center;
+      }
+      .language-circle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: #6366F1;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        margin: 0 auto 0.5em auto;
+        font-size: 1.2em;
+      }
+      .language-name {
+        font-size: 0.8em;
+        font-weight: 500;
+      }
+      .interests-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5em;
+        margin-top: 1em;
+      }
+      .interest-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        font-size: 0.9em;
+      }
+      .interest-icon {
+        color: #6366F1;
+        font-weight: bold;
+      }
+      .work-item {
+        margin-bottom: 1.5em;
+        padding-bottom: 1em;
+        border-bottom: 1px solid #e5e7eb;
+      }
+      .work-item:last-child {
+        border-bottom: none;
+      }
+      .work-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 0.5em;
+      }
+      .item-title {
+        font-weight: bold;
+        color: #1f2937;
+        font-size: 1.1em;
+        margin: 0;
+      }
+      .item-subtitle {
+        color: #6366F1;
+        font-weight: 500;
+        margin: 0.2em 0;
+      }
+      .item-date {
+        color: #6b7280;
+        font-size: 0.9em;
+        text-align: right;
+        white-space: nowrap;
+      }
+      .highlights {
+        margin: 0.5em 0 0 1.2em;
+        padding: 0;
+      }
+      .highlights li {
+        margin-bottom: 0.3em;
+        font-size: 0.95em;
+      }
+      .achievements-list {
+        list-style: none;
+        padding: 0;
+        margin: 1em 0;
+      }
+      .achievements-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5em;
+        margin-bottom: 0.8em;
+        font-size: 0.9em;
+      }
+      .achievement-icon {
+        color: #6366F1;
+        font-weight: bold;
+        margin-top: 0.1em;
+        flex-shrink: 0;
+      }
+      @media print {
+        body { margin: 0; background: white; }
+        .resume { box-shadow: none; }
+      }
+    `;
+  }
+  
   const baseStyles = `
     body {
       font-family: 'Arial', sans-serif;
