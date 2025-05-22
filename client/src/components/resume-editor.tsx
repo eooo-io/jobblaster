@@ -308,7 +308,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
           <div className="border-t border-slate-200 bg-slate-50 dark:bg-gray-800 dark:border-gray-600">
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Saved Resumes</h3>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">JSON Resumes</h3>
                 <Button
                   onClick={handleCreateNewResume}
                   size="sm"
@@ -321,8 +321,8 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               
               {/* Resume List */}
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {resumes && resumes.length > 0 ? (
-                  resumes.map((resume) => (
+                {resumes && Array.isArray(resumes) && resumes.length > 0 ? (
+                  resumes.map((resume: any) => (
                     <div 
                       key={resume.id}
                       className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
