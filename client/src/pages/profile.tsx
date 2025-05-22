@@ -6,9 +6,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Upload, User, Camera, Key, Eye, EyeOff } from "lucide-react";
+import { Upload, User, Camera, Key, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "wouter";
 
 export default function Profile() {
   const { user } = useAuth();
@@ -132,6 +133,15 @@ export default function Profile() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-6">
+      <div className="flex items-center space-x-4">
+        <Link href="/">
+          <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Dashboard</span>
+          </Button>
+        </Link>
+      </div>
+      
       <div>
         <h1 className="text-3xl font-bold text-slate-900">Profile Settings</h1>
         <p className="text-slate-600 mt-2">Manage your account settings and profile information</p>
