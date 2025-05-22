@@ -295,10 +295,10 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                         ) : (
                           <>
                             {skill.name && (
-                              <div className="font-medium mb-1">{skill.name}</div>
+                              <div className="font-bold text-white text-sm mb-2 uppercase tracking-wide border-b border-blue-300 pb-1">{skill.name}</div>
                             )}
                             {skill.keywords && skill.keywords.length > 0 && (
-                              <div className="flex flex-wrap gap-1 mb-2">
+                              <div className="flex flex-wrap gap-1 mb-3">
                                 {skill.keywords.map((keyword: string, kidx: number) => (
                                   <span key={kidx} className="inline-block bg-gray-900 text-white px-2 py-1 rounded-md text-xs">
                                     {keyword}
