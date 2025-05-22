@@ -295,7 +295,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                         ) : (
                           <>
                             {skill.name && (
-                              <div className="font-bold text-white text-sm mb-2 uppercase tracking-wide border-b border-blue-300 pb-1">{skill.name}</div>
+                              <div className="font-bold text-white text-xs mb-2 uppercase tracking-wide border-b border-blue-300 pb-1 whitespace-nowrap">{skill.name}</div>
                             )}
                             {skill.keywords && skill.keywords.length > 0 && (
                               <div className="flex flex-wrap gap-1 mb-3">
