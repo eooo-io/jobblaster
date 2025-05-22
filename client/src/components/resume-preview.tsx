@@ -68,7 +68,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
     return (
       <div className="lg:col-span-1">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - Debug Mode</h3>
-        <div className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-lg p-4 h-96 overflow-auto">
+        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
           <div className="text-xs font-mono space-y-4 text-slate-700 dark:text-gray-300">
             
             {/* Basics Section */}
@@ -568,7 +568,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
   return (
     <div className="lg:col-span-1">
       <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - {theme.charAt(0).toUpperCase() + theme.slice(1)} Theme</h3>
-      <div className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-lg p-4 h-96 overflow-auto">
+      <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
         <div className="bg-white dark:bg-gray-900 rounded shadow-sm p-6 text-sm">
           {/* Header */}
           <div className="text-center mb-6">
