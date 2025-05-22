@@ -74,6 +74,29 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     },
   });
 
+  // Rename mutation
+  const renameMutation = useMutation({
+    mutationFn: async ({ id, name }: { id: number; name: string }) => {
+      const response = await apiRequest('PATCH', `/api/resumes/${id}`, { name });
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      setEditingId(null);
+      toast({
+        title: "Resume renamed",
+        description: "Your resume name has been updated successfully.",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Rename failed",
+        description: "Failed to rename resume. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -226,6 +249,22 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     });
   };
 
+  // Edit handlers for renaming
+  const handleStartEdit = (resume: any) => {
+    setEditingId(resume.id);
+    setNewName(resume.name);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editingId || !newName.trim()) return;
+    renameMutation.mutate({ id: editingId, name: newName.trim() });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setNewName("");
+  };
+
   return (
     <Card className="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-600 flex flex-col h-full">
       <CardHeader className="border-b border-slate-200 dark:border-gray-600">
@@ -322,7 +361,24 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <h4 className="font-medium text-slate-900 dark:text-white">{resume.name || 'Untitled Resume'}</h4>
+                        {editingId === resume.id ? (
+                          <Input
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            className="text-sm font-medium"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleSaveEdit();
+                              } else if (e.key === 'Escape') {
+                                handleCancelEdit();
+                              }
+                            }}
+                            autoFocus
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        ) : (
+                          <h4 className="font-medium text-slate-900 dark:text-white">{resume.name || 'Untitled Resume'}</h4>
+                        )}
                         {selectedResume?.id === resume.id && (
                           <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs px-2 py-1 rounded-full border border-green-200 dark:border-green-700">
                             Selected
@@ -342,29 +398,69 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onResumeSelect(resume);
-                          setJsonContent(resume.jsonData);
-                        }}
-                        className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteResume(resume.id);
-                        }}
-                        className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                      >
-                        Delete
-                      </Button>
+                      {editingId === resume.id ? (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSaveEdit();
+                            }}
+                            className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+                          >
+                            <Check className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCancelEdit();
+                            }}
+                            className="text-gray-600 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleStartEdit(resume);
+                            }}
+                            className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onResumeSelect(resume);
+                              setJsonContent(resume.jsonData);
+                            }}
+                            className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteResume(resume.id);
+                            }}
+                            className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                          >
+                            Delete
+                          </Button>
+                        </>
+                      )}
                     </div>
                   </div>
                 ))
