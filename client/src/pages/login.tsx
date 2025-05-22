@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, LogIn, UserPlus, Sun, Moon } from "lucide-react";
+import { LogIn, UserPlus, Sun, Moon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
 import { apiRequest } from "@/lib/queryClient";
@@ -35,7 +35,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
     onSuccess: () => {
       toast({
         title: "Welcome back!",
-        description: "You've successfully logged into TargetLock.",
+        description: "You've successfully logged into JobBlaster.",
       });
       onLoginSuccess();
     },
@@ -60,7 +60,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
     onSuccess: () => {
       toast({
         title: "Account created!",
-        description: "Your TargetLock account has been created successfully.",
+        description: "Your JobBlaster account has been created successfully.",
       });
       setIsLogin(true);
       setFormData({ username: "", password: "", email: "" });
@@ -124,9 +124,9 @@ export default function Login({ onLoginSuccess }: LoginProps) {
         {/* Logo and Brand */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <Target className="text-white text-2xl" />
+            <i className="fa-solid fa-bullseye text-white text-2xl"></i>
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">TargetLock</h1>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">JobBlaster</h1>
           <p className="text-slate-600 dark:text-gray-300">Personal Intelligent Resume & Job Match Engine</p>
         </div>
 
