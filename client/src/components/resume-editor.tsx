@@ -150,6 +150,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="modern">Modern Theme</SelectItem>
+                <SelectItem value="james-clark">James Clark Professional</SelectItem>
                 <SelectItem value="classic">Classic Theme</SelectItem>
                 <SelectItem value="creative">Creative Theme</SelectItem>
                 <SelectItem value="formal">Formal Theme</SelectItem>
