@@ -201,8 +201,8 @@ export default function Dashboard() {
               </Button>
             </div>
 
-            {/* Print Preview Content */}
-            <div className="flex-1 overflow-auto bg-gray-100 dark:bg-gray-900" style={{ padding: '20px 0' }}>
+            {/* Print Preview Content - Always Light Mode */}
+            <div className="flex-1 overflow-auto bg-gray-100" style={{ padding: '20px 0' }}>
               <div className="flex justify-center">
                 {/* US Legal Paper Size Container with Page Breaks */}
                 <div 
