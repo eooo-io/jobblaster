@@ -384,11 +384,11 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
                           <div className="flex items-center gap-4 mb-1">
-                            <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
+                            <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
                               {job.startDate && formatDate(job.startDate)}
                               {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Current"}
                             </span>
-                            <h4 className="text-lg font-bold text-gray-900">
+                            <h4 className="text-base font-bold text-gray-900">
                               {job.position || "Position"}
                             </h4>
                           </div>
@@ -396,19 +396,19 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                             <p className="text-blue-600 font-medium">
                               {job.name || job.company || "Company"}
                             </p>
-                            <span className="text-sm text-gray-500"><i className="fas fa-map-marker-alt mr-1"></i> {job.location || "Location"}</span>
+                            <span className="text-xs text-gray-500"><i className="fas fa-map-marker-alt mr-1"></i> {job.location || "Location"}</span>
                           </div>
                         </div>
                       </div>
                       
                       {job.summary && (
-                        <p className="text-gray-700 mb-3 text-sm leading-relaxed">
+                        <p className="text-gray-700 mb-3 text-xs leading-relaxed">
                           {job.summary}
                         </p>
                       )}
                       
                       {job.highlights && job.highlights.length > 0 && (
-                        <ul className="text-gray-700 space-y-1 text-sm">
+                        <ul className="text-gray-700 space-y-1 text-xs">
                           {job.highlights.map((highlight: string, idx: number) => (
                             <li key={idx} className="flex items-start">
                               <span className="text-blue-600 mr-2 mt-1">•</span>
@@ -425,12 +425,12 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Skills/Competences */}
               {skills.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
                     CORE COMPETENCIES
                   </h3>
                   <div className="grid grid-cols-3 gap-4">
                     {skills.map((skill: any, index: number) => (
-                      <div key={index} className="bg-gray-200 px-3 py-2 rounded text-sm text-center">
+                      <div key={index} className="bg-gray-200 px-3 py-2 rounded text-xs text-center">
                         {typeof skill === 'string' ? skill : skill.name}
                       </div>
                     ))}
@@ -441,14 +441,14 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Education */}
               {education.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
                     EDUCATION
                   </h3>
                   {education.map((edu: any, index: number) => (
                     <div key={index} className="mb-4 last:mb-0">
                       <div className="flex justify-between items-start mb-1">
                         <div>
-                          <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
+                          <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
                             {edu.startDate && formatDate(edu.startDate)}
                             {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
                           </span>
