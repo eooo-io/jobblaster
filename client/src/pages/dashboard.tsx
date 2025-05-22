@@ -8,6 +8,7 @@ import ResumePreview from "@/components/resume-preview";
 import ResumeSelector from "@/components/resume-selector";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 import { Plus, Bell, Printer, X } from "lucide-react";
 import type { Resume, JobPosting } from "@shared/schema";
 
@@ -16,6 +17,7 @@ export default function Dashboard() {
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
   const [selectedTheme, setSelectedTheme] = useState<string>("modern");
   const [showPrintPreview, setShowPrintPreview] = useState(false);
+  const { toast } = useToast();
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
@@ -61,7 +63,11 @@ export default function Dashboard() {
                   if (selectedResume) {
                     setShowPrintPreview(true);
                   } else {
-                    alert('Please select a resume first to preview!');
+                    toast({
+                      title: "No Resume Selected",
+                      description: "Please select a resume first to preview!",
+                      variant: "destructive",
+                    });
                   }
                 }}
               >
