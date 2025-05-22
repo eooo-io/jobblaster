@@ -518,44 +518,48 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
         {/* JSON Editor Accordion */}
         <div className="flex-1 p-3 lg:p-6 min-h-0">
-          <Collapsible open={jsonEditorOpen} onOpenChange={setJsonEditorOpen}>
-            <CollapsibleTrigger asChild>
-              <Button variant="ghost" className="w-full justify-between p-3 h-auto mb-3">
-                <div className="flex items-center gap-2">
-                  <Code className="h-4 w-4" />
-                  <span className="font-medium">JSON Editor</span>
-                </div>
-                <ChevronDown className={`h-4 w-4 transition-transform ${jsonEditorOpen ? 'rotate-180' : ''}`} />
-              </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className="h-full flex flex-col">
-                <div className="flex items-center justify-between mb-2 lg:mb-4">
-                  <h4 className="font-medium text-slate-900 dark:text-white text-sm lg:text-base">Edit Resume JSON</h4>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    disabled={!jsonContent}
-                    onClick={() => {
-                      if (jsonContent) {
-                        handleJsonChange(jsonContent);
-                      }
-                    }}
-                  >
-                    <RefreshCw className="w-4 h-4 mr-1" />
-                    Validate
-                  </Button>
-                </div>
-                <div className="flex-1 min-h-0">
-                  <JsonEditor
-                    value={selectedResume?.jsonData || jsonContent}
-                    onChange={handleJsonChange}
-                    height="250px"
-                  />
+          <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+            <button 
+              onClick={() => setJsonEditorOpen(!jsonEditorOpen)}
+              className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            >
+              <div className="flex items-center gap-2">
+                <Code className="h-4 w-4" />
+                <span className="font-medium">JSON Editor</span>
+              </div>
+              <ChevronDown className={`h-4 w-4 transition-transform ${jsonEditorOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {jsonEditorOpen && (
+              <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="h-full flex flex-col">
+                  <div className="flex items-center justify-between mb-2 lg:mb-4">
+                    <h4 className="font-medium text-slate-900 dark:text-white text-sm lg:text-base">Edit Resume JSON</h4>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      disabled={!jsonContent}
+                      onClick={() => {
+                        if (jsonContent) {
+                          handleJsonChange(jsonContent);
+                        }
+                      }}
+                    >
+                      <RefreshCw className="w-4 h-4 mr-1" />
+                      Validate
+                    </Button>
+                  </div>
+                  <div className="flex-1 min-h-0">
+                    <JsonEditor
+                      value={selectedResume?.jsonData || jsonContent}
+                      onChange={handleJsonChange}
+                      height="250px"
+                    />
+                  </div>
                 </div>
               </div>
-            </CollapsibleContent>
-          </Collapsible>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>

@@ -104,18 +104,21 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
 
   return (
     <div className="space-y-4">
-      {/* JSON Resumes Accordion */}
-      <Collapsible open={resumesOpen} onOpenChange={setResumesOpen}>
-        <CollapsibleTrigger asChild>
-          <Button variant="ghost" className="w-full justify-between p-4 h-auto">
-            <div className="flex items-center gap-2">
-              <FolderOpen className="h-4 w-4" />
-              <span className="font-medium">JSON Resumes ({resumes?.length || 0})</span>
-            </div>
-            <ChevronDown className={`h-4 w-4 transition-transform ${resumesOpen ? 'rotate-180' : ''}`} />
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-3">
+      {/* JSON Resumes Header */}
+      <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
+        <button 
+          onClick={() => setResumesOpen(!resumesOpen)}
+          className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <FolderOpen className="h-4 w-4" />
+            <span className="font-medium">JSON Resumes ({resumes?.length || 0})</span>
+          </div>
+          <ChevronDown className={`h-4 w-4 transition-transform ${resumesOpen ? 'rotate-180' : ''}`} />
+        </button>
+        
+        {resumesOpen && (
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
           {/* New Resume Button */}
           <Card className="border-dashed border-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
             <CardContent className="p-3">
@@ -130,126 +133,127 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
             </CardContent>
           </Card>
 
-          {/* Resume Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-            {resumes?.map((resume: any) => (
-              <Card 
-                key={resume.id}
-                className={`group cursor-pointer transition-all hover:shadow-md ${
-                  selectedResume?.id === resume.id 
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-950' 
-                    : 'hover:border-gray-300 dark:hover:border-gray-600'
-                }`}
-                onClick={() => onResumeSelect(resume)}
-              >
-                <CardContent className="p-2 relative">
-                  {/* Header with star and edit */}
-                  <div className="flex items-start justify-between mb-1">
-                    {editingId === resume.id ? (
-                      <div className="flex gap-1 min-w-0 flex-1">
-                        <Input
-                          value={editingName}
-                          onChange={(e) => setEditingName(e.target.value)}
-                          className="h-5 text-xs"
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') handleSave(resume.id);
-                            if (e.key === 'Escape') handleCancel();
-                          }}
-                          autoFocus
-                        />
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-5 w-5 p-0"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSave(resume.id);
-                          }}
-                        >
-                          <Save className="h-2 w-2" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-5 w-5 p-0"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCancel();
-                          }}
-                        >
-                          <X className="h-2 w-2" />
-                        </Button>
-                      </div>
-                    ) : (
-                      <>
-                        {/* Default star indicator */}
-                        <div className="flex items-center gap-1">
-                          {resume.isDefault && (
-                            <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                          )}
-                          <FileText className="h-3 w-3 text-gray-400" />
-                        </div>
-                        
-                        {/* Hover controls */}
-                        <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            {/* Resume Grid - Much Smaller Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+              {resumes?.map((resume: any) => (
+                <Card 
+                  key={resume.id}
+                  className={`group cursor-pointer transition-all hover:shadow-md ${
+                    selectedResume?.id === resume.id 
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-950' 
+                      : 'hover:border-gray-300 dark:hover:border-gray-600'
+                  }`}
+                  onClick={() => onResumeSelect(resume)}
+                >
+                  <CardContent className="p-2 relative">
+                    {/* Header with star and edit */}
+                    <div className="flex items-start justify-between mb-1">
+                      {editingId === resume.id ? (
+                        <div className="flex gap-1 min-w-0 flex-1">
+                          <Input
+                            value={editingName}
+                            onChange={(e) => setEditingName(e.target.value)}
+                            className="h-5 text-xs"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleSave(resume.id);
+                              if (e.key === 'Escape') handleCancel();
+                            }}
+                            autoFocus
+                          />
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-4 w-4 p-0"
+                            className="h-5 w-5 p-0"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setDefaultMutation.mutate(resume.id);
+                              handleSave(resume.id);
                             }}
-                            disabled={setDefaultMutation.isPending}
                           >
-                            <Star className={`h-2 w-2 ${resume.isDefault ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                            <Save className="h-2 w-2" />
                           </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-5 w-5 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCancel();
+                            }}
+                          >
+                            <X className="h-2 w-2" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <>
+                          {/* Default star indicator */}
+                          <div className="flex items-center gap-1">
+                            {resume.isDefault && (
+                              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                            )}
+                            <FileText className="h-3 w-3 text-gray-400" />
+                          </div>
                           
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-4 w-4 p-0"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleEdit(resume.id, resume.name);
-                            }}
-                          >
-                            <Edit2 className="h-2 w-2" />
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                  </div>
+                          {/* Hover controls */}
+                          <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-4 w-4 p-0"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setDefaultMutation.mutate(resume.id);
+                              }}
+                              disabled={setDefaultMutation.isPending}
+                            >
+                              <Star className={`h-2 w-2 ${resume.isDefault ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                            </Button>
+                            
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-4 w-4 p-0"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEdit(resume.id, resume.name);
+                              }}
+                            >
+                              <Edit2 className="h-2 w-2" />
+                            </Button>
+                          </div>
+                        </>
+                      )}
+                    </div>
 
-                  {/* Resume name */}
-                  <div className="mb-1">
-                    <span className="font-medium text-gray-900 dark:text-gray-100 text-xs block truncate">
-                      {resume.name}
-                    </span>
-                    {selectedResume?.id === resume.id && (
-                      <span className="text-[10px] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 py-0.5 rounded">
-                        Selected
+                    {/* Resume name */}
+                    <div className="mb-1">
+                      <span className="font-medium text-gray-900 dark:text-gray-100 text-xs block truncate">
+                        {resume.name}
                       </span>
-                    )}
-                  </div>
+                      {selectedResume?.id === resume.id && (
+                        <span className="text-[10px] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 py-0.5 rounded">
+                          Selected
+                        </span>
+                      )}
+                    </div>
 
-                  {/* Meta info */}
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
-                      <Calendar className="h-2 w-2" />
-                      <span>{new Date(resume.createdAt).toLocaleDateString()}</span>
+                    {/* Meta info */}
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
+                        <Calendar className="h-2 w-2" />
+                        <span>{new Date(resume.createdAt).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
+                        <Palette className="h-2 w-2" />
+                        <span className="capitalize">{resume.theme}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
-                      <Palette className="h-2 w-2" />
-                      <span className="capitalize">{resume.theme}</span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </CollapsibleContent>
-      </Collapsible>
+        )}
+      </div>
     </div>
   );
 }
