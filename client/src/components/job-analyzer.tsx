@@ -146,30 +146,33 @@ export default function JobAnalyzer({ selectedJob, onJobSelect, selectedResume }
         {/* Job Input Section */}
         <div className="p-6 border-b border-slate-200 dark:border-gray-600">
           <div className="space-y-4">
-            <div className="flex space-x-2">
+            <div className="flex space-x-1">
               <Button
+                size="sm"
                 variant={activeTab === "paste" ? "default" : "outline"}
-                className="flex-1 text-sm"
+                className="flex-1 text-xs px-2"
                 onClick={() => setActiveTab("paste")}
               >
-                <Clipboard className="w-4 h-4 mr-2" />
-                Paste Text
+                <Clipboard className="w-3 h-3 mr-1" />
+                Paste
               </Button>
               <Button
+                size="sm"
                 variant={activeTab === "upload" ? "default" : "outline"}
-                className="flex-1 text-sm"
+                className="flex-1 text-xs px-2"
                 onClick={() => setActiveTab("upload")}
               >
-                <Upload className="w-4 h-4 mr-2" />
-                Upload File
+                <Upload className="w-3 h-3 mr-1" />
+                Upload
               </Button>
               <Button
+                size="sm"
                 variant={activeTab === "url" ? "default" : "outline"}
-                className="flex-1 text-sm"
+                className="flex-1 text-xs px-2"
                 onClick={() => setActiveTab("url")}
               >
-                <Link className="w-4 h-4 mr-2" />
-                Scrape URL
+                <Link className="w-3 h-3 mr-1" />
+                URL
               </Button>
             </div>
 
