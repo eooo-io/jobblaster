@@ -444,6 +444,102 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // Job Search API Routes
+  app.get("/api/jobs/search", requireAuth, async (req: any, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) return res.status(401).json({ message: "Authentication required" });
+
+      const user = await storage.getUser(userId);
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      // Import JobConnectorManager here to avoid circular imports
+      const { JobConnectorManager } = await import("./job-connectors/connector-manager");
+      const connectorManager = new JobConnectorManager(user);
+
+      const searchParams = {
+        query: req.query.query as string,
+        location: req.query.location as string,
+        salary_min: req.query.salary_min ? parseInt(req.query.salary_min as string) : undefined,
+        salary_max: req.query.salary_max ? parseInt(req.query.salary_max as string) : undefined,
+        page: req.query.page ? parseInt(req.query.page as string) : 1,
+        per_page: 20
+      };
+
+      const { results, errors } = await connectorManager.searchJobs(searchParams);
+      
+      if (results.length === 0 && errors.length > 0) {
+        return res.status(400).json({ 
+          message: "No job connectors are configured or all searches failed",
+          errors 
+        });
+      }
+
+      // Combine results from all connectors
+      const combinedJobs = results.flatMap(result => result.jobs);
+      const totalResults = results.reduce((sum, result) => sum + result.total_results, 0);
+
+      res.json({
+        jobs: combinedJobs,
+        total_results: totalResults,
+        page: searchParams.page,
+        per_page: searchParams.per_page,
+        has_more: results.some(result => result.has_more),
+        connector_errors: errors
+      });
+
+    } catch (error) {
+      console.error("Job search error:", error);
+      res.status(500).json({ message: "Failed to search jobs" });
+    }
+  });
+
+  // Get available job connectors
+  app.get("/api/jobs/connectors", requireAuth, async (req: any, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) return res.status(401).json({ message: "Authentication required" });
+
+      const user = await storage.getUser(userId);
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      const { JobConnectorManager } = await import("./job-connectors/connector-manager");
+      const connectorManager = new JobConnectorManager(user);
+
+      res.json({
+        available: connectorManager.getAvailableConnectors(),
+        configured: connectorManager.getConfiguredConnectors()
+      });
+
+    } catch (error) {
+      console.error("Connector list error:", error);
+      res.status(500).json({ message: "Failed to get connectors" });
+    }
+  });
+
+  // Update connector credentials
+  app.put("/api/jobs/connectors", requireAuth, async (req: any, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) return res.status(401).json({ message: "Authentication required" });
+
+      const { adzunaAppId, adzunaApiKey } = req.body;
+
+      const updateData: any = {};
+      if (adzunaAppId !== undefined) updateData.adzunaAppId = adzunaAppId;
+      if (adzunaApiKey !== undefined) updateData.adzunaApiKey = adzunaApiKey;
+
+      const updatedUser = await storage.updateUser(userId, updateData);
+      if (!updatedUser) return res.status(404).json({ message: "User not found" });
+
+      res.json({ message: "Connector credentials updated successfully" });
+
+    } catch (error) {
+      console.error("Connector update error:", error);
+      res.status(500).json({ message: "Failed to update connector credentials" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
