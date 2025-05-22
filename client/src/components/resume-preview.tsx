@@ -384,7 +384,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
                           <div className="flex items-center gap-4 mb-1">
-                            <span className="text-sm font-medium text-gray-600">
+                            <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
                               {job.startDate && formatDate(job.startDate)}
                               {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Aujourd'hui"}
                             </span>
@@ -448,7 +448,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                     <div key={index} className="mb-4 last:mb-0">
                       <div className="flex justify-between items-start mb-1">
                         <div>
-                          <span className="text-sm font-medium text-gray-600">
+                          <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
                             {edu.startDate && formatDate(edu.startDate)}
                             {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
                           </span>
