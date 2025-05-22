@@ -30,15 +30,20 @@ export default function Profile() {
 
   // Initialize connection status when user data loads
   useEffect(() => {
+    console.log("User data loaded:", user);
     if (user?.adzunaAppId && user?.adzunaApiKey) {
+      console.log("Setting Adzuna connected to true");
       setAdzunaConnected(true);
     } else {
+      console.log("Setting Adzuna connected to false - missing credentials");
       setAdzunaConnected(false);
     }
     
     if (user?.openaiApiKey) {
+      console.log("Setting OpenAI connected to true");
       setOpenaiConnected(true);
     } else {
+      console.log("Setting OpenAI connected to false - missing key");
       setOpenaiConnected(false);
     }
   }, [user]);
