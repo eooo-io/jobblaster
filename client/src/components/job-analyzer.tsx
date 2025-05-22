@@ -137,14 +137,14 @@ export default function JobAnalyzer({ selectedJob, onJobSelect, selectedResume }
   };
 
   return (
-    <Card className="bg-white rounded-xl border border-slate-200 flex flex-col h-full">
-      <CardHeader className="border-b border-slate-200">
-        <CardTitle className="text-lg font-semibold text-slate-900">Job Description Analysis</CardTitle>
+    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-600 flex flex-col h-full">
+      <CardHeader className="border-b border-slate-200 dark:border-gray-600">
+        <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">Job Description Analysis</CardTitle>
       </CardHeader>
 
       <CardContent className="flex-1 flex flex-col p-0">
         {/* Job Input Section */}
-        <div className="p-6 border-b border-slate-200">
+        <div className="p-6 border-b border-slate-200 dark:border-gray-600">
           <div className="space-y-4">
             <div className="flex space-x-2">
               <Button

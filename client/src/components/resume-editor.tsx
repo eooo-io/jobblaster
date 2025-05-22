@@ -224,10 +224,10 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   };
 
   return (
-    <Card className="bg-white rounded-xl border border-slate-200 flex flex-col h-full">
-      <CardHeader className="border-b border-slate-200">
+    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-600 flex flex-col h-full">
+      <CardHeader className="border-b border-slate-200 dark:border-gray-600">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-slate-900">Resume Editor</CardTitle>
+          <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">Resume Editor</CardTitle>
           <Button
             variant="ghost"
             size="sm"
