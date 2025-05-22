@@ -26,18 +26,17 @@ export default function Profile() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [apiError, setApiError] = useState(null);
   const [adzunaConnected, setAdzunaConnected] = useState(false);
+  const [openaiConnected, setOpenaiConnected] = useState(false);
 
-  // Initialize connection status when user data loads
+  // Initialize connection status when user data loads (but don't override mutation results)
   useEffect(() => {
-    console.log("useEffect triggered, user data:", user);
     if (user?.adzunaAppId && user?.adzunaApiKey) {
-      console.log("User has Adzuna credentials, setting connected to true");
       setAdzunaConnected(true);
-    } else {
-      console.log("User missing Adzuna credentials, setting connected to false");
-      // Don't override if we've already set it to true via the mutation
-      // setAdzunaConnected(false);
     }
+    if (user?.openaiApiKey) {
+      setOpenaiConnected(true);
+    }
+    // Don't set to false here - let mutations handle the status updates
   }, [user]);
 
   const uploadMutation = useMutation({
@@ -96,6 +95,9 @@ export default function Profile() {
       return response.json();
     },
     onSuccess: () => {
+      // Set connected status when API key is saved successfully
+      setOpenaiConnected(true);
+      
       toast({
         title: "Success!",
         description: "OpenAI API key updated successfully",
@@ -132,13 +134,8 @@ export default function Profile() {
       return response.json();
     },
     onSuccess: (data) => {
-      console.log("Mutation success callback triggered");
-      console.log("Setting adzunaConnected to true");
-      
       // Always set connected when credentials are saved successfully
       setAdzunaConnected(true);
-      
-      console.log("Connection status should now be true");
       
       // Handle API test results
       if (data.adzunaTest) {
@@ -313,13 +310,13 @@ export default function Profile() {
                 Your API key is stored securely and only used for your AI features. 
                 Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">OpenAI Platform</a>.
               </p>
-              {user?.openaiApiKey && (
+              {openaiConnected && (
                 <div className="flex items-center space-x-2 mt-2 p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   <span className="text-sm text-green-700 dark:text-green-400">API key configured - AI features are enabled</span>
                 </div>
               )}
-              {!user?.openaiApiKey && (
+              {!openaiConnected && (
                 <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                   <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
                   <span className="text-sm text-yellow-700 dark:text-yellow-400">No API key - AI features are disabled</span>
