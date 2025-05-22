@@ -426,7 +426,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {skills.length > 0 && (
                 <div className="mb-8">
                   <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
-                    COMPETENCES
+                    CORE COMPETENCIES
                   </h3>
                   <div className="grid grid-cols-3 gap-6">
                     <div>
@@ -467,7 +467,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {education.length > 0 && (
                 <div className="mb-8">
                   <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
-                    FORMATIONS
+                    EDUCATION
                   </h3>
                   {education.map((edu: any, index: number) => (
                     <div key={index} className="mb-4 last:mb-0">
