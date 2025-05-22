@@ -321,7 +321,8 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               
               {/* Resume List */}
               <div className="space-y-2 max-h-64 overflow-y-auto">
-                {resumes && resumes.length > 0 ? (
+                {console.log('Resumes data:', resumes)}
+                {Array.isArray(resumes) && resumes.length > 0 ? (
                   resumes.map((resume: any) => (
                     <div 
                       key={resume.id}
@@ -333,9 +334,9 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                       onClick={() => onResumeSelect(resume)}
                     >
                       <div className="flex-1">
-                        <h4 className="font-medium text-slate-900 dark:text-white">{resume.name}</h4>
+                        <h4 className="font-medium text-slate-900 dark:text-white">{resume.name || 'Untitled Resume'}</h4>
                         <p className="text-sm text-slate-500 dark:text-gray-400">
-                          Theme: {resume.theme} • Created: {new Date(resume.createdAt || '').toLocaleDateString()}
+                          Theme: {resume.theme || 'modern'} • Created: {resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : 'Unknown'}
                         </p>
                       </div>
                       
