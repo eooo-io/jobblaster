@@ -229,7 +229,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
           <div className={`${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm min-h-full flex text-sm`}>
             
             {/* Left Sidebar - Blue */}
-            <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)' }}>
+            <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)', fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
               
               {/* Contact Information */}
               <div className="mb-8">
@@ -237,39 +237,44 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                   CONTACT
                 </h3>
                 <div className="space-y-3 text-sm">
+                  {/* Location */}
                   {basics.location?.city && (
                     <div className="flex items-center">
                       <i className="fas fa-map-marker-alt mr-3 w-4 text-center"></i>
                       <span>{basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
                     </div>
                   )}
+                  
+                  {/* Phone */}
                   {basics.phone && (
                     <div className="flex items-center">
                       <i className="fas fa-phone mr-3 w-4 text-center"></i>
                       <span>{basics.phone}</span>
                     </div>
                   )}
+                  
+                  {/* Email */}
                   {basics.email && (
                     <div className="flex items-center">
                       <i className="fas fa-envelope mr-3 w-4 text-center"></i>
                       <span className="break-all">{basics.email}</span>
                     </div>
                   )}
-                  {basics.url && (
+                  
+                  {/* GitHub */}
+                  {basics.profiles && basics.profiles.find((p: any) => p.network?.toLowerCase() === 'github' || p.url?.includes('github.com')) && (
                     <div className="flex items-center">
-                      <i className="fas fa-globe mr-3 w-4 text-center"></i>
-                      <span className="break-all text-blue-200">{basics.url}</span>
+                      <i className="fab fa-github mr-3 w-4 text-center"></i>
+                      <span className="text-blue-200">{basics.profiles.find((p: any) => p.network?.toLowerCase() === 'github' || p.url?.includes('github.com'))?.username || basics.profiles.find((p: any) => p.network?.toLowerCase() === 'github' || p.url?.includes('github.com'))?.url}</span>
                     </div>
                   )}
-                  {basics.profiles && basics.profiles.length > 0 && (
-                    <>
-                      {basics.profiles.map((profile: any, index: number) => (
-                        <div key={index} className="flex items-center">
-                          <i className="fab fa-twitter mr-3 w-4 text-center"></i>
-                          <span className="text-blue-200">{profile.username || profile.url}</span>
-                        </div>
-                      ))}
-                    </>
+                  
+                  {/* LinkedIn */}
+                  {basics.profiles && basics.profiles.find((p: any) => p.network?.toLowerCase() === 'linkedin' || p.url?.includes('linkedin.com')) && (
+                    <div className="flex items-center">
+                      <i className="fab fa-linkedin mr-3 w-4 text-center"></i>
+                      <span className="text-blue-200">{basics.profiles.find((p: any) => p.network?.toLowerCase() === 'linkedin' || p.url?.includes('linkedin.com'))?.username || basics.profiles.find((p: any) => p.network?.toLowerCase() === 'linkedin' || p.url?.includes('linkedin.com'))?.url}</span>
+                    </div>
                   )}
                 </div>
               </div>
@@ -348,7 +353,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             </div>
 
             {/* Right Content Area */}
-            <div className="w-2/3 p-6 bg-gray-50">
+            <div className="w-2/3 p-6 bg-gray-50" style={{ fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
               
               {/* Header */}
               <div className="mb-8">
