@@ -6,9 +6,12 @@ import {
   Download, 
   History, 
   Settings,
-  Target
+  Target,
+  LogOut
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 
 const navigation = [
   { name: "Resume Builder", icon: FileText, current: true },

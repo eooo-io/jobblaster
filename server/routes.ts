@@ -3,22 +3,130 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { 
   insertResumeSchema, insertJobPostingSchema, insertMatchScoreSchema, 
-  insertCoverLetterSchema, insertApplicationSchema 
+  insertCoverLetterSchema, insertApplicationSchema, insertUserSchema
 } from "@shared/schema";
 import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from "./openai";
+import { setupAuth, hashPassword, verifyPassword, requireAuth, getCurrentUserId } from "./auth";
 import multer from "multer";
 import JSZip from "jszip";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Mock user ID for demo (in real app would come from authentication)
-  const mockUserId = 1;
+  // Setup authentication middleware
+  setupAuth(app);
 
-  // Resumes
-  app.get("/api/resumes", async (req, res) => {
+  // Authentication routes
+  app.post("/api/auth/register", async (req, res) => {
     try {
-      const resumes = await storage.getResumesByUserId(mockUserId);
+      const { username, password, email } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required" });
+      }
+
+      // Check if user already exists
+      const existingUser = await storage.getUserByUsername(username);
+      if (existingUser) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+
+      // Hash password and create user
+      const hashedPassword = await hashPassword(password);
+      const userData = insertUserSchema.parse({
+        username,
+        password: hashedPassword,
+        email: email || undefined
+      });
+      
+      const user = await storage.createUser(userData);
+      
+      res.json({ 
+        id: user.id, 
+        username: user.username, 
+        email: user.email,
+        message: "Account created successfully" 
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ message: "Registration failed" });
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: "Username and password are required" });
+      }
+
+      // Find user and verify password
+      const user = await storage.getUserByUsername(username);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid username or password" });
+      }
+
+      const isValidPassword = await verifyPassword(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid username or password" });
+      }
+
+      // Set session
+      req.session.userId = user.id;
+      req.session.username = user.username;
+
+      res.json({ 
+        id: user.id, 
+        username: user.username, 
+        email: user.email,
+        message: "Login successful" 
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Logout failed" });
+      }
+      res.json({ message: "Logout successful" });
+    });
+  });
+
+  app.get("/api/auth/user", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json({
+        id: user.id,
+        username: user.username,
+        email: user.email
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Resumes (protected routes)
+  app.get("/api/resumes", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      const resumes = await storage.getResumesByUserId(userId);
       res.json(resumes);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch resumes" });
@@ -37,11 +145,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/resumes", async (req, res) => {
+  app.post("/api/resumes", requireAuth, async (req, res) => {
     try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
       const resumeData = insertResumeSchema.parse({
         ...req.body,
-        userId: mockUserId
+        userId
       });
       const resume = await storage.createResume(resumeData);
       res.json(resume);
