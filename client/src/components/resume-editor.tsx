@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
 import { CloudUpload, Download, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
@@ -16,7 +16,7 @@ interface ResumeEditorProps {
 }
 
 export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeEditorProps) {
-  const [theme, setTheme] = useState("modern");
+
   const [jsonContent, setJsonContent] = useState<any>(null);
   const { toast } = useToast();
 
@@ -97,7 +97,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       updateMutation.mutate({
         id: selectedResume.id,
         jsonData: newJson,
-        theme: theme,
+        theme: selectedResume.theme,
       });
     }
   };
@@ -124,7 +124,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       uploadMutation.mutate({
         name: resumeName,
         jsonData: parsedJson,
-        theme: theme,
+        theme: "modern",
       });
     } catch (error) {
       toast({
@@ -135,16 +135,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
   };
 
-  const handleThemeChange = (newTheme: string) => {
-    setTheme(newTheme);
-    if (selectedResume) {
-      updateMutation.mutate({
-        id: selectedResume.id,
-        jsonData: selectedResume.jsonData,
-        theme: newTheme,
-      });
-    }
-  };
+
 
   const handleDownloadPDF = async () => {
     if (!selectedResume) {
@@ -176,28 +167,15 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       <CardHeader className="border-b border-slate-200">
         <div className="flex items-center justify-between">
           <CardTitle className="text-lg font-semibold text-slate-900">Resume Editor</CardTitle>
-          <div className="flex items-center space-x-2">
-            <Select value={theme} onValueChange={handleThemeChange}>
-              <SelectTrigger className="w-40">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="modern">Modern Theme</SelectItem>
-                <SelectItem value="james-clark">James Clark Professional</SelectItem>
-                <SelectItem value="classic">Classic Theme</SelectItem>
-                <SelectItem value="creative">Creative Theme</SelectItem>
-                <SelectItem value="formal">Formal Theme</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleDownloadPDF}
-              disabled={!selectedResume}
-            >
-              <Download className="w-4 h-4" />
-            </Button>
-          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDownloadPDF}
+            disabled={!selectedResume}
+            className="ml-auto"
+          >
+            <Download className="w-4 h-4" />
+          </Button>
         </div>
       </CardHeader>
 
