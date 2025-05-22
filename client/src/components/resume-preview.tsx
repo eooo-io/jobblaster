@@ -62,6 +62,162 @@ export default function ResumePreview({ resume, theme = "modern" }: ResumePrevie
     return date.getFullYear().toString();
   };
 
+  // Debug theme - shows all data in plain text format
+  if (theme === "debug") {
+    return (
+      <div className="lg:col-span-1">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - Debug Mode</h3>
+        <div className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-lg p-4 h-96 overflow-auto">
+          <div className="text-xs font-mono space-y-4 text-slate-700 dark:text-gray-300">
+            
+            {/* Basics Section */}
+            {basics && Object.keys(basics).length > 0 && (
+              <div>
+                <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-2">BASICS:</h4>
+                {basics.name && <div>• Name: {basics.name}</div>}
+                {basics.label && <div>• Label: {basics.label}</div>}
+                {basics.email && <div>• Email: {basics.email}</div>}
+                {basics.phone && <div>• Phone: {basics.phone}</div>}
+                {basics.url && <div>• Website: {basics.url}</div>}
+                {basics.summary && <div>• Summary: {basics.summary}</div>}
+                {basics.location && (
+                  <div>• Location: {basics.location.city}, {basics.location.region} {basics.location.countryCode}</div>
+                )}
+                {basics.profiles && basics.profiles.length > 0 && (
+                  <div>• Profiles: {basics.profiles.map(p => `${p.network}: ${p.url || p.username}`).join(', ')}</div>
+                )}
+              </div>
+            )}
+
+            {/* Work Experience */}
+            {work && work.length > 0 && (
+              <div>
+                <h4 className="font-bold text-green-600 dark:text-green-400 mb-2">WORK EXPERIENCE ({work.length}):</h4>
+                {work.map((job: any, index: number) => (
+                  <div key={index} className="mb-3 pl-4 border-l-2 border-gray-300 dark:border-gray-600">
+                    <div className="font-semibold">{index + 1}. {job.position || 'Position'}</div>
+                    {job.name && <div>   Company: {job.name}</div>}
+                    {job.startDate && <div>   Duration: {job.startDate} - {job.endDate || 'Present'}</div>}
+                    {job.location && <div>   Location: {job.location}</div>}
+                    {job.summary && <div>   Summary: {job.summary}</div>}
+                    {job.highlights && job.highlights.length > 0 && (
+                      <div>   Highlights: {job.highlights.join('; ')}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Skills */}
+            {skills && skills.length > 0 && (
+              <div>
+                <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-2">SKILLS ({skills.length}):</h4>
+                {skills.map((skill: any, index: number) => (
+                  <div key={index} className="mb-2">
+                    <div>• {skill.name || `Skill ${index + 1}`}</div>
+                    {skill.level && <div>   Level: {skill.level}</div>}
+                    {skill.keywords && skill.keywords.length > 0 && (
+                      <div>   Keywords: {skill.keywords.join(', ')}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Education */}
+            {education && education.length > 0 && (
+              <div>
+                <h4 className="font-bold text-orange-600 dark:text-orange-400 mb-2">EDUCATION ({education.length}):</h4>
+                {education.map((edu: any, index: number) => (
+                  <div key={index} className="mb-3 pl-4 border-l-2 border-gray-300 dark:border-gray-600">
+                    <div className="font-semibold">{index + 1}. {edu.studyType} {edu.area && `in ${edu.area}`}</div>
+                    {edu.institution && <div>   Institution: {edu.institution}</div>}
+                    {edu.startDate && <div>   Duration: {edu.startDate} - {edu.endDate || 'Present'}</div>}
+                    {edu.gpa && <div>   GPA: {edu.gpa}</div>}
+                    {edu.courses && edu.courses.length > 0 && (
+                      <div>   Courses: {edu.courses.join(', ')}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Languages */}
+            {languages && languages.length > 0 && (
+              <div>
+                <h4 className="font-bold text-red-600 dark:text-red-400 mb-2">LANGUAGES ({languages.length}):</h4>
+                {languages.map((lang: any, index: number) => (
+                  <div key={index}>
+                    • {lang.language || `Language ${index + 1}`} - {lang.fluency || 'Not specified'}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Additional Sections */}
+            {resumeData.awards && resumeData.awards.length > 0 && (
+              <div>
+                <h4 className="font-bold text-yellow-600 dark:text-yellow-400 mb-2">AWARDS ({resumeData.awards.length}):</h4>
+                {resumeData.awards.map((award: any, index: number) => (
+                  <div key={index}>
+                    • {award.title} - {award.awarder} ({award.date})
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {resumeData.publications && resumeData.publications.length > 0 && (
+              <div>
+                <h4 className="font-bold text-indigo-600 dark:text-indigo-400 mb-2">PUBLICATIONS ({resumeData.publications.length}):</h4>
+                {resumeData.publications.map((pub: any, index: number) => (
+                  <div key={index}>
+                    • {pub.name} - {pub.publisher} ({pub.releaseDate})
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {resumeData.volunteer && resumeData.volunteer.length > 0 && (
+              <div>
+                <h4 className="font-bold text-teal-600 dark:text-teal-400 mb-2">VOLUNTEER ({resumeData.volunteer.length}):</h4>
+                {resumeData.volunteer.map((vol: any, index: number) => (
+                  <div key={index}>
+                    • {vol.position} at {vol.organization} ({vol.startDate} - {vol.endDate || 'Present'})
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {resumeData.interests && resumeData.interests.length > 0 && (
+              <div>
+                <h4 className="font-bold text-pink-600 dark:text-pink-400 mb-2">INTERESTS ({resumeData.interests.length}):</h4>
+                {resumeData.interests.map((interest: any, index: number) => (
+                  <div key={index}>
+                    • {interest.name} {interest.keywords && `(${interest.keywords.join(', ')})`}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {resumeData.projects && resumeData.projects.length > 0 && (
+              <div>
+                <h4 className="font-bold text-cyan-600 dark:text-cyan-400 mb-2">PROJECTS ({resumeData.projects.length}):</h4>
+                {resumeData.projects.map((project: any, index: number) => (
+                  <div key={index} className="mb-2">
+                    <div className="font-semibold">• {project.name}</div>
+                    {project.description && <div>   Description: {project.description}</div>}
+                    {project.url && <div>   URL: {project.url}</div>}
+                  </div>
+                ))}
+              </div>
+            )}
+
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // James Clark Professional Theme Preview
   if (theme === "james-clark") {
     return (
