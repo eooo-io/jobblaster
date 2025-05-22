@@ -289,13 +289,21 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                     {skills.map((skill: any, index: number) => (
                       <div key={index}>
                         {typeof skill === 'string' ? (
-                          <div>{skill}</div>
+                          <span className="inline-block bg-gray-900 text-white px-2 py-1 rounded-md text-xs mr-1 mb-1">
+                            {skill}
+                          </span>
                         ) : (
                           <>
-                            <div className="font-medium">{skill.name}</div>
+                            {skill.name && (
+                              <div className="font-medium mb-1">{skill.name}</div>
+                            )}
                             {skill.keywords && skill.keywords.length > 0 && (
-                              <div className="ml-2 text-blue-200">
-                                {skill.keywords.slice(0, 3).join(' • ')}
+                              <div className="flex flex-wrap gap-1 mb-2">
+                                {skill.keywords.map((keyword: string, kidx: number) => (
+                                  <span key={kidx} className="inline-block bg-gray-900 text-white px-2 py-1 rounded-md text-xs">
+                                    {keyword}
+                                  </span>
+                                ))}
                               </div>
                             )}
                           </>
