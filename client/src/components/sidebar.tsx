@@ -8,10 +8,13 @@ import {
   Settings,
   Target,
   LogOut,
-  User
+  User,
+  Sun,
+  Moon
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 
@@ -26,19 +29,20 @@ const navigation = [
 
 export default function Sidebar() {
   const { user, logout, isLoggingOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [location] = useLocation();
 
   return (
-    <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
+    <aside className="w-64 bg-white dark:bg-gray-900 border-r border-slate-200 dark:border-gray-700 flex flex-col">
       {/* Logo and Brand */}
-      <div className="p-6 border-b border-slate-200">
+      <div className="p-6 border-b border-slate-200 dark:border-gray-700">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
             <Target className="text-white text-lg" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-slate-900">TargetLock</h1>
-            <p className="text-xs text-slate-500">Resume & Job Match Engine</p>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white">TargetLock</h1>
+            <p className="text-xs text-slate-500 dark:text-gray-400">Resume & Job Match Engine</p>
           </div>
         </div>
       </div>
@@ -91,8 +95,8 @@ export default function Sidebar() {
               className={cn(
                 "w-full justify-start",
                 location === "/profile"
-                  ? "bg-blue-600/10 text-blue-600"
-                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                  ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
+                  : "text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-gray-800"
               )}
             >
               <User className="w-4 h-4 mr-2" />
@@ -103,9 +107,23 @@ export default function Sidebar() {
           <Button
             variant="ghost"
             size="sm"
+            onClick={toggleTheme}
+            className="w-full justify-start text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-gray-800"
+          >
+            {theme === 'dark' ? (
+              <Sun className="w-4 h-4 mr-2" />
+            ) : (
+              <Moon className="w-4 h-4 mr-2" />
+            )}
+            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+          </Button>
+          
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => logout()}
             disabled={isLoggingOut}
-            className="w-full justify-start text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+            className="w-full justify-start text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-gray-800"
           >
             <LogOut className="w-4 h-4 mr-2" />
             {isLoggingOut ? "Signing out..." : "Sign Out"}
