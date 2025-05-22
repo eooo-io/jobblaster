@@ -28,15 +28,19 @@ export default function Profile() {
   const [adzunaConnected, setAdzunaConnected] = useState(false);
   const [openaiConnected, setOpenaiConnected] = useState(false);
 
-  // Initialize connection status when user data loads (but don't override mutation results)
+  // Initialize connection status when user data loads
   useEffect(() => {
     if (user?.adzunaAppId && user?.adzunaApiKey) {
       setAdzunaConnected(true);
+    } else {
+      setAdzunaConnected(false);
     }
+    
     if (user?.openaiApiKey) {
       setOpenaiConnected(true);
+    } else {
+      setOpenaiConnected(false);
     }
-    // Don't set to false here - let mutations handle the status updates
   }, [user]);
 
   const uploadMutation = useMutation({
@@ -352,9 +356,9 @@ export default function Profile() {
                   </div>
                 )}
                 {!adzunaConnected && (
-                  <div className="flex items-center space-x-2 px-3 py-1 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
-                    <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">Not Connected</span>
+                  <div className="flex items-center space-x-2 px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-full">
+                    <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                    <span className="text-xs text-yellow-700 dark:text-yellow-400 font-medium">Not Connected</span>
                   </div>
                 )}
               </div>
