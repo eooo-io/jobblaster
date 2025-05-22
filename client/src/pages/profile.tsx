@@ -128,8 +128,13 @@ export default function Profile() {
       return response.json();
     },
     onSuccess: (data) => {
+      console.log("Mutation success callback triggered");
+      console.log("Setting adzunaConnected to true");
+      
       // Always set connected when credentials are saved successfully
       setAdzunaConnected(true);
+      
+      console.log("Connection status should now be true");
       
       // Handle API test results
       if (data.adzunaTest) {
