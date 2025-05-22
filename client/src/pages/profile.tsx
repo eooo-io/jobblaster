@@ -435,6 +435,14 @@ export default function Profile() {
           </CardContent>
         </Card>
       </div>
+      
+      {/* Error Modal */}
+      <ErrorModal
+        isOpen={showErrorModal}
+        onClose={() => setShowErrorModal(false)}
+        title="Adzuna API Connection Failed"
+        error={apiError}
+      />
     </div>
   );
 }
