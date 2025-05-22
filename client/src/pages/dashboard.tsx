@@ -7,7 +7,7 @@ import CoverLetterGenerator from "@/components/cover-letter-generator";
 import ResumePreview from "@/components/resume-preview";
 import ResumeSelector from "@/components/resume-selector";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Plus, Bell, Printer, X } from "lucide-react";
 import type { Resume, JobPosting } from "@shared/schema";
 
@@ -174,13 +174,20 @@ export default function Dashboard() {
       {/* Print Preview Modal */}
       <Dialog open={showPrintPreview} onOpenChange={setShowPrintPreview}>
         <DialogContent className="max-w-none w-screen h-screen p-0 m-0 bg-gray-100 dark:bg-gray-900">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Print Preview - US Legal Format</DialogTitle>
+            <DialogDescription>
+              Preview how your resume will look when printed on US Legal paper (8.5" × 14")
+            </DialogDescription>
+          </DialogHeader>
+          
           <div className="flex flex-col h-full">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+            <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
               <div>
-                <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Print Preview - US Legal Format
-                </DialogTitle>
+                </h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   {selectedResume?.name || "Resume"} • 8.5" × 14" • Ready to print
                 </p>
@@ -197,30 +204,51 @@ export default function Dashboard() {
             </div>
 
             {/* Print Preview Content */}
-            <div className="flex-1 overflow-auto p-8 bg-gray-100 dark:bg-gray-900">
-              <div className="max-w-[8.5in] mx-auto">
-                {/* US Legal Paper Size Container */}
+            <div className="flex-1 overflow-auto bg-gray-100 dark:bg-gray-900" style={{ padding: '20px 0' }}>
+              <div className="flex justify-center">
+                {/* US Legal Paper Size Container with Page Breaks */}
                 <div 
-                  className="bg-white shadow-lg mx-auto"
+                  className="bg-white shadow-xl"
                   style={{
                     width: '8.5in',
                     minHeight: '14in',
-                    padding: '0.75in',
-                    fontSize: '11pt',
-                    lineHeight: '1.4',
-                    fontFamily: 'Georgia, serif'
+                    margin: '0 auto 20px',
+                    padding: '0.5in',
+                    fontSize: '10pt',
+                    lineHeight: '1.3',
+                    fontFamily: 'Arial, sans-serif',
+                    position: 'relative',
+                    pageBreakAfter: 'always'
                   }}
                 >
-                  <ResumePreview resume={selectedResume} theme={selectedTheme} />
+                  {/* Page Break Indicator */}
+                  <div 
+                    className="absolute top-0 left-0 right-0 border-t-2 border-dashed border-gray-300"
+                    style={{ height: '1px' }}
+                  />
+                  <div 
+                    className="absolute bottom-0 left-0 right-0 border-b-2 border-dashed border-gray-300"
+                    style={{ height: '1px' }}
+                  />
+                  
+                  {/* Page number indicator */}
+                  <div className="absolute top-2 right-4 text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
+                    Page 1
+                  </div>
+                  
+                  <div style={{ height: '100%', overflow: 'hidden' }}>
+                    <ResumePreview resume={selectedResume} theme={selectedTheme} />
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Print Actions Footer */}
-            <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
               <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                 <span>📄 US Legal (8.5" × 14")</span>
                 <span>🎨 {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)} Theme</span>
+                <span>📏 0.5" margins</span>
               </div>
               <div className="flex items-center gap-2">
                 <Button
