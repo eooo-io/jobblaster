@@ -339,13 +339,13 @@ export default function Profile() {
                   <h4 className="font-medium text-gray-900">Adzuna</h4>
                   <p className="text-sm text-gray-600">Global job search engine aggregating positions from hundreds of job boards</p>
                 </div>
-                {adzunaConnected && (user?.adzunaAppId && user?.adzunaApiKey) && (
+                {adzunaConnected && (
                   <div className="flex items-center space-x-2 px-3 py-1 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-full">
                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                     <span className="text-xs text-green-700 dark:text-green-300 font-medium">Connected</span>
                   </div>
                 )}
-                {(!adzunaConnected || !user?.adzunaAppId || !user?.adzunaApiKey) && (
+                {!adzunaConnected && (
                   <div className="flex items-center space-x-2 px-3 py-1 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full">
                     <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
                     <span className="text-xs text-gray-600 dark:text-gray-400 font-medium">Not Connected</span>
