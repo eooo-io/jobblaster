@@ -23,6 +23,8 @@ const navigation = [
 ];
 
 export default function Sidebar() {
+  const { user, logout, isLoggingOut } = useAuth();
+
   return (
     <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
       {/* Logo and Brand */}
@@ -59,16 +61,28 @@ export default function Sidebar() {
 
       {/* User Profile */}
       <div className="p-4 border-t border-slate-200">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-slate-300 rounded-full"></div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-slate-900">John Doe</p>
-            <p className="text-xs text-slate-500">Premium User</p>
+        <div className="flex items-center space-x-3 mb-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+            <span className="text-white text-sm font-medium">
+              {user?.username?.charAt(0).toUpperCase() || "U"}
+            </span>
           </div>
-          <button className="text-slate-400 hover:text-slate-600">
-            <Settings className="w-4 h-4" />
-          </button>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-slate-900">{user?.username || "User"}</p>
+            <p className="text-xs text-slate-500">Personal Workspace</p>
+          </div>
         </div>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => logout()}
+          disabled={isLoggingOut}
+          className="w-full justify-start text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+        >
+          <LogOut className="w-4 h-4 mr-2" />
+          {isLoggingOut ? "Signing out..." : "Sign Out"}
+        </Button>
       </div>
     </aside>
   );
