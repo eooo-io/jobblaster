@@ -20,6 +20,14 @@ export const users = pgTable("users", {
   email: text("email"),
   profilePicture: text("profile_picture"), // URL or base64 encoded image
   openaiApiKey: text("openai_api_key"), // User's personal OpenAI API key
+  // Job Connector API Keys
+  adzunaAppId: text("adzuna_app_id"), // Adzuna App ID
+  adzunaApiKey: text("adzuna_api_key"), // Adzuna API Key
+  // Future connector configurations
+  indeedApiKey: text("indeed_api_key"),
+  glassdoorApiKey: text("glassdoor_api_key"), 
+  greenhouseApiKey: text("greenhouse_api_key"),
+  ziprecruiterApiKey: text("ziprecruiter_api_key"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
