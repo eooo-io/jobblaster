@@ -365,7 +365,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               
               {/* Header */}
               <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                <h1 className="text-3xl font-bold mb-2" style={{ color: 'rgb(28, 35, 51)' }}>
                   {basics.name || "Your Name"}
                 </h1>
                 {basics.label && (
