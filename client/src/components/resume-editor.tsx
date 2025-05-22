@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-import { CloudUpload, Download, RefreshCw } from "lucide-react";
+import { CloudUpload, Download, RefreshCw, Edit3, Check, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import JsonEditor from "@/components/json-editor";
@@ -18,6 +19,8 @@ interface ResumeEditorProps {
 export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeEditorProps) {
 
   const [jsonContent, setJsonContent] = useState<any>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [newName, setNewName] = useState("");
   const { toast } = useToast();
 
   // Auto-load selected resume into JSON editor
