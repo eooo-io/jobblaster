@@ -113,7 +113,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id: user.id,
         username: user.username,
         email: user.email,
-        profilePicture: user.profilePicture
+        profilePicture: user.profilePicture,
+        openaiApiKey: user.openaiApiKey,
+        adzunaAppId: user.adzunaAppId,
+        adzunaApiKey: user.adzunaApiKey
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch user" });
