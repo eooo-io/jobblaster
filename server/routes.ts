@@ -179,9 +179,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
+      // Test Adzuna API connection if credentials were provided
+      let adzunaTestResult = null;
+      if (updateData.adzunaAppId && updateData.adzunaApiKey) {
+        try {
+          const testUrl = `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${updateData.adzunaAppId}&app_key=${updateData.adzunaApiKey}&results_per_page=1&what=test`;
+          const testResponse = await fetch(testUrl);
+          const testData = await testResponse.json();
+          
+          if (testResponse.ok) {
+            adzunaTestResult = { success: true, message: "Connection successful" };
+          } else {
+            adzunaTestResult = { success: false, error: testData };
+          }
+        } catch (error) {
+          adzunaTestResult = { 
+            success: false, 
+            error: { message: "Network error", details: error.message } 
+          };
+        }
+      }
+
       res.json({ 
         message: "Profile updated successfully",
-        openaiApiKey: updatedUser.openaiApiKey
+        openaiApiKey: updatedUser.openaiApiKey,
+        adzunaTest: adzunaTestResult
       });
     } catch (error) {
       console.error("Error updating profile:", error);
