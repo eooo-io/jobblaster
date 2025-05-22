@@ -229,11 +229,11 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
           <div className={`${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm min-h-full flex text-sm`}>
             
             {/* Left Sidebar - Blue */}
-            <div className="w-1/3 bg-blue-600 text-white p-6">
+            <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)' }}>
               
               {/* Contact Information */}
               <div className="mb-8">
-                <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
+                <h3 className="text-lg font-bold mb-4 px-3 py-2 rounded" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                   INFORMATIONS
                 </h3>
                 <div className="space-y-3 text-sm">
@@ -277,7 +277,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Skills */}
               {skills.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
+                  <h3 className="text-lg font-bold mb-4 px-3 py-2 rounded" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                     SOFT SKILLS
                   </h3>
                   <div className="space-y-2 text-sm">
@@ -304,8 +304,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Languages */}
               {languages.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
-                    LANGUES
+                  <h3 className="text-lg font-bold mb-4 px-3 py-2 rounded" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                    LANGUAGES
                   </h3>
                   <div className="space-y-2 text-sm">
                     {languages.map((lang: any, index: number) => (
@@ -321,8 +321,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Interests */}
               {interests.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
-                    INTÉRÊTS
+                  <h3 className="text-lg font-bold mb-4 px-3 py-2 rounded" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                    INTERESTS
                   </h3>
                   <div className="space-y-2 text-sm">
                     {interests.map((interest: any, index: number) => (
@@ -336,8 +336,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
               {/* References */}
               <div>
-                <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
-                  RÉFÉRENCES
+                <h3 className="text-lg font-bold mb-4 px-3 py-2 rounded" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                  REFERENCES
                 </h3>
                 <div className="text-xs leading-relaxed">
                   <p className="italic">
@@ -371,8 +371,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Work Experience */}
               {work.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-xl font-bold text-blue-600 mb-6 border-b-2 border-blue-600 pb-2">
-                    EXPÉRIENCES PROFESSIONNELLES
+                  <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                    PROFESSIONAL EXPERIENCES
                   </h3>
                   {work.map((job: any, index: number) => (
                     <div key={index} className="mb-6 last:mb-0">
@@ -420,8 +420,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Skills/Competences */}
               {skills.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-xl font-bold text-blue-600 mb-6 border-b-2 border-blue-600 pb-2">
-                    COMPÉTENCES
+                  <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                    COMPETENCES
                   </h3>
                   <div className="grid grid-cols-3 gap-6">
                     <div>
@@ -461,7 +461,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Education */}
               {education.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-xl font-bold text-blue-600 mb-6 border-b-2 border-blue-600 pb-2">
+                  <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
                     FORMATIONS
                   </h3>
                   {education.map((edu: any, index: number) => (
@@ -488,8 +488,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Projects */}
               {projects.length > 0 && (
                 <div>
-                  <h3 className="text-xl font-bold text-blue-600 mb-6 border-b-2 border-blue-600 pb-2">
-                    PROJETS
+                  <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                    PROJECTS
                   </h3>
                   {projects.map((project: any, index: number) => (
                     <div key={index} className="mb-6 last:mb-0">
