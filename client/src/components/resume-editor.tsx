@@ -102,6 +102,39 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
   };
 
+  const handleSaveResume = () => {
+    if (!jsonContent) return;
+    
+    try {
+      // Basic JSON validation
+      const parsedJson = typeof jsonContent === 'string' ? JSON.parse(jsonContent) : jsonContent;
+      
+      // Check for basic JSON Resume schema structure
+      if (!parsedJson.basics && !parsedJson.work && !parsedJson.skills) {
+        toast({
+          title: "Invalid Resume Format",
+          description: "Please ensure your JSON follows the JSON Resume Schema format with at least basics, work, or skills sections.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const resumeName = parsedJson.basics?.name || `Resume ${new Date().toLocaleDateString()}`;
+      
+      uploadMutation.mutate({
+        name: resumeName,
+        jsonData: parsedJson,
+        theme: theme,
+      });
+    } catch (error) {
+      toast({
+        title: "Invalid JSON",
+        description: "Please check your JSON syntax. Make sure it's properly formatted.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleThemeChange = (newTheme: string) => {
     setTheme(newTheme);
     if (selectedResume) {
@@ -170,27 +203,47 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
       <CardContent className="flex-1 flex flex-col p-0">
         {/* Upload Section */}
-        <div className="p-6 border-b border-slate-200">
-          <div className="border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-blue-600 transition-colors">
-            <div className="w-12 h-12 bg-blue-600/10 rounded-lg flex items-center justify-center mx-auto mb-4">
-              <CloudUpload className="text-blue-600 text-xl" />
+        <div className="p-6 border-b border-slate-200 dark:border-gray-700">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* File Upload */}
+            <div className="border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-blue-600 transition-colors">
+              <div className="w-10 h-10 bg-blue-600/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <CloudUpload className="text-blue-600 text-lg" />
+              </div>
+              <h4 className="text-base font-medium text-slate-900 dark:text-white mb-2">Upload File</h4>
+              <p className="text-sm text-slate-600 dark:text-gray-300 mb-3">Drop your resume.json file here</p>
+              <label htmlFor="resume-upload">
+                <Button className="bg-blue-600 hover:bg-blue-700" size="sm" asChild>
+                  <span>Choose File</span>
+                </Button>
+              </label>
+              <input
+                id="resume-upload"
+                type="file"
+                accept=".json"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
             </div>
-            <h4 className="text-lg font-medium text-slate-900 mb-2">Upload Resume</h4>
-            <p className="text-slate-600 mb-4">Drop your resume.json file or click to browse</p>
-            <label htmlFor="resume-upload">
-              <Button className="bg-blue-600 hover:bg-blue-700" asChild>
-                <span>Choose File</span>
+
+            {/* Save Resume */}
+            <div className="border-2 border-dashed border-green-300 dark:border-green-600 rounded-lg p-6 text-center hover:border-green-600 transition-colors">
+              <div className="w-10 h-10 bg-green-600/10 rounded-lg flex items-center justify-center mx-auto mb-3">
+                <RefreshCw className="text-green-600 text-lg" />
+              </div>
+              <h4 className="text-base font-medium text-slate-900 dark:text-white mb-2">Save Resume</h4>
+              <p className="text-sm text-slate-600 dark:text-gray-300 mb-3">Validate and save your JSON</p>
+              <Button
+                className="bg-green-600 hover:bg-green-700"
+                size="sm"
+                disabled={!jsonContent || uploadMutation.isPending}
+                onClick={handleSaveResume}
+              >
+                {uploadMutation.isPending ? "Saving..." : "Save & Validate"}
               </Button>
-            </label>
-            <input
-              id="resume-upload"
-              type="file"
-              accept=".json"
-              onChange={handleFileUpload}
-              className="hidden"
-            />
-            <p className="text-xs text-slate-500 mt-2">Supports JSON Resume Schema format</p>
+            </div>
           </div>
+          <p className="text-xs text-slate-500 dark:text-gray-400 mt-3 text-center">Supports JSON Resume Schema format</p>
         </div>
 
         {/* JSON Editor */}
