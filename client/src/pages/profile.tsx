@@ -29,10 +29,14 @@ export default function Profile() {
 
   // Initialize connection status when user data loads
   useEffect(() => {
+    console.log("useEffect triggered, user data:", user);
     if (user?.adzunaAppId && user?.adzunaApiKey) {
+      console.log("User has Adzuna credentials, setting connected to true");
       setAdzunaConnected(true);
     } else {
-      setAdzunaConnected(false);
+      console.log("User missing Adzuna credentials, setting connected to false");
+      // Don't override if we've already set it to true via the mutation
+      // setAdzunaConnected(false);
     }
   }, [user]);
 
