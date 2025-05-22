@@ -53,9 +53,21 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   // Set default resume mutation
   const setDefaultMutation = useMutation({
     mutationFn: async (id: number) => {
-      return apiRequest(`/api/resumes/${id}/default`, {
+      console.log('Setting default resume:', id);
+      const response = await fetch(`/api/resumes/${id}/default`, {
         method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
@@ -64,6 +76,7 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       });
     },
     onError: (error: Error) => {
+      console.error('Set default error:', error);
       toast({
         title: "Error setting default resume",
         description: error.message,
