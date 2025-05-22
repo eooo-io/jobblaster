@@ -136,122 +136,123 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
             </CardContent>
           </Card>
 
-            {/* Resume Grid - Much Smaller Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            {/* Resume List - Clean Rows */}
+            <div className="space-y-2">
               {resumes?.map((resume: any) => (
-                <Card 
+                <div 
                   key={resume.id}
-                  className={`group cursor-pointer transition-all hover:shadow-md ${
+                  className={`group flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all hover:shadow-sm ${
                     selectedResume?.id === resume.id 
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-950' 
-                      : 'hover:border-gray-300 dark:hover:border-gray-600'
+                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-sm' 
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800/50'
                   }`}
                   onClick={() => onResumeSelect(resume)}
                 >
-                  <CardContent className="p-2 relative">
-                    {/* Header with star and edit */}
-                    <div className="flex items-start justify-between mb-1">
+                  {/* Left side - Resume info */}
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    {/* Icon and star */}
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      {resume.isDefault && (
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      )}
+                      <FileText className="h-4 w-4 text-gray-400" />
+                    </div>
+
+                    {/* Resume details */}
+                    <div className="flex-1 min-w-0">
                       {editingId === resume.id ? (
-                        <div className="flex gap-1 min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
                           <Input
                             value={editingName}
                             onChange={(e) => setEditingName(e.target.value)}
-                            className="h-5 text-xs"
+                            className="h-8 text-sm font-medium"
                             onKeyDown={(e) => {
                               if (e.key === 'Enter') handleSave(resume.id);
                               if (e.key === 'Escape') handleCancel();
                             }}
                             autoFocus
+                            onClick={(e) => e.stopPropagation()}
                           />
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-5 w-5 p-0"
+                            className="h-8 w-8 p-0"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleSave(resume.id);
                             }}
                           >
-                            <Save className="h-2 w-2" />
+                            <Save className="h-3 w-3" />
                           </Button>
                           <Button
                             size="sm"
                             variant="ghost"
-                            className="h-5 w-5 p-0"
+                            className="h-8 w-8 p-0"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleCancel();
                             }}
                           >
-                            <X className="h-2 w-2" />
+                            <X className="h-3 w-3" />
                           </Button>
                         </div>
                       ) : (
-                        <>
-                          {/* Default star indicator */}
-                          <div className="flex items-center gap-1">
-                            {resume.isDefault && (
-                              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate">
+                              {resume.name}
+                            </span>
+                            {selectedResume?.id === resume.id && (
+                              <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                                Selected
+                              </span>
                             )}
-                            <FileText className="h-3 w-3 text-gray-400" />
                           </div>
-                          
-                          {/* Hover controls */}
-                          <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-4 w-4 p-0"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setDefaultMutation.mutate(resume.id);
-                              }}
-                              disabled={setDefaultMutation.isPending}
-                            >
-                              <Star className={`h-2 w-2 ${resume.isDefault ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
-                            </Button>
-                            
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              className="h-4 w-4 p-0"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEdit(resume.id, resume.name);
-                              }}
-                            >
-                              <Edit2 className="h-2 w-2" />
-                            </Button>
+                          <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <div className="flex items-center gap-1">
+                              <Palette className="h-3 w-3" />
+                              <span className="capitalize">{resume.theme}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              <span>{new Date(resume.createdAt).toLocaleDateString()}</span>
+                            </div>
                           </div>
-                        </>
+                        </div>
                       )}
                     </div>
+                  </div>
 
-                    {/* Resume name */}
-                    <div className="mb-1">
-                      <span className="font-medium text-gray-900 dark:text-gray-100 text-xs block truncate">
-                        {resume.name}
-                      </span>
-                      {selectedResume?.id === resume.id && (
-                        <span className="text-[10px] bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-1 py-0.5 rounded">
-                          Selected
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Meta info */}
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
-                        <Calendar className="h-2 w-2" />
-                        <span>{new Date(resume.createdAt).toLocaleDateString()}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
-                        <Palette className="h-2 w-2" />
-                        <span className="capitalize">{resume.theme}</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                  {/* Right side - Action buttons */}
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDefaultMutation.mutate(resume.id);
+                      }}
+                      disabled={setDefaultMutation.isPending}
+                      title={resume.isDefault ? "Default resume" : "Set as default"}
+                    >
+                      <Star className={`h-3 w-3 ${resume.isDefault ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(resume.id, resume.name);
+                      }}
+                      title="Rename resume"
+                    >
+                      <Edit2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
