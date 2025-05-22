@@ -285,6 +285,85 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
           <p className="text-xs text-slate-500 dark:text-gray-400 mt-3 text-center">Supports JSON Resume Schema format</p>
         </div>
 
+        {/* Saved Resumes CRUD Section */}
+        <div className="border-t-4 border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-600 min-h-[200px] border-b border-slate-200 dark:border-gray-700">
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">JSON Resumes</h3>
+              <Button
+                onClick={handleCreateNewResume}
+                size="sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                <CloudUpload className="w-4 h-4 mr-2" />
+                New Resume
+              </Button>
+            </div>
+            
+            {/* Resume List */}
+            <div className="space-y-2 max-h-64 overflow-y-auto">
+              {resumesLoading ? (
+                <div className="text-center py-4 text-slate-500 dark:text-gray-400">
+                  <p>Loading resumes...</p>
+                </div>
+              ) : resumes && Array.isArray(resumes) && resumes.length > 0 ? (
+                resumes.map((resume: any) => (
+                  <div 
+                    key={resume.id}
+                    className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
+                      selectedResume?.id === resume.id 
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 shadow-sm' 
+                        : 'bg-white dark:bg-gray-700 border-slate-200 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-600'
+                    }`}
+                    onClick={() => onResumeSelect(resume)}
+                  >
+                    <div className="flex-1">
+                      <h4 className="font-medium text-slate-900 dark:text-white">{resume.name || 'Untitled Resume'}</h4>
+                      <p className="text-sm text-slate-500 dark:text-gray-400">
+                        Theme: {resume.theme || 'modern'} • Created: {resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : 'Unknown'}
+                      </p>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onResumeSelect(resume);
+                          setJsonContent(resume.jsonData);
+                        }}
+                        className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteResume(resume.id);
+                        }}
+                        className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center py-8 text-slate-500 dark:text-gray-400">
+                  <p>No saved resumes yet.</p>
+                  <p className="text-sm">Upload a file or paste JSON above to create your first resume.</p>
+                  <div className="mt-4 text-xs opacity-50">
+                    Debug: Loading: {resumesLoading ? 'Yes' : 'No'} | Data: {resumes ? JSON.stringify(resumes).slice(0, 100) + '...' : 'null'}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
         {/* JSON Editor */}
         <div className="flex-1 p-3 lg:p-6 min-h-0">
           <div className="h-full flex flex-col">
@@ -310,85 +389,6 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                 onChange={handleJsonChange}
                 height="250px"
               />
-            </div>
-          </div>
-
-          {/* Saved Resumes CRUD Section */}
-          <div className="border-t-4 border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-600 min-h-[200px]">
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">JSON Resumes</h3>
-                <Button
-                  onClick={handleCreateNewResume}
-                  size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  <CloudUpload className="w-4 h-4 mr-2" />
-                  New Resume
-                </Button>
-              </div>
-              
-              {/* Resume List */}
-              <div className="space-y-2 max-h-64 overflow-y-auto">
-                {resumesLoading ? (
-                  <div className="text-center py-4 text-slate-500 dark:text-gray-400">
-                    <p>Loading resumes...</p>
-                  </div>
-                ) : resumes && Array.isArray(resumes) && resumes.length > 0 ? (
-                  resumes.map((resume: any) => (
-                    <div 
-                      key={resume.id}
-                      className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
-                        selectedResume?.id === resume.id 
-                          ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 shadow-sm' 
-                          : 'bg-white dark:bg-gray-700 border-slate-200 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-600'
-                      }`}
-                      onClick={() => onResumeSelect(resume)}
-                    >
-                      <div className="flex-1">
-                        <h4 className="font-medium text-slate-900 dark:text-white">{resume.name || 'Untitled Resume'}</h4>
-                        <p className="text-sm text-slate-500 dark:text-gray-400">
-                          Theme: {resume.theme || 'modern'} • Created: {resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : 'Unknown'}
-                        </p>
-                      </div>
-                      
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onResumeSelect(resume);
-                            setJsonContent(resume.jsonData);
-                          }}
-                          className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleDeleteResume(resume.id);
-                          }}
-                          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-                        >
-                          Delete
-                        </Button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-center py-8 text-slate-500 dark:text-gray-400">
-                    <p>No saved resumes yet.</p>
-                    <p className="text-sm">Upload a file or paste JSON above to create your first resume.</p>
-                    <div className="mt-4 text-xs opacity-50">
-                      Debug: Loading: {resumesLoading ? 'Yes' : 'No'} | Data: {resumes ? JSON.stringify(resumes).slice(0, 100) + '...' : 'null'}
-                    </div>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </div>
