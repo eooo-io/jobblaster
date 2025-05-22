@@ -5,6 +5,7 @@ import JobAnalyzer from "@/components/job-analyzer";
 import MatchScorer from "@/components/match-scorer";
 import CoverLetterGenerator from "@/components/cover-letter-generator";
 import ResumePreview from "@/components/resume-preview";
+import ResumeSelector from "@/components/resume-selector";
 import { Button } from "@/components/ui/button";
 import { Plus, Bell } from "lucide-react";
 import type { Resume, JobPosting } from "@shared/schema";
@@ -139,6 +140,21 @@ export default function Dashboard() {
               <JobAnalyzer 
                 selectedJob={selectedJob}
                 onJobSelect={setSelectedJob}
+              />
+            </div>
+          </div>
+
+          {/* Resume Selection Section */}
+          <div className="bg-slate-100 dark:bg-gray-800 border-t border-slate-200 dark:border-gray-700 p-4 lg:p-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-4">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Select Resume for Preview</h3>
+                <p className="text-sm text-slate-600 dark:text-gray-300">Choose which saved resume to display below</p>
+              </div>
+              
+              <ResumeSelector 
+                selectedResume={selectedResume}
+                onResumeSelect={setSelectedResume}
               />
             </div>
           </div>
