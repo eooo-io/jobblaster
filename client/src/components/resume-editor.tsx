@@ -318,9 +318,23 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                     onClick={() => onResumeSelect(resume)}
                   >
                     <div className="flex-1">
-                      <h4 className="font-medium text-slate-900 dark:text-white">{resume.name || 'Untitled Resume'}</h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-medium text-slate-900 dark:text-white">{resume.name || 'Untitled Resume'}</h4>
+                        {selectedResume?.id === resume.id && (
+                          <span className="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-xs px-2 py-1 rounded-full border border-green-200 dark:border-green-700">
+                            Selected
+                          </span>
+                        )}
+                      </div>
                       <p className="text-sm text-slate-500 dark:text-gray-400">
-                        Theme: {resume.theme || 'modern'} • Created: {resume.createdAt ? new Date(resume.createdAt).toLocaleDateString() : 'Unknown'}
+                        Theme: {resume.theme || 'modern'} • Created: {resume.createdAt ? new Date(resume.createdAt).toLocaleString('en-GB', { 
+                          year: 'numeric', 
+                          month: '2-digit', 
+                          day: '2-digit', 
+                          hour: '2-digit', 
+                          minute: '2-digit',
+                          hour12: false 
+                        }) : 'Unknown'}
                       </p>
                     </div>
                     
