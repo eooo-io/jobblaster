@@ -156,8 +156,13 @@ export default function Profile() {
         });
       }
       
-      // Refresh user data
+      // Force refresh user data to get updated credentials
+      queryClient.removeQueries({ queryKey: ["/api/auth/user"] });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      
+      // Update local state to reflect connection
+      setAdzunaAppId(data.user?.adzunaAppId || adzunaAppId);
+      setAdzunaApiKey(data.user?.adzunaApiKey || adzunaApiKey);
     },
     onError: (error: Error) => {
       toast({
