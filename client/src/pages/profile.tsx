@@ -18,6 +18,8 @@ export default function Profile() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showApiKey, setShowApiKey] = useState(false);
   const [apiKey, setApiKey] = useState(user?.openaiApiKey || "");
+  const [adzunaAppId, setAdzunaAppId] = useState(user?.adzunaAppId || "");
+  const [adzunaApiKey, setAdzunaApiKey] = useState(user?.adzunaApiKey || "");
 
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
@@ -86,6 +88,42 @@ export default function Profile() {
     onError: (error: Error) => {
       toast({
         title: "Update Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const updateAdzunaMutation = useMutation({
+    mutationFn: async ({ appId, apiKey }: { appId: string; apiKey: string }) => {
+      const response = await fetch("/api/update-profile", {
+        method: "POST",
+        body: JSON.stringify({ adzunaAppId: appId, adzunaApiKey: apiKey }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to update Adzuna credentials");
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "Adzuna credentials saved successfully",
+      });
+      
+      // Refresh user data
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Save Failed",
         description: error.message,
         variant: "destructive",
       });
