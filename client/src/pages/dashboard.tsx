@@ -26,9 +26,26 @@ export default function Dashboard() {
             <p className="text-sm lg:text-base text-slate-600 dark:text-gray-300">Upload your resume and find the perfect job match</p>
           </div>
           <div className="flex items-center space-x-4">
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={() => {
+                if (selectedResume) {
+                  // Show preview modal or expand preview section
+                  const previewSection = document.getElementById('resume-preview-section');
+                  if (previewSection) {
+                    previewSection.scrollIntoView({ behavior: 'smooth' });
+                    previewSection.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                    setTimeout(() => {
+                      previewSection.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                    }, 2000);
+                  }
+                } else {
+                  alert('Please select a resume first to preview!');
+                }
+              }}
+            >
               <Plus className="w-4 h-4 mr-2" />
-              New Project
+              Preview Resume
             </Button>
             <Button variant="ghost" size="sm">
               <Bell className="w-4 h-4" />
@@ -49,27 +66,46 @@ export default function Dashboard() {
             />
           </div>
 
+          {/* Resume Preview Section */}
+          <div 
+            id="resume-preview-section" 
+            className="bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 p-6 transition-all duration-300"
+          >
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Resume Preview</h2>
+                  <p className="text-slate-600 dark:text-gray-300">See how your resume looks in different themes</p>
+                </div>
+                
+                {/* Theme Selector */}
+                <div className="flex items-center space-x-4">
+                  <label className="text-sm font-medium text-slate-700 dark:text-gray-300">
+                    Theme:
+                  </label>
+                  <select 
+                    value={selectedTheme} 
+                    onChange={(e) => setSelectedTheme(e.target.value)}
+                    className="px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white"
+                  >
+                    <option value="modern">Modern</option>
+                    <option value="james-clark">James Clark Professional</option>
+                    <option value="classic">Classic</option>
+                    <option value="minimal">Minimal</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Large Preview */}
+              <div className="bg-slate-50 dark:bg-gray-800 rounded-lg p-6 border border-slate-200 dark:border-gray-600">
+                <ResumePreview resume={selectedResume} theme={selectedTheme} />
+              </div>
+            </div>
+          </div>
+
           {/* Bottom Panel */}
           <div className="bg-white dark:bg-gray-900 border-t border-slate-200 dark:border-gray-700 p-6">
-            {/* Theme Selector */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                Preview Theme
-              </label>
-              <select 
-                value={selectedTheme} 
-                onChange={(e) => setSelectedTheme(e.target.value)}
-                className="block w-full max-w-xs px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white"
-              >
-                <option value="modern">Modern</option>
-                <option value="james-clark">James Clark Professional</option>
-                <option value="classic">Classic</option>
-                <option value="minimal">Minimal</option>
-              </select>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <ResumePreview resume={selectedResume} theme={selectedTheme} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <MatchScorer 
                 resume={selectedResume} 
                 job={selectedJob} 
