@@ -107,7 +107,10 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       {/* JSON Resumes Header */}
       <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
         <button 
-          onClick={() => setResumesOpen(!resumesOpen)}
+          onClick={() => {
+            console.log('Accordion clicked, current state:', resumesOpen);
+            setResumesOpen(!resumesOpen);
+          }}
           className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
         >
           <div className="flex items-center gap-2">
