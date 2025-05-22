@@ -162,6 +162,60 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
   };
 
+  const handleDeleteResume = async (resumeId: number) => {
+    if (!confirm("Are you sure you want to delete this resume? This action cannot be undone.")) {
+      return;
+    }
+
+    try {
+      await apiRequest(`/api/resumes/${resumeId}`, {
+        method: "DELETE",
+      });
+      
+      queryClient.invalidateQueries({ queryKey: ["/api/resumes"] });
+      
+      // If we deleted the currently selected resume, clear the selection
+      if (selectedResume?.id === resumeId) {
+        onResumeSelect(null as any);
+        setJsonContent(null);
+      }
+      
+      toast({
+        title: "Resume deleted",
+        description: "The resume has been successfully deleted.",
+      });
+    } catch (error) {
+      toast({
+        title: "Delete failed",
+        description: "There was an error deleting the resume. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCreateNewResume = () => {
+    // Clear current selection and JSON content to start fresh
+    onResumeSelect(null as any);
+    setJsonContent({
+      basics: {
+        name: "",
+        label: "",
+        email: "",
+        phone: "",
+        summary: ""
+      },
+      work: [],
+      education: [],
+      skills: [],
+      projects: []
+    });
+    
+    toast({
+      title: "New resume started",
+      description: "Fill in the JSON editor and click 'Save Resume' to create your new resume.",
+    });
+  };
+
   return (
     <Card className="bg-white rounded-xl border border-slate-200 flex flex-col h-full">
       <CardHeader className="border-b border-slate-200">
@@ -248,6 +302,78 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               onChange={handleJsonChange}
               height="300px"
             />
+          </div>
+
+          {/* Saved Resumes CRUD Section */}
+          <div className="border-t border-slate-200 bg-slate-50 dark:bg-gray-800 dark:border-gray-600">
+            <div className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Saved Resumes</h3>
+                <Button
+                  onClick={handleCreateNewResume}
+                  size="sm"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <CloudUpload className="w-4 h-4 mr-2" />
+                  New Resume
+                </Button>
+              </div>
+              
+              {/* Resume List */}
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {resumes && resumes.length > 0 ? (
+                  resumes.map((resume) => (
+                    <div 
+                      key={resume.id}
+                      className={`flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all ${
+                        selectedResume?.id === resume.id 
+                          ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700 shadow-sm' 
+                          : 'bg-white dark:bg-gray-700 border-slate-200 dark:border-gray-600 hover:bg-slate-50 dark:hover:bg-gray-600'
+                      }`}
+                      onClick={() => onResumeSelect(resume)}
+                    >
+                      <div className="flex-1">
+                        <h4 className="font-medium text-slate-900 dark:text-white">{resume.name}</h4>
+                        <p className="text-sm text-slate-500 dark:text-gray-400">
+                          Theme: {resume.theme} • Created: {new Date(resume.createdAt || '').toLocaleDateString()}
+                        </p>
+                      </div>
+                      
+                      <div className="flex items-center space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onResumeSelect(resume);
+                            setJsonContent(resume.jsonData);
+                          }}
+                          className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteResume(resume.id);
+                          }}
+                          className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center py-8 text-slate-500 dark:text-gray-400">
+                    <p>No saved resumes yet.</p>
+                    <p className="text-sm">Upload a file or paste JSON above to create your first resume.</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </CardContent>
