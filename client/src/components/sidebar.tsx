@@ -7,7 +7,8 @@ import {
   History, 
   Settings,
   Target,
-  LogOut
+  LogOut,
+  User
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";

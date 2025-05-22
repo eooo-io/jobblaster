@@ -5,6 +5,7 @@ interface User {
   id: number;
   username: string;
   email: string | null;
+  profilePicture: string | null;
 }
 
 export function useAuth() {
