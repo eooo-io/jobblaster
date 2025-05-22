@@ -17,8 +17,10 @@ export interface IStorage {
   // Resumes
   getResume(id: number): Promise<Resume | undefined>;
   getResumesByUserId(userId: number): Promise<Resume[]>;
+  getDefaultResume(userId: number): Promise<Resume | undefined>;
   createResume(resume: InsertResume): Promise<Resume>;
   updateResume(id: number, resume: Partial<InsertResume>): Promise<Resume | undefined>;
+  setDefaultResume(userId: number, resumeId: number): Promise<Resume | undefined>;
   deleteResume(id: number): Promise<boolean>;
 
   // Job Postings

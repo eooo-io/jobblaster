@@ -37,6 +37,7 @@ export const resumes = pgTable("resumes", {
   name: text("name").notNull(),
   jsonData: jsonb("json_data").notNull(),
   theme: text("theme").notNull().default("modern"),
+  isDefault: boolean("is_default").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
