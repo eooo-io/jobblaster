@@ -334,7 +334,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                   <div className="text-center py-4 text-slate-500 dark:text-gray-400">
                     <p>Loading resumes...</p>
                   </div>
-                ) : resumes && resumes.length > 0 ? (
+                ) : resumes && Array.isArray(resumes) && resumes.length > 0 ? (
                   resumes.map((resume: any) => (
                     <div 
                       key={resume.id}
@@ -383,6 +383,9 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                   <div className="text-center py-8 text-slate-500 dark:text-gray-400">
                     <p>No saved resumes yet.</p>
                     <p className="text-sm">Upload a file or paste JSON above to create your first resume.</p>
+                    <div className="mt-4 text-xs opacity-50">
+                      Debug: Loading: {resumesLoading ? 'Yes' : 'No'} | Data: {resumes ? JSON.stringify(resumes).slice(0, 100) + '...' : 'null'}
+                    </div>
                   </div>
                 )}
               </div>
