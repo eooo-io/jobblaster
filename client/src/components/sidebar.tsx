@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
+import { Link, useLocation } from "wouter";
 
 const navigation = [
   { name: "Resume Builder", icon: FileText, current: true },
@@ -25,6 +26,7 @@ const navigation = [
 
 export default function Sidebar() {
   const { user, logout, isLoggingOut } = useAuth();
+  const [location] = useLocation();
 
   return (
     <aside className="w-64 bg-white border-r border-slate-200 flex flex-col">
@@ -43,16 +45,23 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
-        {navigation.map((item) => (
+        <Link href="/">
+          <a className={cn(
+            "flex items-center space-x-3 px-3 py-2 rounded-lg font-medium",
+            location === "/"
+              ? "bg-blue-600/10 text-blue-600"
+              : "text-slate-600 hover:bg-slate-100"
+          )}>
+            <FileText className="w-5 h-5" />
+            <span>Dashboard</span>
+          </a>
+        </Link>
+        
+        {navigation.slice(1).map((item) => (
           <a
             key={item.name}
             href="#"
-            className={cn(
-              "flex items-center space-x-3 px-3 py-2 rounded-lg font-medium",
-              item.current
-                ? "bg-blue-600/10 text-blue-600"
-                : "text-slate-600 hover:bg-slate-100"
-            )}
+            className="flex items-center space-x-3 px-3 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-100"
           >
             <item.icon className="w-5 h-5" />
             <span>{item.name}</span>
@@ -74,16 +83,34 @@ export default function Sidebar() {
           </div>
         </div>
         
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => logout()}
-          disabled={isLoggingOut}
-          className="w-full justify-start text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-        >
-          <LogOut className="w-4 h-4 mr-2" />
-          {isLoggingOut ? "Signing out..." : "Sign Out"}
-        </Button>
+        <div className="space-y-2">
+          <Link href="/profile">
+            <Button
+              variant="ghost"
+              size="sm"
+              className={cn(
+                "w-full justify-start",
+                location === "/profile"
+                  ? "bg-blue-600/10 text-blue-600"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+              )}
+            >
+              <User className="w-4 h-4 mr-2" />
+              Profile Settings
+            </Button>
+          </Link>
+          
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => logout()}
+            disabled={isLoggingOut}
+            className="w-full justify-start text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            {isLoggingOut ? "Signing out..." : "Sign Out"}
+          </Button>
+        </div>
       </div>
     </aside>
   );
