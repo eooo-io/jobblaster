@@ -1,5 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useLocation } from "wouter";
 
 interface User {
   id: number;
@@ -10,6 +11,8 @@ interface User {
 }
 
 export function useAuth() {
+  const [, setLocation] = useLocation();
+  
   const { data: user, isLoading, error } = useQuery({
     queryKey: ['/api/auth/user'],
     retry: false,
@@ -23,6 +26,7 @@ export function useAuth() {
     onSuccess: () => {
       queryClient.clear(); // Clear all cached data
       queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      setLocation('/login'); // Redirect to login page
     },
   });
 
