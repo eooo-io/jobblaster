@@ -107,7 +107,11 @@ export default function Dashboard() {
                   if (selectedResume) {
                     setShowPrintPreview(true);
                   } else {
-                    alert('Please select a resume first to preview!');
+                    toast({
+                      title: "No Resume Selected",
+                      description: "Please select a resume first to preview!",
+                      variant: "destructive",
+                    });
                   }
                 }}
               >
