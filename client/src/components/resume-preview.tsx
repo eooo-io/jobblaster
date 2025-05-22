@@ -32,6 +32,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
   const education = resumeData.education || [];
   const languages = resumeData.languages || [];
   const interests = resumeData.interests || [];
+  const projects = resumeData.projects || [];
 
   const getSkillPercentage = (level: string): number => {
     const levelMap: { [key: string]: number } = {
@@ -289,8 +290,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                         </p>
                       </div>
                       <div className="text-sm text-gray-500 mt-1 sm:mt-0">
-                        {job.startDate && formatYear(job.startDate)}
-                        {job.endDate ? ` – ${formatYear(job.endDate)}` : " – Present"}
+                        {job.startDate && formatDate(job.startDate)}
+                        {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Present"}
                       </div>
                     </div>
                     
@@ -333,8 +334,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                         </p>
                       </div>
                       <div className="text-sm text-gray-500 mt-1 sm:mt-0">
-                        {edu.startDate && formatYear(edu.startDate)}
-                        {edu.endDate ? ` – ${formatYear(edu.endDate)}` : edu.startDate && " – Present"}
+                        {edu.startDate && formatDate(edu.startDate)}
+                        {edu.endDate ? ` – ${formatDate(edu.endDate)}` : edu.startDate && " – Present"}
                       </div>
                     </div>
                     {edu.gpa && (
@@ -398,8 +399,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                         )}
                       </div>
                       <div className="text-sm text-gray-500 mt-1 sm:mt-0">
-                        {project.startDate && formatYear(project.startDate)}
-                        {project.endDate ? ` – ${formatYear(project.endDate)}` : project.startDate && " – Present"}
+                        {project.startDate && formatDate(project.startDate)}
+                        {project.endDate ? ` – ${formatDate(project.endDate)}` : project.startDate && " – Present"}
                       </div>
                     </div>
                     
