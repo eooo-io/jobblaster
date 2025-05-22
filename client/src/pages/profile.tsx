@@ -27,6 +27,13 @@ export default function Profile() {
   const [apiError, setApiError] = useState(null);
   const [adzunaConnected, setAdzunaConnected] = useState(false);
 
+  // Initialize connection status when user data loads
+  useEffect(() => {
+    if (user?.adzunaAppId && user?.adzunaApiKey) {
+      setAdzunaConnected(true);
+    }
+  }, [user]);
+
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
