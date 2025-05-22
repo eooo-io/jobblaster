@@ -100,8 +100,8 @@ export default function Sidebar() {
                 <Target className="text-white text-lg" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">TargetLock</h1>
-                <p className="text-xs text-slate-500 dark:text-gray-400">Resume & Job Match Engine</p>
+                <h1 className="text-xl font-bold text-slate-900 dark:text-white">JobBlaster</h1>
+                <p className="text-xs text-slate-500 dark:text-gray-400">AI-Powered Job Application Platform</p>
               </div>
             </div>
           </div>
@@ -205,8 +205,8 @@ export default function Sidebar() {
               <Target className="text-white text-lg" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">TargetLock</h1>
-              <p className="text-xs text-slate-500 dark:text-gray-400">Resume & Job Match Engine</p>
+              <h1 className="text-xl font-bold text-slate-900 dark:text-white">JobBlaster</h1>
+              <p className="text-xs text-slate-500 dark:text-gray-400">AI-Powered Job Application Platform</p>
             </div>
           </div>
         </div>
