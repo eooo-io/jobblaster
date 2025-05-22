@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Target, LogIn, UserPlus } from "lucide-react";
+import { Target, LogIn, UserPlus, Sun, Moon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "@/contexts/ThemeContext";
 import { apiRequest } from "@/lib/queryClient";
 
 interface LoginProps {
@@ -20,6 +21,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
     email: ""
   });
   const { toast } = useToast();
+  const { theme, toggleTheme } = useTheme();
 
   const loginMutation = useMutation({
     mutationFn: async (data: { username: string; password: string }) => {
@@ -103,24 +105,38 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4 relative">
+      {/* Theme Toggle Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={toggleTheme}
+        className="absolute top-4 right-4 text-slate-600 dark:text-gray-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/20 dark:hover:bg-gray-700/50"
+      >
+        {theme === 'dark' ? (
+          <Sun className="w-5 h-5" />
+        ) : (
+          <Moon className="w-5 h-5" />
+        )}
+      </Button>
+
       <div className="w-full max-w-md">
         {/* Logo and Brand */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
             <Target className="text-white text-2xl" />
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">TargetLock</h1>
-          <p className="text-slate-600">Personal Intelligent Resume & Job Match Engine</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">TargetLock</h1>
+          <p className="text-slate-600 dark:text-gray-300">Personal Intelligent Resume & Job Match Engine</p>
         </div>
 
         {/* Login/Register Form */}
-        <Card className="bg-white/80 backdrop-blur-sm border border-white/20 shadow-xl">
+        <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 shadow-xl">
           <CardHeader className="text-center">
-            <CardTitle className="text-xl font-semibold text-slate-900">
+            <CardTitle className="text-xl font-semibold text-slate-900 dark:text-white">
               {isLogin ? "Welcome Back" : "Create Account"}
             </CardTitle>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 dark:text-gray-300">
               {isLogin 
                 ? "Sign in to access your resume optimization tools" 
                 : "Set up your personal resume optimization workspace"
@@ -131,7 +147,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <Label htmlFor="username" className="text-sm font-medium text-slate-700">
+                <Label htmlFor="username" className="text-sm font-medium text-slate-700 dark:text-gray-300">
                   Username
                 </Label>
                 <Input
@@ -140,14 +156,14 @@ export default function Login({ onLoginSuccess }: LoginProps) {
                   value={formData.username}
                   onChange={(e) => handleInputChange('username', e.target.value)}
                   placeholder="Enter your username"
-                  className="mt-1"
+                  className="mt-1 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   required
                 />
               </div>
 
               {!isLogin && (
                 <div>
-                  <Label htmlFor="email" className="text-sm font-medium text-slate-700">
+                  <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-gray-300">
                     Email (optional)
                   </Label>
                   <Input
@@ -156,13 +172,13 @@ export default function Login({ onLoginSuccess }: LoginProps) {
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     placeholder="Enter your email"
-                    className="mt-1"
+                    className="mt-1 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   />
                 </div>
               )}
 
               <div>
-                <Label htmlFor="password" className="text-sm font-medium text-slate-700">
+                <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-gray-300">
                   Password
                 </Label>
                 <Input
@@ -171,7 +187,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
                   value={formData.password}
                   onChange={(e) => handleInputChange('password', e.target.value)}
                   placeholder="Enter your password"
-                  className="mt-1"
+                  className="mt-1 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
                   required
                 />
               </div>
@@ -199,7 +215,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
               >
                 {isLogin 
                   ? "Don't have an account? Create one" 
@@ -210,7 +226,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
           </CardContent>
         </Card>
 
-        <div className="mt-6 text-center text-xs text-slate-500">
+        <div className="mt-6 text-center text-xs text-slate-500 dark:text-gray-400">
           <p>Secure personal workspace for resume optimization</p>
         </div>
       </div>
