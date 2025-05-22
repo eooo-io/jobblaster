@@ -9,6 +9,7 @@ import { CloudUpload, Download, RefreshCw, Edit3, Check, X, ChevronDown, Code } 
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import JsonEditor from "@/components/json-editor";
+import ResumeSelector from "@/components/resume-selector";
 import { generatePDF } from "@/lib/pdf-generator";
 import type { Resume } from "@shared/schema";
 
@@ -322,6 +323,14 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       </CardHeader>
 
       <CardContent className="flex-1 flex flex-col p-0">
+        {/* Resume Selector with Accordions */}
+        <div className="p-3 lg:p-6 border-b border-slate-200 dark:border-gray-700">
+          <ResumeSelector 
+            selectedResume={selectedResume}
+            onResumeSelect={onResumeSelect}
+          />
+        </div>
+
         {/* Upload Section */}
         <div className="p-3 lg:p-6 border-b border-slate-200 dark:border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
