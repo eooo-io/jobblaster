@@ -48,7 +48,6 @@ export default function Dashboard() {
                   className="flex-1 px-2 py-1 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white text-xs"
                 >
                   <option value="modern">Modern</option>
-                  <option value="james-clark">James Clark</option>
                   <option value="classic">Classic</option>
                   <option value="minimal">Minimal</option>
                   <option value="debug">Debug</option>
@@ -90,7 +89,6 @@ export default function Dashboard() {
                   className="px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white text-sm"
                 >
                   <option value="modern">Modern</option>
-                  <option value="james-clark">James Clark Professional</option>
                   <option value="classic">Classic</option>
                   <option value="minimal">Minimal</option>
                   <option value="debug">Debug</option>

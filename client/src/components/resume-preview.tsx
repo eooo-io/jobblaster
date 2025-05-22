@@ -218,120 +218,352 @@ export default function ResumePreview({ resume, theme = "modern" }: ResumePrevie
     );
   }
 
-  // James Clark Professional Theme Preview
-  if (theme === "james-clark") {
+
+
+  // Modern Theme - Comprehensive JSON Resume Rendering
+  if (theme === "modern") {
     return (
       <div className="lg:col-span-1">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - James Clark Professional</h3>
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - Modern Theme</h3>
         <div className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-lg p-4 h-96 overflow-auto">
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden transform scale-50 origin-top-left" style={{ width: '400px', height: '500px' }}>
-            {/* Purple Header */}
-            <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 relative">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-white/20 rounded flex items-center justify-center text-lg font-bold">
-                  {basics.name?.charAt(0) || 'E'}
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold tracking-wide">{basics.name || 'EZRA TER LINDEN'}</h1>
-                  <p className="text-sm opacity-90">{basics.label || 'Lead Software Developer'}</p>
-                </div>
+          <div className="bg-white dark:bg-gray-900 rounded shadow-sm p-6 text-sm space-y-4">
+            
+            {/* Header Section */}
+            <div className="text-center border-b border-blue-100 pb-4">
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
+                {basics.name || "Your Name"}
+              </h1>
+              {basics.label && (
+                <p className="text-blue-600 dark:text-blue-400 font-medium mb-2">
+                  {basics.label}
+                </p>
+              )}
+              
+              {/* Contact Information */}
+              <div className="text-xs text-gray-600 dark:text-gray-400 space-x-2 flex flex-wrap justify-center gap-x-3">
+                {basics.email && <span>📧 {basics.email}</span>}
+                {basics.phone && <span>📞 {basics.phone}</span>}
+                {basics.url && <span>🌐 {basics.url}</span>}
+                {basics.location?.city && (
+                  <span>📍 {basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
+                )}
               </div>
-              <div className="absolute top-4 right-4 text-right text-xs">
-                {basics.email && <div>📧 {basics.email}</div>}
-                {basics.phone && <div>📞 {basics.phone}</div>}
-                {basics.location?.city && <div>📍 {basics.location.city}</div>}
-              </div>
+              
+              {/* Social Profiles */}
+              {basics.profiles && basics.profiles.length > 0 && (
+                <div className="text-xs text-gray-600 dark:text-gray-400 mt-1 flex flex-wrap justify-center gap-x-2">
+                  {basics.profiles.map((profile: any, index: number) => (
+                    <span key={index}>
+                      {profile.network}: {profile.username || profile.url}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Main Content */}
-            <div className="grid grid-cols-5 gap-0">
-              {/* Sidebar */}
-              <div className="col-span-2 bg-indigo-50 p-3 space-y-4">
-                <div>
-                  <h2 className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-1">
-                    <span className="w-3 h-3 bg-indigo-600 rounded-full"></span>
-                    SKILLS
-                  </h2>
-                  {skills.slice(0, 3).map((skill, index) => {
-                    const skillName = typeof skill === 'string' ? skill : skill.name || 'Skill';
-                    const level = typeof skill === 'object' && skill.level ? skill.level : 'Expert';
-                    const percentage = getSkillPercentage(level);
-                    return (
-                      <div key={index} className="mb-2">
-                        <div className="flex justify-between text-xs mb-1">
-                          <span className="font-medium">{skillName.slice(0, 15)}</span>
-                          <span>{Math.round(percentage/10)}</span>
-                        </div>
-                        <div className="h-1 bg-gray-200 rounded overflow-hidden">
-                          <div className="h-full bg-gradient-to-r from-indigo-600 to-purple-600" style={{ width: `${percentage}%` }}></div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+            {/* Summary */}
+            {basics.summary && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  PROFESSIONAL SUMMARY
+                </h2>
+                <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                  {basics.summary}
+                </p>
+              </div>
+            )}
 
-                {languages.length > 0 && (
-                  <div>
-                    <h2 className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-1">
-                      <span className="w-3 h-3 bg-indigo-600 rounded-full"></span>
-                      LANGUAGES
-                    </h2>
-                    <div className="space-y-2">
-                      {languages.slice(0, 2).map((lang, index) => {
-                        const name = typeof lang === 'string' ? lang : lang.language || 'Language';
-                        const fluency = typeof lang === 'object' && lang.fluency ? lang.fluency : 'Native';
-                        const percentage = getFluencyPercentage(fluency);
-                        return (
-                          <div key={index} className="text-center">
-                            <div className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xs mx-auto mb-1">
-                              {percentage}%
-                            </div>
-                            <div className="text-xs">{name}</div>
-                          </div>
-                        );
-                      })}
+            {/* Work Experience */}
+            {work.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  WORK EXPERIENCE
+                </h2>
+                {work.map((job: any, index: number) => (
+                  <div key={index} className="mb-3 last:mb-0">
+                    <div className="flex justify-between items-start mb-1">
+                      <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                        {job.position || "Position"}
+                      </h3>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {formatDate(job.startDate)}{job.endDate ? ` - ${formatDate(job.endDate)}` : " - Present"}
+                      </span>
                     </div>
+                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1">
+                      {job.name || job.company || "Company"}
+                      {job.location && <span className="text-gray-500 dark:text-gray-400"> • {job.location}</span>}
+                    </p>
+                    {job.summary && (
+                      <p className="text-xs text-gray-700 dark:text-gray-300 mb-1">
+                        {job.summary}
+                      </p>
+                    )}
+                    {job.highlights && job.highlights.length > 0 && (
+                      <ul className="text-xs text-gray-700 dark:text-gray-300 ml-3 list-disc space-y-0.5">
+                        {job.highlights.map((highlight: string, idx: number) => (
+                          <li key={idx}>{highlight}</li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
+            )}
 
-              {/* Main Content */}
-              <div className="col-span-3 p-3 space-y-3">
-                {basics.summary && (
-                  <div>
-                    <h2 className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-1">
-                      <span className="w-3 h-3 bg-indigo-600 rounded-full"></span>
-                      SUMMARY
-                    </h2>
-                    <p className="text-xs text-gray-700 leading-tight">{basics.summary.slice(0, 120)}...</p>
-                  </div>
-                )}
-
-                {work.length > 0 && (
-                  <div>
-                    <h2 className="text-sm font-bold text-gray-800 mb-2 flex items-center gap-1">
-                      <span className="w-3 h-3 bg-indigo-600 rounded-full"></span>
-                      EXPERIENCE
-                    </h2>
-                    {work.slice(0, 2).map((job, index) => (
-                      <div key={index} className="mb-3 pb-2 border-b border-gray-200 last:border-b-0">
-                        <h3 className="text-xs font-bold text-gray-800">{job.position}</h3>
-                        <div className="text-xs text-indigo-600 font-medium">{job.name || job.company}</div>
-                        <div className="text-xs text-gray-600">{formatDate(job.startDate)}-{job.endDate ? formatDate(job.endDate) : 'Present'}</div>
-                        {job.summary && <p className="text-xs text-gray-700 mt-1">{job.summary.slice(0, 100)}...</p>}
+            {/* Education */}
+            {education.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  EDUCATION
+                </h2>
+                {education.map((edu: any, index: number) => (
+                  <div key={index} className="mb-2 last:mb-0">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                          {edu.studyType} {edu.area && `in ${edu.area}`}
+                        </h3>
+                        <p className="text-xs text-blue-600 dark:text-blue-400">
+                          {edu.institution}
+                        </p>
+                        {edu.gpa && (
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            GPA: {edu.gpa}
+                          </p>
+                        )}
                       </div>
-                    ))}
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {formatDate(edu.startDate)}{edu.endDate ? ` - ${formatDate(edu.endDate)}` : ""}
+                      </span>
+                    </div>
+                    {edu.courses && edu.courses.length > 0 && (
+                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                        Relevant coursework: {edu.courses.slice(0, 3).join(', ')}
+                      </p>
+                    )}
                   </div>
-                )}
+                ))}
               </div>
-            </div>
+            )}
+
+            {/* Skills */}
+            {skills.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  SKILLS
+                </h2>
+                <div className="space-y-2">
+                  {skills.map((skill: any, index: number) => (
+                    <div key={index}>
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-xs font-medium text-gray-900 dark:text-white">
+                          {skill.name || `Skill ${index + 1}`}
+                        </span>
+                        {skill.level && (
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {skill.level}
+                          </span>
+                        )}
+                      </div>
+                      {skill.level && (
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1">
+                          <div 
+                            className="bg-blue-600 h-1 rounded-full" 
+                            style={{ width: `${getSkillPercentage(skill.level)}%` }}
+                          ></div>
+                        </div>
+                      )}
+                      {skill.keywords && skill.keywords.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {skill.keywords.slice(0, 6).map((keyword: string, kidx: number) => (
+                            <Badge key={kidx} variant="secondary" className="text-xs px-2 py-0">
+                              {keyword}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Languages */}
+            {languages.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  LANGUAGES
+                </h2>
+                <div className="grid grid-cols-2 gap-2">
+                  {languages.map((lang: any, index: number) => (
+                    <div key={index} className="flex justify-between items-center">
+                      <span className="text-xs font-medium text-gray-900 dark:text-white">
+                        {lang.language || `Language ${index + 1}`}
+                      </span>
+                      <span className="text-xs text-gray-600 dark:text-gray-400">
+                        {lang.fluency || "Fluent"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Projects */}
+            {resumeData.projects && resumeData.projects.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  PROJECTS
+                </h2>
+                {resumeData.projects.slice(0, 3).map((project: any, index: number) => (
+                  <div key={index} className="mb-2 last:mb-0">
+                    <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                      {project.name}
+                      {project.url && (
+                        <span className="text-blue-600 dark:text-blue-400 font-normal ml-1">
+                          ({project.url})
+                        </span>
+                      )}
+                    </h3>
+                    {project.description && (
+                      <p className="text-xs text-gray-700 dark:text-gray-300">
+                        {project.description}
+                      </p>
+                    )}
+                    {project.keywords && project.keywords.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-1">
+                        {project.keywords.slice(0, 4).map((keyword: string, kidx: number) => (
+                          <Badge key={kidx} variant="outline" className="text-xs px-1 py-0">
+                            {keyword}
+                          </Badge>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Awards */}
+            {resumeData.awards && resumeData.awards.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  AWARDS & ACHIEVEMENTS
+                </h2>
+                {resumeData.awards.map((award: any, index: number) => (
+                  <div key={index} className="mb-1 last:mb-0">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                          {award.title}
+                        </h3>
+                        <p className="text-xs text-blue-600 dark:text-blue-400">
+                          {award.awarder}
+                        </p>
+                      </div>
+                      {award.date && (
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {formatDate(award.date)}
+                        </span>
+                      )}
+                    </div>
+                    {award.summary && (
+                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                        {award.summary}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Volunteer Experience */}
+            {resumeData.volunteer && resumeData.volunteer.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  VOLUNTEER EXPERIENCE
+                </h2>
+                {resumeData.volunteer.map((vol: any, index: number) => (
+                  <div key={index} className="mb-2 last:mb-0">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                          {vol.position}
+                        </h3>
+                        <p className="text-xs text-blue-600 dark:text-blue-400">
+                          {vol.organization}
+                        </p>
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {formatDate(vol.startDate)}{vol.endDate ? ` - ${formatDate(vol.endDate)}` : " - Present"}
+                      </span>
+                    </div>
+                    {vol.summary && (
+                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                        {vol.summary}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Publications */}
+            {resumeData.publications && resumeData.publications.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  PUBLICATIONS
+                </h2>
+                {resumeData.publications.map((pub: any, index: number) => (
+                  <div key={index} className="mb-1 last:mb-0">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                          {pub.name}
+                        </h3>
+                        <p className="text-xs text-blue-600 dark:text-blue-400">
+                          {pub.publisher}
+                        </p>
+                      </div>
+                      {pub.releaseDate && (
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {formatDate(pub.releaseDate)}
+                        </span>
+                      )}
+                    </div>
+                    {pub.summary && (
+                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                        {pub.summary}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Interests */}
+            {resumeData.interests && resumeData.interests.length > 0 && (
+              <div>
+                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                  INTERESTS
+                </h2>
+                <div className="flex flex-wrap gap-1">
+                  {resumeData.interests.map((interest: any, index: number) => (
+                    <Badge key={index} variant="secondary" className="text-xs px-2 py-1">
+                      {interest.name}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
           </div>
         </div>
       </div>
     );
   }
 
-  // Default Theme Preview
+  // Default Theme Preview (for other themes)
   return (
     <div className="lg:col-span-1">
       <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - {theme.charAt(0).toUpperCase() + theme.slice(1)} Theme</h3>
