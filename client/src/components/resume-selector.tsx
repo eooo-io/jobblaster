@@ -28,11 +28,21 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   // Rename resume mutation
   const renameMutation = useMutation({
     mutationFn: async ({ id, name }: { id: number; name: string }) => {
-      return apiRequest(`/api/resumes/${id}`, {
+      const response = await fetch(`/api/resumes/${id}`, {
         method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
         body: JSON.stringify({ name }),
-        headers: { 'Content-Type': 'application/json' },
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+      }
+      
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
