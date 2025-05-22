@@ -428,37 +428,12 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                   <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
                     CORE COMPETENCIES
                   </h3>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-3">Frontend</h4>
-                      <div className="space-y-2">
-                        {skills.slice(0, Math.ceil(skills.length/3)).map((skill: any, index: number) => (
-                          <div key={index} className="bg-gray-200 px-3 py-1 rounded text-xs">
-                            {typeof skill === 'string' ? skill : skill.name}
-                          </div>
-                        ))}
+                  <div className="grid grid-cols-3 gap-4">
+                    {skills.map((skill: any, index: number) => (
+                      <div key={index} className="bg-gray-200 px-3 py-2 rounded text-sm text-center">
+                        {typeof skill === 'string' ? skill : skill.name}
                       </div>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-3">Backend</h4>
-                      <div className="space-y-2">
-                        {skills.slice(Math.ceil(skills.length/3), Math.ceil(2*skills.length/3)).map((skill: any, index: number) => (
-                          <div key={index} className="bg-gray-200 px-3 py-1 rounded text-xs">
-                            {typeof skill === 'string' ? skill : skill.name}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 mb-3">DevOps</h4>
-                      <div className="space-y-2">
-                        {skills.slice(Math.ceil(2*skills.length/3)).map((skill: any, index: number) => (
-                          <div key={index} className="bg-gray-200 px-3 py-1 rounded text-xs">
-                            {typeof skill === 'string' ? skill : skill.name}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
               )}
