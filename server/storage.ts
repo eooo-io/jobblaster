@@ -4,6 +4,8 @@ import {
   type JobPosting, type InsertJobPosting, type MatchScore, type InsertMatchScore,
   type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -259,4 +261,142 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Database Storage Implementation
+export class DatabaseStorage implements IStorage {
+  // Users
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(insertUser).returning();
+    return user;
+  }
+
+  async updateUser(id: number, userUpdate: Partial<InsertUser>): Promise<User | undefined> {
+    const [user] = await db.update(users).set(userUpdate).where(eq(users.id, id)).returning();
+    return user;
+  }
+
+  // Resumes - Database Implementation
+  async getResume(id: number): Promise<Resume | undefined> {
+    const [resume] = await db.select().from(resumes).where(eq(resumes.id, id));
+    return resume;
+  }
+
+  async getResumesByUserId(userId: number): Promise<Resume[]> {
+    const userResumes = await db.select().from(resumes).where(eq(resumes.userId, userId));
+    return userResumes;
+  }
+
+  async createResume(insertResume: InsertResume): Promise<Resume> {
+    const [resume] = await db.insert(resumes).values(insertResume).returning();
+    return resume;
+  }
+
+  async updateResume(id: number, resumeUpdate: Partial<InsertResume>): Promise<Resume | undefined> {
+    const [resume] = await db.update(resumes).set(resumeUpdate).where(eq(resumes.id, id)).returning();
+    return resume;
+  }
+
+  async deleteResume(id: number): Promise<boolean> {
+    const result = await db.delete(resumes).where(eq(resumes.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Job Postings - Database Implementation
+  async getJobPosting(id: number): Promise<JobPosting | undefined> {
+    const [jobPosting] = await db.select().from(jobPostings).where(eq(jobPostings.id, id));
+    return jobPosting;
+  }
+
+  async getJobPostingsByUserId(userId: number): Promise<JobPosting[]> {
+    const userJobPostings = await db.select().from(jobPostings).where(eq(jobPostings.userId, userId));
+    return userJobPostings;
+  }
+
+  async createJobPosting(insertJobPosting: InsertJobPosting): Promise<JobPosting> {
+    const [jobPosting] = await db.insert(jobPostings).values(insertJobPosting).returning();
+    return jobPosting;
+  }
+
+  async updateJobPosting(id: number, jobUpdate: Partial<InsertJobPosting>): Promise<JobPosting | undefined> {
+    const [jobPosting] = await db.update(jobPostings).set(jobUpdate).where(eq(jobPostings.id, id)).returning();
+    return jobPosting;
+  }
+
+  async deleteJobPosting(id: number): Promise<boolean> {
+    const result = await db.delete(jobPostings).where(eq(jobPostings.id, id));
+    return result.rowCount > 0;
+  }
+
+  // Match Scores - Database Implementation
+  async getMatchScore(resumeId: number, jobId: number): Promise<MatchScore | undefined> {
+    const [matchScore] = await db.select().from(matchScores)
+      .where(eq(matchScores.resumeId, resumeId))
+      .where(eq(matchScores.jobId, jobId));
+    return matchScore;
+  }
+
+  async createMatchScore(insertMatchScore: InsertMatchScore): Promise<MatchScore> {
+    const [matchScore] = await db.insert(matchScores).values(insertMatchScore).returning();
+    return matchScore;
+  }
+
+  async updateMatchScore(id: number, scoreUpdate: Partial<InsertMatchScore>): Promise<MatchScore | undefined> {
+    const [matchScore] = await db.update(matchScores).set(scoreUpdate).where(eq(matchScores.id, id)).returning();
+    return matchScore;
+  }
+
+  // Cover Letters - Database Implementation
+  async getCoverLetter(id: number): Promise<CoverLetter | undefined> {
+    const [coverLetter] = await db.select().from(coverLetters).where(eq(coverLetters.id, id));
+    return coverLetter;
+  }
+
+  async getCoverLettersByResumeAndJob(resumeId: number, jobId: number): Promise<CoverLetter[]> {
+    const letters = await db.select().from(coverLetters)
+      .where(eq(coverLetters.resumeId, resumeId))
+      .where(eq(coverLetters.jobId, jobId));
+    return letters;
+  }
+
+  async createCoverLetter(insertCoverLetter: InsertCoverLetter): Promise<CoverLetter> {
+    const [coverLetter] = await db.insert(coverLetters).values(insertCoverLetter).returning();
+    return coverLetter;
+  }
+
+  async updateCoverLetter(id: number, letterUpdate: Partial<InsertCoverLetter>): Promise<CoverLetter | undefined> {
+    const [coverLetter] = await db.update(coverLetters).set(letterUpdate).where(eq(coverLetters.id, id)).returning();
+    return coverLetter;
+  }
+
+  // Applications - Database Implementation
+  async getApplication(id: number): Promise<Application | undefined> {
+    const [application] = await db.select().from(applications).where(eq(applications.id, id));
+    return application;
+  }
+
+  async getApplicationsByUserId(userId: number): Promise<Application[]> {
+    const userApplications = await db.select().from(applications).where(eq(applications.userId, userId));
+    return userApplications;
+  }
+
+  async createApplication(insertApplication: InsertApplication): Promise<Application> {
+    const [application] = await db.insert(applications).values(insertApplication).returning();
+    return application;
+  }
+
+  async updateApplication(id: number, appUpdate: Partial<InsertApplication>): Promise<Application | undefined> {
+    const [application] = await db.update(applications).set(appUpdate).where(eq(applications.id, id)).returning();
+    return application;
+  }
+}
+
+export const storage = new DatabaseStorage();
