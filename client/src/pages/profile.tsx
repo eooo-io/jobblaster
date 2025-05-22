@@ -112,12 +112,12 @@ export default function Profile() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
         <div className="max-w-2xl mx-auto">
           <Link href="/">
-            <Button variant="ghost" size="sm" className="flex items-center space-x-2 hover:bg-gray-100">
+            <Button variant="ghost" size="sm" className="flex items-center space-x-2 hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 dark:text-white">
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Dashboard</span>
             </Button>
@@ -128,8 +128,8 @@ export default function Profile() {
       {/* Main Content */}
       <div className="max-w-2xl mx-auto p-6 space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Profile Settings</h1>
-          <p className="text-slate-600 mt-2">Manage your account settings and profile information</p>
+          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Profile Settings</h1>
+          <p className="text-slate-600 dark:text-gray-300 mt-2">Manage your account settings and profile information</p>
         </div>
 
         {/* Profile Picture Section */}
@@ -171,7 +171,7 @@ export default function Profile() {
                 
                 {selectedFile && (
                   <div className="mt-2 flex items-center space-x-2">
-                    <span className="text-sm text-slate-600">{selectedFile.name}</span>
+                    <span className="text-sm text-slate-600 dark:text-gray-300">{selectedFile.name}</span>
                     <Button
                       size="sm"
                       onClick={handleUpload}
@@ -213,7 +213,7 @@ export default function Profile() {
                   <button
                     type="button"
                     onClick={() => setShowApiKey(!showApiKey)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-gray-400 dark:hover:text-gray-300"
                   >
                     {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -225,20 +225,20 @@ export default function Profile() {
                   {updateApiKeyMutation.isPending ? "Saving..." : "Save"}
                 </Button>
               </div>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
                 Your API key is stored securely and only used for your AI features. 
-                Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">OpenAI Platform</a>.
+                Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">OpenAI Platform</a>.
               </p>
               {user?.openaiApiKey && (
-                <div className="flex items-center space-x-2 mt-2 p-2 bg-green-50 border border-green-200 rounded-lg">
+                <div className="flex items-center space-x-2 mt-2 p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-green-700">API key configured - AI features are enabled</span>
+                  <span className="text-sm text-green-700 dark:text-green-400">API key configured - AI features are enabled</span>
                 </div>
               )}
               {!user?.openaiApiKey && (
-                <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
                   <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <span className="text-sm text-yellow-700">No API key - AI features are disabled</span>
+                  <span className="text-sm text-yellow-700 dark:text-yellow-400">No API key - AI features are disabled</span>
                 </div>
               )}
             </div>
