@@ -5,7 +5,7 @@ import {
   type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication
 } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -297,9 +297,31 @@ export class DatabaseStorage implements IStorage {
     return userResumes;
   }
 
+  async getDefaultResume(userId: number): Promise<Resume | undefined> {
+    const [defaultResume] = await db.select().from(resumes).where(
+      and(eq(resumes.userId, userId), eq(resumes.isDefault, true))
+    );
+    return defaultResume;
+  }
+
   async createResume(insertResume: InsertResume): Promise<Resume> {
     const [resume] = await db.insert(resumes).values(insertResume).returning();
     return resume;
+  }
+
+  async setDefaultResume(userId: number, resumeId: number): Promise<Resume | undefined> {
+    // First, remove default flag from all user's resumes
+    await db.update(resumes)
+      .set({ isDefault: false })
+      .where(eq(resumes.userId, userId));
+    
+    // Then set the specified resume as default
+    const [defaultResume] = await db.update(resumes)
+      .set({ isDefault: true })
+      .where(and(eq(resumes.id, resumeId), eq(resumes.userId, userId)))
+      .returning();
+    
+    return defaultResume;
   }
 
   async updateResume(id: number, resumeUpdate: Partial<InsertResume>): Promise<Resume | undefined> {

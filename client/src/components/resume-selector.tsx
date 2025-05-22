@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { FileText, Calendar, Palette, Edit2, Save, X } from 'lucide-react';
+import { FileText, Calendar, Palette, Edit2, Save, X, Star } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 
@@ -43,6 +43,29 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
     onError: (error: Error) => {
       toast({
         title: "Rename Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Set default resume mutation
+  const setDefaultMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return apiRequest(`/api/resumes/${id}/default`, {
+        method: 'PUT',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      toast({
+        title: "Default Resume Set",
+        description: "This resume will now be used as your default template!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Set Default Failed",
         description: error.message,
         variant: "destructive",
       });

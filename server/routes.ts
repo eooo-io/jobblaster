@@ -531,6 +531,40 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // Set default resume
+  app.put("/api/resumes/:id/default", requireAuth, async (req: any, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) return res.status(401).json({ message: "Authentication required" });
+
+      const resumeId = parseInt(req.params.id);
+      const defaultResume = await storage.setDefaultResume(userId, resumeId);
+      
+      if (!defaultResume) {
+        return res.status(404).json({ message: "Resume not found" });
+      }
+
+      res.json(defaultResume);
+    } catch (error) {
+      console.error("Set default resume error:", error);
+      res.status(500).json({ message: "Failed to set default resume" });
+    }
+  });
+
+  // Get default resume
+  app.get("/api/resumes/default", requireAuth, async (req: any, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) return res.status(401).json({ message: "Authentication required" });
+
+      const defaultResume = await storage.getDefaultResume(userId);
+      res.json(defaultResume || null);
+    } catch (error) {
+      console.error("Get default resume error:", error);
+      res.status(500).json({ message: "Failed to get default resume" });
+    }
+  });
+
   // Get available job connectors
   app.get("/api/jobs/connectors", requireAuth, async (req: any, res: Response) => {
     try {
