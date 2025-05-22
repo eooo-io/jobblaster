@@ -159,9 +159,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Authentication required" });
       }
 
-      const { openaiApiKey } = req.body;
+      const { openaiApiKey, adzunaAppId, adzunaApiKey } = req.body;
       
-      const updatedUser = await storage.updateUser(userId, { openaiApiKey });
+      const updateData: any = {};
+      if (openaiApiKey !== undefined) updateData.openaiApiKey = openaiApiKey;
+      if (adzunaAppId !== undefined) updateData.adzunaAppId = adzunaAppId;
+      if (adzunaApiKey !== undefined) updateData.adzunaApiKey = adzunaApiKey;
+      
+      const updatedUser = await storage.updateUser(userId, updateData);
       
       if (!updatedUser) {
         return res.status(404).json({ message: "User not found" });
