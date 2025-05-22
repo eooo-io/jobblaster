@@ -229,7 +229,7 @@ export default function JobAnalyzer({ selectedJob, onJobSelect, selectedResume }
         {parsedData && (
           <div className="flex-1 p-6">
             <div className="flex items-center justify-between mb-4">
-              <h4 className="font-medium text-slate-900">Parsed Job Information</h4>
+              <h4 className="font-medium text-slate-900 dark:text-white">Parsed Job Information</h4>
               <Button onClick={handleSaveJob} disabled={saveMutation.isPending}>
                 {saveMutation.isPending ? "Saving..." : "Save Job"}
               </Button>
@@ -238,14 +238,14 @@ export default function JobAnalyzer({ selectedJob, onJobSelect, selectedResume }
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-sm font-medium text-slate-700 mb-1">Job Title</Label>
+                  <Label className="text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">Job Title</Label>
                   <Input
                     value={parsedData.title || ""}
                     onChange={(e) => updateParsedField('title', e.target.value)}
                   />
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-slate-700 mb-1">Company</Label>
+                  <Label className="text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">Company</Label>
                   <Input
                     value={parsedData.company || ""}
                     onChange={(e) => updateParsedField('company', e.target.value)}
@@ -254,7 +254,7 @@ export default function JobAnalyzer({ selectedJob, onJobSelect, selectedResume }
               </div>
 
               <div>
-                <Label className="text-sm font-medium text-slate-700 mb-1">Required Tech Stack</Label>
+                <Label className="text-sm font-medium text-slate-700 dark:text-gray-300 mb-1">Required Tech Stack</Label>
                 <div className="flex flex-wrap gap-2 mb-2">
                   {parsedData.techStack?.map((skill: string, index: number) => (
                     <Badge key={index} className="bg-blue-100 text-blue-800 flex items-center">
