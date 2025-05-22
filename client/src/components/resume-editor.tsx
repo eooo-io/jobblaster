@@ -226,27 +226,64 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
   };
 
-  const handleCreateNewResume = () => {
-    // Clear current selection and JSON content to start fresh
-    onResumeSelect(null as any);
-    setJsonContent({
-      basics: {
-        name: "",
-        label: "",
-        email: "",
-        phone: "",
-        summary: ""
-      },
-      work: [],
-      education: [],
-      skills: [],
-      projects: []
-    });
-    
-    toast({
-      title: "New resume started",
-      description: "Fill in the JSON editor and click 'Save Resume' to create your new resume.",
-    });
+  const handleCreateNewResume = async () => {
+    try {
+      // Try to get the default resume template
+      const defaultResume = await apiRequest('/api/resumes/default');
+      
+      if (defaultResume) {
+        // Use the default resume as template
+        setJsonContent(defaultResume.jsonData);
+        toast({
+          title: "New resume started",
+          description: "Loaded your default resume template. Modify it and save as a new resume!",
+        });
+      } else {
+        // No default template, use basic structure
+        setJsonContent({
+          basics: {
+            name: "",
+            label: "",
+            email: "",
+            phone: "",
+            summary: ""
+          },
+          work: [],
+          education: [],
+          skills: [],
+          projects: []
+        });
+        toast({
+          title: "New resume started",
+          description: "Fill in the JSON editor and click 'Save Resume' to create your new resume.",
+        });
+      }
+      
+      // Clear current selection to start fresh
+      onResumeSelect(null as any);
+      
+    } catch (error) {
+      // If there's an error getting default template, use basic structure
+      onResumeSelect(null as any);
+      setJsonContent({
+        basics: {
+          name: "",
+          label: "",
+          email: "",
+          phone: "",
+          summary: ""
+        },
+        work: [],
+        education: [],
+        skills: [],
+        projects: []
+      });
+      
+      toast({
+        title: "New resume started",
+        description: "Fill in the JSON editor and click 'Save Resume' to create your new resume.",
+      });
+    }
   };
 
   // Edit handlers for renaming

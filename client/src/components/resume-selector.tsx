@@ -165,19 +165,36 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                 ) : (
                   <>
                     <div className="flex items-center justify-between">
-                      <h4 className="font-medium text-slate-900 dark:text-white truncate">
+                      <h4 className="font-medium text-slate-900 dark:text-white truncate flex items-center">
                         {resume.name || 'Untitled Resume'}
+                        {resume.isDefault && (
+                          <Star className="w-4 h-4 ml-2 text-yellow-500 fill-yellow-500" />
+                        )}
                       </h4>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleStartEdit(resume);
-                        }}
-                        className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Edit2 className="w-3 h-3" />
+                      <div className="flex items-center space-x-1">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDefaultMutation.mutate(resume.id);
+                          }}
+                          disabled={setDefaultMutation.isPending || resume.isDefault}
+                          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                          title={resume.isDefault ? "Already default" : "Set as default"}
+                        >
+                          <Star className={`w-3 h-3 ${resume.isDefault ? 'text-yellow-500 fill-yellow-500' : 'text-slate-400'}`} />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStartEdit(resume);
+                          }}
+                          className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Edit2 className="w-3 h-3" />
                       </Button>
                     </div>
                     <div className="flex items-center space-x-3 mt-2 text-xs text-slate-500 dark:text-gray-400">
