@@ -159,12 +159,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Authentication required" });
       }
 
-      const { openaiApiKey, adzunaAppId, adzunaApiKey } = req.body;
+      const { openaiApiKey, adzunaAppId, adzunaApiKey, appId, apiKey } = req.body;
+      
+      console.log('Update profile request body:', req.body);
       
       const updateData: any = {};
       if (openaiApiKey !== undefined) updateData.openaiApiKey = openaiApiKey;
       if (adzunaAppId !== undefined) updateData.adzunaAppId = adzunaAppId;
       if (adzunaApiKey !== undefined) updateData.adzunaApiKey = adzunaApiKey;
+      // Also check for the other possible field names from frontend
+      if (appId !== undefined) updateData.adzunaAppId = appId;
+      if (apiKey !== undefined) updateData.adzunaApiKey = apiKey;
+      
+      console.log('Update data to be sent to storage:', updateData);
       
       const updatedUser = await storage.updateUser(userId, updateData);
       
