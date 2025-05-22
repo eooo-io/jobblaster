@@ -396,7 +396,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                             <p className="text-blue-600 font-medium">
                               {job.name || job.company || "Company"}
                             </p>
-                            <span className="text-sm text-gray-500">📍 {job.location || "Location"}</span>
+                            <span className="text-sm text-gray-500"><i className="fas fa-map-marker-alt mr-1"></i> {job.location || "Location"}</span>
                           </div>
                         </div>
                       </div>
