@@ -29,8 +29,13 @@ export default function Profile() {
 
   // Initialize connection status when user data loads
   useEffect(() => {
+    console.log('User data:', user);
     if (user?.adzunaAppId && user?.adzunaApiKey) {
+      console.log('Setting Adzuna connected to true');
       setAdzunaConnected(true);
+    } else {
+      console.log('Adzuna not connected - missing credentials');
+      setAdzunaConnected(false);
     }
   }, [user]);
 
