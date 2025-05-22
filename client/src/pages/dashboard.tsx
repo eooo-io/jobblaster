@@ -235,7 +235,7 @@ export default function Dashboard() {
                   </div>
                   
                   <div style={{ height: '100%', overflow: 'hidden' }}>
-                    <ResumePreview resume={selectedResume} theme={selectedTheme} />
+                    <ResumePreview resume={selectedResume} theme={selectedTheme} forceLightMode={true} />
                   </div>
                 </div>
               </div>
