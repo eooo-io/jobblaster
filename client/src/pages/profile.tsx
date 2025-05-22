@@ -144,25 +144,25 @@ export default function Profile() {
           setApiError(data.adzunaTest.error);
           setShowErrorModal(true);
           toast({
-            title: "Credentials Saved",
+            title: "Credentials Saved", 
             description: "Credentials saved but API test failed. Check error details.",
             variant: "destructive",
           });
         }
       } else {
+        // If no test result, but credentials were saved, assume connected
+        if (adzunaAppId && adzunaApiKey) {
+          setAdzunaConnected(true);
+        }
         toast({
           title: "Success!",
           description: "Profile updated successfully",
         });
       }
       
-      // Force refresh user data to get updated credentials
+      // Force refresh user data
       queryClient.removeQueries({ queryKey: ["/api/auth/user"] });
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
-      
-      // Update local state to reflect connection
-      setAdzunaAppId(data.user?.adzunaAppId || adzunaAppId);
-      setAdzunaApiKey(data.user?.adzunaApiKey || adzunaApiKey);
     },
     onError: (error: Error) => {
       toast({
