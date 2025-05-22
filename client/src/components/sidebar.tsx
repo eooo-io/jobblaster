@@ -7,7 +7,6 @@ import {
   Download, 
   History, 
   Settings,
-  Target,
   LogOut,
   User,
   Sun,
@@ -50,9 +49,9 @@ export default function Sidebar() {
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-slate-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-            <Target className="text-white text-sm" />
+            <i className="fas fa-bullseye text-white text-sm"></i>
           </div>
-          <h1 className="text-lg font-bold text-slate-900 dark:text-white">TargetLock</h1>
+          <h1 className="text-lg font-bold text-slate-900 dark:text-white">JobBlaster</h1>
         </div>
         
         <div className="flex items-center space-x-2">
@@ -97,7 +96,7 @@ export default function Sidebar() {
           <div className="p-6 border-b border-slate-200 dark:border-gray-700">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <Target className="text-white text-lg" />
+                <i className="fas fa-bullseye text-white text-lg"></i>
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-900 dark:text-white">JobBlaster</h1>
@@ -202,7 +201,7 @@ export default function Sidebar() {
         <div className="p-6 border-b border-slate-200 dark:border-gray-700">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-              <Target className="text-white text-lg" />
+              <i className="fas fa-bullseye text-white text-lg"></i>
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-900 dark:text-white">JobBlaster</h1>
