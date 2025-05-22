@@ -220,255 +220,312 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
     );
   }
 
-  // Lucide Theme - Clean, minimal design inspired by JSON Resume registry
+  // Lucide Theme - Blue sidebar layout from JSON Resume registry
   if (theme === "lucide") {
     return (
       <div className="lg:col-span-1">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - Lucide Theme</h3>
         <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-          <div className={`${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm p-8 text-sm max-w-4xl mx-auto`}>
+          <div className={`${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm min-h-full flex text-sm`}>
             
-            {/* Header Section */}
-            <div className="mb-8">
-              <h1 className="text-3xl font-light text-gray-900 mb-2">
-                {basics.name || "Your Name"}
-              </h1>
-              {basics.label && (
-                <h2 className="text-lg text-gray-600 mb-4 font-light">
-                  {basics.label}
-                </h2>
-              )}
+            {/* Left Sidebar - Blue */}
+            <div className="w-1/3 bg-blue-600 text-white p-6">
               
               {/* Contact Information */}
-              <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-                {basics.email && (
-                  <span className="flex items-center">
-                    <span>{basics.email}</span>
-                  </span>
-                )}
-                {basics.phone && (
-                  <span>{basics.phone}</span>
-                )}
-                {basics.location?.city && (
-                  <span>
-                    {basics.location.city}{basics.location.region && `, ${basics.location.region}`}
-                  </span>
-                )}
-                {basics.url && (
-                  <span className="text-blue-600">{basics.url}</span>
-                )}
+              <div className="mb-8">
+                <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
+                  INFORMATIONS
+                </h3>
+                <div className="space-y-3 text-sm">
+                  {basics.location?.city && (
+                    <div className="flex items-center">
+                      <span className="mr-2">📍</span>
+                      <span>{basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
+                    </div>
+                  )}
+                  {basics.phone && (
+                    <div className="flex items-center">
+                      <span className="mr-2">📞</span>
+                      <span>{basics.phone}</span>
+                    </div>
+                  )}
+                  {basics.email && (
+                    <div className="flex items-center">
+                      <span className="mr-2">✉️</span>
+                      <span className="break-all">{basics.email}</span>
+                    </div>
+                  )}
+                  {basics.url && (
+                    <div className="flex items-center">
+                      <span className="mr-2">🔗</span>
+                      <span className="break-all text-blue-200">{basics.url}</span>
+                    </div>
+                  )}
+                  {basics.profiles && basics.profiles.length > 0 && (
+                    <>
+                      {basics.profiles.map((profile: any, index: number) => (
+                        <div key={index} className="flex items-center">
+                          <span className="mr-2">🐦</span>
+                          <span className="text-blue-200">{profile.username || profile.url}</span>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Skills */}
+              {skills.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
+                    SOFT SKILLS
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    {skills.map((skill: any, index: number) => (
+                      <div key={index}>
+                        {typeof skill === 'string' ? (
+                          <div>{skill}</div>
+                        ) : (
+                          <>
+                            <div className="font-medium">{skill.name}</div>
+                            {skill.keywords && skill.keywords.length > 0 && (
+                              <div className="ml-2 text-blue-200">
+                                {skill.keywords.slice(0, 3).join(' • ')}
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Languages */}
+              {languages.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
+                    LANGUES
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    {languages.map((lang: any, index: number) => (
+                      <div key={index}>
+                        <div className="font-medium">{lang.language}</div>
+                        <div className="text-blue-200 text-xs">{lang.fluency}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Interests */}
+              {interests.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
+                    INTÉRÊTS
+                  </h3>
+                  <div className="space-y-2 text-sm">
+                    {interests.map((interest: any, index: number) => (
+                      <div key={index}>
+                        {typeof interest === 'string' ? interest : interest.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* References */}
+              <div>
+                <h3 className="text-lg font-bold mb-4 bg-blue-700 px-3 py-2 rounded">
+                  RÉFÉRENCES
+                </h3>
+                <div className="text-xs leading-relaxed">
+                  <p className="italic">
+                    "Professional references available upon request. Previous colleagues and supervisors can attest to technical expertise, work ethic, and collaborative abilities."
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Summary */}
-            {basics.summary && (
+            {/* Right Content Area */}
+            <div className="w-2/3 p-6 bg-gray-50">
+              
+              {/* Header */}
               <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-3 border-b border-gray-200 pb-1">
-                  About
-                </h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {basics.summary}
-                </p>
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                  {basics.name || "Your Name"}
+                </h1>
+                {basics.label && (
+                  <h2 className="text-xl text-blue-600 font-medium mb-4">
+                    {basics.label}
+                  </h2>
+                )}
+                
+                {basics.summary && (
+                  <p className="text-gray-700 leading-relaxed text-sm">
+                    {basics.summary}
+                  </p>
+                )}
               </div>
-            )}
 
-            {/* Work Experience */}
-            {work.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">
-                  Work Experience
-                </h3>
-                {work.map((job: any, index: number) => (
-                  <div key={index} className="mb-6 last:mb-0">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
-                      <div>
-                        <h4 className="font-medium text-gray-900">
-                          {job.position || "Position"}
-                        </h4>
-                        <p className="text-gray-600">
-                          {job.name || job.company || "Company"}
-                        </p>
-                      </div>
-                      <div className="text-sm text-gray-500 mt-1 sm:mt-0">
-                        {job.startDate && formatDate(job.startDate)}
-                        {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Present"}
-                      </div>
-                    </div>
-                    
-                    {job.summary && (
-                      <p className="text-gray-700 mb-2 leading-relaxed">
-                        {job.summary}
-                      </p>
-                    )}
-                    
-                    {job.highlights && job.highlights.length > 0 && (
-                      <ul className="text-gray-700 space-y-1">
-                        {job.highlights.map((highlight: string, idx: number) => (
-                          <li key={idx} className="flex items-start">
-                            <span className="text-gray-400 mr-2 mt-1">•</span>
-                            <span>{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Education */}
-            {education.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">
-                  Education
-                </h3>
-                {education.map((edu: any, index: number) => (
-                  <div key={index} className="mb-4 last:mb-0">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1">
-                      <div>
-                        <h4 className="font-medium text-gray-900">
-                          {edu.studyType} {edu.area && `in ${edu.area}`}
-                        </h4>
-                        <p className="text-gray-600">
-                          {edu.institution}
-                        </p>
-                      </div>
-                      <div className="text-sm text-gray-500 mt-1 sm:mt-0">
-                        {edu.startDate && formatDate(edu.startDate)}
-                        {edu.endDate ? ` – ${formatDate(edu.endDate)}` : edu.startDate && " – Present"}
-                      </div>
-                    </div>
-                    {edu.gpa && (
-                      <p className="text-sm text-gray-600">GPA: {edu.gpa}</p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Skills */}
-            {skills.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">
-                  Skills
-                </h3>
-                <div className="space-y-3">
-                  {skills.map((skill: any, index: number) => (
-                    <div key={index}>
-                      {typeof skill === 'string' ? (
-                        <span className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm mr-2 mb-2">
-                          {skill}
-                        </span>
-                      ) : (
-                        <div>
-                          <h4 className="font-medium text-gray-900 mb-2">
-                            {skill.name}
-                          </h4>
-                          <div className="flex flex-wrap gap-2">
-                            {skill.keywords?.map((keyword: string, kidx: number) => (
-                              <span key={kidx} className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                                {keyword}
-                              </span>
-                            ))}
+              {/* Work Experience */}
+              {work.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-blue-600 mb-6 border-b-2 border-blue-600 pb-2">
+                    EXPÉRIENCES PROFESSIONNELLES
+                  </h3>
+                  {work.map((job: any, index: number) => (
+                    <div key={index} className="mb-6 last:mb-0">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-4 mb-1">
+                            <span className="text-sm font-medium text-gray-600">
+                              {job.startDate && formatDate(job.startDate)}
+                              {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Aujourd'hui"}
+                            </span>
+                            <h4 className="text-lg font-bold text-gray-900">
+                              {job.position || "Position"}
+                            </h4>
+                          </div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <p className="text-blue-600 font-medium">
+                              {job.name || job.company || "Company"}
+                            </p>
+                            <span className="text-sm text-gray-500">📍 {job.location || "Location"}</span>
                           </div>
                         </div>
+                      </div>
+                      
+                      {job.summary && (
+                        <p className="text-gray-700 mb-3 text-sm leading-relaxed">
+                          {job.summary}
+                        </p>
+                      )}
+                      
+                      {job.highlights && job.highlights.length > 0 && (
+                        <ul className="text-gray-700 space-y-1 text-sm">
+                          {job.highlights.map((highlight: string, idx: number) => (
+                            <li key={idx} className="flex items-start">
+                              <span className="text-blue-600 mr-2 mt-1">•</span>
+                              <span>{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
                       )}
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Projects */}
-            {projects.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">
-                  Projects
-                </h3>
-                {projects.map((project: any, index: number) => (
-                  <div key={index} className="mb-6 last:mb-0">
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
-                      <div>
-                        <h4 className="font-medium text-gray-900">
-                          {project.name}
-                        </h4>
-                        {project.url && (
-                          <p className="text-blue-600 text-sm">
-                            {project.url}
-                          </p>
-                        )}
-                      </div>
-                      <div className="text-sm text-gray-500 mt-1 sm:mt-0">
-                        {project.startDate && formatDate(project.startDate)}
-                        {project.endDate ? ` – ${formatDate(project.endDate)}` : project.startDate && " – Present"}
+              {/* Skills/Competences */}
+              {skills.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-blue-600 mb-6 border-b-2 border-blue-600 pb-2">
+                    COMPÉTENCES
+                  </h3>
+                  <div className="grid grid-cols-3 gap-6">
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-3">Frontend</h4>
+                      <div className="space-y-2">
+                        {skills.slice(0, Math.ceil(skills.length/3)).map((skill: any, index: number) => (
+                          <div key={index} className="bg-gray-200 px-3 py-1 rounded text-xs">
+                            {typeof skill === 'string' ? skill : skill.name}
+                          </div>
+                        ))}
                       </div>
                     </div>
-                    
-                    {project.description && (
-                      <p className="text-gray-700 mb-2 leading-relaxed">
-                        {project.description}
-                      </p>
-                    )}
-                    
-                    {project.highlights && project.highlights.length > 0 && (
-                      <ul className="text-gray-700 space-y-1">
-                        {project.highlights.map((highlight: string, idx: number) => (
-                          <li key={idx} className="flex items-start">
-                            <span className="text-gray-400 mr-2 mt-1">•</span>
-                            <span>{highlight}</span>
-                          </li>
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-3">Backend</h4>
+                      <div className="space-y-2">
+                        {skills.slice(Math.ceil(skills.length/3), Math.ceil(2*skills.length/3)).map((skill: any, index: number) => (
+                          <div key={index} className="bg-gray-200 px-3 py-1 rounded text-xs">
+                            {typeof skill === 'string' ? skill : skill.name}
+                          </div>
                         ))}
-                      </ul>
-                    )}
-                    
-                    {project.keywords && project.keywords.length > 0 && (
-                      <div className="mt-2">
-                        <div className="flex flex-wrap gap-1">
-                          {project.keywords.map((keyword: string, kidx: number) => (
-                            <span key={kidx} className="inline-block bg-blue-50 text-blue-700 px-2 py-1 rounded text-xs">
-                              {keyword}
-                            </span>
-                          ))}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-gray-900 mb-3">DevOps</h4>
+                      <div className="space-y-2">
+                        {skills.slice(Math.ceil(2*skills.length/3)).map((skill: any, index: number) => (
+                          <div key={index} className="bg-gray-200 px-3 py-1 rounded text-xs">
+                            {typeof skill === 'string' ? skill : skill.name}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Education */}
+              {education.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-bold text-blue-600 mb-6 border-b-2 border-blue-600 pb-2">
+                    FORMATIONS
+                  </h3>
+                  {education.map((edu: any, index: number) => (
+                    <div key={index} className="mb-4 last:mb-0">
+                      <div className="flex justify-between items-start mb-1">
+                        <div>
+                          <span className="text-sm font-medium text-gray-600">
+                            {edu.startDate && formatDate(edu.startDate)}
+                            {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
+                          </span>
+                          <h4 className="font-bold text-gray-900">
+                            {edu.studyType} {edu.area && `en ${edu.area}`}
+                          </h4>
+                          <p className="text-blue-600 font-medium">
+                            {edu.institution}
+                          </p>
                         </div>
                       </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {/* Languages */}
-            {languages.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">
-                  Languages
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {languages.map((lang: any, index: number) => (
-                    <div key={index} className="flex justify-between">
-                      <span className="text-gray-900">{lang.language}</span>
-                      <span className="text-gray-600 text-sm">{lang.fluency}</span>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Interests */}
-            {interests.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-4 border-b border-gray-200 pb-1">
-                  Interests
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {interests.map((interest: any, index: number) => (
-                    <span key={index} className="inline-block bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                      {typeof interest === 'string' ? interest : interest.name}
-                    </span>
+              {/* Projects */}
+              {projects.length > 0 && (
+                <div>
+                  <h3 className="text-xl font-bold text-blue-600 mb-6 border-b-2 border-blue-600 pb-2">
+                    PROJETS
+                  </h3>
+                  {projects.map((project: any, index: number) => (
+                    <div key={index} className="mb-6 last:mb-0">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <span className="text-sm font-medium text-gray-600">
+                            {project.startDate && formatDate(project.startDate)}
+                            {project.endDate ? ` – ${formatDate(project.endDate)}` : project.startDate && " – Aujourd'hui"}
+                          </span>
+                          <h4 className="font-bold text-gray-900">
+                            {project.name}
+                          </h4>
+                        </div>
+                      </div>
+                      
+                      {project.description && (
+                        <p className="text-gray-700 mb-2 text-sm leading-relaxed">
+                          {project.description}
+                        </p>
+                      )}
+                      
+                      {project.highlights && project.highlights.length > 0 && (
+                        <ul className="text-gray-700 space-y-1 text-sm">
+                          {project.highlights.map((highlight: string, idx: number) => (
+                            <li key={idx} className="flex items-start">
+                              <span className="text-blue-600 mr-2 mt-1">•</span>
+                              <span>{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
                   ))}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
           </div>
         </div>
