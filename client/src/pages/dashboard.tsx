@@ -49,6 +49,7 @@ export default function Dashboard() {
                   <option value="james-clark">James Clark</option>
                   <option value="classic">Classic</option>
                   <option value="minimal">Minimal</option>
+                  <option value="debug">Debug</option>
                 </select>
               </div>
               
@@ -97,6 +98,7 @@ export default function Dashboard() {
                   <option value="james-clark">James Clark Professional</option>
                   <option value="classic">Classic</option>
                   <option value="minimal">Minimal</option>
+                  <option value="debug">Debug</option>
                 </select>
               </div>
               
