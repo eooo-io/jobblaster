@@ -8,6 +8,8 @@ interface User {
   email: string | null;
   profilePicture: string | null;
   openaiApiKey: string | null;
+  adzunaAppId: string | null;
+  adzunaApiKey: string | null;
 }
 
 export function useAuth() {
