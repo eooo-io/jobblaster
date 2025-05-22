@@ -48,7 +48,7 @@ export default function JsonEditor({ value, onChange, height = "300px" }: JsonEd
     <div className="w-full">
       <textarea
         ref={textareaRef}
-        className="w-full p-4 border border-slate-200 rounded-lg font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        className="w-full p-4 border border-slate-200 dark:border-gray-600 rounded-lg font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500"
         style={{ height }}
         defaultValue={formattedValue}
         onChange={handleChange}
