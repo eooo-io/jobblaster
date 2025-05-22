@@ -7,13 +7,15 @@ import CoverLetterGenerator from "@/components/cover-letter-generator";
 import ResumePreview from "@/components/resume-preview";
 import ResumeSelector from "@/components/resume-selector";
 import { Button } from "@/components/ui/button";
-import { Plus, Bell } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Plus, Bell, Printer, X } from "lucide-react";
 import type { Resume, JobPosting } from "@shared/schema";
 
 export default function Dashboard() {
   const [selectedResume, setSelectedResume] = useState<Resume | null>(null);
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
   const [selectedTheme, setSelectedTheme] = useState<string>("modern");
+  const [showPrintPreview, setShowPrintPreview] = useState(false);
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
@@ -58,21 +60,14 @@ export default function Dashboard() {
                 className="bg-blue-600 hover:bg-blue-700 text-xs px-3"
                 onClick={() => {
                   if (selectedResume) {
-                    const previewSection = document.getElementById('resume-preview-section');
-                    if (previewSection) {
-                      previewSection.scrollIntoView({ behavior: 'smooth' });
-                      previewSection.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
-                      setTimeout(() => {
-                        previewSection.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
-                      }, 2000);
-                    }
+                    setShowPrintPreview(true);
                   } else {
                     alert('Please select a resume first to preview!');
                   }
                 }}
               >
-                <Plus className="w-3 h-3 mr-1" />
-                Preview
+                <Printer className="w-3 h-3 mr-1" />
+                Print Preview
               </Button>
             </div>
           </div>
@@ -106,21 +101,14 @@ export default function Dashboard() {
                 className="bg-blue-600 hover:bg-blue-700"
                 onClick={() => {
                   if (selectedResume) {
-                    const previewSection = document.getElementById('resume-preview-section');
-                    if (previewSection) {
-                      previewSection.scrollIntoView({ behavior: 'smooth' });
-                      previewSection.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
-                      setTimeout(() => {
-                        previewSection.classList.remove('ring-2', 'ring-blue-500', 'ring-opacity-50');
-                      }, 2000);
-                    }
+                    setShowPrintPreview(true);
                   } else {
                     alert('Please select a resume first to preview!');
                   }
                 }}
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Preview Resume
+                <Printer className="w-4 h-4 mr-2" />
+                Print Preview
               </Button>
               <Button variant="ghost" size="sm">
                 <Bell className="w-4 h-4" />
@@ -182,6 +170,80 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+
+      {/* Print Preview Modal */}
+      <Dialog open={showPrintPreview} onOpenChange={setShowPrintPreview}>
+        <DialogContent className="max-w-none w-screen h-screen p-0 m-0 bg-gray-100 dark:bg-gray-900">
+          <div className="flex flex-col h-full">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
+              <div>
+                <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Print Preview - US Legal Format
+                </DialogTitle>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {selectedResume?.name || "Resume"} • 8.5" × 14" • Ready to print
+                </p>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowPrintPreview(false)}
+                className="flex items-center gap-2"
+              >
+                <X className="w-4 h-4" />
+                Close
+              </Button>
+            </div>
+
+            {/* Print Preview Content */}
+            <div className="flex-1 overflow-auto p-8 bg-gray-100 dark:bg-gray-900">
+              <div className="max-w-[8.5in] mx-auto">
+                {/* US Legal Paper Size Container */}
+                <div 
+                  className="bg-white shadow-lg mx-auto"
+                  style={{
+                    width: '8.5in',
+                    minHeight: '14in',
+                    padding: '0.75in',
+                    fontSize: '11pt',
+                    lineHeight: '1.4',
+                    fontFamily: 'Georgia, serif'
+                  }}
+                >
+                  <ResumePreview resume={selectedResume} theme={selectedTheme} />
+                </div>
+              </div>
+            </div>
+
+            {/* Print Actions Footer */}
+            <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+              <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+                <span>📄 US Legal (8.5" × 14")</span>
+                <span>🎨 {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)} Theme</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.print()}
+                  className="flex items-center gap-2"
+                >
+                  <Printer className="w-4 h-4" />
+                  Print Resume
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => setShowPrintPreview(false)}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  Done
+                </Button>
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
