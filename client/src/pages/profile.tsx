@@ -10,7 +10,7 @@ import { Upload, User, Camera, Key, Eye, EyeOff, ArrowLeft, Search } from "lucid
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
-import ErrorModal from "@/components/error-modal";
+import { ErrorModal } from "@/components/error-modal";
 
 export default function Profile() {
   const { user } = useAuth();
