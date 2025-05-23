@@ -50,10 +50,10 @@ export default function SearchCriteriaPage() {
     jobTitles: [],
     locations: [],
     excludeKeywords: [],
-    employmentType: "full-time",
+    employmentTypes: [],
     salaryMin: undefined,
     salaryMax: undefined,
-    experienceLevel: "mid",
+    experienceLevels: [],
     isActive: true,
   });
 
