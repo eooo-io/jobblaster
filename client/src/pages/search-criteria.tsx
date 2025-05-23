@@ -232,15 +232,26 @@ export default function SearchCriteriaPage() {
     );
   }
 
+  const toggleCriteriaExpansion = (criteriaId: number) => {
+    setExpandedCriteria(prev => ({
+      ...prev,
+      [criteriaId]: !prev[criteriaId]
+    }));
+  };
+
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-3xl font-bold">Job Search Criteria</h1>
-          <p className="text-muted-foreground">
-            Manage universal search parameters for all job connectors and scrapers
-          </p>
-        </div>
+    <div className="flex h-screen bg-background">
+      <Sidebar />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 overflow-auto">
+          <div className="container mx-auto p-6">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h1 className="text-3xl font-bold">Job Search Criteria</h1>
+                <p className="text-muted-foreground">
+                  Manage universal search parameters for all job connectors and scrapers
+                </p>
+              </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={openCreateDialog}>
@@ -513,21 +524,33 @@ export default function SearchCriteriaPage() {
         </Dialog>
       </div>
 
-      <div className="grid gap-4">
-        {criteria.map((criteriaItem: JobSearchCriteria) => (
-          <Card key={criteriaItem.id}>
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <Target className="h-5 w-5" />
-                    {criteriaItem.name}
-                    {criteriaItem.isActive ? (
-                      <Badge variant="default">Active</Badge>
-                    ) : (
-                      <Badge variant="secondary">Inactive</Badge>
-                    )}
-                  </CardTitle>
+            <div className="grid gap-4">
+              {criteria.map((criteriaItem: JobSearchCriteria) => (
+                <Collapsible
+                  key={criteriaItem.id}
+                  open={expandedCriteria[criteriaItem.id] || false}
+                  onOpenChange={() => toggleCriteriaExpansion(criteriaItem.id)}
+                >
+                  <Card>
+                    <CollapsibleTrigger asChild>
+                      <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-2 flex-1">
+                            {expandedCriteria[criteriaItem.id] ? (
+                              <ChevronDown className="h-4 w-4" />
+                            ) : (
+                              <ChevronRight className="h-4 w-4" />
+                            )}
+                            <Target className="h-5 w-5" />
+                            <CardTitle className="flex items-center gap-2">
+                              {criteriaItem.name}
+                              {criteriaItem.isActive ? (
+                                <Badge variant="default">Active</Badge>
+                              ) : (
+                                <Badge variant="secondary">Inactive</Badge>
+                              )}
+                            </CardTitle>
+                          </div>
                   <CardDescription className="flex items-center gap-4 mt-2">
                     <span className="flex items-center gap-1">
                       <Search className="h-4 w-4" />
@@ -549,12 +572,12 @@ export default function SearchCriteriaPage() {
                         {criteriaItem.salaryMax && `$${criteriaItem.salaryMax.toLocaleString()}`}
                       </span>
                     )}
-                  </CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
+                          </CardDescription>
+                        </div>
+                        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                          <Button
+                            variant="outline"
+                            size="sm"
                     onClick={() => runSearchMutation.mutate(criteriaItem.id)}
                     disabled={runSearchMutation.isPending}
                   >
@@ -576,10 +599,12 @@ export default function SearchCriteriaPage() {
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
+                        </div>
+                      </CardHeader>
+                    </CollapsibleTrigger>
+                    
+                    <CollapsibleContent>
+                      <CardContent>
               <div className="grid gap-4">
                 {criteriaItem.keywords && criteriaItem.keywords.length > 0 && (
                   <div>
@@ -632,10 +657,12 @@ export default function SearchCriteriaPage() {
                     </div>
                   </div>
                 )}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                      </div>
+                    </CardContent>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
+            ))}
 
         {criteria.length === 0 && (
           <Card>
@@ -651,7 +678,10 @@ export default function SearchCriteriaPage() {
               </Button>
             </CardContent>
           </Card>
-        )}
+          )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
