@@ -349,7 +349,7 @@ export default function ExternalLogs() {
                                       <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         Request Data
                                       </Typography>
-                                      <pre className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-3 rounded text-xs overflow-x-auto max-h-40">
+                                      <pre className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-3 rounded text-xs overflow-x-auto max-h-40 text-gray-900 dark:text-gray-100">
                                         {JSON.stringify(log.requestData, null, 2)}
                                       </pre>
                                     </div>
@@ -357,7 +357,7 @@ export default function ExternalLogs() {
                                       <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                         Response Data
                                       </Typography>
-                                      <pre className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-3 rounded text-xs overflow-x-auto max-h-40">
+                                      <pre className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-3 rounded text-xs overflow-x-auto max-h-40 text-gray-900 dark:text-gray-100">
                                         {JSON.stringify(log.responseData, null, 2)}
                                       </pre>
                                     </div>
