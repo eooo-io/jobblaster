@@ -266,9 +266,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!userId) {
         return res.status(401).json({ message: "Not authenticated" });
       }
+      console.log(`🔍 Fetching resumes for userId: ${userId}`);
       const resumes = await storage.getResumesByUserId(userId);
+      console.log(`📋 Found ${resumes.length} resumes:`, resumes.map(r => ({ id: r.id, name: r.name })));
       res.json(resumes);
     } catch (error) {
+      console.error("Error fetching resumes:", error);
       res.status(500).json({ message: "Failed to fetch resumes" });
     }
   });
