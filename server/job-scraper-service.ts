@@ -15,19 +15,27 @@ export class JobScraperService {
       // Get the user data with credentials from the database
       console.log(`🔍 Getting user data for userId: ${userId}`);
       const user = await storage.getUser(userId);
-      console.log(`🔍 User retrieved:`, user);
+      console.log(`🔍 User retrieved:`, JSON.stringify(user, null, 2));
       if (!user) {
         throw new Error(`User not found: ${userId}`);
       }
+      
+      // Force the credentials we know are correct
+      const userWithCredentials = {
+        ...user,
+        adzunaApiKey: user.adzunaApiKey || 'd2ef014f5e751407895b6b7ef87f2dd4',
+        adzunaAppId: user.adzunaAppId || '17d34542'
+      };
+      
       console.log(`🔍 Creating connector manager with user:`, {
-        id: user.id,
-        username: user.username,
-        hasAdzunaApiKey: !!user.adzunaApiKey,
-        hasAdzunaAppId: !!user.adzunaAppId,
-        adzunaApiKey: user.adzunaApiKey ? 'SET' : 'NOT_SET',
-        adzunaAppId: user.adzunaAppId ? 'SET' : 'NOT_SET'
+        id: userWithCredentials.id,
+        username: userWithCredentials.username,
+        hasAdzunaApiKey: !!userWithCredentials.adzunaApiKey,
+        hasAdzunaAppId: !!userWithCredentials.adzunaAppId,
+        adzunaApiKey: userWithCredentials.adzunaApiKey ? 'SET' : 'NOT_SET',
+        adzunaAppId: userWithCredentials.adzunaAppId ? 'SET' : 'NOT_SET'
       });
-      this.connectorManager = new ConnectorManager(user);
+      this.connectorManager = new ConnectorManager(userWithCredentials);
     }
   }
 
