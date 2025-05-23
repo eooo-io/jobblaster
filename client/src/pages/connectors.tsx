@@ -49,13 +49,18 @@ export default function Connectors() {
   useEffect(() => {
     if (user) {
       console.log("Loading user data:", user); // Debug log
-      setSettings({
+      console.log("User properties:", Object.keys(user)); // Debug log
+      
+      const newSettings = {
         openaiApiKey: user.openaiApiKey || "",
         adzunaAppId: user.adzunaAppId || "",
         adzunaApiKey: user.adzunaApiKey || "",
         anthropicApiKey: user.anthropicApiKey || "",
         xaiApiKey: user.xaiApiKey || "",
-      });
+      };
+      
+      console.log("Setting form data:", newSettings); // Debug log
+      setSettings(newSettings);
       
       // Set connection status based on existing credentials
       const results: Record<string, TestResult> = {};
