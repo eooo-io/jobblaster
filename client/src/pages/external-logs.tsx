@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardHeader, CardBody, Typography, Chip, Button } from "@material-tailwind/react";
-import { Clock, CheckCircle, XCircle, Activity, Database, ArrowLeft, ChevronDown, ChevronRight } from "lucide-react";
+import { Card, CardHeader, CardBody, Typography, Chip, Button, Select, Option } from "@material-tailwind/react";
+import { Clock, CheckCircle, XCircle, Activity, Database, ArrowLeft, ChevronDown, ChevronRight, ChevronLeft } from "lucide-react";
 import { format } from "date-fns";
 import { Link } from "wouter";
 import { useState } from "react";
@@ -27,6 +27,8 @@ export default function ExternalLogs() {
 
   const [expandedLogs, setExpandedLogs] = useState<Set<number>>(new Set());
   const [expandedServices, setExpandedServices] = useState<Set<string>>(new Set(["OpenAI", "Adzuna"]));
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   if (isLoading) {
     return (
@@ -94,14 +96,92 @@ export default function ExternalLogs() {
     return { total, successful, failed };
   };
 
-  // Group logs by service
-  const logsByService = logs.reduce((acc, log) => {
+  // Sort logs by creation date (newest first)
+  const sortedLogs = [...logs].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  
+  // Calculate pagination
+  const totalLogs = sortedLogs.length;
+  const totalPages = Math.ceil(totalLogs / pageSize);
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const paginatedLogs = sortedLogs.slice(startIndex, endIndex);
+  
+  // Group paginated logs by service
+  const logsByService = paginatedLogs.reduce((acc, log) => {
     if (!acc[log.service]) {
       acc[log.service] = [];
     }
     acc[log.service].push(log);
     return acc;
   }, {} as Record<string, ExternalLog[]>);
+
+  const handlePageSizeChange = (value: string) => {
+    setPageSize(parseInt(value));
+    setCurrentPage(1); // Reset to first page when changing page size
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const renderPaginationButtons = () => {
+    const buttons = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    // Previous button
+    buttons.push(
+      <Button
+        key="prev"
+        variant="outlined"
+        size="sm"
+        onClick={() => handlePageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        className="flex items-center space-x-1"
+      >
+        <ChevronLeft className="h-4 w-4" />
+        <span>Previous</span>
+      </Button>
+    );
+
+    // Page number buttons
+    for (let i = startPage; i <= endPage; i++) {
+      buttons.push(
+        <Button
+          key={i}
+          variant={i === currentPage ? "filled" : "outlined"}
+          size="sm"
+          onClick={() => handlePageChange(i)}
+          className="min-w-[40px]"
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    // Next button
+    buttons.push(
+      <Button
+        key="next"
+        variant="outlined"
+        size="sm"
+        onClick={() => handlePageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+        className="flex items-center space-x-1"
+      >
+        <span>Next</span>
+        <ChevronRight className="h-4 w-4" />
+      </Button>
+    );
+
+    return buttons;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
@@ -127,6 +207,31 @@ export default function ExternalLogs() {
               </div>
             </div>
           </div>
+          {totalLogs > 0 && (
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Typography variant="small" color="gray">
+                  Show:
+                </Typography>
+                <div className="w-20">
+                  <select
+                    value={pageSize}
+                    onChange={(e) => handlePageSizeChange(e.target.value)}
+                    className="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                  </select>
+                </div>
+              </div>
+              <Typography variant="small" color="gray">
+                {startIndex + 1}-{Math.min(endIndex, totalLogs)} of {totalLogs} logs
+              </Typography>
+            </div>
+          )}
         </div>
 
         {/* Services */}
@@ -270,6 +375,18 @@ export default function ExternalLogs() {
             })
           )}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="mt-8 flex items-center justify-between">
+            <Typography variant="small" color="gray">
+              Showing {startIndex + 1}-{Math.min(endIndex, totalLogs)} of {totalLogs} logs
+            </Typography>
+            <div className="flex items-center space-x-2">
+              {renderPaginationButtons()}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
