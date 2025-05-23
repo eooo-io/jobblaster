@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, CardHeader, CardBody, Typography, Chip } from "@material-tailwind/react";
-import { Clock, CheckCircle, XCircle, Activity, Database } from "lucide-react";
+import { Card, CardHeader, CardBody, Typography, Chip, Button } from "@material-tailwind/react";
+import { Clock, CheckCircle, XCircle, Activity, Database, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
+import { Link } from "wouter";
 
 interface ExternalLog {
   id: number;
@@ -49,11 +50,26 @@ export default function ExternalLogs() {
   if (isLoading) {
     return (
       <div className="p-6">
-        <div className="flex items-center gap-2 mb-6">
-          <Database className="w-6 h-6 text-blue-600" />
-          <Typography variant="h4" color="blue-gray">
-            External API Logs
-          </Typography>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <Database className="w-6 h-6 text-blue-600" />
+            <Typography variant="h4" color="blue-gray">
+              External API Logs
+            </Typography>
+          </div>
+          <Link href="/">
+            <Button 
+              variant="outlined" 
+              size="sm" 
+              className="flex items-center gap-2"
+              placeholder={undefined} 
+              onPointerEnterCapture={undefined} 
+              onPointerLeaveCapture={undefined}
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Dashboard
+            </Button>
+          </Link>
         </div>
         <div className="space-y-4">
           {[...Array(5)].map((_, i) => (
@@ -71,17 +87,31 @@ export default function ExternalLogs() {
 
   return (
     <div className="p-6">
-      <div className="flex items-center gap-2 mb-6">
-        <Database className="w-6 h-6 text-blue-600" />
-        <Typography variant="h4" color="blue-gray">
-          External API Logs
-        </Typography>
-        <Chip
-          value={`${logs.length} logs`}
-          size="sm"
-          color="blue"
-          className="ml-auto"
-        />
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-2">
+          <Database className="w-6 h-6 text-blue-600" />
+          <Typography variant="h4" color="blue-gray" placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+            External API Logs
+          </Typography>
+          <Chip
+            value={`${logs.length} logs`}
+            size="sm"
+            color="blue"
+          />
+        </div>
+        <Link href="/">
+          <Button 
+            variant="outlined" 
+            size="sm" 
+            className="flex items-center gap-2"
+            placeholder={undefined} 
+            onPointerEnterCapture={undefined} 
+            onPointerLeaveCapture={undefined}
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Dashboard
+          </Button>
+        </Link>
       </div>
 
       {logs.length === 0 ? (
