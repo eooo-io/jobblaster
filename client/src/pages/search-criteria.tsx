@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Edit2, Trash2, Search, Target, MapPin, DollarSign, Clock, Play, ChevronDown, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -440,40 +441,80 @@ export default function SearchCriteriaPage() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="employmentType">Employment Type</Label>
-                    <Select
-                      value={formData.employmentType}
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, employmentType: value }))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="full-time">Full-time</SelectItem>
-                        <SelectItem value="part-time">Part-time</SelectItem>
-                        <SelectItem value="contract">Contract</SelectItem>
-                        <SelectItem value="freelance">Freelance</SelectItem>
-                        <SelectItem value="internship">Internship</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>Employment Types</Label>
+                    <div className="border rounded-md p-3 space-y-2">
+                      {[
+                        { value: "full-time", label: "Full-time" },
+                        { value: "part-time", label: "Part-time" },
+                        { value: "contract", label: "Contract" },
+                        { value: "freelance", label: "Freelance" },
+                        { value: "internship", label: "Internship" }
+                      ].map((option) => (
+                        <div key={option.value} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`employment-${option.value}`}
+                            checked={formData.employmentTypes.includes(option.value)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  employmentTypes: [...prev.employmentTypes, option.value]
+                                }));
+                              } else {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  employmentTypes: prev.employmentTypes.filter(type => type !== option.value)
+                                }));
+                              }
+                            }}
+                          />
+                          <Label 
+                            htmlFor={`employment-${option.value}`}
+                            className="text-sm font-normal cursor-pointer"
+                          >
+                            {option.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="experienceLevel">Experience Level</Label>
-                    <Select
-                      value={formData.experienceLevel}
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, experienceLevel: value }))}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="entry">Entry Level</SelectItem>
-                        <SelectItem value="mid">Mid Level</SelectItem>
-                        <SelectItem value="senior">Senior Level</SelectItem>
-                        <SelectItem value="executive">Executive</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Label>Experience Levels</Label>
+                    <div className="border rounded-md p-3 space-y-2">
+                      {[
+                        { value: "entry", label: "Entry Level" },
+                        { value: "mid", label: "Mid Level" },
+                        { value: "senior", label: "Senior Level" },
+                        { value: "executive", label: "Executive" }
+                      ].map((option) => (
+                        <div key={option.value} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`experience-${option.value}`}
+                            checked={formData.experienceLevels.includes(option.value)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  experienceLevels: [...prev.experienceLevels, option.value]
+                                }));
+                              } else {
+                                setFormData(prev => ({
+                                  ...prev,
+                                  experienceLevels: prev.experienceLevels.filter(level => level !== option.value)
+                                }));
+                              }
+                            }}
+                          />
+                          <Label 
+                            htmlFor={`experience-${option.value}`}
+                            className="text-sm font-normal cursor-pointer"
+                          >
+                            {option.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -562,7 +603,7 @@ export default function SearchCriteriaPage() {
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
-                      {criteriaItem.employmentType}
+                      {criteriaItem.employmentTypes?.join(", ") || "No employment types"}
                     </span>
                     {(criteriaItem.salaryMin || criteriaItem.salaryMax) && (
                       <span className="flex items-center gap-1">
