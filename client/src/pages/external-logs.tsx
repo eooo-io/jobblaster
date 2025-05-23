@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardHeader, CardBody, Typography, Chip, Button, Select, Option } from "@material-tailwind/react";
 import { Clock, CheckCircle, XCircle, Activity, Database, ArrowLeft, ChevronDown, ChevronRight, ChevronLeft } from "lucide-react";
 import { format } from "date-fns";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useState } from "react";
 
 interface ExternalLog {
@@ -29,6 +29,7 @@ export default function ExternalLogs() {
   const [expandedServices, setExpandedServices] = useState<Set<string>>(new Set(["OpenAI", "Adzuna"]));
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [, setLocation] = useLocation();
 
   if (isLoading) {
     return (
@@ -193,12 +194,15 @@ export default function ExternalLogs() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
-            <Link href="/dashboard">
-              <Button variant="outlined" size="sm" className="flex items-center space-x-2">
-                <ArrowLeft className="h-4 w-4" />
-                <span>Back to Dashboard</span>
-              </Button>
-            </Link>
+            <Button 
+              variant="outlined" 
+              size="sm" 
+              className="flex items-center space-x-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              onClick={() => setLocation('/')}
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span>Back to Dashboard</span>
+            </Button>
             <div className="flex items-center space-x-3">
               <Database className="h-8 w-8 text-blue-600" />
               <div>
