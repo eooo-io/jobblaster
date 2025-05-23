@@ -106,6 +106,18 @@ export const externalLogs = pgTable("external_logs", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// General application logs table for errors and exceptions
+export const logs = pgTable("logs", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id), // Optional - may not always have a user context
+  level: varchar("level", { length: 10 }).notNull(), // "error", "warn", "info", "debug"
+  message: text("message").notNull(),
+  component: varchar("component", { length: 50 }), // e.g., "job-scraper", "auth", "database"
+  errorStack: text("error_stack"), // Full error stack trace
+  metadata: jsonb("metadata"), // Additional context data
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const aiTemplates = pgTable("ai_templates", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
@@ -166,6 +178,11 @@ export const insertApplicationSchema = createInsertSchema(applications).omit({
 });
 
 export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertLogSchema = createInsertSchema(logs).omit({
   id: true,
   createdAt: true,
 });
@@ -273,6 +290,9 @@ export type Application = typeof applications.$inferSelect;
 
 export type InsertExternalLog = z.infer<typeof insertExternalLogSchema>;
 export type ExternalLog = typeof externalLogs.$inferSelect;
+
+export type InsertLog = z.infer<typeof insertLogSchema>;
+export type Log = typeof logs.$inferSelect;
 
 export type InsertAiTemplate = z.infer<typeof insertAiTemplateSchema>;
 export type AiTemplate = typeof aiTemplates.$inferSelect;
