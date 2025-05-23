@@ -191,10 +191,10 @@ export const jobSearchCriteria = pgTable("job_search_criteria", {
   jobTitles: text("job_titles").array().notNull(), // ["Frontend Developer", "React Developer"]
   locations: text("locations").array().notNull(), // ["Remote", "San Francisco", "New York"]
   excludeKeywords: text("exclude_keywords").array().default([]), // ["Senior", "Lead"]
-  employmentType: varchar("employment_type", { length: 50 }).default("full-time"), // full-time, part-time, contract
+  employmentTypes: text("employment_types").array().default(["full-time"]), // ["full-time", "part-time", "contract"]
   salaryMin: integer("salary_min"), // 80000
   salaryMax: integer("salary_max"), // 120000
-  experienceLevel: varchar("experience_level", { length: 50 }).default("mid"), // entry, mid, senior
+  experienceLevels: text("experience_levels").array().default(["mid"]), // ["entry", "mid", "senior"]
   isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),

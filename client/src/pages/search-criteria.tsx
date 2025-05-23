@@ -21,10 +21,10 @@ interface SearchCriteriaFormData {
   jobTitles: string[];
   locations: string[];
   excludeKeywords: string[];
-  employmentType: string;
+  employmentTypes: string[];
   salaryMin?: number;
   salaryMax?: number;
-  experienceLevel: string;
+  experienceLevels: string[];
   isActive: boolean;
 }
 
