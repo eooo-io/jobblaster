@@ -209,6 +209,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Test OpenAI API connection
       if (updateData.openaiApiKey) {
         try {
+          console.log("Testing OpenAI API key...");
           const testResponse = await fetch('https://api.openai.com/v1/models', {
             method: 'GET',
             headers: {
@@ -217,17 +218,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
             }
           });
           
+          console.log("OpenAI API response status:", testResponse.status);
+          
           if (testResponse.ok) {
             openaiTestResult = { success: true, message: "API key verified successfully" };
+            console.log("OpenAI API test successful");
           } else {
             const errorData = await testResponse.json();
             openaiTestResult = { success: false, error: errorData };
+            console.log("OpenAI API test failed:", errorData);
           }
         } catch (error) {
           openaiTestResult = { 
             success: false, 
             error: { message: "Network error", details: error.message } 
           };
+          console.log("OpenAI API test network error:", error);
         }
       }
 
