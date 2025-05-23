@@ -77,10 +77,7 @@ export default function AssignedTemplates() {
   // Save template assignments
   const saveAssignmentsMutation = useMutation({
     mutationFn: async (assignmentData: TemplateAssignment[]) => {
-      return apiRequest("/api/template-assignments", {
-        method: "POST",
-        body: JSON.stringify(assignmentData),
-      });
+      return apiRequest("POST", "/api/template-assignments", assignmentData);
     },
     onSuccess: () => {
       toast({
