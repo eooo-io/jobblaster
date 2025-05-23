@@ -34,12 +34,15 @@ export class AdzunaConnector extends BaseJobConnector {
     if (params.company) queryParams.append('company', params.company);
 
     const url = `${this.baseUrl}/${this.country}/search?${queryParams}`;
+    console.log("🔗 Adzuna API URL:", url);
 
     try {
       const response = await fetch(url);
       
       if (!response.ok) {
-        throw new Error(`Adzuna API error: ${response.status} ${response.statusText}`);
+        const errorText = await response.text();
+        console.log("❌ Adzuna API Error Response:", errorText);
+        throw new Error(`Adzuna API error: ${response.status} ${response.statusText} - ${errorText}`);
       }
 
       const data = await response.json();
