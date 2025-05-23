@@ -10,7 +10,7 @@ interface ErrorModalProps {
   error: any;
 }
 
-export default function ErrorModal({ isOpen, onClose, title, error }: ErrorModalProps) {
+export function ErrorModal({ isOpen, onClose, title, error }: ErrorModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-auto">

@@ -35,6 +35,8 @@ function Router() {
     <Switch>
       <Route path="/" component={Dashboard} />
       <Route path="/profile" component={Profile} />
+      <Route path="/connectors" component={Connectors} />
+      <Route path="/templates" component={Templates} />
       <Route path="/external-logs" component={ExternalLogs} />
       <Route component={NotFound} />
     </Switch>

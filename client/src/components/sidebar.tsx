@@ -14,7 +14,8 @@ import {
   Menu,
   X,
   Database,
-  Zap
+  Zap,
+  Link2
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -140,18 +141,18 @@ export default function Sidebar() {
               <h3 className="px-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider mb-2">
                 System Tools
               </h3>
-              <Link href="/external-logs">
+              <Link href="/connectors">
                 <div 
                   className={cn(
                     "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
-                    location === "/external-logs"
+                    location === "/connectors"
                       ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
                       : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
                   )}
                   onClick={closeMobileMenu}
                 >
-                  <Database className="w-5 h-5" />
-                  <span>External API Logs</span>
+                  <Link2 className="w-5 h-5" />
+                  <span>Connectors</span>
                 </div>
               </Link>
               <Link href="/templates">
@@ -166,6 +167,20 @@ export default function Sidebar() {
                 >
                   <Zap className="w-5 h-5" />
                   <span>AI Prompt Templates</span>
+                </div>
+              </Link>
+              <Link href="/external-logs">
+                <div 
+                  className={cn(
+                    "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
+                    location === "/external-logs"
+                      ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
+                      : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+                  )}
+                  onClick={closeMobileMenu}
+                >
+                  <Database className="w-5 h-5" />
+                  <span>External API Logs</span>
                 </div>
               </Link>
             </div>
