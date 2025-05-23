@@ -1,12 +1,13 @@
 import OpenAI from "openai";
 import type { Resume, JobPosting } from "@shared/schema";
+import { logApiCall } from "./api-logger";
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const openai = new OpenAI({ 
   apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_ENV_VAR || "default_key" 
 });
 
-export async function analyzeJobDescription(description: string): Promise<{
+export async function analyzeJobDescription(description: string, userId?: number): Promise<{
   title: string;
   company: string;
   techStack: string[];
@@ -15,8 +16,49 @@ export async function analyzeJobDescription(description: string): Promise<{
   location: string;
   employmentType: string;
 }> {
+  const requestData = {
+    model: "gpt-4o",
+    messages: [
+      {
+        role: "system",
+        content: `You are an expert job description analyzer. Extract structured information from job postings and return it in JSON format. 
+
+        Analyze the job description and extract:
+        - title: The job title/position
+        - company: Company name
+        - techStack: Array of technical skills, technologies, programming languages, frameworks, tools mentioned
+        - softSkills: Array of soft skills, interpersonal skills, leadership qualities mentioned
+        - experienceYears: Years of experience required (e.g., "3-5 years", "5+ years", "Entry level")
+        - location: Work location or "Remote" if remote work
+        - employmentType: Type of employment (e.g., "Full-time", "Part-time", "Contract", "Internship")
+
+        Return only valid JSON in this exact format:
+        {
+          "title": "string",
+          "company": "string", 
+          "techStack": ["string"],
+          "softSkills": ["string"],
+          "experienceYears": "string",
+          "location": "string",
+          "employmentType": "string"
+        }`
+      },
+      {
+        role: "user",
+        content: `Please analyze this job description and extract the structured information:\n\n${description}`
+      }
+    ],
+    response_format: { type: "json_object" as const }
+  };
+
   try {
-    const response = await openai.chat.completions.create({
+    const response = await logApiCall({
+      service: 'OpenAI',
+      endpoint: '/chat/completions',
+      method: 'POST',
+      requestData,
+      userId: userId || 1
+    }, () => openai.chat.completions.create(requestData));
       model: "gpt-4o",
       messages: [
         {

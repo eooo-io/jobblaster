@@ -710,6 +710,63 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // Test API logging with both services
+  app.post("/api/test-logging", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const results = [];
+
+      // Test OpenAI API call
+      try {
+        await logApiCall({
+          service: 'OpenAI',
+          endpoint: '/chat/completions',
+          method: 'POST',
+          requestData: { 
+            model: 'gpt-4o',
+            messages: [{ role: 'user', content: 'Test API logging' }],
+            max_tokens: 10
+          },
+          userId
+        }, async () => {
+          // Simulate OpenAI response for demo
+          throw new Error('Please configure your OpenAI API key in your profile settings to test this service');
+        });
+      } catch (error) {
+        results.push({ service: 'OpenAI', status: 'logged', note: 'API call logged (requires valid API key)' });
+      }
+
+      // Test Adzuna API call
+      try {
+        await logApiCall({
+          service: 'Adzuna',
+          endpoint: '/jobs/search',
+          method: 'GET',
+          requestData: { query: 'software developer', location: 'london' },
+          userId
+        }, async () => {
+          // Simulate Adzuna response for demo
+          throw new Error('Please configure your Adzuna credentials in your profile settings to test this service');
+        });
+      } catch (error) {
+        results.push({ service: 'Adzuna', status: 'logged', note: 'API call logged (requires valid credentials)' });
+      }
+
+      res.json({ 
+        message: 'API logging test completed', 
+        results,
+        note: 'Check the External API Logs page to see the logged calls'
+      });
+    } catch (error) {
+      console.error("Error testing API logging:", error);
+      res.status(500).json({ message: "Failed to test API logging" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
