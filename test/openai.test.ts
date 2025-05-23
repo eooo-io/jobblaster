@@ -2,18 +2,19 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from '@server/openai';
 import type { Resume, JobPosting } from '@shared/schema';
 
-// Mock OpenAI responses
-const mockOpenAI = {
-  chat: {
-    completions: {
-      create: vi.fn()
+// Mock OpenAI module
+vi.mock('openai', () => {
+  const mockOpenAI = {
+    chat: {
+      completions: {
+        create: vi.fn()
+      }
     }
-  }
-};
-
-vi.mock('openai', () => ({
-  default: vi.fn(() => mockOpenAI)
-}));
+  };
+  return {
+    default: vi.fn(() => mockOpenAI)
+  };
+});
 
 describe('OpenAI Integration', () => {
   beforeEach(() => {
