@@ -292,15 +292,15 @@ export default function Sidebar() {
             <h3 className="px-3 text-xs font-semibold text-slate-500 dark:text-gray-400 uppercase tracking-wider mb-2">
               System Tools
             </h3>
-            <Link href="/external-logs">
+            <Link href="/connectors">
               <div className={cn(
                 "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
-                location === "/external-logs"
+                location === "/connectors"
                   ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
                   : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
               )}>
-                <Database className="w-4 h-4" />
-                <span>External API Logs</span>
+                <Link2 className="w-4 h-4" />
+                <span>Connectors</span>
               </div>
             </Link>
             <Link href="/templates">
@@ -312,6 +312,17 @@ export default function Sidebar() {
               )}>
                 <Zap className="w-4 h-4" />
                 <span>AI Prompt Templates</span>
+              </div>
+            </Link>
+            <Link href="/external-logs">
+              <div className={cn(
+                "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
+                location === "/external-logs"
+                  ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
+                  : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+              )}>
+                <Database className="w-4 h-4" />
+                <span>External API Logs</span>
               </div>
             </Link>
           </div>
