@@ -52,6 +52,9 @@ export default function SearchCriteriaPage() {
     queryKey: ["/api/job-search-criteria"],
   });
 
+  // Debug log to see what data we're getting
+  console.log("Search criteria data:", criteria, "isLoading:", isLoading);
+
   const createMutation = useMutation({
     mutationFn: (data: InsertJobSearchCriteria) => apiRequest("/api/job-search-criteria", "POST", data),
     onSuccess: () => {
