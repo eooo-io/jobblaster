@@ -8,6 +8,8 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import Dashboard from "@/pages/dashboard";
 import Login from "@/pages/login";
 import Profile from "@/pages/profile";
+import Connectors from "@/pages/connectors";
+import Templates from "@/pages/templates";
 import ExternalLogs from "@/pages/external-logs";
 import NotFound from "@/pages/not-found";
 
