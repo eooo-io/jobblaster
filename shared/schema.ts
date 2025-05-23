@@ -106,18 +106,6 @@ export const externalLogs = pgTable("external_logs", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// General application logs table for errors and exceptions
-export const logs = pgTable("logs", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id), // Optional - may not always have a user context
-  level: varchar("level", { length: 10 }).notNull(), // "error", "warn", "info", "debug"
-  message: text("message").notNull(),
-  component: varchar("component", { length: 50 }), // e.g., "job-scraper", "auth", "database"
-  errorStack: text("error_stack"), // Full error stack trace
-  metadata: jsonb("metadata"), // Additional context data
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
 export const aiTemplates = pgTable("ai_templates", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull().references(() => users.id),
@@ -182,11 +170,6 @@ export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
   createdAt: true,
 });
 
-export const insertLogSchema = createInsertSchema(logs).omit({
-  id: true,
-  createdAt: true,
-});
-
 export const insertAiTemplateSchema = createInsertSchema(aiTemplates).omit({
   id: true,
   createdAt: true,
@@ -197,76 +180,6 @@ export const insertTemplateAssignmentSchema = createInsertSchema(templateAssignm
   id: true,
   createdAt: true,
   updatedAt: true,
-});
-
-// Job Search Criteria - Universal for all job connectors
-export const jobSearchCriteria = pgTable("job_search_criteria", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
-  name: varchar("name", { length: 255 }).notNull(), // e.g., "Frontend Developer - Remote"
-  keywords: text("keywords").array().notNull(), // ["React", "Frontend", "JavaScript"]
-  jobTitles: text("job_titles").array().notNull(), // ["Frontend Developer", "React Developer"]
-  locations: text("locations").array().notNull(), // ["Remote", "San Francisco", "New York"]
-  excludeKeywords: text("exclude_keywords").array().default([]), // ["Senior", "Lead"]
-  employmentTypes: text("employment_types").array().default(["full-time"]), // ["full-time", "part-time", "contract"]
-  salaryMin: integer("salary_min"), // 80000
-  salaryMax: integer("salary_max"), // 120000
-  experienceLevels: text("experience_levels").array().default(["mid"]), // ["entry", "mid", "senior"]
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Scraped Jobs - Jobs collected from external sources
-export const scrapedJobs = pgTable("scraped_jobs", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
-  criteriaId: integer("criteria_id").notNull(),
-  source: varchar("source", { length: 50 }).notNull(), // "linkedin", "indeed", "adzuna"
-  title: text("title").notNull(),
-  company: text("company").notNull(),
-  location: text("location"),
-  description: text("description"),
-  url: text("url"),
-  salary: text("salary"),
-  employmentType: text("employment_type"),
-  experienceLevel: text("experience_level"),
-  postedDate: timestamp("posted_date"),
-  matchScore: integer("match_score"), // 0-100 percentage from OpenAI
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// Job Search Sessions - Track automated search runs
-export const jobSearchSessions = pgTable("job_search_sessions", {
-  id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull(),
-  status: varchar("status", { length: 50 }).default("pending"), // pending, running, completed, failed
-  totalJobsFound: integer("total_jobs_found").default(0),
-  errorCount: integer("error_count").default(0),
-  completedCriteria: integer("completed_criteria").default(0),
-  totalCriteria: integer("total_criteria").default(0),
-  startedAt: timestamp("started_at").defaultNow(),
-  completedAt: timestamp("completed_at"),
-});
-
-export const insertJobSearchCriteriaSchema = createInsertSchema(jobSearchCriteria).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertScrapedJobSchema = createInsertSchema(scrapedJobs).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertJobSearchSessionSchema = createInsertSchema(jobSearchSessions).omit({
-  id: true,
-  startedAt: true,
-  completedAt: true,
 });
 
 // Types
@@ -291,20 +204,8 @@ export type Application = typeof applications.$inferSelect;
 export type InsertExternalLog = z.infer<typeof insertExternalLogSchema>;
 export type ExternalLog = typeof externalLogs.$inferSelect;
 
-export type InsertLog = z.infer<typeof insertLogSchema>;
-export type Log = typeof logs.$inferSelect;
-
 export type InsertAiTemplate = z.infer<typeof insertAiTemplateSchema>;
 export type AiTemplate = typeof aiTemplates.$inferSelect;
 
 export type InsertTemplateAssignment = z.infer<typeof insertTemplateAssignmentSchema>;
 export type TemplateAssignment = typeof templateAssignments.$inferSelect;
-
-export type InsertJobSearchCriteria = z.infer<typeof insertJobSearchCriteriaSchema>;
-export type JobSearchCriteria = typeof jobSearchCriteria.$inferSelect;
-
-export type InsertScrapedJob = z.infer<typeof insertScrapedJobSchema>;
-export type ScrapedJob = typeof scrapedJobs.$inferSelect;
-
-export type InsertJobSearchSession = z.infer<typeof insertJobSearchSessionSchema>;
-export type JobSearchSession = typeof jobSearchSessions.$inferSelect;

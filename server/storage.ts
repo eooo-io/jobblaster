@@ -1,17 +1,13 @@
 import { 
   users, resumes, jobPostings, matchScores, coverLetters, applications, externalLogs, aiTemplates, templateAssignments,
-  jobSearchCriteria, jobSearchSessions, scrapedJobs,
   type User, type InsertUser, type Resume, type InsertResume, 
   type JobPosting, type InsertJobPosting, type MatchScore, type InsertMatchScore,
   type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication,
   type ExternalLog, type InsertExternalLog, type AiTemplate, type InsertAiTemplate,
-  type TemplateAssignment, type InsertTemplateAssignment,
-  type JobSearchCriteria, type InsertJobSearchCriteria,
-  type JobSearchSession, type InsertJobSearchSession,
-  type ScrapedJob, type InsertScrapedJob
+  type TemplateAssignment, type InsertTemplateAssignment
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -67,25 +63,6 @@ export interface IStorage {
   // Template Assignments
   getTemplateAssignments(userId: number): Promise<TemplateAssignment[]>;
   setTemplateAssignments(userId: number, assignments: InsertTemplateAssignment[]): Promise<TemplateAssignment[]>;
-
-  // Job Search Criteria - Universal for all connectors
-  getJobSearchCriteria(userId: number): Promise<JobSearchCriteria[]>;
-  getJobSearchCriteriaById(id: number): Promise<JobSearchCriteria | undefined>;
-  createJobSearchCriteria(criteria: InsertJobSearchCriteria): Promise<JobSearchCriteria>;
-  updateJobSearchCriteria(id: number, criteria: Partial<InsertJobSearchCriteria>): Promise<JobSearchCriteria | undefined>;
-  deleteJobSearchCriteria(id: number): Promise<boolean>;
-
-  // Scraped Jobs
-  getScrapedJobs(userId: number, limit?: number, offset?: number): Promise<ScrapedJob[]>;
-  getScrapedJobsByUrl(url: string): Promise<ScrapedJob[]>;
-  createScrapedJob(scrapedJob: InsertScrapedJob): Promise<ScrapedJob>;
-  updateScrapedJobMatchScore(id: number, matchScore: number): Promise<ScrapedJob | undefined>;
-  deleteScrapedJob(id: number): Promise<boolean>;
-
-  // Job Search Sessions
-  getJobSearchSessions(userId: number): Promise<JobSearchSession[]>;
-  createJobSearchSession(session: InsertJobSearchSession): Promise<JobSearchSession>;
-  updateJobSearchSession(id: number, session: Partial<InsertJobSearchSession>): Promise<JobSearchSession | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -346,68 +323,6 @@ export class MemStorage implements IStorage {
 
 // Database Storage Implementation
 export class DatabaseStorage implements IStorage {
-  // Job Search Criteria Methods
-  async getJobSearchCriteria(userId: number): Promise<JobSearchCriteria[]> {
-    try {
-      console.log("🎯 SEARCHING FOR CRITERIA - userId:", userId);
-      const results = await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.userId, userId));
-      console.log("🎯 FOUND RESULTS:", results.length, "criteria");
-      console.log("🎯 FIRST RESULT:", results[0] ? JSON.stringify(results[0], null, 2) : "None");
-      return results;
-    } catch (error) {
-      console.error("🎯 DATABASE ERROR:", error);
-      throw error;
-    }
-  }
-
-  async getJobSearchCriteriaById(id: number): Promise<JobSearchCriteria | undefined> {
-    const [criteria] = await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.id, id));
-    return criteria;
-  }
-
-  async createJobSearchCriteria(insertCriteria: InsertJobSearchCriteria): Promise<JobSearchCriteria> {
-    const [criteria] = await db
-      .insert(jobSearchCriteria)
-      .values(insertCriteria)
-      .returning();
-    return criteria;
-  }
-
-  async updateJobSearchCriteria(id: number, criteriaUpdate: Partial<InsertJobSearchCriteria>): Promise<JobSearchCriteria | undefined> {
-    const [criteria] = await db
-      .update(jobSearchCriteria)
-      .set(criteriaUpdate)
-      .where(eq(jobSearchCriteria.id, id))
-      .returning();
-    return criteria;
-  }
-
-  async deleteJobSearchCriteria(id: number): Promise<boolean> {
-    const result = await db.delete(jobSearchCriteria).where(eq(jobSearchCriteria.id, id));
-    return result.rowCount ? result.rowCount > 0 : false;
-  }
-
-  // Job Search Sessions Methods
-  async getJobSearchSessions(userId: number): Promise<JobSearchSession[]> {
-    return await db.select().from(jobSearchSessions).where(eq(jobSearchSessions.userId, userId));
-  }
-
-  async createJobSearchSession(insertSession: InsertJobSearchSession): Promise<JobSearchSession> {
-    const [session] = await db
-      .insert(jobSearchSessions)
-      .values(insertSession)
-      .returning();
-    return session;
-  }
-
-  async updateJobSearchSession(id: number, sessionUpdate: Partial<InsertJobSearchSession>): Promise<JobSearchSession | undefined> {
-    const [session] = await db
-      .update(jobSearchSessions)
-      .set(sessionUpdate)
-      .where(eq(jobSearchSessions.id, id))
-      .returning();
-    return session;
-  }
   // Users
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
@@ -634,37 +549,6 @@ export class DatabaseStorage implements IStorage {
     }
     
     return result;
-  }
-
-  // Scraped Jobs
-  async getScrapedJobs(userId: number, limit: number = 50, offset: number = 0): Promise<ScrapedJob[]> {
-    return await db.select().from(scrapedJobs)
-      .where(eq(scrapedJobs.userId, userId))
-      .orderBy(desc(scrapedJobs.createdAt))
-      .limit(limit)
-      .offset(offset);
-  }
-
-  async getScrapedJobsByUrl(url: string): Promise<ScrapedJob[]> {
-    return await db.select().from(scrapedJobs).where(eq(scrapedJobs.url, url));
-  }
-
-  async createScrapedJob(scrapedJob: InsertScrapedJob): Promise<ScrapedJob> {
-    const [job] = await db.insert(scrapedJobs).values(scrapedJob).returning();
-    return job;
-  }
-
-  async updateScrapedJobMatchScore(id: number, matchScore: number): Promise<ScrapedJob | undefined> {
-    const [job] = await db.update(scrapedJobs)
-      .set({ matchScore, updatedAt: new Date() })
-      .where(eq(scrapedJobs.id, id))
-      .returning();
-    return job;
-  }
-
-  async deleteScrapedJob(id: number): Promise<boolean> {
-    const result = await db.delete(scrapedJobs).where(eq(scrapedJobs.id, id));
-    return result.count > 0;
   }
 }
 

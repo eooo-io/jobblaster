@@ -20,27 +20,16 @@ export class JobConnectorManager {
   }
 
   private initializeConnectors(): void {
-    // Initialize Adzuna connector - use database credentials as primary source
-    const adzunaApiKey = this.user?.adzunaApiKey || undefined;
-    const adzunaAppId = this.user?.adzunaAppId || undefined;
-    
-    console.log("🔑 Initializing Adzuna connector with:", {
-      hasApiKey: !!adzunaApiKey,
-      hasAppId: !!adzunaAppId,
-      userHasApiKey: !!this.user?.adzunaApiKey,
-      userHasAppId: !!this.user?.adzunaAppId,
-      userId: this.user?.id,
-      userObject: this.user
-    });
-    
+    // Initialize Adzuna connector
     const adzunaConnector = new AdzunaConnector({
-      apiKey: adzunaApiKey,
-      appId: adzunaAppId,
-      userId: this.user.id
+      apiKey: this.user.adzunaApiKey || undefined,
+      appId: this.user.adzunaAppId || undefined,
     });
     this.connectors.set('adzuna', adzunaConnector);
 
-    // Note: LinkedIn and Indeed connectors removed - focusing on Adzuna only
+    // Future connectors can be added here when APIs become available
+    // this.connectors.set('indeed', new IndeedConnector({ ... }));
+    // this.connectors.set('glassdoor', new GlassdoorConnector({ ... }));
   }
 
   getAvailableConnectors(): ConnectorConfig[] {
@@ -58,19 +47,10 @@ export class JobConnectorManager {
       {
         type: 'indeed',
         name: 'Indeed',
-        description: 'Automated job scraping from Indeed (scraping-based)',
-        isConfigured: this.connectors.get('indeed')?.isConfigured() || false,
+        description: 'World\'s largest job search engine (API access requires partnership)',
+        isConfigured: false,
         requiresCredentials: [
-          { field: 'indeedApiKey', label: 'API Key (Optional)' }
-        ]
-      },
-      {
-        type: 'linkedin',
-        name: 'LinkedIn',
-        description: 'Professional job scraping from LinkedIn (scraping-based)',
-        isConfigured: this.connectors.get('linkedin')?.isConfigured() || false,
-        requiresCredentials: [
-          { field: 'linkedinApiKey', label: 'API Key (Optional)' }
+          { field: 'indeedApiKey', label: 'Publisher API Key' }
         ]
       },
       {
@@ -152,6 +132,3 @@ export class JobConnectorManager {
     return connector.getJobDetails(jobId);
   }
 }
-
-// Export alias for compatibility
-export const ConnectorManager = JobConnectorManager;

@@ -3,7 +3,6 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
 import { hashPassword } from "./auth";
-import { Logger, setupGlobalErrorHandling } from "./logger";
 
 const app = express();
 app.use(express.json());
@@ -41,21 +40,18 @@ app.use((req, res, next) => {
 
 // Bootstrap function to ensure admin user exists
 async function bootstrapApplication() {
-  // Setup global error handling for unhandled exceptions
-  setupGlobalErrorHandling();
-  
   try {
     // Check if admin user already exists
-    const existingAdmin = await storage.getUserByUsername("ezraterlinden");
+    const existingAdmin = await storage.getUserByUsername("admin");
     
     if (!existingAdmin) {
-      // Create admin user with specified credentials
-      const hashedPassword = await hashPassword("*iQ0rxMzu%&VW@dB");
+      // Create admin user with default password
+      const hashedPassword = await hashPassword("admin123");
       await storage.createUser({
-        username: "ezraterlinden",
+        username: "admin",
         password: hashedPassword
       });
-      log("✓ Admin user created: username=ezraterlinden");
+      log("✓ Admin user created: username=admin, password=admin123");
     } else {
       log("✓ Admin user already exists");
     }

@@ -36,12 +36,10 @@ export abstract class BaseJobConnector {
   protected apiKey?: string;
   protected appId?: string;
   protected baseUrl: string = '';
-  protected userId?: number;
   
-  constructor(config: { apiKey?: string; appId?: string; userId?: number }) {
+  constructor(config: { apiKey?: string; appId?: string }) {
     this.apiKey = config.apiKey;
     this.appId = config.appId;
-    this.userId = config.userId;
   }
 
   abstract isConfigured(): boolean;
