@@ -488,6 +488,37 @@ export class DatabaseStorage implements IStorage {
     const [log] = await db.insert(externalLogs).values(insertLog).returning();
     return log;
   }
+
+  // AI Templates
+  async getAiTemplates(userId: number): Promise<AiTemplate[]> {
+    const templates = await db.select().from(aiTemplates)
+      .where(eq(aiTemplates.userId, userId))
+      .orderBy(aiTemplates.createdAt);
+    return templates;
+  }
+
+  async getAiTemplate(id: number): Promise<AiTemplate | undefined> {
+    const [template] = await db.select().from(aiTemplates).where(eq(aiTemplates.id, id));
+    return template;
+  }
+
+  async createAiTemplate(insertTemplate: InsertAiTemplate): Promise<AiTemplate> {
+    const [template] = await db.insert(aiTemplates).values(insertTemplate).returning();
+    return template;
+  }
+
+  async updateAiTemplate(id: number, templateUpdate: Partial<InsertAiTemplate>): Promise<AiTemplate | undefined> {
+    const [template] = await db.update(aiTemplates)
+      .set({ ...templateUpdate, updatedAt: new Date() })
+      .where(eq(aiTemplates.id, id))
+      .returning();
+    return template;
+  }
+
+  async deleteAiTemplate(id: number): Promise<boolean> {
+    const result = await db.delete(aiTemplates).where(eq(aiTemplates.id, id));
+    return (result.rowCount ?? 0) > 0;
+  }
 }
 
 export const storage = new DatabaseStorage();
