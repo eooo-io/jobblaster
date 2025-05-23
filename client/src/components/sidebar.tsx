@@ -13,7 +13,8 @@ import {
   Moon,
   Menu,
   X,
-  Database
+  Database,
+  Zap
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
