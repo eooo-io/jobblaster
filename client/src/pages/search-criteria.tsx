@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,11 @@ interface SearchCriteriaFormData {
 
 export default function SearchCriteriaPage() {
   const { toast } = useToast();
+  
+  // Clear cache on component mount
+  React.useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["/api/job-search-criteria"] });
+  }, []);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCriteria, setEditingCriteria] = useState<JobSearchCriteria | null>(null);
   const [keywordInput, setKeywordInput] = useState("");
@@ -50,6 +55,8 @@ export default function SearchCriteriaPage() {
 
   const { data: criteria = [], isLoading } = useQuery({
     queryKey: ["/api/job-search-criteria"],
+    staleTime: 0, // Force fresh data
+    cacheTime: 0, // Don't cache
   });
 
   // Debug log to see what data we're getting
