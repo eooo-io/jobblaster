@@ -719,7 +719,9 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
         return res.status(401).json({ message: "Authentication required" });
       }
 
+      console.log("Fetching search criteria for userId:", userId);
       const criteria = await storage.getJobSearchCriteria(userId);
+      console.log("Found criteria:", criteria);
       res.json(criteria);
     } catch (error) {
       console.error("Error fetching job search criteria:", error);
