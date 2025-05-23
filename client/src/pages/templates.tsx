@@ -1,0 +1,414 @@
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { Card, CardHeader, CardBody, Typography, Button, Input, Textarea, Select, Option } from "@material-tailwind/react";
+import { Plus, Edit, Trash2, Save, X, Settings, ArrowLeft } from "lucide-react";
+import { Link } from "wouter";
+import { useState } from "react";
+import { queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+
+interface Template {
+  id: number;
+  name: string;
+  description: string;
+  category: string;
+  systemPrompt: string;
+  extractionInstruction: string;
+  outputFormat: any;
+  temperature: number;
+  maxTokens: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const defaultTemplate = {
+  name: "",
+  description: "",
+  category: "job_analysis",
+  systemPrompt: "You are an AI assistant that extracts structured information from text. Always return only valid JSON.",
+  extractionInstruction: "Extract the key information from the following text:\n\n{{input_text}}",
+  outputFormat: {},
+  temperature: 0.2,
+  maxTokens: 1024,
+};
+
+export default function Templates() {
+  const { toast } = useToast();
+  const [isCreating, setIsCreating] = useState(false);
+  const [editingTemplate, setEditingTemplate] = useState<Template | null>(null);
+  const [formData, setFormData] = useState(defaultTemplate);
+
+  const { data: templates = [], isLoading } = useQuery<Template[]>({
+    queryKey: ["/api/templates"],
+  });
+
+  const createMutation = useMutation({
+    mutationFn: async (template: typeof defaultTemplate) => {
+      const response = await fetch("/api/templates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(template),
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to create template");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/templates"] });
+      toast({ title: "Template created successfully!" });
+      setIsCreating(false);
+      setFormData(defaultTemplate);
+    },
+    onError: () => {
+      toast({ title: "Failed to create template", variant: "destructive" });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, ...template }: Template) => {
+      const response = await fetch(`/api/templates/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(template),
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to update template");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/templates"] });
+      toast({ title: "Template updated successfully!" });
+      setEditingTemplate(null);
+    },
+    onError: () => {
+      toast({ title: "Failed to update template", variant: "destructive" });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/templates/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to delete template");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/templates"] });
+      toast({ title: "Template deleted successfully!" });
+    },
+    onError: () => {
+      toast({ title: "Failed to delete template", variant: "destructive" });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingTemplate) {
+      updateMutation.mutate({ ...editingTemplate, ...formData });
+    } else {
+      createMutation.mutate(formData);
+    }
+  };
+
+  const handleEdit = (template: Template) => {
+    setEditingTemplate(template);
+    setFormData({
+      name: template.name,
+      description: template.description,
+      category: template.category,
+      systemPrompt: template.systemPrompt,
+      extractionInstruction: template.extractionInstruction,
+      outputFormat: template.outputFormat,
+      temperature: template.temperature,
+      maxTokens: template.maxTokens,
+    });
+  };
+
+  const handleCancel = () => {
+    setIsCreating(false);
+    setEditingTemplate(null);
+    setFormData(defaultTemplate);
+  };
+
+  const updateOutputFormat = (value: string) => {
+    try {
+      const parsed = JSON.parse(value);
+      setFormData({ ...formData, outputFormat: parsed });
+    } catch (e) {
+      // Invalid JSON, but still update the field for editing
+      setFormData({ ...formData, outputFormat: value });
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="flex items-center space-x-2">
+          <Settings className="h-6 w-6 animate-spin text-blue-600" />
+          <span className="text-lg text-gray-600 dark:text-gray-300">Loading templates...</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-4">
+            <Link href="/profile">
+              <Button variant="outlined" size="sm" className="flex items-center space-x-2">
+                <ArrowLeft className="h-4 w-4" />
+                <span>Back to Settings</span>
+              </Button>
+            </Link>
+            <div className="flex items-center space-x-3">
+              <Settings className="h-8 w-8 text-blue-600" />
+              <div>
+                <Typography variant="h4" color="blue-gray">
+                  AI Prompt Templates
+                </Typography>
+                <Typography variant="small" color="gray">
+                  Manage your OpenAI prompt templates for job analysis and other AI features
+                </Typography>
+              </div>
+            </div>
+          </div>
+          {!isCreating && !editingTemplate && (
+            <Button
+              onClick={() => setIsCreating(true)}
+              className="flex items-center space-x-2"
+              color="blue"
+            >
+              <Plus className="h-4 w-4" />
+              <span>New Template</span>
+            </Button>
+          )}
+        </div>
+
+        {/* Create/Edit Form */}
+        {(isCreating || editingTemplate) && (
+          <Card className="mb-6 bg-white dark:bg-gray-800 shadow-sm">
+            <CardHeader className="bg-blue-50 dark:bg-blue-900 py-4">
+              <Typography variant="h6" color="blue-gray">
+                {editingTemplate ? "Edit Template" : "Create New Template"}
+              </Typography>
+            </CardHeader>
+            <CardBody>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <Typography variant="small" className="font-semibold mb-2">
+                      Template Name
+                    </Typography>
+                    <Input
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      placeholder="Job Analysis Template"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Typography variant="small" className="font-semibold mb-2">
+                      Category
+                    </Typography>
+                    <Select
+                      value={formData.category}
+                      onChange={(value) => setFormData({ ...formData, category: value || "job_analysis" })}
+                    >
+                      <Option value="job_analysis">Job Analysis</Option>
+                      <Option value="resume_analysis">Resume Analysis</Option>
+                      <Option value="cover_letter">Cover Letter</Option>
+                      <Option value="match_scoring">Match Scoring</Option>
+                      <Option value="general">General</Option>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <Typography variant="small" className="font-semibold mb-2">
+                    Description
+                  </Typography>
+                  <Input
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Brief description of what this template does"
+                  />
+                </div>
+
+                <div>
+                  <Typography variant="small" className="font-semibold mb-2">
+                    System Prompt
+                  </Typography>
+                  <Textarea
+                    value={formData.systemPrompt}
+                    onChange={(e) => setFormData({ ...formData, systemPrompt: e.target.value })}
+                    placeholder="You are an AI assistant that..."
+                    rows={4}
+                    className="font-mono text-sm"
+                  />
+                </div>
+
+                <div>
+                  <Typography variant="small" className="font-semibold mb-2">
+                    Extraction Instruction
+                  </Typography>
+                  <Textarea
+                    value={formData.extractionInstruction}
+                    onChange={(e) => setFormData({ ...formData, extractionInstruction: e.target.value })}
+                    placeholder="Extract information from the following text..."
+                    rows={6}
+                    className="font-mono text-sm"
+                  />
+                  <Typography variant="small" color="gray" className="mt-1">
+                    Use {{input_text}} as a placeholder for dynamic content
+                  </Typography>
+                </div>
+
+                <div>
+                  <Typography variant="small" className="font-semibold mb-2">
+                    Output Format (JSON)
+                  </Typography>
+                  <Textarea
+                    value={typeof formData.outputFormat === 'string' ? formData.outputFormat : JSON.stringify(formData.outputFormat, null, 2)}
+                    onChange={(e) => updateOutputFormat(e.target.value)}
+                    placeholder='{"field1": "", "field2": []}'
+                    rows={8}
+                    className="font-mono text-sm"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div>
+                    <Typography variant="small" className="font-semibold mb-2">
+                      Temperature (0.0 - 2.0)
+                    </Typography>
+                    <Input
+                      type="number"
+                      min="0"
+                      max="2"
+                      step="0.1"
+                      value={formData.temperature}
+                      onChange={(e) => setFormData({ ...formData, temperature: parseFloat(e.target.value) })}
+                    />
+                  </div>
+                  <div>
+                    <Typography variant="small" className="font-semibold mb-2">
+                      Max Tokens
+                    </Typography>
+                    <Input
+                      type="number"
+                      min="1"
+                      max="4000"
+                      value={formData.maxTokens}
+                      onChange={(e) => setFormData({ ...formData, maxTokens: parseInt(e.target.value) })}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-4">
+                  <Button type="submit" color="blue" className="flex items-center space-x-2">
+                    <Save className="h-4 w-4" />
+                    <span>{editingTemplate ? "Update" : "Create"} Template</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outlined"
+                    onClick={handleCancel}
+                    className="flex items-center space-x-2"
+                  >
+                    <X className="h-4 w-4" />
+                    <span>Cancel</span>
+                  </Button>
+                </div>
+              </form>
+            </CardBody>
+          </Card>
+        )}
+
+        {/* Templates List */}
+        <div className="space-y-4">
+          {templates.length === 0 ? (
+            <Card className="bg-white dark:bg-gray-800 shadow-sm">
+              <CardBody className="text-center py-12">
+                <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <Typography variant="h6" color="blue-gray" className="mb-2">
+                  No Templates Found
+                </Typography>
+                <Typography variant="small" color="gray">
+                  Create your first AI prompt template to get started.
+                </Typography>
+              </CardBody>
+            </Card>
+          ) : (
+            templates.map((template) => (
+              <Card key={template.id} className="bg-white dark:bg-gray-800 shadow-sm">
+                <CardBody className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center space-x-3 mb-2">
+                        <Typography variant="h6" color="blue-gray">
+                          {template.name}
+                        </Typography>
+                        <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
+                          {template.category.replace('_', ' ')}
+                        </span>
+                      </div>
+                      <Typography variant="small" color="gray" className="mb-4">
+                        {template.description}
+                      </Typography>
+                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
+                        <div>
+                          <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                            Temperature: {template.temperature}
+                          </Typography>
+                        </div>
+                        <div>
+                          <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                            Max Tokens: {template.maxTokens}
+                          </Typography>
+                        </div>
+                        <div>
+                          <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                            Updated: {new Date(template.updatedAt).toLocaleDateString()}
+                          </Typography>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-2 ml-4">
+                      <Button
+                        size="sm"
+                        variant="outlined"
+                        onClick={() => handleEdit(template)}
+                        className="flex items-center space-x-1"
+                      >
+                        <Edit className="h-4 w-4" />
+                        <span>Edit</span>
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outlined"
+                        color="red"
+                        onClick={() => {
+                          if (confirm("Are you sure you want to delete this template?")) {
+                            deleteMutation.mutate(template.id);
+                          }
+                        }}
+                        className="flex items-center space-x-1"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                        <span>Delete</span>
+                      </Button>
+                    </div>
+                  </div>
+                </CardBody>
+              </Card>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
