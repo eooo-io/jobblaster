@@ -1070,10 +1070,14 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
         return res.status(401).json({ message: "Authentication required" });
       }
 
+      console.log(`🚀 API Route: Starting scraper for userId: ${userId}`);
+      
       // Import the job scraper service here to avoid circular dependencies
       const { jobScraperService } = await import("./job-scraper-service");
       
+      console.log(`🚀 API Route: Calling runScrapingSession for userId: ${userId}`);
       const result = await jobScraperService.runScrapingSession(userId);
+      console.log(`🚀 API Route: Scraper completed, result:`, result);
       res.json(result);
     } catch (error) {
       console.error("Error running scraping session:", error);
