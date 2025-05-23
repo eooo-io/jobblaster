@@ -143,7 +143,7 @@ export default function ExternalLogs() {
         size="sm"
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="flex items-center space-x-1"
+        className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
       >
         <ChevronLeft className="h-4 w-4" />
         <span>Previous</span>
@@ -158,7 +158,11 @@ export default function ExternalLogs() {
           variant={i === currentPage ? "filled" : "outlined"}
           size="sm"
           onClick={() => handlePageChange(i)}
-          className="min-w-[40px]"
+          className={`min-w-[40px] ${
+            i === currentPage 
+              ? "bg-blue-600 border-blue-600 text-white" 
+              : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+          }`}
         >
           {i}
         </Button>
@@ -173,7 +177,7 @@ export default function ExternalLogs() {
         size="sm"
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="flex items-center space-x-1"
+        className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
       >
         <span>Next</span>
         <ChevronRight className="h-4 w-4" />
