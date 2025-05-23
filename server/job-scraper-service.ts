@@ -54,8 +54,9 @@ export class JobScraperService {
         salary_max: criteria.salaryMax,
       };
 
+      console.log(`🔍 Sending to Adzuna:`, searchParams);
       const results = await this.connectorManager.searchJobs(searchParams, ['adzuna']);
-      console.log(`🎯 Adzuna search completed! Found ${results.jobs.length} jobs`);
+      console.log(`🎯 Adzuna search completed! Found ${results?.jobs?.length || 0} jobs`);
       
       for (const job of results.jobs) {
         await this.saveScrapedJob(job, criteriaId, userId, "adzuna");
