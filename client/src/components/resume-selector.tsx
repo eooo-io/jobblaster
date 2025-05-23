@@ -3,9 +3,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { FileText, Calendar, Palette, Edit2, Save, X, Star, ChevronDown, FolderOpen, Clock } from 'lucide-react';
+import { FileText, Calendar, Palette, Edit2, Save, X, Star, ChevronDown, FolderOpen, Clock, Trash2 } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 
@@ -91,6 +92,42 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       console.error('Set default error:', error);
       toast({
         title: "Error setting default resume",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete resume mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/resumes/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+      }
+      
+      return response.json();
+    },
+    onSuccess: (_, deletedId) => {
+      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      
+      // If the deleted resume was selected, clear the selection
+      if (selectedResume?.id === deletedId) {
+        onResumeSelect(null);
+      }
+      
+      toast({
+        title: "Resume deleted successfully!",
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error deleting resume",
         description: error.message,
         variant: "destructive",
       });
@@ -286,6 +323,38 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                     >
                       <Edit2 className="h-3 w-3" />
                     </Button>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 p-0 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/20"
+                          onClick={(e) => e.stopPropagation()}
+                          title="Delete resume"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Resume</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete "{resume.name}"? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => deleteMutation.mutate(resume.id)}
+                            disabled={deleteMutation.isPending}
+                            className="bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700"
+                          >
+                            {deleteMutation.isPending ? "Deleting..." : "Delete"}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               ))}
