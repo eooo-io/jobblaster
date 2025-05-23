@@ -154,6 +154,20 @@ export default function Sidebar() {
                   <span>External API Logs</span>
                 </div>
               </Link>
+              <Link href="/templates">
+                <div 
+                  className={cn(
+                    "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
+                    location === "/templates"
+                      ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
+                      : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+                  )}
+                  onClick={closeMobileMenu}
+                >
+                  <Zap className="w-5 h-5" />
+                  <span>AI Prompt Templates</span>
+                </div>
+              </Link>
             </div>
           </nav>
 
@@ -272,6 +286,17 @@ export default function Sidebar() {
               )}>
                 <Database className="w-4 h-4" />
                 <span>External API Logs</span>
+              </div>
+            </Link>
+            <Link href="/templates">
+              <div className={cn(
+                "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
+                location === "/templates"
+                  ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
+                  : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+              )}>
+                <Zap className="w-4 h-4" />
+                <span>AI Prompt Templates</span>
               </div>
             </Link>
           </div>
