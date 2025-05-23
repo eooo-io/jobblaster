@@ -30,20 +30,15 @@ export default function Profile() {
 
   // Initialize connection status when user data loads
   useEffect(() => {
-    console.log("User data loaded:", user);
     if (user?.adzunaAppId && user?.adzunaApiKey) {
-      console.log("Setting Adzuna connected to true");
       setAdzunaConnected(true);
     } else {
-      console.log("Setting Adzuna connected to false - missing credentials");
       setAdzunaConnected(false);
     }
     
     if (user?.openaiApiKey) {
-      console.log("Setting OpenAI connected to true");
       setOpenaiConnected(true);
     } else {
-      console.log("Setting OpenAI connected to false - missing key");
       setOpenaiConnected(false);
     }
   }, [user]);
@@ -103,14 +98,32 @@ export default function Profile() {
       
       return response.json();
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       // Set connected status when API key is saved successfully
       setOpenaiConnected(true);
       
-      toast({
-        title: "Success!",
-        description: "OpenAI API key updated successfully",
-      });
+      // Handle API test results
+      if (data.openaiTest) {
+        if (data.openaiTest.success) {
+          toast({
+            title: "Success!",
+            description: "OpenAI API key saved and verified successfully",
+          });
+        } else {
+          setApiError(data.openaiTest.error);
+          setShowErrorModal(true);
+          toast({
+            title: "API Key Saved", 
+            description: "API key saved but verification failed. Check error details.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        toast({
+          title: "Success!",
+          description: "OpenAI API key updated successfully",
+        });
+      }
       
       // Refresh user data
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });

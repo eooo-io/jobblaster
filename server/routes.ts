@@ -182,8 +182,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Test Adzuna API connection if credentials were provided
+      // Test APIs if credentials were provided
       let adzunaTestResult = null;
+      let openaiTestResult = null;
+
+      // Test Adzuna API connection
       if (updateData.adzunaAppId && updateData.adzunaApiKey) {
         try {
           const testUrl = `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${updateData.adzunaAppId}&app_key=${updateData.adzunaApiKey}&results_per_page=1&what=test`;
@@ -203,10 +206,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
+      // Test OpenAI API connection
+      if (updateData.openaiApiKey) {
+        try {
+          const testResponse = await fetch('https://api.openai.com/v1/models', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${updateData.openaiApiKey}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (testResponse.ok) {
+            openaiTestResult = { success: true, message: "API key verified successfully" };
+          } else {
+            const errorData = await testResponse.json();
+            openaiTestResult = { success: false, error: errorData };
+          }
+        } catch (error) {
+          openaiTestResult = { 
+            success: false, 
+            error: { message: "Network error", details: error.message } 
+          };
+        }
+      }
+
       res.json({ 
         message: "Profile updated successfully",
         openaiApiKey: updatedUser.openaiApiKey,
-        adzunaTest: adzunaTestResult
+        adzunaTest: adzunaTestResult,
+        openaiTest: openaiTestResult
       });
     } catch (error) {
       console.error("Error updating profile:", error);
