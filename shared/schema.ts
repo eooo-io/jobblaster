@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, index, real } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, index, real, unique } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -125,6 +125,15 @@ export const aiTemplates = pgTable("ai_templates", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const templateAssignments = pgTable("template_assignments", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  category: varchar("category", { length: 50 }).notNull(), // job_analysis, resume_analysis, cover_letter, match_scoring, general
+  templateId: integer("template_id").references(() => aiTemplates.id),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -162,6 +171,12 @@ export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
 });
 
 export const insertAiTemplateSchema = createInsertSchema(aiTemplates).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertTemplateAssignmentSchema = createInsertSchema(templateAssignments).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
