@@ -235,3 +235,90 @@ export async function generateCoverLetter(
     throw new Error("Failed to generate cover letter. Please check your API key and try again.");
   }
 }
+
+// Score job match compatibility between resume and job description
+export async function scoreJobMatch(resumeData: any, jobData: any, userId: number): Promise<number> {
+  try {
+    const user = await storage.getUser(userId);
+    if (!user?.openaiApiKey) {
+      throw new Error("OpenAI API key not configured. Please add your API key in the profile settings.");
+    }
+
+    const openai = new OpenAI({ 
+      apiKey: user.openaiApiKey,
+    });
+
+    // Get the assigned template for job scoring
+    const assignments = await storage.getTemplateAssignments(userId);
+    const scoringAssignment = assignments.find(a => a.category === 'job_scoring');
+    
+    let systemPrompt = `You are an expert HR recruiter and career coach. Analyze the compatibility between a candidate's resume and a job posting. 
+
+Provide a match score from 0-100 based on:
+- Technical skills alignment (40%)
+- Experience level match (30%) 
+- Industry/domain relevance (20%)
+- Education/certifications (10%)
+
+Return your response as a JSON object with this exact format:
+{
+  "score": 85,
+  "reasoning": "Strong technical skills match with 8+ years experience in required technologies. Leadership experience aligns with senior role requirements."
+}`;
+
+    if (scoringAssignment?.templateId) {
+      const template = await storage.getAiTemplate(scoringAssignment.templateId);
+      if (template) {
+        systemPrompt = template.systemPrompt;
+      }
+    }
+
+    const prompt = `
+RESUME DATA:
+${JSON.stringify(resumeData, null, 2)}
+
+JOB POSTING:
+Title: ${jobData.title}
+Company: ${jobData.company}
+Description: ${jobData.description}
+Requirements: ${jobData.requirements}
+
+Analyze the match between this resume and job posting. Focus on skills, experience, and qualifications alignment.`;
+
+    const response = await logApiCall({
+      service: 'OpenAI',
+      endpoint: '/chat/completions',
+      method: 'POST',
+      requestData: {
+        model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: prompt }
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.3,
+        max_tokens: 500
+      },
+      userId
+    }, async () => {
+      return await openai.chat.completions.create({
+        model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: prompt }
+        ],
+        response_format: { type: "json_object" },
+        temperature: 0.3,
+        max_tokens: 500
+      });
+    });
+
+    const result = JSON.parse(response.choices[0].message.content);
+    const score = Math.max(0, Math.min(100, Math.round(result.score || 0)));
+    
+    return score;
+  } catch (error) {
+    console.error("Job scoring failed:", error);
+    throw new Error("Failed to score job match. Please check your OpenAI API key and try again.");
+  }
+}

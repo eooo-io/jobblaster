@@ -1025,6 +1025,109 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // Scraped Jobs Management
+  app.get("/api/scraped-jobs", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const limit = parseInt(req.query.limit as string) || 50;
+      const offset = parseInt(req.query.offset as string) || 0;
+      
+      const jobs = await storage.getScrapedJobs(userId, limit, offset);
+      res.json(jobs);
+    } catch (error) {
+      console.error("Error fetching scraped jobs:", error);
+      res.status(500).json({ message: "Failed to fetch scraped jobs" });
+    }
+  });
+
+  app.delete("/api/scraped-jobs/:id", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const success = await storage.deleteScrapedJob(parseInt(req.params.id));
+      if (!success) {
+        return res.status(404).json({ message: "Scraped job not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting scraped job:", error);
+      res.status(500).json({ message: "Failed to delete scraped job" });
+    }
+  });
+
+  // Job Scraping Session Management
+  app.post("/api/scrape-jobs", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      // Import the job scraper service here to avoid circular dependencies
+      const { jobScraperService } = await import("./job-scraper-service");
+      
+      const result = await jobScraperService.runScrapingSession(userId);
+      res.json(result);
+    } catch (error) {
+      console.error("Error running scraping session:", error);
+      res.status(500).json({ message: "Failed to run scraping session" });
+    }
+  });
+
+  // Job Scoring with OpenAI
+  app.post("/api/score-job/:jobId", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const jobId = parseInt(req.params.jobId);
+      const { resumeId } = req.body;
+
+      if (!resumeId) {
+        return res.status(400).json({ message: "Resume ID is required" });
+      }
+
+      // Get the scraped job and resume
+      const jobs = await storage.getScrapedJobs(userId, 1, 0);
+      const job = jobs.find(j => j.id === jobId);
+      if (!job) {
+        return res.status(404).json({ message: "Job not found" });
+      }
+
+      const resume = await storage.getResume(resumeId);
+      if (!resume || resume.userId !== userId) {
+        return res.status(404).json({ message: "Resume not found" });
+      }
+
+      // Import OpenAI service
+      const { scoreJobMatch } = await import("./openai");
+      
+      const score = await scoreJobMatch(resume.content, {
+        title: job.title,
+        company: job.company,
+        description: job.description || "",
+        requirements: job.description || ""
+      }, userId);
+
+      // Update the job with the match score
+      await storage.updateScrapedJobMatchScore(jobId, score);
+
+      res.json({ score });
+    } catch (error) {
+      console.error("Error scoring job:", error);
+      res.status(500).json({ message: "Failed to score job match" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
