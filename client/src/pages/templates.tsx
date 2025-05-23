@@ -328,7 +328,7 @@ export default function Templates() {
                     />
                   </div>
                   <div>
-                    <Typography variant="small" className="font-semibold mb-2">
+                    <Typography variant="small" className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
                       Max Tokens
                     </Typography>
                     <Input
