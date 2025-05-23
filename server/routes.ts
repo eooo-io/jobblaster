@@ -177,9 +177,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log('Update data to be sent to storage:', updateData);
       
       const updatedUser = await storage.updateUser(userId, updateData);
-      console.log('User updated successfully, now testing APIs...');
+      console.log('User updated successfully, updatedUser:', !!updatedUser);
+      console.log('Now testing APIs...');
       
       if (!updatedUser) {
+        console.log('UpdateUser returned null - user not found');
         return res.status(404).json({ message: "User not found" });
       }
 
