@@ -1148,47 +1148,72 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
       const user = await storage.getUser(userId!);
       
       if (!user?.openaiApiKey) {
+        console.log("❌ OpenAI API key not configured for user:", userId);
         return res.status(400).json({ error: "OpenAI API key not configured" });
       }
 
       const testMessage = req.body.message || "Hello, this is a test message";
+      console.log("🧪 Testing OpenAI connection for user:", userId);
       
       // Make a simple OpenAI API call with logging
-      const response = await logApiCall({
-        service: "openai",
-        endpoint: "https://api.openai.com/v1/chat/completions",
-        method: "POST",
-        requestData: {
-          model: "gpt-4o",
-          messages: [{ role: "user", content: testMessage }],
-          max_tokens: 50
-        },
-        userId: userId!
-      }, async () => {
-        const result = await fetch("https://api.openai.com/v1/chat/completions", {
+      try {
+        const response = await logApiCall({
+          service: "openai",
+          endpoint: "https://api.openai.com/v1/chat/completions",
           method: "POST",
-          headers: {
-            "Authorization": `Bearer ${user.openaiApiKey}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
+          requestData: {
             model: "gpt-4o",
             messages: [{ role: "user", content: testMessage }],
             max_tokens: 50
-          })
+          },
+          userId: userId!
+        }, async () => {
+          const result = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${user.openaiApiKey}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "gpt-4o",
+              messages: [{ role: "user", content: testMessage }],
+              max_tokens: 50
+            })
+          });
+          return result;
         });
-        return result;
-      });
 
-      const data = await response.json();
-      res.json({ 
-        success: true, 
-        message: "OpenAI test completed",
-        response: data.choices?.[0]?.message?.content || "No response content"
-      });
+        const data = await response.json();
+        console.log("✅ OpenAI test successful for user:", userId);
+        res.json({ 
+          success: true, 
+          message: "OpenAI test completed",
+          response: data.choices?.[0]?.message?.content || "No response content"
+        });
+      } catch (apiError) {
+        console.error("❌ OpenAI API call failed:", apiError);
+        // Log the failed API call too
+        await storage.createExternalLog({
+          service: "openai",
+          endpoint: "https://api.openai.com/v1/chat/completions",
+          method: "POST",
+          requestData: {
+            model: "gpt-4o",
+            messages: [{ role: "user", content: testMessage }],
+            max_tokens: 50
+          },
+          responseData: null,
+          statusCode: 0,
+          success: false,
+          errorMessage: apiError.message,
+          userId: userId!
+        });
+        
+        throw apiError;
+      }
       
     } catch (error) {
-      console.error("OpenAI test error:", error);
+      console.error("❌ OpenAI test error:", error);
       res.status(500).json({ error: "OpenAI test failed", details: error.message });
     }
   });
