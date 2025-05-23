@@ -23,7 +23,20 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
     if (!printWindow) return;
 
     // Get the resume content with the exact theme styling
-    const resumeElement = document.querySelector('.resume-content');
+    // Try different selectors based on theme structure
+    let resumeElement = document.querySelector('.resume-content');
+    
+    // If not found, try alternative selectors for different themes
+    if (!resumeElement) {
+      // For themes that might have different structure
+      resumeElement = document.querySelector('[class*="bg-white"][class*="rounded"]');
+    }
+    
+    if (!resumeElement) {
+      // Last resort - get the entire preview container
+      resumeElement = document.querySelector('.overflow-auto > div');
+    }
+    
     if (!resumeElement) return;
 
     // Get all current stylesheets to preserve theme styling
@@ -391,7 +404,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
           )}
         </div>
         <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-          <div className={`${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm min-h-full flex text-sm`}>
+          <div className={`resume-content ${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm min-h-full flex text-sm`}>
             
             {/* Left Sidebar - Blue */}
             <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)', fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
