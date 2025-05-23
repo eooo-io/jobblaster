@@ -1,10 +1,8 @@
 import { BaseJobConnector, JobSearchParams, JobSearchResponse } from './base-connector';
 import { AdzunaConnector } from './adzuna-connector';
-import { LinkedInConnector } from './linkedin-connector';
-import { IndeedConnector } from './indeed-connector';
 import type { User } from '@shared/schema';
 
-export type ConnectorType = 'adzuna' | 'indeed' | 'linkedin' | 'glassdoor' | 'greenhouse' | 'ziprecruiter';
+export type ConnectorType = 'adzuna' | 'indeed' | 'glassdoor' | 'greenhouse' | 'ziprecruiter';
 
 export interface ConnectorConfig {
   type: ConnectorType;
@@ -29,21 +27,7 @@ export class JobConnectorManager {
     });
     this.connectors.set('adzuna', adzunaConnector);
 
-    // Initialize LinkedIn scraper (only if credentials available)
-    if (this.user.linkedinApiKey) {
-      const linkedinConnector = new LinkedInConnector({
-        apiKey: this.user.linkedinApiKey,
-      });
-      this.connectors.set('linkedin', linkedinConnector);
-    }
-
-    // Initialize Indeed scraper (only if credentials available)
-    if (this.user.indeedApiKey) {
-      const indeedConnector = new IndeedConnector({
-        apiKey: this.user.indeedApiKey,
-      });
-      this.connectors.set('indeed', indeedConnector);
-    }
+    // Note: LinkedIn and Indeed connectors removed - focusing on Adzuna only
   }
 
   getAvailableConnectors(): ConnectorConfig[] {
