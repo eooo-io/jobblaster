@@ -58,6 +58,10 @@ export interface IStorage {
   createAiTemplate(template: InsertAiTemplate): Promise<AiTemplate>;
   updateAiTemplate(id: number, template: Partial<InsertAiTemplate>): Promise<AiTemplate | undefined>;
   deleteAiTemplate(id: number): Promise<boolean>;
+
+  // Template Assignments
+  getTemplateAssignments(userId: number): Promise<TemplateAssignment[]>;
+  setTemplateAssignments(userId: number, assignments: InsertTemplateAssignment[]): Promise<TemplateAssignment[]>;
 }
 
 export class MemStorage implements IStorage {

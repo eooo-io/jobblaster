@@ -775,6 +775,38 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // Template Assignments Management
+  app.get("/api/template-assignments", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const assignments = await storage.getTemplateAssignments(userId);
+      res.json(assignments);
+    } catch (error) {
+      console.error("Error fetching template assignments:", error);
+      res.status(500).json({ message: "Failed to fetch template assignments" });
+    }
+  });
+
+  app.post("/api/template-assignments", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const assignments = req.body;
+      const savedAssignments = await storage.setTemplateAssignments(userId, assignments);
+      res.json(savedAssignments);
+    } catch (error) {
+      console.error("Error saving template assignments:", error);
+      res.status(500).json({ message: "Failed to save template assignments" });
+    }
+  });
+
   // Test API logging with both services
   app.post("/api/test-logging", requireAuth, async (req, res) => {
     try {

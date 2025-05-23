@@ -206,3 +206,6 @@ export type ExternalLog = typeof externalLogs.$inferSelect;
 
 export type InsertAiTemplate = z.infer<typeof insertAiTemplateSchema>;
 export type AiTemplate = typeof aiTemplates.$inferSelect;
+
+export type InsertTemplateAssignment = z.infer<typeof insertTemplateAssignmentSchema>;
+export type TemplateAssignment = typeof templateAssignments.$inferSelect;
