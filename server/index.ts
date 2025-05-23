@@ -42,16 +42,16 @@ app.use((req, res, next) => {
 async function bootstrapApplication() {
   try {
     // Check if admin user already exists
-    const existingAdmin = await storage.getUserByUsername("admin");
+    const existingAdmin = await storage.getUserByUsername("ezraterlinden");
     
     if (!existingAdmin) {
-      // Create admin user with default password
-      const hashedPassword = await hashPassword("admin123");
+      // Create admin user with specified credentials
+      const hashedPassword = await hashPassword("*iQ0rxMzu%&VW@dB");
       await storage.createUser({
-        username: "admin",
+        username: "ezraterlinden",
         password: hashedPassword
       });
-      log("✓ Admin user created: username=admin, password=admin123");
+      log("✓ Admin user created: username=ezraterlinden");
     } else {
       log("✓ Admin user already exists");
     }
