@@ -105,7 +105,7 @@ export default function SearchCriteriaPage() {
   });
 
   const runSearchMutation = useMutation({
-    mutationFn: (criteriaId: number) => apiRequest("/api/scrape-jobs", "POST", { criteriaId }),
+    mutationFn: (criteriaId: number) => apiRequest("POST", "/api/scrape-jobs", { criteriaId }),
     onSuccess: () => {
       toast({ title: "Job search started! Check External API Logs for progress." });
     },
