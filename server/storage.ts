@@ -1,10 +1,13 @@
 import { 
   users, resumes, jobPostings, matchScores, coverLetters, applications, externalLogs, aiTemplates, templateAssignments,
+  jobSearchCriteria, jobSearchSessions,
   type User, type InsertUser, type Resume, type InsertResume, 
   type JobPosting, type InsertJobPosting, type MatchScore, type InsertMatchScore,
   type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication,
   type ExternalLog, type InsertExternalLog, type AiTemplate, type InsertAiTemplate,
-  type TemplateAssignment, type InsertTemplateAssignment
+  type TemplateAssignment, type InsertTemplateAssignment,
+  type JobSearchCriteria, type InsertJobSearchCriteria,
+  type JobSearchSession, type InsertJobSearchSession
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
@@ -337,7 +340,8 @@ export class MemStorage implements IStorage {
 export class DatabaseStorage implements IStorage {
   // Job Search Criteria Methods
   async getJobSearchCriteria(userId: number): Promise<JobSearchCriteria[]> {
-    return await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.userId, userId));
+    const results = await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.userId, userId));
+    return results;
   }
 
   async getJobSearchCriteriaById(id: number): Promise<JobSearchCriteria | undefined> {
