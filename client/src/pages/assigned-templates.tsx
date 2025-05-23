@@ -246,12 +246,18 @@ export default function AssignedTemplates() {
                       <div>
                         {selectedTemplate && (
                           <div className="space-y-2">
-                            <div className="flex items-center space-x-2">
-                              <Brain className={`h-4 w-4 ${getProviderColor(selectedTemplate.provider)}`} />
+                            <div className="flex items-center space-x-2 mb-3">
+                              <div className="flex items-center space-x-1 px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs font-medium">
+                                <span className="w-2 h-2 bg-green-600 rounded-full"></span>
+                                <span>Selected</span>
+                              </div>
                               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getProviderBadgeColor(selectedTemplate.provider)}`}>
                                 {selectedTemplate.provider.toUpperCase()}
                               </span>
                             </div>
+                            <Typography variant="small" className="font-medium text-gray-900 dark:text-white">
+                              {selectedTemplate.name}
+                            </Typography>
                             <Typography variant="small" className="text-gray-600 dark:text-gray-400">
                               Model: {selectedTemplate.model}
                             </Typography>
