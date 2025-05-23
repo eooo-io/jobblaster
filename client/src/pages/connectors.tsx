@@ -362,88 +362,85 @@ export default function Connectors() {
           
           <div className="grid gap-4 md:grid-cols-2">
             {/* Adzuna */}
-            <Card className="border border-slate-200 dark:border-gray-700">
-              <CardBody className="p-6">
+            <Card>
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                       <span className="text-white text-sm font-bold">Az</span>
                     </div>
                     <div>
-                      <Typography variant="h6" className="text-slate-900 dark:text-white">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
                         Adzuna
-                      </Typography>
-                      <Typography className="text-xs text-slate-500 dark:text-gray-400">
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Job search and analysis
-                      </Typography>
+                      </p>
                     </div>
                   </div>
                   {getConnectionStatus("adzuna")}
                 </div>
 
                 <div className="space-y-3">
-                  <Input
-                    label="App ID"
-                    value={settings.adzunaAppId || ""}
-                    onChange={(e) => handleInputChange("adzunaAppId", e.target.value)}
-                    placeholder="Your Adzuna App ID"
-                    crossOrigin={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
-                  />
-                  <Input
-                    type="password"
-                    label="API Key"
-                    value={settings.adzunaApiKey || ""}
-                    onChange={(e) => handleInputChange("adzunaApiKey", e.target.value)}
-                    placeholder="Your Adzuna API Key"
-                    crossOrigin={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="adzuna-app-id">App ID</Label>
+                    <Input
+                      id="adzuna-app-id"
+                      value={settings.adzunaAppId || ""}
+                      onChange={(e) => handleInputChange("adzunaAppId", e.target.value)}
+                      placeholder="Your Adzuna App ID"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="adzuna-api-key">API Key</Label>
+                    <Input
+                      id="adzuna-api-key"
+                      type="password"
+                      value={settings.adzunaApiKey || ""}
+                      onChange={(e) => handleInputChange("adzunaApiKey", e.target.value)}
+                      placeholder="Your Adzuna API Key"
+                    />
+                  </div>
                   <Button
                     size="sm"
-                    variant="outlined"
+                    variant="outline"
                     onClick={() => testConnection("adzuna")}
                     disabled={!settings.adzunaAppId || !settings.adzunaApiKey}
                     className="w-full"
-                    placeholder={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
                   >
                     Test Connection
                   </Button>
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
 
             {/* Future platforms */}
-            <Card className="border border-slate-200 dark:border-gray-700 opacity-60">
-              <CardBody className="p-6">
+            <Card className="opacity-60">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center">
                       <span className="text-white text-sm font-bold">+</span>
                     </div>
                     <div>
-                      <Typography variant="h6" className="text-slate-900 dark:text-white">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
                         More Platforms
-                      </Typography>
-                      <Typography className="text-xs text-slate-500 dark:text-gray-400">
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Indeed, Glassdoor, LinkedIn
-                      </Typography>
+                      </p>
                     </div>
                   </div>
-                  <span className="text-xs bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded-full text-slate-500 dark:text-gray-400">
+                  <Badge variant="secondary" className="text-xs">
                     Coming Soon
-                  </span>
+                  </Badge>
                 </div>
                 <div className="text-center py-4">
-                  <Typography className="text-sm text-slate-500 dark:text-gray-400">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     Additional job platforms will be available soon
-                  </Typography>
+                  </p>
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
           </div>
         </div>
@@ -455,9 +452,6 @@ export default function Connectors() {
             className="bg-blue-600 hover:bg-blue-700"
             onClick={handleSave}
             disabled={saveSettings.isPending}
-            placeholder={undefined}
-            onPointerEnterCapture={undefined}
-            onPointerLeaveCapture={undefined}
           >
             {saveSettings.isPending ? (
               <>
