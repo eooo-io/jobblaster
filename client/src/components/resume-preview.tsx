@@ -527,15 +527,15 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
       <div className="lg:col-span-1">
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - Modern Theme</h3>
         <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-          <div className={`${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm p-6 text-sm space-y-4`}>
+          <div className="bg-white rounded shadow-sm p-6 text-sm space-y-4">
             
             {/* Header Section */}
             <div className="text-center border-b border-blue-100 pb-4">
-              <h1 className={`text-2xl font-bold ${forceLightMode ? 'text-gray-900' : 'text-gray-900 dark:text-white'} mb-1`}>
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">
                 {basics.name || "Your Name"}
               </h1>
               {basics.label && (
-                <p className="text-blue-600 dark:text-blue-400 font-medium mb-2">
+                <p className="text-blue-600 font-medium mb-2">
                   {basics.label}
                 </p>
               )}
