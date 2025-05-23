@@ -361,8 +361,8 @@ export default function Templates() {
           </Card>
         )}
 
-        {/* Templates List */}
-        <div className="space-y-4">
+        {/* Templates List - Organized by Provider */}
+        <div className="space-y-6">
           {templates.length === 0 ? (
             <Card className="bg-white dark:bg-gray-800 shadow-sm">
               <CardBody className="text-center py-12">
@@ -376,73 +376,223 @@ export default function Templates() {
               </CardBody>
             </Card>
           ) : (
-            templates.map((template) => (
-              <Card key={template.id} className="bg-white dark:bg-gray-800 shadow-sm">
-                <CardBody className="p-6">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <Typography variant="h6" color="blue-gray">
-                          {template.name}
-                        </Typography>
-                        <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
-                          {template.category.replace('_', ' ')}
-                        </span>
-                      </div>
-                      <Typography variant="small" color="gray" className="mb-4">
-                        {template.description}
-                      </Typography>
-                      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
-                            Temperature: {template.temperature}
-                          </Typography>
-                        </div>
-                        <div>
-                          <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
-                            Max Tokens: {template.maxTokens}
-                          </Typography>
-                        </div>
-                        <div>
-                          <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
-                            Updated: {new Date(template.updatedAt).toLocaleDateString()}
-                          </Typography>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center space-x-2 ml-4">
-                      <Button
-                        size="sm"
-                        variant="outlined"
-                        onClick={() => handleEdit(template)}
-                        className="flex items-center space-x-1"
-                      >
-                        <Edit className="h-4 w-4" />
-                        <span>Edit</span>
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="outlined"
-                        color="red"
-                        onClick={() => {
-                          if (confirm("Are you sure you want to delete this template?")) {
-                            deleteMutation.mutate(template.id);
-                          }
-                        }}
-                        className="flex items-center space-x-1"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                        <span>Delete</span>
-                      </Button>
-                    </div>
+            <>
+              {/* OpenAI Templates */}
+              {templates.filter(t => t.provider === 'openai').length > 0 && (
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Brain className="h-6 w-6 text-green-600" />
+                    <Typography variant="h5" color="blue-gray">
+                      OpenAI Templates
+                    </Typography>
                   </div>
-                </CardBody>
-              </Card>
-            ))
+                  {templates.filter(t => t.provider === 'openai').map((template) => (
+                    <Card key={template.id} className="bg-white dark:bg-gray-800 shadow-sm">
+                      <CardBody className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-3 mb-2">
+                              <Typography variant="h6" color="blue-gray">
+                                {template.name}
+                              </Typography>
+                              <span className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs font-medium">
+                                OpenAI
+                              </span>
+                            </div>
+                            <Typography variant="small" color="gray" className="mb-4">
+                              {template.description}
+                            </Typography>
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Temperature: {template.temperature}
+                                </Typography>
+                              </div>
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Max Tokens: {template.maxTokens}
+                                </Typography>
+                              </div>
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Model: {template.model}
+                                </Typography>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2 ml-4">
+                            <Button
+                              size="sm"
+                              variant="outlined"
+                              onClick={() => handleEdit(template)}
+                              className="flex items-center space-x-1"
+                            >
+                              <Edit className="h-4 w-4" />
+                              <span>Edit</span>
+                            </Button>
+                            <Button
+                              size="sm"
+                              color="red"
+                              variant="outlined"
+                              onClick={() => handleDelete(template.id)}
+                              className="flex items-center space-x-1"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span>Delete</span>
+                            </Button>
+                          </div>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {/* Anthropic Templates */}
+              {templates.filter(t => t.provider === 'anthropic').length > 0 && (
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Brain className="h-6 w-6 text-purple-600" />
+                    <Typography variant="h5" color="blue-gray">
+                      Anthropic Templates
+                    </Typography>
+                  </div>
+                  {templates.filter(t => t.provider === 'anthropic').map((template) => (
+                    <Card key={template.id} className="bg-white dark:bg-gray-800 shadow-sm">
+                      <CardBody className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-3 mb-2">
+                              <Typography variant="h6" color="blue-gray">
+                                {template.name}
+                              </Typography>
+                              <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
+                                Anthropic
+                              </span>
+                            </div>
+                            <Typography variant="small" color="gray" className="mb-4">
+                              {template.description}
+                            </Typography>
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Temperature: {template.temperature}
+                                </Typography>
+                              </div>
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Max Tokens: {template.maxTokens}
+                                </Typography>
+                              </div>
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Model: {template.model}
+                                </Typography>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2 ml-4">
+                            <Button
+                              size="sm"
+                              variant="outlined"
+                              onClick={() => handleEdit(template)}
+                              className="flex items-center space-x-1"
+                            >
+                              <Edit className="h-4 w-4" />
+                              <span>Edit</span>
+                            </Button>
+                            <Button
+                              size="sm"
+                              color="red"
+                              variant="outlined"
+                              onClick={() => handleDelete(template.id)}
+                              className="flex items-center space-x-1"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span>Delete</span>
+                            </Button>
+                          </div>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  ))}
+                </div>
+              )}
+
+              {/* xAI Templates */}
+              {templates.filter(t => t.provider === 'xai').length > 0 && (
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <Brain className="h-6 w-6 text-blue-600" />
+                    <Typography variant="h5" color="blue-gray">
+                      xAI Templates
+                    </Typography>
+                  </div>
+                  {templates.filter(t => t.provider === 'xai').map((template) => (
+                    <Card key={template.id} className="bg-white dark:bg-gray-800 shadow-sm">
+                      <CardBody className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-3 mb-2">
+                              <Typography variant="h6" color="blue-gray">
+                                {template.name}
+                              </Typography>
+                              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
+                                xAI
+                              </span>
+                            </div>
+                            <Typography variant="small" color="gray" className="mb-4">
+                              {template.description}
+                            </Typography>
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Temperature: {template.temperature}
+                                </Typography>
+                              </div>
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Max Tokens: {template.maxTokens}
+                                </Typography>
+                              </div>
+                              <div>
+                                <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
+                                  Model: {template.model}
+                                </Typography>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2 ml-4">
+                            <Button
+                              size="sm"
+                              variant="outlined"
+                              onClick={() => handleEdit(template)}
+                              className="flex items-center space-x-1"
+                            >
+                              <Edit className="h-4 w-4" />
+                              <span>Edit</span>
+                            </Button>
+                            <Button
+                              size="sm"
+                              color="red"
+                              variant="outlined"
+                              onClick={() => handleDelete(template.id)}
+                              className="flex items-center space-x-1"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span>Delete</span>
+                            </Button>
+                          </div>
+                        </div>
+                      </CardBody>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }
