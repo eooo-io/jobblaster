@@ -1,8 +1,9 @@
 import { 
-  users, resumes, jobPostings, matchScores, coverLetters, applications,
+  users, resumes, jobPostings, matchScores, coverLetters, applications, externalLogs,
   type User, type InsertUser, type Resume, type InsertResume, 
   type JobPosting, type InsertJobPosting, type MatchScore, type InsertMatchScore,
-  type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication
+  type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication,
+  type ExternalLog, type InsertExternalLog
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
@@ -290,6 +291,22 @@ export class MemStorage implements IStorage {
     this.applications.set(id, updated);
     return updated;
   }
+
+  // External Logs (MemStorage implementation)
+  async getExternalLogs(userId: number, limit: number = 100): Promise<ExternalLog[]> {
+    // MemStorage doesn't persist external logs
+    return [];
+  }
+
+  async createExternalLog(insertLog: InsertExternalLog): Promise<ExternalLog> {
+    // MemStorage doesn't persist external logs, return a mock for interface compliance
+    const log: ExternalLog = {
+      id: 1,
+      ...insertLog,
+      createdAt: new Date()
+    };
+    return log;
+  }
 }
 
 // Database Storage Implementation
@@ -449,6 +466,20 @@ export class DatabaseStorage implements IStorage {
   async updateApplication(id: number, appUpdate: Partial<InsertApplication>): Promise<Application | undefined> {
     const [application] = await db.update(applications).set(appUpdate).where(eq(applications.id, id)).returning();
     return application;
+  }
+
+  // External Logs
+  async getExternalLogs(userId: number, limit: number = 100): Promise<ExternalLog[]> {
+    const logs = await db.select().from(externalLogs)
+      .where(eq(externalLogs.userId, userId))
+      .orderBy(externalLogs.createdAt)
+      .limit(limit);
+    return logs;
+  }
+
+  async createExternalLog(insertLog: InsertExternalLog): Promise<ExternalLog> {
+    const [log] = await db.insert(externalLogs).values(insertLog).returning();
+    return log;
   }
 }
 

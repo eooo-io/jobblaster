@@ -692,6 +692,24 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // System Tools - External Logs
+  app.get("/api/external-logs", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const limit = parseInt(req.query.limit as string) || 100;
+      const logs = await storage.getExternalLogs(userId, limit);
+      
+      res.json(logs);
+    } catch (error) {
+      console.error("Error fetching external logs:", error);
+      res.status(500).json({ message: "Failed to fetch external logs" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
