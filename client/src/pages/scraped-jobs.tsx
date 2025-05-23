@@ -292,17 +292,18 @@ export default function ScrapedJobsPage() {
               <Typography variant="small" className="text-gray-700 dark:text-gray-300">
                 Resume for Scoring:
               </Typography>
-              <Select
-                value={selectedResume?.toString() || ""}
-                onChange={(value) => setSelectedResume(value ? parseInt(value) : null)}
-                className="min-w-[200px]"
-              >
-                <SelectItem value="">Select Resume</SelectItem>
-                {resumes.map((resume) => (
-                  <SelectItem key={resume.id} value={resume.id.toString()}>
-                    {resume.name} {resume.isDefault && "(Default)"}
-                  </SelectItem>
-                ))}
+              <Select value={selectedResume?.toString() || ""} onValueChange={(value) => setSelectedResume(value ? parseInt(value) : null)}>
+                <SelectTrigger className="min-w-[200px]">
+                  <SelectValue placeholder="Select Resume" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">Select Resume</SelectItem>
+                  {resumes.map((resume) => (
+                    <SelectItem key={resume.id} value={resume.id.toString()}>
+                      {resume.name} {resume.isDefault && "(Default)"}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </div>
           </div>
