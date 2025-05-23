@@ -144,7 +144,20 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
   if (theme === "debug") {
     return (
       <div className="lg:col-span-1">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - Debug Mode</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Resume Preview - Debug Mode</h3>
+          {showDownloadButton && (
+            <Button
+              onClick={handleDownloadPDF}
+              size="sm"
+              variant="outline"
+              className="flex items-center space-x-2"
+            >
+              <Download className="h-4 w-4" />
+              <span>Download PDF</span>
+            </Button>
+          )}
+        </div>
         <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
           <div className="text-xs font-mono space-y-4 text-slate-700 dark:text-gray-300">
             
@@ -300,7 +313,20 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
   if (theme === "lucide") {
     return (
       <div className="lg:col-span-1">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - Lucide Theme</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Resume Preview - Lucide Theme</h3>
+          {showDownloadButton && (
+            <Button
+              onClick={handleDownloadPDF}
+              size="sm"
+              variant="outline"
+              className="flex items-center space-x-2"
+            >
+              <Download className="h-4 w-4" />
+              <span>Download PDF</span>
+            </Button>
+          )}
+        </div>
         <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
           <div className={`${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm min-h-full flex text-sm`}>
             
@@ -601,9 +627,22 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
   if (theme === "modern") {
     return (
       <div className="lg:col-span-1">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - Modern Theme</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Resume Preview - Modern Theme</h3>
+          {showDownloadButton && (
+            <Button
+              onClick={handleDownloadPDF}
+              size="sm"
+              variant="outline"
+              className="flex items-center space-x-2"
+            >
+              <Download className="h-4 w-4" />
+              <span>Download PDF</span>
+            </Button>
+          )}
+        </div>
         <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-          <div className="bg-white rounded shadow-sm p-6 text-sm space-y-4">
+          <div className="resume-content bg-white rounded shadow-sm p-6 text-sm space-y-4">
             
             {/* Header Section */}
             <div className="text-center border-b border-blue-100 pb-4">
