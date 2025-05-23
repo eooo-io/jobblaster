@@ -180,8 +180,7 @@ export default function AssignedTemplates() {
             <Button
               onClick={handleSave}
               disabled={saveAssignmentsMutation.isPending}
-              color="blue"
-              className="flex items-center space-x-2"
+              className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               <Save className="h-4 w-4" />
               <span>{saveAssignmentsMutation.isPending ? "Saving..." : "Save Assignments"}</span>
