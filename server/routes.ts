@@ -491,6 +491,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Job Postings Routes (for Scraped Jobs page)
+  app.get("/api/job-postings", requireAuth, async (req: any, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 10;
+      const search = req.query.search as string || "";
+      const company = req.query.company as string || "";
+
+      // Get all jobs for user
+      const allJobs = await storage.getJobPostingsByUserId(userId);
+      
+      // Filter jobs based on search criteria
+      let filteredJobs = allJobs;
+      
+      if (search) {
+        const searchLower = search.toLowerCase();
+        filteredJobs = filteredJobs.filter(job => 
+          job.title.toLowerCase().includes(searchLower) ||
+          job.company.toLowerCase().includes(searchLower) ||
+          job.description.toLowerCase().includes(searchLower)
+        );
+      }
+      
+      if (company) {
+        filteredJobs = filteredJobs.filter(job => 
+          job.company.toLowerCase() === company.toLowerCase()
+        );
+      }
+
+      // Sort by creation date (newest first)
+      filteredJobs.sort((a, b) => 
+        new Date(b.createdAt!).getTime() - new Date(a.createdAt!).getTime()
+      );
+
+      // Calculate pagination
+      const total = filteredJobs.length;
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      const jobs = filteredJobs.slice(startIndex, endIndex);
+
+      res.json({
+        jobs,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      });
+    } catch (error) {
+      console.error("Error fetching job postings:", error);
+      res.status(500).json({ message: "Failed to fetch job postings" });
+    }
+  });
+
+  app.delete("/api/job-postings/:id", requireAuth, async (req: any, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const jobId = parseInt(req.params.id);
+      
+      // Check if job exists and belongs to user
+      const job = await storage.getJobPosting(jobId);
+      if (!job) {
+        return res.status(404).json({ message: "Job posting not found" });
+      }
+
+      if (job.userId !== userId) {
+        return res.status(403).json({ message: "Not authorized to delete this job posting" });
+      }
+
+      const deleted = await storage.deleteJobPosting(jobId);
+      if (deleted) {
+        res.json({ message: "Job posting deleted successfully" });
+      } else {
+        res.status(500).json({ message: "Failed to delete job posting" });
+      }
+    } catch (error) {
+      console.error("Error deleting job posting:", error);
+      res.status(500).json({ message: "Failed to delete job posting" });
+    }
+  });
+
   // Export Package
   app.post("/api/export-package", async (req, res) => {
     try {
