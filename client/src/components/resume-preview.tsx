@@ -552,7 +552,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               
               {/* Social Profiles */}
               {basics.profiles && basics.profiles.length > 0 && (
-                <div className="text-xs text-gray-600 dark:text-gray-400 mt-1 flex flex-wrap justify-center gap-x-2">
+                <div className="text-xs text-gray-600 mt-1 flex flex-wrap justify-center gap-x-2">
                   {basics.profiles.map((profile: any, index: number) => (
                     <span key={index}>
                       {profile.network}: {profile.username || profile.url}
@@ -565,10 +565,10 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Summary */}
             {basics.summary && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   PROFESSIONAL SUMMARY
                 </h2>
-                <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                <p className="text-xs text-gray-700 leading-relaxed">
                   {basics.summary}
                 </p>
               </div>
@@ -577,30 +577,30 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Work Experience */}
             {work.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   WORK EXPERIENCE
                 </h2>
                 {work.map((job: any, index: number) => (
                   <div key={index} className="mb-3 last:mb-0">
                     <div className="flex justify-between items-start mb-1">
-                      <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                      <h3 className="font-semibold text-gray-900 text-xs">
                         {job.position || "Position"}
                       </h3>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-gray-500">
                         {formatDate(job.startDate)}{job.endDate ? ` - ${formatDate(job.endDate)}` : " - Present"}
                       </span>
                     </div>
-                    <p className="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1">
+                    <p className="text-xs text-blue-600 font-medium mb-1">
                       {job.name || job.company || "Company"}
-                      {job.location && <span className="text-gray-500 dark:text-gray-400"> • {job.location}</span>}
+                      {job.location && <span className="text-gray-500"> • {job.location}</span>}
                     </p>
                     {job.summary && (
-                      <p className="text-xs text-gray-700 dark:text-gray-300 mb-1">
+                      <p className="text-xs text-gray-700 mb-1">
                         {job.summary}
                       </p>
                     )}
                     {job.highlights && job.highlights.length > 0 && (
-                      <ul className="text-xs text-gray-700 dark:text-gray-300 ml-3 list-disc space-y-0.5">
+                      <ul className="text-xs text-gray-700 ml-3 list-disc space-y-0.5">
                         {job.highlights.map((highlight: string, idx: number) => (
                           <li key={idx}>{highlight}</li>
                         ))}
