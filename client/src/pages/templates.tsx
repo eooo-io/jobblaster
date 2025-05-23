@@ -5,6 +5,7 @@ import { Link } from "wouter";
 import { useState } from "react";
 import { queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import Sidebar from "@/components/sidebar";
 
 interface Template {
   id: number;
@@ -188,28 +189,25 @@ export default function Templates() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-4">
-            <Link href="/profile">
-              <Button variant="outlined" size="sm" className="flex items-center space-x-2">
-                <ArrowLeft className="h-4 w-4" />
-                <span>Back to Settings</span>
-              </Button>
-            </Link>
-            <div className="flex items-center space-x-3">
-              <Settings className="h-8 w-8 text-blue-600" />
-              <div>
-                <Typography variant="h4" color="blue-gray">
-                  AI Prompt Templates
-                </Typography>
-                <Typography variant="small" color="gray">
-                  Manage your OpenAI prompt templates for job analysis and other AI features
-                </Typography>
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
+      <Sidebar />
+      
+      <main className="flex-1 flex flex-col overflow-hidden lg:ml-0 pt-16 lg:pt-0">
+        <div className="flex-1 overflow-y-auto p-6 max-w-6xl mx-auto w-full">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3">
+                <Settings className="h-8 w-8 text-blue-600" />
+                <div>
+                  <Typography variant="h4" color="blue-gray">
+                    AI Prompt Templates
+                  </Typography>
+                  <Typography variant="small" color="gray">
+                    Manage your OpenAI prompt templates for job analysis and other AI features
+                  </Typography>
+                </div>
               </div>
-            </div>
           </div>
           {!isCreating && !editingTemplate && (
             <Button
@@ -443,7 +441,8 @@ export default function Templates() {
             ))
           )}
         </div>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }
