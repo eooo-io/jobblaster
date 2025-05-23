@@ -4,10 +4,21 @@ import { logApiCall } from "./api-logger";
 import type { JobSearchCriteria, InsertScrapedJob } from "@shared/schema";
 
 export class JobScraperService {
-  private connectorManager: ConnectorManager;
+  private connectorManager: ConnectorManager | null = null;
 
   constructor() {
-    this.connectorManager = new ConnectorManager();
+    // We'll initialize the connector manager when we have user data
+  }
+
+  private async initializeConnectorManager(userId: number): Promise<void> {
+    if (!this.connectorManager) {
+      // Get the user data with credentials from the database
+      const user = await storage.getUser(userId);
+      if (!user) {
+        throw new Error(`User not found: ${userId}`);
+      }
+      this.connectorManager = new ConnectorManager(user);
+    }
   }
 
   async runScrapeForCriteria(criteriaId: number, userId: number): Promise<{
@@ -16,6 +27,9 @@ export class JobScraperService {
     errors: string[];
   }> {
     console.log(`🎯 Starting scrape for criteria ID: ${criteriaId}`);
+    
+    // Initialize connector manager with user credentials
+    await this.initializeConnectorManager(userId);
     
     const criteria = await storage.getJobSearchCriteriaById(criteriaId);
     if (!criteria) {
@@ -124,6 +138,9 @@ export class JobScraperService {
     criteriaSummary: { [criteriaId: number]: { name: string; jobsFound: number; errors: string[] } };
   }> {
     console.log(`🚀 Starting comprehensive scraping session for user ${userId}`);
+    
+    // Initialize connector manager with user credentials
+    await this.initializeConnectorManager(userId);
     
     // Get all active criteria for user
     const allCriteria = await storage.getJobSearchCriteria(userId);
