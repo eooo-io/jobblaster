@@ -156,7 +156,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update profile settings
-  app.put("/api/update-profile", requireAuth, async (req, res) => {
+  app.post("/api/update-profile", requireAuth, async (req, res) => {
     try {
       const userId = getCurrentUserId(req);
       if (!userId) {
