@@ -43,14 +43,15 @@ export class JobScraperService {
     try {
       console.log("🔍 Running Adzuna job search...");
       
+      // Convert search criteria to Adzuna-compatible format
+      const searchKeywords = [...(criteria.keywords || []), ...(criteria.jobTitles || [])].join(' OR ');
+      const searchLocation = criteria.locations && criteria.locations.length > 0 ? criteria.locations[0] : 'United States';
+      
       const searchParams = {
-        keywords: criteria.keywords,
-        jobTitles: criteria.jobTitles,
-        locations: criteria.locations,
-        salaryMin: criteria.salaryMin,
-        salaryMax: criteria.salaryMax,
-        employmentTypes: criteria.employmentTypes,
-        experienceLevels: criteria.experienceLevels,
+        query: searchKeywords,
+        location: searchLocation,
+        salary_min: criteria.salaryMin,
+        salary_max: criteria.salaryMax,
       };
 
       const results = await this.connectorManager.searchJobs(searchParams, ['adzuna']);
