@@ -541,7 +541,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               )}
               
               {/* Contact Information */}
-              <div className="text-xs text-gray-600 dark:text-gray-400 space-x-2 flex flex-wrap justify-center gap-x-3">
+              <div className="text-xs text-gray-600 space-x-2 flex flex-wrap justify-center gap-x-3">
                 {basics.email && <span><i className="fas fa-envelope mr-1"></i>{basics.email}</span>}
                 {basics.phone && <span><i className="fas fa-phone mr-1"></i>{basics.phone}</span>}
                 {basics.url && <span><i className="fas fa-globe mr-1"></i>{basics.url}</span>}
