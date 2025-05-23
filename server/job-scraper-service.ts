@@ -13,10 +13,20 @@ export class JobScraperService {
   private async initializeConnectorManager(userId: number): Promise<void> {
     if (!this.connectorManager) {
       // Get the user data with credentials from the database
+      console.log(`🔍 Getting user data for userId: ${userId}`);
       const user = await storage.getUser(userId);
+      console.log(`🔍 User retrieved:`, user);
       if (!user) {
         throw new Error(`User not found: ${userId}`);
       }
+      console.log(`🔍 Creating connector manager with user:`, {
+        id: user.id,
+        username: user.username,
+        hasAdzunaApiKey: !!user.adzunaApiKey,
+        hasAdzunaAppId: !!user.adzunaAppId,
+        adzunaApiKey: user.adzunaApiKey ? 'SET' : 'NOT_SET',
+        adzunaAppId: user.adzunaAppId ? 'SET' : 'NOT_SET'
+      });
       this.connectorManager = new ConnectorManager(user);
     }
   }
