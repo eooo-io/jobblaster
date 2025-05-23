@@ -4,11 +4,16 @@ import {
   Card,
   CardBody,
   Typography,
-  Select,
-  Option,
   Button,
   Alert,
 } from "@material-tailwind/react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Save, Settings, Brain, AlertCircle } from "lucide-react";
 import Sidebar from "@/components/sidebar";
 import { useToast } from "@/hooks/use-toast";
@@ -217,18 +222,27 @@ export default function AssignedTemplates() {
                           Assigned Template
                         </Typography>
                         <Select
-                          value={assignment?.templateId?.toString() || ""}
-                          onChange={(value) => handleAssignmentChange(category.id, value)}
-                          className="dark:text-white dark:bg-gray-700 dark:border-gray-600"
+                          value={assignment?.templateId?.toString() || "none"}
+                          onValueChange={(value) => handleAssignmentChange(category.id, value === "none" ? "" : value)}
                         >
-                          <Option value="">No template assigned</Option>
-                          {templates
-                            .filter((template: Template) => template.category === category.id || template.category === 'general')
-                            .map((template: Template) => (
-                              <Option key={template.id} value={template.id.toString()}>
-                                {template.name} ({template.provider.toUpperCase()})
-                              </Option>
-                            ))}
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="No template assigned" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">
+                              No template assigned
+                            </SelectItem>
+                            {templates
+                              .filter((template: Template) => template.category === category.id || template.category === 'general')
+                              .map((template: Template) => (
+                                <SelectItem 
+                                  key={template.id} 
+                                  value={template.id.toString()}
+                                >
+                                  {template.name} ({template.provider.toUpperCase()})
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
                         </Select>
                       </div>
 
