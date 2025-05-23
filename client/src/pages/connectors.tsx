@@ -42,7 +42,7 @@ export default function Connectors() {
 
   // Fetch user profile for current settings
   const { data: user, isLoading, error } = useQuery({
-    queryKey: ["/api/user"],
+    queryKey: ["/api/auth/user"],
   });
 
   // Debug logging
