@@ -296,7 +296,7 @@ export default function Templates() {
                     className="font-mono text-sm"
                   />
                   <Typography variant="small" color="gray" className="mt-1">
-                    Use {{input_text}} as a placeholder for dynamic content
+                    Use {`{{input_text}}`} as a placeholder for dynamic content
                   </Typography>
                 </div>
 
