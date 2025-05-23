@@ -711,6 +711,76 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // Job Search Criteria Management
+  app.get("/api/job-search-criteria", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const criteria = await storage.getJobSearchCriteria(userId);
+      res.json(criteria);
+    } catch (error) {
+      console.error("Error fetching job search criteria:", error);
+      res.status(500).json({ message: "Failed to fetch job search criteria" });
+    }
+  });
+
+  app.post("/api/job-search-criteria", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const criteria = await storage.createJobSearchCriteria({
+        ...req.body,
+        userId
+      });
+      res.json(criteria);
+    } catch (error) {
+      console.error("Error creating job search criteria:", error);
+      res.status(500).json({ message: "Failed to create job search criteria" });
+    }
+  });
+
+  app.put("/api/job-search-criteria/:id", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const criteria = await storage.updateJobSearchCriteria(parseInt(req.params.id), req.body);
+      if (!criteria) {
+        return res.status(404).json({ message: "Job search criteria not found" });
+      }
+      res.json(criteria);
+    } catch (error) {
+      console.error("Error updating job search criteria:", error);
+      res.status(500).json({ message: "Failed to update job search criteria" });
+    }
+  });
+
+  app.delete("/api/job-search-criteria/:id", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const success = await storage.deleteJobSearchCriteria(parseInt(req.params.id));
+      if (!success) {
+        return res.status(404).json({ message: "Job search criteria not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting job search criteria:", error);
+      res.status(500).json({ message: "Failed to delete job search criteria" });
+    }
+  });
+
   // AI Templates Management
   app.get("/api/templates", requireAuth, async (req, res) => {
     try {

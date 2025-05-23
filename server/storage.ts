@@ -335,6 +335,59 @@ export class MemStorage implements IStorage {
 
 // Database Storage Implementation
 export class DatabaseStorage implements IStorage {
+  // Job Search Criteria Methods
+  async getJobSearchCriteria(userId: number): Promise<JobSearchCriteria[]> {
+    return await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.userId, userId));
+  }
+
+  async getJobSearchCriteriaById(id: number): Promise<JobSearchCriteria | undefined> {
+    const [criteria] = await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.id, id));
+    return criteria;
+  }
+
+  async createJobSearchCriteria(insertCriteria: InsertJobSearchCriteria): Promise<JobSearchCriteria> {
+    const [criteria] = await db
+      .insert(jobSearchCriteria)
+      .values(insertCriteria)
+      .returning();
+    return criteria;
+  }
+
+  async updateJobSearchCriteria(id: number, criteriaUpdate: Partial<InsertJobSearchCriteria>): Promise<JobSearchCriteria | undefined> {
+    const [criteria] = await db
+      .update(jobSearchCriteria)
+      .set(criteriaUpdate)
+      .where(eq(jobSearchCriteria.id, id))
+      .returning();
+    return criteria;
+  }
+
+  async deleteJobSearchCriteria(id: number): Promise<boolean> {
+    const result = await db.delete(jobSearchCriteria).where(eq(jobSearchCriteria.id, id));
+    return result.rowCount ? result.rowCount > 0 : false;
+  }
+
+  // Job Search Sessions Methods
+  async getJobSearchSessions(userId: number): Promise<JobSearchSession[]> {
+    return await db.select().from(jobSearchSessions).where(eq(jobSearchSessions.userId, userId));
+  }
+
+  async createJobSearchSession(insertSession: InsertJobSearchSession): Promise<JobSearchSession> {
+    const [session] = await db
+      .insert(jobSearchSessions)
+      .values(insertSession)
+      .returning();
+    return session;
+  }
+
+  async updateJobSearchSession(id: number, sessionUpdate: Partial<InsertJobSearchSession>): Promise<JobSearchSession | undefined> {
+    const [session] = await db
+      .update(jobSearchSessions)
+      .set(sessionUpdate)
+      .where(eq(jobSearchSessions.id, id))
+      .returning();
+    return session;
+  }
   // Users
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
