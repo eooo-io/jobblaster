@@ -207,6 +207,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Test OpenAI API connection
+      console.log("Checking if OpenAI API key provided:", !!updateData.openaiApiKey);
       if (updateData.openaiApiKey) {
         try {
           console.log("Testing OpenAI API key...");
@@ -236,6 +237,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log("OpenAI API test network error:", error);
         }
       }
+      
+      console.log("Final response data:", { 
+        adzunaTest: adzunaTestResult, 
+        openaiTest: openaiTestResult 
+      });
 
       res.json({ 
         message: "Profile updated successfully",
