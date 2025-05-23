@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Card, CardBody, CardHeader, Typography, Button, Select, SelectItem, Progress, Chip, IconButton } from "@material-tailwind/react";
+import { Card, CardBody, CardHeader, Typography, Button, Progress, Chip, IconButton } from "@material-tailwind/react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Trash2, Target, Building2, MapPin, Calendar, DollarSign, Users, ExternalLink } from "lucide-react";
-import { Sidebar } from "../components/sidebar";
+import Sidebar from "../components/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -272,17 +273,18 @@ export default function ScrapedJobsPage() {
               <Typography variant="small" className="text-gray-700 dark:text-gray-300">
                 Filter by Company:
               </Typography>
-              <Select
-                value={selectedCompany}
-                onChange={(value) => setSelectedCompany(value || "all")}
-                className="min-w-[200px]"
-              >
-                <SelectItem value="all">All Companies</SelectItem>
-                {companies.map((company) => (
-                  <SelectItem key={company} value={company}>
-                    {company}
-                  </SelectItem>
-                ))}
+              <Select value={selectedCompany} onValueChange={(value) => setSelectedCompany(value || "all")}>
+                <SelectTrigger className="min-w-[200px]">
+                  <SelectValue placeholder="Select company" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Companies</SelectItem>
+                  {companies.map((company) => (
+                    <SelectItem key={company} value={company}>
+                      {company}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </div>
 
