@@ -45,16 +45,9 @@ export default function Connectors() {
     queryKey: ["/api/auth/user"],
   });
 
-  // Debug logging
-  console.log("Query state:", { user, isLoading, error });
-
   // Update settings when user data loads
   useEffect(() => {
-    console.log("useEffect triggered, user:", user);
     if (user) {
-      console.log("Loading user data:", user); // Debug log
-      console.log("User properties:", Object.keys(user)); // Debug log
-      
       const newSettings = {
         openaiApiKey: user.openaiApiKey || "",
         adzunaAppId: user.adzunaAppId || "",
@@ -63,7 +56,6 @@ export default function Connectors() {
         xaiApiKey: user.xaiApiKey || "",
       };
       
-      console.log("Setting form data:", newSettings); // Debug log
       setSettings(newSettings);
       
       // Set connection status based on existing credentials
