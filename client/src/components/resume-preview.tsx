@@ -1,4 +1,6 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 import type { Resume } from "@shared/schema";
 import type { JSONResumeSchema } from "@/lib/types";
 
@@ -6,13 +8,87 @@ interface ResumePreviewProps {
   resume: Resume | null;
   theme?: string;
   forceLightMode?: boolean;
+  showDownloadButton?: boolean;
 }
 
-export default function ResumePreview({ resume, theme = "modern", forceLightMode = false }: ResumePreviewProps) {
+export default function ResumePreview({ resume, theme = "modern", forceLightMode = false, showDownloadButton = true }: ResumePreviewProps) {
+  const handleDownloadPDF = () => {
+    if (!resume?.jsonData) return;
+    
+    const resumeData = resume.jsonData as JSONResumeSchema;
+    const resumeName = resumeData.basics?.name || resume.name || 'Resume';
+    
+    // Create a new window with the resume content for PDF generation
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    // Get the resume content
+    const resumeElement = document.querySelector('.resume-content');
+    if (!resumeElement) return;
+
+    // Create clean HTML for PDF
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>${resumeName} - Resume</title>
+          <meta charset="utf-8">
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { 
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              line-height: 1.5;
+              color: #1f2937;
+              background: white;
+              font-size: 14px;
+              padding: 20px;
+            }
+            @media print {
+              body { padding: 0; margin: 0; }
+              @page { margin: 0.5in; size: letter; }
+            }
+            .resume-content { max-width: 8.5in; margin: 0 auto; }
+            h1 { font-size: 24px; font-weight: bold; margin-bottom: 8px; }
+            h2 { font-size: 18px; font-weight: 600; margin: 16px 0 8px 0; border-bottom: 2px solid #e5e7eb; padding-bottom: 4px; }
+            h3 { font-size: 16px; font-weight: 600; margin: 12px 0 4px 0; }
+            p { margin-bottom: 4px; }
+            .contact-info { margin-bottom: 16px; font-size: 12px; }
+            .section { margin-bottom: 16px; }
+            .work-item, .education-item, .project-item { margin-bottom: 12px; }
+            .date { font-size: 12px; color: #6b7280; font-style: italic; }
+            .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+            .skill-badge { 
+              background: #f3f4f6; 
+              padding: 4px 8px; 
+              border-radius: 4px; 
+              font-size: 12px;
+              border: 1px solid #e5e7eb;
+            }
+            ul { margin-left: 16px; margin-bottom: 8px; }
+            li { margin-bottom: 2px; }
+          </style>
+        </head>
+        <body>
+          ${resumeElement.outerHTML}
+          <script>
+            window.onload = function() {
+              window.print();
+              setTimeout(() => window.close(), 1000);
+            }
+          </script>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+  };
   if (!resume?.jsonData) {
     return (
       <div className="lg:col-span-1">
-        <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Resume Preview</h3>
+        </div>
         <div className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-lg p-4 h-96 overflow-auto">
           <div className="flex items-center justify-center h-full text-slate-500 dark:text-gray-400">
             <div className="text-center">
