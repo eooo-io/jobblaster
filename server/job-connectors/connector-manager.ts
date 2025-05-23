@@ -22,10 +22,10 @@ export class JobConnectorManager {
   }
 
   private initializeConnectors(): void {
-    // Initialize Adzuna connector
+    // Initialize Adzuna connector - use environment variables as primary source
     const adzunaConnector = new AdzunaConnector({
-      apiKey: this.user.adzunaApiKey || undefined,
-      appId: this.user.adzunaAppId || undefined,
+      apiKey: process.env.ADZUNA_API_KEY || this.user.adzunaApiKey || undefined,
+      appId: process.env.ADZUNA_APP_ID || this.user.adzunaAppId || undefined,
     });
     this.connectors.set('adzuna', adzunaConnector);
 
