@@ -70,7 +70,7 @@ export default function Connectors() {
 
   const saveSettings = useMutation({
     mutationFn: async (data: ConnectorSettings) => {
-      const response = await fetch("/api/user", {
+      const response = await fetch("/api/update-profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
