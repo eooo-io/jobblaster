@@ -15,7 +15,8 @@ import {
   X,
   Database,
   Zap,
-  Link2
+  Link2,
+  Target
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
