@@ -51,6 +51,13 @@ export interface IStorage {
   // External Logs
   getExternalLogs(userId: number, limit?: number): Promise<ExternalLog[]>;
   createExternalLog(log: InsertExternalLog): Promise<ExternalLog>;
+
+  // AI Templates
+  getAiTemplates(userId: number): Promise<AiTemplate[]>;
+  getAiTemplate(id: number): Promise<AiTemplate | undefined>;
+  createAiTemplate(template: InsertAiTemplate): Promise<AiTemplate>;
+  updateAiTemplate(id: number, template: Partial<InsertAiTemplate>): Promise<AiTemplate | undefined>;
+  deleteAiTemplate(id: number): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
