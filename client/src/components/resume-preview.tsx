@@ -22,11 +22,24 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
     const printWindow = window.open('', '_blank');
     if (!printWindow) return;
 
-    // Get the resume content
+    // Get the resume content with the exact theme styling
     const resumeElement = document.querySelector('.resume-content');
     if (!resumeElement) return;
 
-    // Create clean HTML for PDF
+    // Get all current stylesheets to preserve theme styling
+    const stylesheets = Array.from(document.styleSheets)
+      .map(sheet => {
+        try {
+          return Array.from(sheet.cssRules)
+            .map(rule => rule.cssText)
+            .join('\n');
+        } catch (e) {
+          return '';
+        }
+      })
+      .join('\n');
+
+    // Create HTML for PDF that preserves the exact theme styling
     const htmlContent = `
       <!DOCTYPE html>
       <html>
@@ -34,46 +47,52 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
           <title>${resumeName} - Resume</title>
           <meta charset="utf-8">
           <style>
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { 
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              line-height: 1.5;
-              color: #1f2937;
-              background: white;
-              font-size: 14px;
-              padding: 20px;
-            }
+            ${stylesheets}
+            
+            /* PDF-specific overrides */
             @media print {
-              body { padding: 0; margin: 0; }
-              @page { margin: 0.5in; size: letter; }
+              body { 
+                margin: 0; 
+                padding: 0;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+              }
+              @page { 
+                margin: 0.5in; 
+                size: letter; 
+              }
+              .resume-content {
+                max-width: none !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+              }
+              /* Force background colors and images to print */
+              * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+              }
             }
-            .resume-content { max-width: 8.5in; margin: 0 auto; }
-            h1 { font-size: 24px; font-weight: bold; margin-bottom: 8px; }
-            h2 { font-size: 18px; font-weight: 600; margin: 16px 0 8px 0; border-bottom: 2px solid #e5e7eb; padding-bottom: 4px; }
-            h3 { font-size: 16px; font-weight: 600; margin: 12px 0 4px 0; }
-            p { margin-bottom: 4px; }
-            .contact-info { margin-bottom: 16px; font-size: 12px; }
-            .section { margin-bottom: 16px; }
-            .work-item, .education-item, .project-item { margin-bottom: 12px; }
-            .date { font-size: 12px; color: #6b7280; font-style: italic; }
-            .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
-            .skill-badge { 
-              background: #f3f4f6; 
-              padding: 4px 8px; 
-              border-radius: 4px; 
-              font-size: 12px;
-              border: 1px solid #e5e7eb;
+            
+            /* Ensure consistent spacing and layout */
+            body {
+              background: white !important;
+              font-size: 14px;
+              line-height: 1.4;
             }
-            ul { margin-left: 16px; margin-bottom: 8px; }
-            li { margin-bottom: 2px; }
           </style>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         </head>
         <body>
           ${resumeElement.outerHTML}
           <script>
             window.onload = function() {
-              window.print();
-              setTimeout(() => window.close(), 1000);
+              // Small delay to ensure styles are loaded
+              setTimeout(() => {
+                window.print();
+                setTimeout(() => window.close(), 1000);
+              }, 500);
             }
           </script>
         </body>
