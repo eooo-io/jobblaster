@@ -10,7 +10,9 @@ import JobSearch from "@/components/job-search";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Bell, Printer, X } from "lucide-react";
+import { Plus, Bell, Printer, X, Zap } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 import type { Resume, JobPosting } from "@shared/schema";
 
 export default function Dashboard() {
@@ -19,6 +21,31 @@ export default function Dashboard() {
   const [selectedTheme, setSelectedTheme] = useState<string>("modern");
   const [showPrintPreview, setShowPrintPreview] = useState(false);
   const { toast } = useToast();
+
+  // OpenAI test mutation
+  const testOpenAI = useMutation({
+    mutationFn: async () => {
+      return apiRequest("/api/test-openai", {
+        method: "POST",
+        body: JSON.stringify({
+          message: "Testing OpenAI connection and external API logging system"
+        })
+      });
+    },
+    onSuccess: (data: any) => {
+      toast({
+        title: "OpenAI Test Successful!",
+        description: `Response: ${data.response}`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "OpenAI Test Failed",
+        description: error.message || "Failed to connect to OpenAI",
+        variant: "destructive"
+      });
+    }
+  });
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
@@ -34,9 +61,21 @@ export default function Dashboard() {
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white truncate">Resume Builder</h2>
                 <p className="text-xs text-slate-600 dark:text-gray-300">Build & match resumes</p>
               </div>
-              <Button variant="ghost" size="sm">
-                <Bell className="w-4 h-4" />
-              </Button>
+              <div className="flex items-center space-x-2">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => testOpenAI.mutate()}
+                  disabled={testOpenAI.isPending}
+                  className="text-green-600 hover:text-green-700 hover:bg-green-50 dark:text-green-400 dark:hover:text-green-300 dark:hover:bg-green-950"
+                  title="Test OpenAI Connection"
+                >
+                  <Zap className="w-4 h-4" />
+                </Button>
+                <Button variant="ghost" size="sm">
+                  <Bell className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
             
             <div className="flex items-center justify-between space-x-2">
