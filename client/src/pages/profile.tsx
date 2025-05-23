@@ -289,64 +289,7 @@ export default function Profile() {
           </CardContent>
         </Card>
 
-        {/* OpenAI API Configuration */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Key className="w-5 h-5" />
-              <span>AI Integration</span>
-            </CardTitle>
-            <CardDescription>
-              Configure your OpenAI API key for AI-powered resume optimization and job matching
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="apiKey">OpenAI API Key</Label>
-              <div className="flex space-x-2 mt-1">
-                <div className="relative flex-1">
-                  <Input
-                    id="apiKey"
-                    type={showApiKey ? "text" : "password"}
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    placeholder="sk-..."
-                    className="pr-10"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowApiKey(!showApiKey)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-gray-400 dark:hover:text-gray-300"
-                  >
-                    {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-                <Button
-                  onClick={handleApiKeyUpdate}
-                  disabled={updateApiKeyMutation.isPending || !apiKey.trim()}
-                >
-                  {updateApiKeyMutation.isPending ? "Saving..." : "Save"}
-                </Button>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-gray-400 mt-1">
-                Your API key is stored securely and only used for your AI features. 
-                Get your key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" className="text-blue-600 dark:text-blue-400 hover:underline">OpenAI Platform</a>.
-              </p>
-              {openaiConnected && (
-                <div className="flex items-center space-x-2 mt-2 p-2 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-green-700 dark:text-green-400">API key configured - AI features are enabled</span>
-                </div>
-              )}
-              {!openaiConnected && (
-                <div className="flex items-center space-x-2 mt-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <span className="text-sm text-yellow-700 dark:text-yellow-400">No API key - AI features are disabled</span>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
+
 
         {/* Job Connector Configuration */}
         <Card>
