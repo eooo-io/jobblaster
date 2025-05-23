@@ -650,7 +650,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Projects */}
               {projects.length > 0 && (
                 <div>
-                  <h3 className="text-xl font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
                     PROJECTS
                   </h3>
                   {projects.map((project: any, index: number) => (
@@ -659,7 +659,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                         <div>
                           <span className="text-sm font-medium text-gray-600">
                             {project.startDate && formatDate(project.startDate)}
-                            {project.endDate ? ` – ${formatDate(project.endDate)}` : project.startDate && " – Aujourd'hui"}
+                            {project.endDate ? ` – ${formatDate(project.endDate)}` : project.startDate && " – Current"}
                           </span>
                           <h4 className="font-bold text-gray-900">
                             {project.name}
