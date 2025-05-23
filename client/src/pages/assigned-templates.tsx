@@ -221,11 +221,11 @@ export default function AssignedTemplates() {
                           value={assignment?.templateId?.toString() || "none"}
                           onValueChange={(value) => handleAssignmentChange(category.id, value === "none" ? "" : value)}
                         >
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger className="w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600">
                             <SelectValue placeholder="No template assigned" />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">
+                          <SelectContent className="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600">
+                            <SelectItem value="none" className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600">
                               No template assigned
                             </SelectItem>
                             {templates
@@ -234,6 +234,7 @@ export default function AssignedTemplates() {
                                 <SelectItem 
                                   key={template.id} 
                                   value={template.id.toString()}
+                                  className="text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-600"
                                 >
                                   {template.name} ({template.provider.toUpperCase()})
                                 </SelectItem>
