@@ -57,14 +57,19 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 color-adjust: exact !important;
               }
               @page { 
-                margin: 0.75in 0.5in 1in 0.5in; 
+                margin: 0.5in; 
                 size: letter;
-                @bottom-center {
+                /* Remove browser headers and footers */
+                @top-left { content: ""; }
+                @top-center { content: ""; }
+                @top-right { content: ""; }
+                @bottom-left { content: ""; }
+                @bottom-center { 
                   content: counter(page, lower-roman);
                   font-size: 10px;
                   color: #666;
-                  margin-top: 0.5in;
                 }
+                @bottom-right { content: ""; }
               }
               .resume-content {
                 max-width: none !important;
