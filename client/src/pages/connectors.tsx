@@ -41,12 +41,16 @@ export default function Connectors() {
   });
 
   // Fetch user profile for current settings
-  const { data: user } = useQuery({
+  const { data: user, isLoading, error } = useQuery({
     queryKey: ["/api/user"],
   });
 
+  // Debug logging
+  console.log("Query state:", { user, isLoading, error });
+
   // Update settings when user data loads
   useEffect(() => {
+    console.log("useEffect triggered, user:", user);
     if (user) {
       console.log("Loading user data:", user); // Debug log
       console.log("User properties:", Object.keys(user)); // Debug log
