@@ -202,15 +202,6 @@ export default function Dashboard() {
                   {selectedResume?.name || "Resume"} • 8.5" × 14" • Ready to print
                 </p>
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowPrintPreview(false)}
-                className="flex items-center gap-2"
-              >
-                <X className="w-4 h-4" />
-                <span>Close</span>
-              </Button>
             </div>
 
             {/* Print Preview Content - Always Light Mode */}
