@@ -200,21 +200,47 @@ export const jobSearchCriteria = pgTable("job_search_criteria", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Scraped Jobs - Jobs collected from external sources
+export const scrapedJobs = pgTable("scraped_jobs", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  criteriaId: integer("criteria_id").notNull(),
+  source: varchar("source", { length: 50 }).notNull(), // "linkedin", "indeed", "adzuna"
+  title: text("title").notNull(),
+  company: text("company").notNull(),
+  location: text("location"),
+  description: text("description"),
+  url: text("url"),
+  salary: text("salary"),
+  employmentType: text("employment_type"),
+  experienceLevel: text("experience_level"),
+  postedDate: timestamp("posted_date"),
+  matchScore: integer("match_score"), // 0-100 percentage from OpenAI
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Job Search Sessions - Track automated search runs
 export const jobSearchSessions = pgTable("job_search_sessions", {
   id: serial("id").primaryKey(),
   userId: integer("user_id").notNull(),
-  criteriaId: integer("criteria_id").notNull(),
-  connectors: text("connectors").array().notNull(), // ["linkedin", "indeed", "adzuna"]
   status: varchar("status", { length: 50 }).default("pending"), // pending, running, completed, failed
   totalJobsFound: integer("total_jobs_found").default(0),
-  jobsImported: integer("jobs_imported").default(0),
-  errors: text("errors").array().default([]),
+  errorCount: integer("error_count").default(0),
+  completedCriteria: integer("completed_criteria").default(0),
+  totalCriteria: integer("total_criteria").default(0),
   startedAt: timestamp("started_at").defaultNow(),
   completedAt: timestamp("completed_at"),
 });
 
 export const insertJobSearchCriteriaSchema = createInsertSchema(jobSearchCriteria).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertScrapedJobSchema = createInsertSchema(scrapedJobs).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
@@ -256,6 +282,9 @@ export type TemplateAssignment = typeof templateAssignments.$inferSelect;
 
 export type InsertJobSearchCriteria = z.infer<typeof insertJobSearchCriteriaSchema>;
 export type JobSearchCriteria = typeof jobSearchCriteria.$inferSelect;
+
+export type InsertScrapedJob = z.infer<typeof insertScrapedJobSchema>;
+export type ScrapedJob = typeof scrapedJobs.$inferSelect;
 
 export type InsertJobSearchSession = z.infer<typeof insertJobSearchSessionSchema>;
 export type JobSearchSession = typeof jobSearchSessions.$inferSelect;

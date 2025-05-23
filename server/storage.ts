@@ -74,6 +74,13 @@ export interface IStorage {
   updateJobSearchCriteria(id: number, criteria: Partial<InsertJobSearchCriteria>): Promise<JobSearchCriteria | undefined>;
   deleteJobSearchCriteria(id: number): Promise<boolean>;
 
+  // Scraped Jobs
+  getScrapedJobs(userId: number, limit?: number, offset?: number): Promise<ScrapedJob[]>;
+  getScrapedJobsByUrl(url: string): Promise<ScrapedJob[]>;
+  createScrapedJob(scrapedJob: InsertScrapedJob): Promise<ScrapedJob>;
+  updateScrapedJobMatchScore(id: number, matchScore: number): Promise<ScrapedJob | undefined>;
+  deleteScrapedJob(id: number): Promise<boolean>;
+
   // Job Search Sessions
   getJobSearchSessions(userId: number): Promise<JobSearchSession[]>;
   createJobSearchSession(session: InsertJobSearchSession): Promise<JobSearchSession>;
