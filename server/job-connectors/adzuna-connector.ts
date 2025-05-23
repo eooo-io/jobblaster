@@ -1,4 +1,5 @@
 import { BaseJobConnector, JobSearchParams, JobSearchResponse, JobResult } from './base-connector';
+import { logApiCall } from '../api-logger';
 
 export class AdzunaConnector extends BaseJobConnector {
   protected baseUrl = 'https://api.adzuna.com/v1/api/jobs';
@@ -37,7 +38,16 @@ export class AdzunaConnector extends BaseJobConnector {
     console.log("🔗 Adzuna API URL:", url);
 
     try {
-      const response = await fetch(url);
+      // Use the API logger to track all external calls
+      const response = await logApiCall({
+        service: 'Adzuna',
+        endpoint: url,
+        method: 'GET',
+        requestData: Object.fromEntries(queryParams.entries()),
+        userId: this.userId || 1 // Default to user 1 if not provided
+      }, async () => {
+        return await fetch(url);
+      });
       
       if (!response.ok) {
         const errorText = await response.text();
