@@ -25,15 +25,16 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
 
 const navigation = [
-  { name: "Resume Builder", icon: FileText, current: true },
-  { name: "Job Analysis", icon: Briefcase, current: false },
-  { name: "Match Scoring", icon: TrendingUp, current: false },
-  { name: "Cover Letters", icon: Mail, current: false },
-  { name: "Export Package", icon: Download, current: false },
-  { name: "Application History", icon: History, current: false },
+  { name: "Resume Builder", icon: FileText, href: "/", current: true },
+  { name: "Search Criteria", icon: Target, href: "/search-criteria", current: false },
+  { name: "Scraped Jobs", icon: Briefcase, href: "/scraped-jobs", current: false },
+  { name: "Job Analysis", icon: TrendingUp, href: "#", current: false },
+  { name: "Cover Letters", icon: Mail, href: "#", current: false },
+  { name: "Export Package", icon: Download, href: "#", current: false },
+  { name: "Application History", icon: History, href: "#", current: false },
 ];
 
-export default function Sidebar() {
+function Sidebar() {
   const { user, logout, isLoggingOut } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [location] = useLocation();
@@ -126,16 +127,33 @@ export default function Sidebar() {
               </div>
             </Link>
             
-            {navigation.slice(1).map((item) => (
-              <div
-                key={item.name}
-                className="flex items-center space-x-3 px-3 py-3 rounded-lg font-medium text-slate-400 dark:text-gray-500 cursor-not-allowed"
-              >
-                <item.icon className="w-5 h-5" />
-                <span>{item.name}</span>
-                <span className="text-xs bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded-full">Soon</span>
-              </div>
-            ))}
+            {navigation.slice(1).map((item) => 
+              item.href === "#" ? (
+                <div
+                  key={item.name}
+                  className="flex items-center space-x-3 px-3 py-3 rounded-lg font-medium text-slate-400 dark:text-gray-500 cursor-not-allowed"
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span>{item.name}</span>
+                  <span className="text-xs bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded-full">Soon</span>
+                </div>
+              ) : (
+                <Link key={item.name} href={item.href}>
+                  <div 
+                    className={cn(
+                      "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
+                      location === item.href
+                        ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
+                        : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+                    )}
+                    onClick={closeMobileMenu}
+                  >
+                    <item.icon className="w-5 h-5" />
+                    <span>{item.name}</span>
+                  </div>
+                </Link>
+              )
+            )}
 
             {/* System Tools Section */}
             <div className="pt-4">
@@ -467,3 +485,8 @@ export default function Sidebar() {
     </>
   );
 }
+
+export { Sidebar };
+export default Sidebar;
+
+

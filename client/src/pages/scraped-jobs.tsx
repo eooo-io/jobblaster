@@ -1,412 +1,475 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardContent 
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { 
-  Trash2, 
-  Building2, 
-  MapPin, 
-  Clock, 
-  Search,
-  ChevronLeft,
-  ChevronRight,
-  ExternalLink
-} from "lucide-react";
+import { useState, useEffect } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Card, CardBody, CardHeader, Typography, Button, Select, SelectItem, Progress, Chip, IconButton } from "@material-tailwind/react";
+import { Trash2, Target, Building2, MapPin, Calendar, DollarSign, Users, ExternalLink } from "lucide-react";
+import { Sidebar } from "../components/sidebar";
 import { useToast } from "@/hooks/use-toast";
-import { queryClient, apiRequest } from "@/lib/queryClient";
-import type { JobPosting } from "@shared/schema";
-import Sidebar from "@/components/sidebar";
+import { apiRequest } from "@/lib/queryClient";
+
+interface ScrapedJob {
+  id: number;
+  userId: number;
+  criteriaId: number;
+  source: string;
+  title: string;
+  company: string;
+  location: string | null;
+  description: string | null;
+  url: string | null;
+  salary: string | null;
+  employmentType: string | null;
+  experienceLevel: string | null;
+  postedDate: string | null;
+  matchScore: number | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Resume {
+  id: number;
+  name: string;
+  content: any;
+  isDefault: boolean;
+}
+
+// Circular progress component for match scores
+function MatchScoreCircle({ score }: { score: number | null }) {
+  if (score === null) {
+    return (
+      <div className="w-16 h-16 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded-full">
+        <span className="text-xs text-gray-500 dark:text-gray-400">No Score</span>
+      </div>
+    );
+  }
+
+  const circumference = 2 * Math.PI * 20;
+  const strokeDasharray = circumference;
+  const strokeDashoffset = circumference - (score / 100) * circumference;
+
+  const getScoreColor = (score: number) => {
+    if (score >= 80) return "text-green-600";
+    if (score >= 60) return "text-yellow-600";
+    if (score >= 40) return "text-orange-600";
+    return "text-red-600";
+  };
+
+  const getStrokeColor = (score: number) => {
+    if (score >= 80) return "stroke-green-600";
+    if (score >= 60) return "stroke-yellow-600";
+    if (score >= 40) return "stroke-orange-600";
+    return "stroke-red-600";
+  };
+
+  return (
+    <div className="relative w-16 h-16">
+      <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 44 44">
+        <circle
+          cx="22"
+          cy="22"
+          r="20"
+          stroke="currentColor"
+          strokeWidth="3"
+          fill="transparent"
+          className="text-gray-200 dark:text-gray-700"
+        />
+        <circle
+          cx="22"
+          cy="22"
+          r="20"
+          stroke="currentColor"
+          strokeWidth="3"
+          fill="transparent"
+          strokeDasharray={strokeDasharray}
+          strokeDashoffset={strokeDashoffset}
+          className={getStrokeColor(score)}
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className={`text-sm font-bold ${getScoreColor(score)}`}>
+          {score}%
+        </span>
+      </div>
+    </div>
+  );
+}
 
 export default function ScrapedJobsPage() {
-  const { toast } = useToast();
+  const [selectedCompany, setSelectedCompany] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [companyFilter, setCompanyFilter] = useState("");
+  const [pageSize, setPageSize] = useState(20);
+  const [selectedResume, setSelectedResume] = useState<number | null>(null);
+  const [scoringJobId, setScoringJobId] = useState<number | null>(null);
+  
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  // Fetch scraped jobs with pagination
-  const { data: jobsData, isLoading } = useQuery({
-    queryKey: ["/api/job-postings", currentPage, pageSize, searchTerm, companyFilter],
-    queryFn: () => {
-      const params = new URLSearchParams({
-        page: currentPage.toString(),
-        limit: pageSize.toString(),
-        ...(searchTerm && { search: searchTerm }),
-        ...(companyFilter && { company: companyFilter })
-      });
-      return fetch(`/api/job-postings?${params}`).then(res => res.json());
-    }
+  // Fetch scraped jobs
+  const { data: jobs = [], isLoading, error } = useQuery({
+    queryKey: ["/api/scraped-jobs", currentPage, pageSize],
+    retry: false,
   });
 
-  const jobs = jobsData?.jobs || [];
-  const totalJobs = jobsData?.total || 0;
-  const totalPages = Math.ceil(totalJobs / pageSize);
+  // Fetch resumes for scoring
+  const { data: resumes = [] } = useQuery<Resume[]>({
+    queryKey: ["/api/resumes"],
+    retry: false,
+  });
 
   // Delete job mutation
   const deleteJobMutation = useMutation({
-    mutationFn: (jobId: number) => apiRequest(`/api/job-postings/${jobId}`, "DELETE"),
+    mutationFn: (jobId: number) => apiRequest(`/api/scraped-jobs/${jobId}`, {
+      method: "DELETE",
+    }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/job-postings"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/scraped-jobs"] });
       toast({
-        title: "Job Deleted",
-        description: "The scraped job has been successfully deleted.",
+        title: "Job deleted successfully",
+        description: "The job has been removed from your scraped jobs list.",
       });
     },
     onError: () => {
       toast({
-        title: "Delete Failed",
-        description: "Failed to delete the job. Please try again.",
+        title: "Error",
+        description: "Failed to delete job. Please try again.",
         variant: "destructive",
       });
     },
   });
 
+  // Score job mutation
+  const scoreJobMutation = useMutation({
+    mutationFn: ({ jobId, resumeId }: { jobId: number; resumeId: number }) =>
+      apiRequest(`/api/score-job/${jobId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resumeId }),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/scraped-jobs"] });
+      setScoringJobId(null);
+      toast({
+        title: "Job scored successfully",
+        description: "The job has been analyzed and scored against your resume.",
+      });
+    },
+    onError: (error: any) => {
+      setScoringJobId(null);
+      toast({
+        title: "Scoring failed",
+        description: error.message || "Failed to score job. Please check your OpenAI API key.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Run scraping session mutation
+  const scrapeJobsMutation = useMutation({
+    mutationFn: () => apiRequest("/api/scrape-jobs", { method: "POST" }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/scraped-jobs"] });
+      toast({
+        title: "Job scraping completed",
+        description: `Found ${data.totalJobsFound} jobs, imported ${data.jobsImported} new positions.`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Scraping failed",
+        description: error.message || "Failed to scrape jobs. Please check your search criteria.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Get unique companies for filtering
+  const companies = Array.from(new Set(jobs.map((job: ScrapedJob) => job.company))).sort();
+
+  // Filter jobs by company
+  const filteredJobs = selectedCompany === "all" 
+    ? jobs 
+    : jobs.filter((job: ScrapedJob) => job.company === selectedCompany);
+
   const handleDeleteJob = (jobId: number) => {
-    deleteJobMutation.mutate(jobId);
+    if (confirm("Are you sure you want to delete this job?")) {
+      deleteJobMutation.mutate(jobId);
+    }
+  };
+
+  const handleScoreJob = (jobId: number) => {
+    if (!selectedResume) {
+      toast({
+        title: "No resume selected",
+        description: "Please select a resume to score against this job.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setScoringJobId(jobId);
+    scoreJobMutation.mutate({ jobId, resumeId: selectedResume });
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+    return new Date(dateString).toLocaleDateString();
   };
 
-  const truncateDescription = (description: string, maxLength: number = 200) => {
-    if (description.length <= maxLength) return description;
-    return description.substring(0, maxLength) + "...";
+  const getSourceIcon = (source: string) => {
+    switch (source.toLowerCase()) {
+      case 'linkedin':
+        return '💼';
+      case 'indeed':
+        return '🔍';
+      case 'adzuna':
+        return '📊';
+      default:
+        return '🌐';
+    }
   };
 
-  const getUniqueCompanies = () => {
-    const companies = jobs.map((job: JobPosting) => job.company);
-    return [...new Set(companies)].filter(Boolean).sort();
-  };
+  if (error) {
+    return (
+      <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+        <Sidebar />
+        <div className="flex-1 p-8">
+          <div className="text-center">
+            <Typography variant="h4" color="red" className="mb-4">
+              Error Loading Jobs
+            </Typography>
+            <Typography>Failed to load scraped jobs. Please try again.</Typography>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-gray-900">
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex-1 overflow-auto">
-          <div className="p-8">
-            <div className="max-w-7xl mx-auto">
-              {/* Header */}
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-                  Scraped Jobs
-                </h1>
-                <p className="mt-2 text-slate-600 dark:text-gray-400">
-                  Manage all job listings collected from LinkedIn, Indeed, and other platforms
-                </p>
-              </div>
+      <div className="flex-1 overflow-auto">
+        <div className="p-6">
+          {/* Header */}
+          <div className="mb-6">
+            <Typography variant="h4" className="text-gray-900 dark:text-white mb-2">
+              Scraped Jobs
+            </Typography>
+            <Typography variant="small" className="text-gray-600 dark:text-gray-400">
+              Manage and score automatically collected job opportunities
+            </Typography>
+          </div>
 
-              {/* Filters and Controls */}
-              <Card className="mb-6">
-                <CardContent className="p-6">
-                  <div className="flex flex-col md:flex-row gap-4 items-end">
-                    <div className="flex-1">
-                      <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                        Search Jobs
-                      </label>
-                      <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                        <Input
-                          placeholder="Search by title, company, or keywords..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-10"
-                        />
-                      </div>
-                    </div>
-                    
-                    <div className="min-w-[200px]">
-                      <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                        Filter by Company
-                      </label>
-                      <Select value={companyFilter} onValueChange={setCompanyFilter}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="All companies" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All companies</SelectItem>
-                          {getUniqueCompanies().map((company) => (
-                            <SelectItem key={company} value={company}>
-                              {company}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
+          {/* Controls */}
+          <div className="mb-6 flex flex-wrap gap-4 items-center">
+            <Button
+              onClick={() => scrapeJobsMutation.mutate()}
+              disabled={scrapeJobsMutation.isPending}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              {scrapeJobsMutation.isPending ? "Scraping..." : "Run Job Scraper"}
+            </Button>
 
-                    <div className="min-w-[120px]">
-                      <label className="block text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                        Page Size
-                      </label>
-                      <Select value={pageSize.toString()} onValueChange={(value) => setPageSize(Number(value))}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="5">5 per page</SelectItem>
-                          <SelectItem value="10">10 per page</SelectItem>
-                          <SelectItem value="25">25 per page</SelectItem>
-                          <SelectItem value="50">50 per page</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="flex items-center gap-2">
+              <Typography variant="small" className="text-gray-700 dark:text-gray-300">
+                Filter by Company:
+              </Typography>
+              <Select
+                value={selectedCompany}
+                onChange={(value) => setSelectedCompany(value || "all")}
+                className="min-w-[200px]"
+              >
+                <SelectItem value="all">All Companies</SelectItem>
+                {companies.map((company) => (
+                  <SelectItem key={company} value={company}>
+                    {company}
+                  </SelectItem>
+                ))}
+              </Select>
+            </div>
 
-              {/* Results Summary */}
-              <div className="mb-6 flex justify-between items-center">
-                <p className="text-sm text-slate-600 dark:text-gray-400">
-                  Showing {((currentPage - 1) * pageSize) + 1} to {Math.min(currentPage * pageSize, totalJobs)} of {totalJobs} scraped jobs
-                </p>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                    disabled={currentPage === 1 || isLoading}
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    Previous
-                  </Button>
-                  <span className="text-sm text-slate-600 dark:text-gray-400">
-                    Page {currentPage} of {totalPages}
-                  </span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                    disabled={currentPage === totalPages || isLoading}
-                  >
-                    Next
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-
-              {/* Job Listings */}
-              {isLoading ? (
-                <div className="space-y-4">
-                  {[...Array(pageSize)].map((_, i) => (
-                    <Card key={i} className="animate-pulse">
-                      <CardContent className="p-6">
-                        <div className="h-4 bg-slate-200 dark:bg-gray-700 rounded w-1/3 mb-2"></div>
-                        <div className="h-3 bg-slate-200 dark:bg-gray-700 rounded w-1/4 mb-4"></div>
-                        <div className="h-3 bg-slate-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                        <div className="h-3 bg-slate-200 dark:bg-gray-700 rounded w-3/4"></div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : jobs.length === 0 ? (
-                <Card>
-                  <CardContent className="p-12 text-center">
-                    <Building2 className="h-12 w-12 text-slate-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium text-slate-900 dark:text-white mb-2">
-                      No scraped jobs found
-                    </h3>
-                    <p className="text-slate-600 dark:text-gray-400 mb-6">
-                      {searchTerm || companyFilter 
-                        ? "Try adjusting your search filters or clear them to see all jobs."
-                        : "Your job scrapers haven't collected any listings yet. Run your search criteria to start collecting jobs."}
-                    </p>
-                    {(searchTerm || companyFilter) && (
-                      <Button 
-                        variant="outline" 
-                        onClick={() => {
-                          setSearchTerm("");
-                          setCompanyFilter("");
-                        }}
-                      >
-                        Clear Filters
-                      </Button>
-                    )}
-                  </CardContent>
-                </Card>
-              ) : (
-                <div className="space-y-4">
-                  {jobs.map((job: JobPosting) => (
-                    <Card key={job.id} className="hover:shadow-md transition-shadow">
-                      <CardHeader className="pb-3">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <CardTitle className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
-                              {job.title}
-                            </CardTitle>
-                            <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-gray-400">
-                              <div className="flex items-center gap-1">
-                                <Building2 className="h-4 w-4" />
-                                <span>{job.company}</span>
-                              </div>
-                              {job.location && (
-                                <div className="flex items-center gap-1">
-                                  <MapPin className="h-4 w-4" />
-                                  <span>{job.location}</span>
-                                </div>
-                              )}
-                              <div className="flex items-center gap-1">
-                                <Clock className="h-4 w-4" />
-                                <span>{formatDate(job.createdAt!)}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {job.employmentType && (
-                              <Badge variant="secondary">
-                                {job.employmentType}
-                              </Badge>
-                            )}
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
-                                >
-                                  <Trash2 className="h-4 w-4" />
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>Delete Scraped Job</AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Are you sure you want to delete "{job.title}" at {job.company}? 
-                                    This action cannot be undone.
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => handleDeleteJob(job.id)}
-                                    className="bg-red-600 hover:bg-red-700"
-                                  >
-                                    Delete
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="pt-0">
-                        <p className="text-slate-600 dark:text-gray-400 mb-4">
-                          {truncateDescription(job.description)}
-                        </p>
-                        
-                        {/* Tech Stack */}
-                        {job.techStack && job.techStack.length > 0 && (
-                          <div className="mb-3">
-                            <h4 className="text-sm font-medium text-slate-700 dark:text-gray-300 mb-2">
-                              Required Technologies:
-                            </h4>
-                            <div className="flex flex-wrap gap-1">
-                              {job.techStack.slice(0, 8).map((tech, index) => (
-                                <Badge key={index} variant="outline" className="text-xs">
-                                  {tech}
-                                </Badge>
-                              ))}
-                              {job.techStack.length > 8 && (
-                                <Badge variant="outline" className="text-xs">
-                                  +{job.techStack.length - 8} more
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Experience Level */}
-                        {job.experienceYears && (
-                          <div className="mb-3">
-                            <span className="text-sm font-medium text-slate-700 dark:text-gray-300">
-                              Experience: 
-                            </span>
-                            <span className="text-sm text-slate-600 dark:text-gray-400 ml-2">
-                              {job.experienceYears}
-                            </span>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              )}
-
-              {/* Bottom Pagination */}
-              {totalPages > 1 && (
-                <div className="mt-8 flex justify-center">
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                      disabled={currentPage === 1 || isLoading}
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                      Previous
-                    </Button>
-                    
-                    {/* Page Numbers */}
-                    {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                      const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
-                      if (pageNum > totalPages) return null;
-                      
-                      return (
-                        <Button
-                          key={pageNum}
-                          variant={currentPage === pageNum ? "default" : "outline"}
-                          size="sm"
-                          onClick={() => setCurrentPage(pageNum)}
-                          disabled={isLoading}
-                        >
-                          {pageNum}
-                        </Button>
-                      );
-                    })}
-                    
-                    <Button
-                      variant="outline"
-                      onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                      disabled={currentPage === totalPages || isLoading}
-                    >
-                      Next
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              )}
+            <div className="flex items-center gap-2">
+              <Typography variant="small" className="text-gray-700 dark:text-gray-300">
+                Resume for Scoring:
+              </Typography>
+              <Select
+                value={selectedResume?.toString() || ""}
+                onChange={(value) => setSelectedResume(value ? parseInt(value) : null)}
+                className="min-w-[200px]"
+              >
+                <SelectItem value="">Select Resume</SelectItem>
+                {resumes.map((resume) => (
+                  <SelectItem key={resume.id} value={resume.id.toString()}>
+                    {resume.name} {resume.isDefault && "(Default)"}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
           </div>
+
+          {/* Loading State */}
+          {isLoading && (
+            <div className="text-center py-8">
+              <Typography>Loading scraped jobs...</Typography>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!isLoading && filteredJobs.length === 0 && (
+            <Card className="text-center py-12">
+              <CardBody>
+                <Typography variant="h5" className="mb-4 text-gray-600 dark:text-gray-400">
+                  No jobs found
+                </Typography>
+                <Typography className="mb-6 text-gray-500 dark:text-gray-500">
+                  {jobs.length === 0 
+                    ? "Run the job scraper to start collecting opportunities"
+                    : "No jobs match the selected company filter"
+                  }
+                </Typography>
+                {jobs.length === 0 && (
+                  <Button
+                    onClick={() => scrapeJobsMutation.mutate()}
+                    disabled={scrapeJobsMutation.isPending}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    {scrapeJobsMutation.isPending ? "Scraping..." : "Run Job Scraper"}
+                  </Button>
+                )}
+              </CardBody>
+            </Card>
+          )}
+
+          {/* Jobs Grid */}
+          {!isLoading && filteredJobs.length > 0 && (
+            <div className="grid gap-6">
+              {filteredJobs.map((job: ScrapedJob) => (
+                <Card key={job.id} className="border border-gray-200 dark:border-gray-700">
+                  <CardBody className="p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <Typography variant="h6" className="text-gray-900 dark:text-white">
+                            {job.title}
+                          </Typography>
+                          <Chip
+                            value={`${getSourceIcon(job.source)} ${job.source}`}
+                            size="sm"
+                            className="bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300"
+                          />
+                        </div>
+                        
+                        <div className="flex items-center gap-2 mb-3">
+                          <Building2 className="w-4 h-4 text-gray-500" />
+                          <Typography className="text-gray-700 dark:text-gray-300">
+                            {job.company}
+                          </Typography>
+                          {job.location && (
+                            <>
+                              <MapPin className="w-4 h-4 text-gray-500 ml-4" />
+                              <Typography className="text-gray-600 dark:text-gray-400">
+                                {job.location}
+                              </Typography>
+                            </>
+                          )}
+                        </div>
+
+                        <div className="flex flex-wrap gap-4 mb-4">
+                          {job.salary && (
+                            <div className="flex items-center gap-1">
+                              <DollarSign className="w-4 h-4 text-gray-500" />
+                              <Typography variant="small" className="text-gray-600 dark:text-gray-400">
+                                {job.salary}
+                              </Typography>
+                            </div>
+                          )}
+                          {job.employmentType && (
+                            <div className="flex items-center gap-1">
+                              <Users className="w-4 h-4 text-gray-500" />
+                              <Typography variant="small" className="text-gray-600 dark:text-gray-400">
+                                {job.employmentType}
+                              </Typography>
+                            </div>
+                          )}
+                          {job.postedDate && (
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4 text-gray-500" />
+                              <Typography variant="small" className="text-gray-600 dark:text-gray-400">
+                                Posted {formatDate(job.postedDate)}
+                              </Typography>
+                            </div>
+                          )}
+                        </div>
+
+                        {job.description && (
+                          <Typography 
+                            variant="small" 
+                            className="text-gray-600 dark:text-gray-400 line-clamp-3 mb-4"
+                          >
+                            {job.description.substring(0, 300)}
+                            {job.description.length > 300 && "..."}
+                          </Typography>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-4 ml-6">
+                        {/* Match Score */}
+                        <div className="text-center">
+                          <MatchScoreCircle score={job.matchScore} />
+                          <Typography variant="small" className="text-gray-500 dark:text-gray-400 mt-1">
+                            Match Score
+                          </Typography>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex flex-col gap-2">
+                          <Button
+                            size="sm"
+                            onClick={() => handleScoreJob(job.id)}
+                            disabled={!selectedResume || scoringJobId === job.id}
+                            className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+                          >
+                            <Target className="w-4 h-4" />
+                            {scoringJobId === job.id ? "Scoring..." : "Score Job"}
+                          </Button>
+                          
+                          {job.url && (
+                            <Button
+                              size="sm"
+                              variant="outlined"
+                              onClick={() => window.open(job.url, '_blank')}
+                              className="flex items-center gap-2"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                              View Job
+                            </Button>
+                          )}
+                          
+                          <IconButton
+                            size="sm"
+                            color="red"
+                            variant="outlined"
+                            onClick={() => handleDeleteJob(job.id)}
+                            disabled={deleteJobMutation.isPending}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </IconButton>
+                        </div>
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {/* Pagination Info */}
+          {!isLoading && filteredJobs.length > 0 && (
+            <div className="mt-6 text-center">
+              <Typography variant="small" className="text-gray-600 dark:text-gray-400">
+                Showing {filteredJobs.length} jobs
+                {selectedCompany !== "all" && ` from ${selectedCompany}`}
+              </Typography>
+            </div>
+          )}
         </div>
       </div>
     </div>
