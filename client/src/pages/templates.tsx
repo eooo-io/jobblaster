@@ -225,7 +225,7 @@ export default function Templates() {
         {(isCreating || editingTemplate) && (
           <Card className="mb-6 bg-white dark:bg-gray-800 shadow-sm">
             <CardHeader className="bg-blue-50 dark:bg-blue-900 py-4">
-              <Typography variant="h6" color="blue-gray">
+              <Typography variant="h6" className="text-gray-900 dark:text-white">
                 {editingTemplate ? "Edit Template" : "Create New Template"}
               </Typography>
             </CardHeader>
@@ -233,7 +233,7 @@ export default function Templates() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
-                    <Typography variant="small" className="font-semibold mb-2">
+                    <Typography variant="small" className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
                       Template Name
                     </Typography>
                     <Input
@@ -244,7 +244,7 @@ export default function Templates() {
                     />
                   </div>
                   <div>
-                    <Typography variant="small" className="font-semibold mb-2">
+                    <Typography variant="small" className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
                       Category
                     </Typography>
                     <Select
@@ -261,7 +261,7 @@ export default function Templates() {
                 </div>
 
                 <div>
-                  <Typography variant="small" className="font-semibold mb-2">
+                  <Typography variant="small" className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
                     Description
                   </Typography>
                   <Input
@@ -272,7 +272,7 @@ export default function Templates() {
                 </div>
 
                 <div>
-                  <Typography variant="small" className="font-semibold mb-2">
+                  <Typography variant="small" className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
                     System Prompt
                   </Typography>
                   <Textarea
@@ -285,7 +285,7 @@ export default function Templates() {
                 </div>
 
                 <div>
-                  <Typography variant="small" className="font-semibold mb-2">
+                  <Typography variant="small" className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
                     Extraction Instruction
                   </Typography>
                   <Textarea
@@ -295,13 +295,13 @@ export default function Templates() {
                     rows={6}
                     className="font-mono text-sm"
                   />
-                  <Typography variant="small" color="gray" className="mt-1">
+                  <Typography variant="small" className="mt-1 text-gray-600 dark:text-gray-400">
                     Use {`{{input_text}}`} as a placeholder for dynamic content
                   </Typography>
                 </div>
 
                 <div>
-                  <Typography variant="small" className="font-semibold mb-2">
+                  <Typography variant="small" className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
                     Output Format (JSON)
                   </Typography>
                   <Textarea
@@ -315,7 +315,7 @@ export default function Templates() {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div>
-                    <Typography variant="small" className="font-semibold mb-2">
+                    <Typography variant="small" className="font-semibold mb-2 text-gray-700 dark:text-gray-300">
                       Temperature (0.0 - 2.0)
                     </Typography>
                     <Input
@@ -381,8 +381,8 @@ export default function Templates() {
               {templates.filter(t => t.provider === 'openai').length > 0 && (
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <Brain className="h-6 w-6 text-green-600" />
-                    <Typography variant="h5" color="blue-gray">
+                    <Brain className="h-6 w-6 text-green-600 dark:text-green-400" />
+                    <Typography variant="h5" className="text-gray-900 dark:text-white">
                       OpenAI Templates
                     </Typography>
                   </div>
@@ -392,14 +392,14 @@ export default function Templates() {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center space-x-3 mb-2">
-                              <Typography variant="h6" color="blue-gray">
+                              <Typography variant="h6" className="text-gray-900 dark:text-white">
                                 {template.name}
                               </Typography>
                               <span className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs font-medium">
                                 OpenAI
                               </span>
                             </div>
-                            <Typography variant="small" color="gray" className="mb-4">
+                            <Typography variant="small" className="text-gray-600 dark:text-gray-300 mb-4">
                               {template.description}
                             </Typography>
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
@@ -452,8 +452,8 @@ export default function Templates() {
               {templates.filter(t => t.provider === 'anthropic').length > 0 && (
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <Brain className="h-6 w-6 text-purple-600" />
-                    <Typography variant="h5" color="blue-gray">
+                    <Brain className="h-6 w-6 text-purple-600 dark:text-purple-400" />
+                    <Typography variant="h5" className="text-gray-900 dark:text-white">
                       Anthropic Templates
                     </Typography>
                   </div>
@@ -463,14 +463,14 @@ export default function Templates() {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center space-x-3 mb-2">
-                              <Typography variant="h6" color="blue-gray">
+                              <Typography variant="h6" className="text-gray-900 dark:text-white">
                                 {template.name}
                               </Typography>
                               <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
                                 Anthropic
                               </span>
                             </div>
-                            <Typography variant="small" color="gray" className="mb-4">
+                            <Typography variant="small" className="text-gray-600 dark:text-gray-300 mb-4">
                               {template.description}
                             </Typography>
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
@@ -523,8 +523,8 @@ export default function Templates() {
               {templates.filter(t => t.provider === 'xai').length > 0 && (
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <Brain className="h-6 w-6 text-blue-600" />
-                    <Typography variant="h5" color="blue-gray">
+                    <Brain className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                    <Typography variant="h5" className="text-gray-900 dark:text-white">
                       xAI Templates
                     </Typography>
                   </div>
@@ -534,14 +534,14 @@ export default function Templates() {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center space-x-3 mb-2">
-                              <Typography variant="h6" color="blue-gray">
+                              <Typography variant="h6" className="text-gray-900 dark:text-white">
                                 {template.name}
                               </Typography>
                               <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
                                 xAI
                               </span>
                             </div>
-                            <Typography variant="small" color="gray" className="mb-4">
+                            <Typography variant="small" className="text-gray-600 dark:text-gray-300 mb-4">
                               {template.description}
                             </Typography>
                             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
