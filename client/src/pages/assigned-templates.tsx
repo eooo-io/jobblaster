@@ -10,7 +10,7 @@ import {
   Alert,
 } from "@material-tailwind/react";
 import { Save, Settings, Brain, AlertCircle } from "lucide-react";
-import { Sidebar } from "@/components/sidebar";
+import Sidebar from "@/components/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
