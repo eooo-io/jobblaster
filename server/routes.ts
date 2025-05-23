@@ -7,6 +7,7 @@ import {
 } from "@shared/schema";
 import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from "./openai";
 import { setupAuth, hashPassword, verifyPassword, requireAuth, getCurrentUserId } from "./auth";
+import { logApiCall } from "./api-logger";
 import multer from "multer";
 import JSZip from "jszip";
 
