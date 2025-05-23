@@ -1,8 +1,10 @@
 import { BaseJobConnector, JobSearchParams, JobSearchResponse } from './base-connector';
 import { AdzunaConnector } from './adzuna-connector';
+import { LinkedInConnector } from './linkedin-connector';
+import { IndeedConnector } from './indeed-connector';
 import type { User } from '@shared/schema';
 
-export type ConnectorType = 'adzuna' | 'indeed' | 'glassdoor' | 'greenhouse' | 'ziprecruiter';
+export type ConnectorType = 'adzuna' | 'indeed' | 'linkedin' | 'glassdoor' | 'greenhouse' | 'ziprecruiter';
 
 export interface ConnectorConfig {
   type: ConnectorType;
@@ -27,9 +29,17 @@ export class JobConnectorManager {
     });
     this.connectors.set('adzuna', adzunaConnector);
 
-    // Future connectors can be added here when APIs become available
-    // this.connectors.set('indeed', new IndeedConnector({ ... }));
-    // this.connectors.set('glassdoor', new GlassdoorConnector({ ... }));
+    // Initialize LinkedIn scraper
+    const linkedinConnector = new LinkedInConnector({
+      apiKey: this.user.linkedinApiKey || undefined,
+    });
+    this.connectors.set('linkedin', linkedinConnector);
+
+    // Initialize Indeed scraper
+    const indeedConnector = new IndeedConnector({
+      apiKey: this.user.indeedApiKey || undefined,
+    });
+    this.connectors.set('indeed', indeedConnector);
   }
 
   getAvailableConnectors(): ConnectorConfig[] {
@@ -47,10 +57,19 @@ export class JobConnectorManager {
       {
         type: 'indeed',
         name: 'Indeed',
-        description: 'World\'s largest job search engine (API access requires partnership)',
-        isConfigured: false,
+        description: 'Automated job scraping from Indeed (scraping-based)',
+        isConfigured: this.connectors.get('indeed')?.isConfigured() || false,
         requiresCredentials: [
-          { field: 'indeedApiKey', label: 'Publisher API Key' }
+          { field: 'indeedApiKey', label: 'API Key (Optional)' }
+        ]
+      },
+      {
+        type: 'linkedin',
+        name: 'LinkedIn',
+        description: 'Professional job scraping from LinkedIn (scraping-based)',
+        isConfigured: this.connectors.get('linkedin')?.isConfigured() || false,
+        requiresCredentials: [
+          { field: 'linkedinApiKey', label: 'API Key (Optional)' }
         ]
       },
       {
