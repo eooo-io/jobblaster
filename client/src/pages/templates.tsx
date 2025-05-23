@@ -241,6 +241,7 @@ export default function Templates() {
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Job Analysis Template"
                       required
+                      className="dark:text-white dark:bg-gray-700 dark:border-gray-600"
                     />
                   </div>
                   <div>
@@ -250,6 +251,7 @@ export default function Templates() {
                     <Select
                       value={formData.category}
                       onChange={(value) => setFormData({ ...formData, category: value || "job_analysis" })}
+                      className="dark:text-white dark:bg-gray-700 dark:border-gray-600"
                     >
                       <Option value="job_analysis">Job Analysis</Option>
                       <Option value="resume_analysis">Resume Analysis</Option>
@@ -268,6 +270,7 @@ export default function Templates() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Brief description of what this template does"
+                    className="dark:text-white dark:bg-gray-700 dark:border-gray-600"
                   />
                 </div>
 
@@ -280,7 +283,7 @@ export default function Templates() {
                     onChange={(e) => setFormData({ ...formData, systemPrompt: e.target.value })}
                     placeholder="You are an AI assistant that..."
                     rows={4}
-                    className="font-mono text-sm"
+                    className="font-mono text-sm dark:text-white dark:bg-gray-700 dark:border-gray-600"
                   />
                 </div>
 
@@ -293,7 +296,7 @@ export default function Templates() {
                     onChange={(e) => setFormData({ ...formData, extractionInstruction: e.target.value })}
                     placeholder="Extract information from the following text..."
                     rows={6}
-                    className="font-mono text-sm"
+                    className="font-mono text-sm dark:text-white dark:bg-gray-700 dark:border-gray-600"
                   />
                   <Typography variant="small" className="mt-1 text-gray-600 dark:text-gray-400">
                     Use {`{{input_text}}`} as a placeholder for dynamic content
@@ -309,7 +312,7 @@ export default function Templates() {
                     onChange={(e) => updateOutputFormat(e.target.value)}
                     placeholder='{"field1": "", "field2": []}'
                     rows={8}
-                    className="font-mono text-sm"
+                    className="font-mono text-sm dark:text-white dark:bg-gray-700 dark:border-gray-600"
                   />
                 </div>
 
@@ -325,6 +328,7 @@ export default function Templates() {
                       step="0.1"
                       value={formData.temperature}
                       onChange={(e) => setFormData({ ...formData, temperature: parseFloat(e.target.value) })}
+                      className="dark:text-white dark:bg-gray-700 dark:border-gray-600"
                     />
                   </div>
                   <div>
@@ -337,6 +341,7 @@ export default function Templates() {
                       max="4000"
                       value={formData.maxTokens}
                       onChange={(e) => setFormData({ ...formData, maxTokens: parseInt(e.target.value) })}
+                      className="dark:text-white dark:bg-gray-700 dark:border-gray-600"
                     />
                   </div>
                 </div>
