@@ -44,10 +44,12 @@ export class JobScraperService {
     jobsFound: number;
     errors: string[];
   }> {
-    console.log(`🎯 Starting scrape for criteria ID: ${criteriaId}`);
+    console.log(`🎯 Starting scrape for criteria ID: ${criteriaId}, userId: ${userId}`);
     
     // Initialize connector manager with user credentials
+    console.log(`🔧 About to initialize connector manager for user ${userId}`);
     await this.initializeConnectorManager(userId);
+    console.log(`🔧 Connector manager initialized successfully`);
     
     const criteria = await storage.getJobSearchCriteriaById(criteriaId);
     if (!criteria) {
