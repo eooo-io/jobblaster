@@ -328,6 +328,17 @@ export default function Sidebar() {
                 <span>AI Prompt Templates</span>
               </div>
             </Link>
+            <Link href="/assigned-templates">
+              <div className={cn(
+                "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
+                location === "/assigned-templates"
+                  ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
+                  : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+              )}>
+                <Settings className="w-4 h-4" />
+                <span>Assigned Templates</span>
+              </div>
+            </Link>
             <Link href="/external-logs">
               <div className={cn(
                 "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
