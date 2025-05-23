@@ -11,6 +11,7 @@ import Profile from "@/pages/profile";
 import Connectors from "@/pages/connectors";
 import Templates from "@/pages/templates";
 import AssignedTemplates from "@/pages/assigned-templates";
+import SearchCriteria from "@/pages/search-criteria";
 import ExternalLogs from "@/pages/external-logs";
 import NotFound from "@/pages/not-found";
 

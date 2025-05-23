@@ -63,6 +63,18 @@ export interface IStorage {
   // Template Assignments
   getTemplateAssignments(userId: number): Promise<TemplateAssignment[]>;
   setTemplateAssignments(userId: number, assignments: InsertTemplateAssignment[]): Promise<TemplateAssignment[]>;
+
+  // Job Search Criteria - Universal for all connectors
+  getJobSearchCriteria(userId: number): Promise<JobSearchCriteria[]>;
+  getJobSearchCriteriaById(id: number): Promise<JobSearchCriteria | undefined>;
+  createJobSearchCriteria(criteria: InsertJobSearchCriteria): Promise<JobSearchCriteria>;
+  updateJobSearchCriteria(id: number, criteria: Partial<InsertJobSearchCriteria>): Promise<JobSearchCriteria | undefined>;
+  deleteJobSearchCriteria(id: number): Promise<boolean>;
+
+  // Job Search Sessions
+  getJobSearchSessions(userId: number): Promise<JobSearchSession[]>;
+  createJobSearchSession(session: InsertJobSearchSession): Promise<JobSearchSession>;
+  updateJobSearchSession(id: number, session: Partial<InsertJobSearchSession>): Promise<JobSearchSession | undefined>;
 }
 
 export class MemStorage implements IStorage {

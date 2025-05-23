@@ -182,6 +182,50 @@ export const insertTemplateAssignmentSchema = createInsertSchema(templateAssignm
   updatedAt: true,
 });
 
+// Job Search Criteria - Universal for all job connectors
+export const jobSearchCriteria = pgTable("job_search_criteria", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  name: varchar("name", { length: 255 }).notNull(), // e.g., "Frontend Developer - Remote"
+  keywords: text("keywords").array().notNull(), // ["React", "Frontend", "JavaScript"]
+  jobTitles: text("job_titles").array().notNull(), // ["Frontend Developer", "React Developer"]
+  locations: text("locations").array().notNull(), // ["Remote", "San Francisco", "New York"]
+  excludeKeywords: text("exclude_keywords").array().default([]), // ["Senior", "Lead"]
+  employmentType: varchar("employment_type", { length: 50 }).default("full-time"), // full-time, part-time, contract
+  salaryMin: integer("salary_min"), // 80000
+  salaryMax: integer("salary_max"), // 120000
+  experienceLevel: varchar("experience_level", { length: 50 }).default("mid"), // entry, mid, senior
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Job Search Sessions - Track automated search runs
+export const jobSearchSessions = pgTable("job_search_sessions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  criteriaId: integer("criteria_id").notNull(),
+  connectors: text("connectors").array().notNull(), // ["linkedin", "indeed", "adzuna"]
+  status: varchar("status", { length: 50 }).default("pending"), // pending, running, completed, failed
+  totalJobsFound: integer("total_jobs_found").default(0),
+  jobsImported: integer("jobs_imported").default(0),
+  errors: text("errors").array().default([]),
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertJobSearchCriteriaSchema = createInsertSchema(jobSearchCriteria).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertJobSearchSessionSchema = createInsertSchema(jobSearchSessions).omit({
+  id: true,
+  startedAt: true,
+  completedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -209,3 +253,9 @@ export type AiTemplate = typeof aiTemplates.$inferSelect;
 
 export type InsertTemplateAssignment = z.infer<typeof insertTemplateAssignmentSchema>;
 export type TemplateAssignment = typeof templateAssignments.$inferSelect;
+
+export type InsertJobSearchCriteria = z.infer<typeof insertJobSearchCriteriaSchema>;
+export type JobSearchCriteria = typeof jobSearchCriteria.$inferSelect;
+
+export type InsertJobSearchSession = z.infer<typeof insertJobSearchSessionSchema>;
+export type JobSearchSession = typeof jobSearchSessions.$inferSelect;
