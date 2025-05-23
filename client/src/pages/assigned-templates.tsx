@@ -62,8 +62,25 @@ export default function AssignedTemplates() {
 
   // Initialize assignments when data loads
   useState(() => {
-    if (currentAssignments.length > 0) {
-      setAssignments(currentAssignments);
+    if (currentAssignments.length > 0 && templates.length > 0) {
+      // Match saved assignments with full template data
+      const enrichedAssignments = CATEGORIES.map(cat => {
+        const savedAssignment = currentAssignments.find(a => a.category === cat.id);
+        if (savedAssignment && savedAssignment.templateId) {
+          const template = templates.find(t => t.id === savedAssignment.templateId);
+          return {
+            category: cat.id,
+            templateId: savedAssignment.templateId,
+            template: template
+          };
+        }
+        return {
+          category: cat.id,
+          templateId: null,
+          template: undefined
+        };
+      });
+      setAssignments(enrichedAssignments);
     } else {
       // Initialize with empty assignments for all categories
       setAssignments(CATEGORIES.map(cat => ({
@@ -72,7 +89,7 @@ export default function AssignedTemplates() {
         template: undefined
       })));
     }
-  }, [currentAssignments]);
+  }, [currentAssignments, templates]);
 
   // Save template assignments
   const saveAssignmentsMutation = useMutation({
