@@ -269,6 +269,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`🔍 Fetching resumes for userId: ${userId}`);
       const resumes = await storage.getResumesByUserId(userId);
       console.log(`📋 Found ${resumes.length} resumes:`, resumes.map(r => ({ id: r.id, name: r.name })));
+      
+      // Clear cache headers to ensure fresh data
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+      
       res.json(resumes);
     } catch (error) {
       console.error("Error fetching resumes:", error);
