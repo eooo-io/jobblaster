@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import Dashboard from "@/pages/dashboard";
 import Login from "@/pages/login";
 import Profile from "@/pages/profile";
+import ExternalLogs from "@/pages/external-logs";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -32,6 +33,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Dashboard} />
       <Route path="/profile" component={Profile} />
+      <Route path="/external-logs" component={ExternalLogs} />
       <Route component={NotFound} />
     </Switch>
   );
