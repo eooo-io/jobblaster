@@ -16,39 +16,35 @@ export async function analyzeJobDescription(description: string, userId?: number
   location: string;
   employmentType: string;
 }> {
+  // Using your OpenAI template for consistent job analysis
+  const systemPrompt = "You are an AI assistant that extracts structured job details from raw job postings. Always return only valid JSON.";
+  
+  const extractionInstruction = `Extract structured job details from the following job post. Output as a JSON object with the following fields:
+
+- Company Name
+- Role Title
+- Required Technologies
+- Required Soft Skills
+- Preferred Experience
+- Location (Remote/On-site)
+- Employment Type
+
+Only include the fields listed above.
+
+Job Post:
+"""
+${description}
+"""`;
+
   const requestData = {
-    model: "gpt-4o",
+    model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
     messages: [
-      {
-        role: "system",
-        content: `You are an expert job description analyzer. Extract structured information from job postings and return it in JSON format. 
-
-        Analyze the job description and extract:
-        - title: The job title/position
-        - company: Company name
-        - techStack: Array of technical skills, technologies, programming languages, frameworks, tools mentioned
-        - softSkills: Array of soft skills, interpersonal skills, leadership qualities mentioned
-        - experienceYears: Years of experience required (e.g., "3-5 years", "5+ years", "Entry level")
-        - location: Work location or "Remote" if remote work
-        - employmentType: Type of employment (e.g., "Full-time", "Part-time", "Contract", "Internship")
-
-        Return only valid JSON in this exact format:
-        {
-          "title": "string",
-          "company": "string", 
-          "techStack": ["string"],
-          "softSkills": ["string"],
-          "experienceYears": "string",
-          "location": "string",
-          "employmentType": "string"
-        }`
-      },
-      {
-        role: "user",
-        content: `Please analyze this job description and extract the structured information:\n\n${description}`
-      }
+      { role: "system", content: systemPrompt },
+      { role: "user", content: extractionInstruction }
     ],
-    response_format: { type: "json_object" as const }
+    response_format: { type: "json_object" as const },
+    temperature: 0.2,
+    max_tokens: 1024,
   };
 
   try {
@@ -59,51 +55,17 @@ export async function analyzeJobDescription(description: string, userId?: number
       requestData,
       userId: userId || 1
     }, () => openai.chat.completions.create(requestData));
-      model: "gpt-4o",
-      messages: [
-        {
-          role: "system",
-          content: `You are an expert job description analyzer. Extract structured information from job postings and return it in JSON format. 
-
-          Analyze the job description and extract:
-          - title: The job title/position
-          - company: Company name
-          - techStack: Array of technical skills, technologies, programming languages, frameworks, tools mentioned
-          - softSkills: Array of soft skills, interpersonal skills, leadership qualities mentioned
-          - experienceYears: Years of experience required (e.g., "3-5 years", "5+ years", "Entry level")
-          - location: Work location or "Remote" if remote work
-          - employmentType: Type of employment (e.g., "Full-time", "Part-time", "Contract", "Internship")
-
-          Return only valid JSON in this exact format:
-          {
-            "title": "string",
-            "company": "string", 
-            "techStack": ["string"],
-            "softSkills": ["string"],
-            "experienceYears": "string",
-            "location": "string",
-            "employmentType": "string"
-          }`
-        },
-        {
-          role: "user",
-          content: `Please analyze this job description and extract the structured information:\n\n${description}`
-        }
-      ],
-      response_format: { type: "json_object" },
-      temperature: 0.1,
-    });
 
     const result = JSON.parse(response.choices[0].message.content || "{}");
     
     return {
-      title: result.title || "Position Title",
-      company: result.company || "Company Name",
-      techStack: Array.isArray(result.techStack) ? result.techStack : [],
-      softSkills: Array.isArray(result.softSkills) ? result.softSkills : [],
-      experienceYears: result.experienceYears || "Not specified",
-      location: result.location || "Not specified", 
-      employmentType: result.employmentType || "Not specified"
+      title: result["Role Title"] || "Position Title",
+      company: result["Company Name"] || "Company Name",
+      techStack: Array.isArray(result["Required Technologies"]) ? result["Required Technologies"] : [],
+      softSkills: Array.isArray(result["Required Soft Skills"]) ? result["Required Soft Skills"] : [],
+      experienceYears: result["Preferred Experience"] || "Not specified",
+      location: result["Location"] || "Not specified", 
+      employmentType: result["Employment Type"] || "Not specified"
     };
   } catch (error) {
     console.error("Job description analysis failed:", error);
