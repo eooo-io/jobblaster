@@ -44,7 +44,6 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
       <!DOCTYPE html>
       <html>
         <head>
-          <title>${resumeName} - Resume</title>
           <meta charset="utf-8">
           <style>
             ${stylesheets}
@@ -58,8 +57,14 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 color-adjust: exact !important;
               }
               @page { 
-                margin: 0.5in; 
-                size: letter; 
+                margin: 0.75in 0.5in 1in 0.5in; 
+                size: letter;
+                @bottom-center {
+                  content: counter(page, lower-roman);
+                  font-size: 10px;
+                  color: #666;
+                  margin-top: 0.5in;
+                }
               }
               .resume-content {
                 max-width: none !important;
@@ -67,11 +72,16 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 box-shadow: none !important;
                 border: none !important;
                 border-radius: 0 !important;
+                padding: 0 !important;
               }
               /* Force background colors and images to print */
               * {
                 -webkit-print-color-adjust: exact !important;
                 color-adjust: exact !important;
+              }
+              /* Remove any headers */
+              header, .header, .page-header {
+                display: none !important;
               }
             }
             
@@ -81,13 +91,42 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               font-size: 14px;
               line-height: 1.4;
             }
+            
+            /* Page numbering */
+            .page-number {
+              position: fixed;
+              bottom: 0.5in;
+              left: 50%;
+              transform: translateX(-50%);
+              font-size: 10px;
+              color: #666;
+              text-align: center;
+            }
           </style>
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
         </head>
         <body>
           ${resumeElement.outerHTML}
+          <div class="page-number"></div>
           <script>
             window.onload = function() {
+              // Add page numbering functionality
+              function addPageNumbers() {
+                const style = document.createElement('style');
+                style.textContent = \`
+                  @media print {
+                    body { counter-reset: page; }
+                    .page-number:after {
+                      counter-increment: page;
+                      content: counter(page, lower-roman);
+                    }
+                  }
+                \`;
+                document.head.appendChild(style);
+              }
+              
+              addPageNumbers();
+              
               // Small delay to ensure styles are loaded
               setTimeout(() => {
                 window.print();
