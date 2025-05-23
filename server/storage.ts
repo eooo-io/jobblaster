@@ -341,6 +341,7 @@ export class DatabaseStorage implements IStorage {
   // Job Search Criteria Methods
   async getJobSearchCriteria(userId: number): Promise<JobSearchCriteria[]> {
     const results = await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.userId, userId));
+    console.log("Database query results:", results);
     return results;
   }
 
