@@ -269,10 +269,10 @@ export default function ExternalLogs() {
                           <span className="text-2xl">{getServiceIcon(service)}</span>
                         </div>
                         <div>
-                          <Typography variant="h6" color="blue-gray">
+                          <Typography variant="h6" className="text-gray-900 dark:text-white">
                             {service} API
                           </Typography>
-                          <Typography variant="small" color="gray">
+                          <Typography variant="small" className="text-gray-600 dark:text-gray-400">
                             {stats.total} total calls • {stats.successful} successful • {stats.failed} failed
                           </Typography>
                         </div>
@@ -312,10 +312,10 @@ export default function ExternalLogs() {
                                       {getStatusIcon(log.success)}
                                     </div>
                                     <div>
-                                      <Typography variant="small" className="font-semibold" color="blue-gray">
+                                      <Typography variant="small" className="font-semibold text-gray-900 dark:text-white">
                                         {log.method} {log.endpoint}
                                       </Typography>
-                                      <Typography variant="small" color="gray">
+                                      <Typography variant="small" className="text-gray-600 dark:text-gray-400">
                                         {format(new Date(log.createdAt), "MMM dd, HH:mm:ss")} • {formatResponseTime(log.responseTime)}
                                       </Typography>
                                     </div>
@@ -379,7 +379,7 @@ export default function ExternalLogs() {
         {/* Pagination Controls */}
         {totalPages > 1 && (
           <div className="mt-8 flex items-center justify-between">
-            <Typography variant="small" color="gray">
+            <Typography variant="small" className="text-gray-600 dark:text-gray-400">
               Showing {startIndex + 1}-{Math.min(endIndex, totalLogs)} of {totalLogs} logs
             </Typography>
             <div className="flex items-center space-x-2">
