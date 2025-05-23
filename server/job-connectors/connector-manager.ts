@@ -29,17 +29,21 @@ export class JobConnectorManager {
     });
     this.connectors.set('adzuna', adzunaConnector);
 
-    // Initialize LinkedIn scraper
-    const linkedinConnector = new LinkedInConnector({
-      apiKey: this.user.linkedinApiKey || undefined,
-    });
-    this.connectors.set('linkedin', linkedinConnector);
+    // Initialize LinkedIn scraper (only if credentials available)
+    if (this.user.linkedinApiKey) {
+      const linkedinConnector = new LinkedInConnector({
+        apiKey: this.user.linkedinApiKey,
+      });
+      this.connectors.set('linkedin', linkedinConnector);
+    }
 
-    // Initialize Indeed scraper
-    const indeedConnector = new IndeedConnector({
-      apiKey: this.user.indeedApiKey || undefined,
-    });
-    this.connectors.set('indeed', indeedConnector);
+    // Initialize Indeed scraper (only if credentials available)
+    if (this.user.indeedApiKey) {
+      const indeedConnector = new IndeedConnector({
+        apiKey: this.user.indeedApiKey,
+      });
+      this.connectors.set('indeed', indeedConnector);
+    }
   }
 
   getAvailableConnectors(): ConnectorConfig[] {
