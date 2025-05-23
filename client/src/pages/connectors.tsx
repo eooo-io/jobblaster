@@ -88,7 +88,7 @@ export default function Connectors() {
         title: "Settings saved",
         description: "Your connector settings have been updated successfully.",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/user"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
     },
     onError: (error: any) => {
       toast({
