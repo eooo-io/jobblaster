@@ -21,9 +21,19 @@ export class JobConnectorManager {
 
   private initializeConnectors(): void {
     // Initialize Adzuna connector - use environment variables as primary source
+    const adzunaApiKey = process.env.ADZUNA_API_KEY || this.user.adzunaApiKey || undefined;
+    const adzunaAppId = process.env.ADZUNA_APP_ID || this.user.adzunaAppId || undefined;
+    
+    console.log("🔑 Initializing Adzuna connector with:", {
+      hasApiKey: !!adzunaApiKey,
+      hasAppId: !!adzunaAppId,
+      apiKeySource: process.env.ADZUNA_API_KEY ? 'env' : (this.user.adzunaApiKey ? 'user' : 'none'),
+      appIdSource: process.env.ADZUNA_APP_ID ? 'env' : (this.user.adzunaAppId ? 'user' : 'none')
+    });
+    
     const adzunaConnector = new AdzunaConnector({
-      apiKey: process.env.ADZUNA_API_KEY || this.user.adzunaApiKey || undefined,
-      appId: process.env.ADZUNA_APP_ID || this.user.adzunaAppId || undefined,
+      apiKey: adzunaApiKey,
+      appId: adzunaAppId,
     });
     this.connectors.set('adzuna', adzunaConnector);
 
