@@ -8,10 +8,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Edit2, Trash2, Search, Target, MapPin, DollarSign, Clock, Play } from "lucide-react";
+import { Plus, Edit2, Trash2, Search, Target, MapPin, DollarSign, Clock, Play, ChevronDown, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { JobSearchCriteria, InsertJobSearchCriteria } from "@shared/schema";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import Sidebar from "@/components/sidebar";
 
 interface SearchCriteriaFormData {
   name: string;
@@ -35,6 +37,7 @@ export default function SearchCriteriaPage() {
   }, []);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingCriteria, setEditingCriteria] = useState<JobSearchCriteria | null>(null);
+  const [expandedCriteria, setExpandedCriteria] = useState<{ [key: number]: boolean }>({});
   const [keywordInput, setKeywordInput] = useState("");
   const [jobTitleInput, setJobTitleInput] = useState("");
   const [locationInput, setLocationInput] = useState("");
