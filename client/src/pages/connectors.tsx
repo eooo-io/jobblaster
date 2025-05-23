@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle, XCircle, Zap, Globe, Brain, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -46,7 +46,7 @@ export default function Connectors() {
   });
 
   // Update settings when user data loads
-  useState(() => {
+  useEffect(() => {
     if (user) {
       setSettings({
         openaiApiKey: user.openaiApiKey || "",
