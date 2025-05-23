@@ -42,6 +42,7 @@ function Router() {
       <Route path="/" component={Dashboard} />
       <Route path="/profile" component={Profile} />
       <Route path="/connectors" component={Connectors} />
+      <Route path="/search-criteria" component={SearchCriteria} />
       <Route path="/templates" component={Templates} />
       <Route path="/assigned-templates" component={AssignedTemplates} />
       <Route path="/external-logs" component={ExternalLogs} />
