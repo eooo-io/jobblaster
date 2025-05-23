@@ -48,6 +48,7 @@ export default function Connectors() {
   // Update settings when user data loads
   useEffect(() => {
     if (user) {
+      console.log("Loading user data:", user); // Debug log
       setSettings({
         openaiApiKey: user.openaiApiKey || "",
         adzunaAppId: user.adzunaAppId || "",
