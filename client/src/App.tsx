@@ -12,6 +12,7 @@ import Connectors from "@/pages/connectors";
 import Templates from "@/pages/templates";
 import AssignedTemplates from "@/pages/assigned-templates";
 import SearchCriteria from "@/pages/search-criteria";
+import ScrapedJobs from "@/pages/scraped-jobs";
 import ExternalLogs from "@/pages/external-logs";
 import NotFound from "@/pages/not-found";
 
@@ -43,6 +44,7 @@ function Router() {
       <Route path="/profile" component={Profile} />
       <Route path="/connectors" component={Connectors} />
       <Route path="/search-criteria" component={SearchCriteria} />
+      <Route path="/scraped-jobs" component={ScrapedJobs} />
       <Route path="/templates" component={Templates} />
       <Route path="/assigned-templates" component={AssignedTemplates} />
       <Route path="/external-logs" component={ExternalLogs} />

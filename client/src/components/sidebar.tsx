@@ -170,6 +170,20 @@ export default function Sidebar() {
                   <span>Search Criteria</span>
                 </div>
               </Link>
+              <Link href="/scraped-jobs">
+                <div 
+                  className={cn(
+                    "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
+                    location === "/scraped-jobs"
+                      ? "bg-blue-600/10 text-blue-600 dark:bg-blue-600/20 dark:text-blue-400"
+                      : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+                  )}
+                  onClick={closeMobileMenu}
+                >
+                  <Briefcase className="w-5 h-5" />
+                  <span>Scraped Jobs</span>
+                </div>
+              </Link>
               <Link href="/templates">
                 <div 
                   className={cn(
