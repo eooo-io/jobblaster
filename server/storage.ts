@@ -1,9 +1,9 @@
 import { 
-  users, resumes, jobPostings, matchScores, coverLetters, applications, externalLogs,
+  users, resumes, jobPostings, matchScores, coverLetters, applications, externalLogs, aiTemplates,
   type User, type InsertUser, type Resume, type InsertResume, 
   type JobPosting, type InsertJobPosting, type MatchScore, type InsertMatchScore,
   type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication,
-  type ExternalLog, type InsertExternalLog
+  type ExternalLog, type InsertExternalLog, type AiTemplate, type InsertAiTemplate
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";

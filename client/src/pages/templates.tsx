@@ -58,7 +58,7 @@ const defaultTemplate = {
   provider: "openai",
   category: "job_analysis",
   systemPrompt: "You are an AI assistant that extracts structured information from text. Always return only valid JSON.",
-  extractionInstruction: "Extract the key information from the following text:\\n\\n{{input_text}}",
+  extractionInstruction: "Extract the key information from the following text:\\n\\n{input_text}",
   outputFormat: {},
   temperature: 20, // stored as integer * 100
   maxTokens: 1024,
