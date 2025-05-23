@@ -81,7 +81,7 @@ export default function SearchCriteriaPage() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<InsertJobSearchCriteria> }) =>
-      apiRequest(`/api/job-search-criteria/${id}`, "PUT", data),
+      apiRequest("PUT", `/api/job-search-criteria/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/job-search-criteria"] });
       setIsDialogOpen(false);
