@@ -1,16 +1,17 @@
 import { 
   users, resumes, jobPostings, matchScores, coverLetters, applications, externalLogs, aiTemplates, templateAssignments,
-  jobSearchCriteria, jobSearchSessions,
+  jobSearchCriteria, jobSearchSessions, scrapedJobs,
   type User, type InsertUser, type Resume, type InsertResume, 
   type JobPosting, type InsertJobPosting, type MatchScore, type InsertMatchScore,
   type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication,
   type ExternalLog, type InsertExternalLog, type AiTemplate, type InsertAiTemplate,
   type TemplateAssignment, type InsertTemplateAssignment,
   type JobSearchCriteria, type InsertJobSearchCriteria,
-  type JobSearchSession, type InsertJobSearchSession
+  type JobSearchSession, type InsertJobSearchSession,
+  type ScrapedJob, type InsertScrapedJob
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, desc } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -633,6 +634,37 @@ export class DatabaseStorage implements IStorage {
     }
     
     return result;
+  }
+
+  // Scraped Jobs
+  async getScrapedJobs(userId: number, limit: number = 50, offset: number = 0): Promise<ScrapedJob[]> {
+    return await db.select().from(scrapedJobs)
+      .where(eq(scrapedJobs.userId, userId))
+      .orderBy(desc(scrapedJobs.createdAt))
+      .limit(limit)
+      .offset(offset);
+  }
+
+  async getScrapedJobsByUrl(url: string): Promise<ScrapedJob[]> {
+    return await db.select().from(scrapedJobs).where(eq(scrapedJobs.url, url));
+  }
+
+  async createScrapedJob(scrapedJob: InsertScrapedJob): Promise<ScrapedJob> {
+    const [job] = await db.insert(scrapedJobs).values(scrapedJob).returning();
+    return job;
+  }
+
+  async updateScrapedJobMatchScore(id: number, matchScore: number): Promise<ScrapedJob | undefined> {
+    const [job] = await db.update(scrapedJobs)
+      .set({ matchScore, updatedAt: new Date() })
+      .where(eq(scrapedJobs.id, id))
+      .returning();
+    return job;
+  }
+
+  async deleteScrapedJob(id: number): Promise<boolean> {
+    const result = await db.delete(scrapedJobs).where(eq(scrapedJobs.id, id));
+    return result.count > 0;
   }
 }
 
