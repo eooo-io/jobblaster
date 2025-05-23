@@ -91,6 +91,21 @@ export const applications = pgTable("applications", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const externalLogs = pgTable("external_logs", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  service: varchar("service", { length: 50 }).notNull(), // openai, adzuna, etc.
+  endpoint: varchar("endpoint", { length: 255 }).notNull(),
+  method: varchar("method", { length: 10 }).notNull(), // GET, POST, etc.
+  requestData: jsonb("request_data"), // Request payload
+  responseStatus: integer("response_status"), // HTTP status code
+  responseData: jsonb("response_data"), // Response data
+  responseTime: integer("response_time"), // Response time in milliseconds
+  success: boolean("success").notNull(),
+  errorMessage: text("error_message"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -122,6 +137,11 @@ export const insertApplicationSchema = createInsertSchema(applications).omit({
   createdAt: true,
 });
 
+export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -140,3 +160,6 @@ export type CoverLetter = typeof coverLetters.$inferSelect;
 
 export type InsertApplication = z.infer<typeof insertApplicationSchema>;
 export type Application = typeof applications.$inferSelect;
+
+export type InsertExternalLog = z.infer<typeof insertExternalLogSchema>;
+export type ExternalLog = typeof externalLogs.$inferSelect;

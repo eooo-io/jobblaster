@@ -46,6 +46,10 @@ export interface IStorage {
   getApplicationsByUserId(userId: number): Promise<Application[]>;
   createApplication(application: InsertApplication): Promise<Application>;
   updateApplication(id: number, application: Partial<InsertApplication>): Promise<Application | undefined>;
+
+  // External Logs
+  getExternalLogs(userId: number, limit?: number): Promise<ExternalLog[]>;
+  createExternalLog(log: InsertExternalLog): Promise<ExternalLog>;
 }
 
 export class MemStorage implements IStorage {
