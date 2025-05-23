@@ -297,7 +297,7 @@ export default function ScrapedJobsPage() {
                   <SelectValue placeholder="Select Resume" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Select Resume</SelectItem>
+                  <SelectItem value="none">Select Resume</SelectItem>
                   {resumes.map((resume) => (
                     <SelectItem key={resume.id} value={resume.id.toString()}>
                       {resume.name} {resume.isDefault && "(Default)"}
