@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardHeader, CardBody, Typography, Button, Input, Textarea, Select, Option } from "@material-tailwind/react";
-import { Plus, Edit, Trash2, Save, X, Settings, ArrowLeft } from "lucide-react";
+import { Card, CardHeader, CardBody, Typography, Button, Input, Textarea, Select, Option, Tabs, TabsHeader, TabsBody, Tab, TabPanel } from "@material-tailwind/react";
+import { Plus, Edit, Trash2, Save, X, Settings, ArrowLeft, Brain, Cpu, Zap } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 import { queryClient } from "@/lib/queryClient";
@@ -10,25 +10,60 @@ interface Template {
   id: number;
   name: string;
   description: string;
+  provider: string;
   category: string;
   systemPrompt: string;
   extractionInstruction: string;
   outputFormat: any;
   temperature: number;
   maxTokens: number;
+  model: string;
+  isDefault: boolean;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }
 
+const aiProviders = [
+  { 
+    id: 'openai', 
+    name: 'OpenAI', 
+    icon: Brain, 
+    color: 'green',
+    models: ['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'],
+    description: 'GPT models for natural language processing'
+  },
+  { 
+    id: 'anthropic', 
+    name: 'Anthropic', 
+    icon: Cpu, 
+    color: 'orange',
+    models: ['claude-3-5-sonnet', 'claude-3-opus', 'claude-3-haiku'],
+    description: 'Claude models for advanced reasoning and analysis'
+  },
+  { 
+    id: 'xai', 
+    name: 'xAI', 
+    icon: Zap, 
+    color: 'purple',
+    models: ['grok-1', 'grok-1.5'],
+    description: 'Grok models for real-time understanding'
+  }
+];
+
 const defaultTemplate = {
   name: "",
   description: "",
+  provider: "openai",
   category: "job_analysis",
   systemPrompt: "You are an AI assistant that extracts structured information from text. Always return only valid JSON.",
   extractionInstruction: "Extract the key information from the following text:\n\n{{input_text}}",
   outputFormat: {},
-  temperature: 0.2,
+  temperature: 20, // stored as integer * 100
   maxTokens: 1024,
+  model: "gpt-4o",
+  isDefault: false,
+  isActive: true,
 };
 
 export default function Templates() {

@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, index } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, index, real } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -106,6 +106,25 @@ export const externalLogs = pgTable("external_logs", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const aiTemplates = pgTable("ai_templates", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  name: varchar("name", { length: 100 }).notNull(),
+  description: varchar("description", { length: 500 }),
+  provider: varchar("provider", { length: 50 }).notNull(), // openai, anthropic, xai, etc.
+  category: varchar("category", { length: 50 }).notNull(), // job_analysis, resume_analysis, etc.
+  systemPrompt: text("system_prompt").notNull(),
+  extractionInstruction: text("extraction_instruction").notNull(),
+  outputFormat: jsonb("output_format").notNull(),
+  temperature: integer("temperature").notNull().default(20), // stored as integer * 100 for precision
+  maxTokens: integer("max_tokens").notNull().default(1024),
+  model: varchar("model", { length: 50 }), // gpt-4o, claude-3-5-sonnet, grok-1, etc.
+  isDefault: boolean("is_default").default(false),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -142,6 +161,12 @@ export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
   createdAt: true,
 });
 
+export const insertAiTemplateSchema = createInsertSchema(aiTemplates).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
@@ -163,3 +188,6 @@ export type Application = typeof applications.$inferSelect;
 
 export type InsertExternalLog = z.infer<typeof insertExternalLogSchema>;
 export type ExternalLog = typeof externalLogs.$inferSelect;
+
+export type InsertAiTemplate = z.infer<typeof insertAiTemplateSchema>;
+export type AiTemplate = typeof aiTemplates.$inferSelect;
