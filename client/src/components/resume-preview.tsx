@@ -77,11 +77,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 @top-center { content: ""; }
                 @top-right { content: ""; }
                 @bottom-left { content: ""; }
-                @bottom-center { 
-                  content: counter(page, lower-roman);
-                  font-size: 10px;
-                  color: #666;
-                }
+                @bottom-center { content: ""; }
                 @bottom-right { content: ""; }
               }
               .resume-content {
