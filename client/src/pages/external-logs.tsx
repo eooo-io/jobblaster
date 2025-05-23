@@ -299,28 +299,28 @@ export default function ExternalLogs() {
                           return (
                             <div key={log.id} className="border border-gray-200 dark:border-gray-600 rounded-lg">
                               <div 
-                                className="p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                className="p-2.5 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                 onClick={() => toggleLogExpansion(log.id)}
                               >
                                 <div className="flex items-center justify-between">
-                                  <div className="flex items-center space-x-3">
-                                    <div className="flex items-center space-x-2">
+                                  <div className="flex items-center space-x-2">
+                                    <div className="flex items-center space-x-1.5">
                                       {isExpanded ? 
-                                        <ChevronDown className="h-4 w-4 text-gray-500" /> : 
-                                        <ChevronRight className="h-4 w-4 text-gray-500" />
+                                        <ChevronDown className="h-3.5 w-3.5 text-gray-500" /> : 
+                                        <ChevronRight className="h-3.5 w-3.5 text-gray-500" />
                                       }
                                       {getStatusIcon(log.success)}
                                     </div>
                                     <div>
-                                      <Typography variant="small" className="font-semibold text-gray-900 dark:text-white">
+                                      <Typography variant="small" className="font-semibold text-gray-900 dark:text-white text-sm">
                                         {log.method} {log.endpoint}
                                       </Typography>
-                                      <Typography variant="small" className="text-gray-600 dark:text-gray-400">
+                                      <Typography variant="small" className="text-gray-600 dark:text-gray-400 text-xs">
                                         {format(new Date(log.createdAt), "MMM dd, HH:mm:ss")} • {formatResponseTime(log.responseTime)}
                                       </Typography>
                                     </div>
                                   </div>
-                                  <div className="flex items-center space-x-2">
+                                  <div className="flex items-center space-x-1.5">
                                     <Chip
                                       value={log.responseStatus?.toString() || "N/A"}
                                       color={log.success ? "green" : "red"}
@@ -331,33 +331,33 @@ export default function ExternalLogs() {
                               </div>
                               
                               {isExpanded && (
-                                <div className="border-t border-gray-200 dark:border-gray-600 p-4 bg-gray-50 dark:bg-gray-800">
-                                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
+                                <div className="border-t border-gray-200 dark:border-gray-600 p-2.5 bg-gray-50 dark:bg-gray-800">
+                                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5 text-sm">
                                     {log.errorMessage && (
                                       <div className="lg:col-span-2">
-                                        <Typography variant="small" className="font-semibold text-red-600 mb-2">
+                                        <Typography variant="small" className="font-semibold text-red-600 mb-1.5 text-xs">
                                           Error Message
                                         </Typography>
-                                        <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded p-3">
-                                          <Typography variant="small" className="text-red-700 dark:text-red-300 font-mono">
+                                        <div className="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded p-2">
+                                          <Typography variant="small" className="text-red-700 dark:text-red-300 font-mono text-xs">
                                             {log.errorMessage}
                                           </Typography>
                                         </div>
                                       </div>
                                     )}
                                     <div>
-                                      <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                      <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300 mb-1.5 text-xs">
                                         Request Data
                                       </Typography>
-                                      <pre className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-3 rounded text-xs overflow-x-auto max-h-40 text-gray-900 dark:text-gray-100">
+                                      <pre className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-2 rounded text-xs overflow-x-auto max-h-32 text-gray-900 dark:text-gray-100">
                                         {JSON.stringify(log.requestData, null, 2)}
                                       </pre>
                                     </div>
                                     <div>
-                                      <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                      <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300 mb-1.5 text-xs">
                                         Response Data
                                       </Typography>
-                                      <pre className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-3 rounded text-xs overflow-x-auto max-h-40 text-gray-900 dark:text-gray-100">
+                                      <pre className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 p-2 rounded text-xs overflow-x-auto max-h-32 text-gray-900 dark:text-gray-100">
                                         {JSON.stringify(log.responseData, null, 2)}
                                       </pre>
                                     </div>
