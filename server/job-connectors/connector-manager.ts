@@ -36,6 +36,7 @@ export class JobConnectorManager {
     const adzunaConnector = new AdzunaConnector({
       apiKey: adzunaApiKey,
       appId: adzunaAppId,
+      userId: this.userData.id
     });
     this.connectors.set('adzuna', adzunaConnector);
 
