@@ -120,10 +120,10 @@ export default function SearchCriteriaPage() {
       jobTitles: [],
       locations: [],
       excludeKeywords: [],
-      employmentType: "full-time",
+      employmentTypes: ["full-time"],
       salaryMin: undefined,
       salaryMax: undefined,
-      experienceLevel: "mid",
+      experienceLevels: ["mid"],
       isActive: true,
     });
     setEditingCriteria(null);
@@ -146,10 +146,10 @@ export default function SearchCriteriaPage() {
       jobTitles: criteria.jobTitles || [],
       locations: criteria.locations || [],
       excludeKeywords: criteria.excludeKeywords || [],
-      employmentType: criteria.employmentType || "full-time",
+      employmentTypes: criteria.employmentTypes || ["full-time"],
       salaryMin: criteria.salaryMin || undefined,
       salaryMax: criteria.salaryMax || undefined,
-      experienceLevel: criteria.experienceLevel || "mid",
+      experienceLevels: criteria.experienceLevels || ["mid"],
       isActive: criteria.isActive ?? true,
     });
     setIsDialogOpen(true);
@@ -174,10 +174,10 @@ export default function SearchCriteriaPage() {
       jobTitles: formData.jobTitles,
       locations: formData.locations,
       excludeKeywords: formData.excludeKeywords,
-      employmentType: formData.employmentType,
+      employmentTypes: formData.employmentTypes,
       salaryMin: formData.salaryMin || null,
       salaryMax: formData.salaryMax || null,
-      experienceLevel: formData.experienceLevel,
+      experienceLevels: formData.experienceLevels,
       isActive: formData.isActive,
       userId: 1, // This will be replaced with actual user ID from session
     };
