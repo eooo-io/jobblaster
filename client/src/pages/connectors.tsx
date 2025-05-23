@@ -70,18 +70,25 @@ export default function Connectors() {
 
   const saveSettings = useMutation({
     mutationFn: async (data: ConnectorSettings) => {
+      console.log("Saving settings:", data);
       const response = await fetch("/api/update-profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
       if (!response.ok) {
         const errorText = await response.text();
+        console.log("Error response:", errorText);
         throw new Error(`Failed to save settings: ${errorText}`);
       }
 
-      return response.json();
+      const result = await response.json();
+      console.log("Success response:", result);
+      return result;
     },
     onSuccess: () => {
       toast({
