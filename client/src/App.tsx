@@ -10,6 +10,7 @@ import Login from "@/pages/login";
 import Profile from "@/pages/profile";
 import Connectors from "@/pages/connectors";
 import Templates from "@/pages/templates";
+import AssignedTemplates from "@/pages/assigned-templates";
 import ExternalLogs from "@/pages/external-logs";
 import NotFound from "@/pages/not-found";
 
@@ -37,6 +38,7 @@ function Router() {
       <Route path="/profile" component={Profile} />
       <Route path="/connectors" component={Connectors} />
       <Route path="/templates" component={Templates} />
+      <Route path="/assigned-templates" component={AssignedTemplates} />
       <Route path="/external-logs" component={ExternalLogs} />
       <Route component={NotFound} />
     </Switch>
