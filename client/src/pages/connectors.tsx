@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Card, CardBody, Typography, Button, Input, Alert } from "@material-tailwind/react";
 import { CheckCircle, XCircle, Zap, Globe, Brain, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { ErrorModal } from "@/components/error-modal";
 import Sidebar from "@/components/sidebar";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 
 interface ConnectorSettings {
   // OpenAI
@@ -196,174 +200,165 @@ export default function Connectors() {
       <main className="flex-1 flex flex-col overflow-hidden lg:ml-0 pt-16 lg:pt-0">
         <div className="flex-1 overflow-y-auto p-6 max-w-4xl mx-auto w-full">
           <div className="mb-8">
-        <Typography variant="h4" className="text-slate-900 dark:text-white mb-2">
-          API Connectors
-        </Typography>
-        <Typography className="text-slate-600 dark:text-gray-400">
-          Configure your API connections for AI services and job search platforms.
-        </Typography>
-      </div>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+              API Connectors
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Configure your API connections for AI services and job search platforms.
+            </p>
+          </div>
 
       <div className="space-y-6">
         {/* AI Providers Section */}
         <div>
-          <Typography variant="h5" className="text-slate-800 dark:text-gray-200 mb-4 flex items-center">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
             <Brain className="w-5 h-5 mr-2" />
             AI Providers
-          </Typography>
+          </h2>
           
           <div className="grid gap-4 md:grid-cols-2">
             {/* OpenAI */}
-            <Card className="border border-slate-200 dark:border-gray-700">
-              <CardBody className="p-6">
+            <Card>
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
                       <span className="text-white text-sm font-bold">AI</span>
                     </div>
                     <div>
-                      <Typography variant="h6" className="text-slate-900 dark:text-white">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
                         OpenAI
-                      </Typography>
-                      <Typography className="text-xs text-slate-500 dark:text-gray-400">
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         GPT-4o for job analysis
-                      </Typography>
+                      </p>
                     </div>
                   </div>
                   {getConnectionStatus("openai")}
                 </div>
 
                 <div className="space-y-3">
-                  <Input
-                    type="password"
-                    label="API Key"
-                    value={settings.openaiApiKey || ""}
-                    onChange={(e) => handleInputChange("openaiApiKey", e.target.value)}
-                    placeholder="sk-..."
-                    crossOrigin={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="openai-key">API Key</Label>
+                    <Input
+                      id="openai-key"
+                      type="password"
+                      value={settings.openaiApiKey || ""}
+                      onChange={(e) => handleInputChange("openaiApiKey", e.target.value)}
+                      placeholder="sk-..."
+                    />
+                  </div>
                   <Button
                     size="sm"
-                    variant="outlined"
+                    variant="outline"
                     onClick={() => testConnection("openai")}
                     disabled={!settings.openaiApiKey}
                     className="w-full"
-                    placeholder={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
                   >
                     Test Connection
                   </Button>
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
 
             {/* Anthropic */}
-            <Card className="border border-slate-200 dark:border-gray-700 opacity-60">
-              <CardBody className="p-6">
+            <Card className="opacity-60">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
                       <span className="text-white text-sm font-bold">A</span>
                     </div>
                     <div>
-                      <Typography variant="h6" className="text-slate-900 dark:text-white">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
                         Anthropic
-                      </Typography>
-                      <Typography className="text-xs text-slate-500 dark:text-gray-400">
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Claude for advanced analysis
-                      </Typography>
+                      </p>
                     </div>
                   </div>
-                  <span className="text-xs bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded-full text-slate-500 dark:text-gray-400">
+                  <Badge variant="secondary" className="text-xs">
                     Coming Soon
-                  </span>
+                  </Badge>
                 </div>
 
                 <div className="space-y-3">
-                  <Input
-                    type="password"
-                    label="API Key"
-                    value=""
-                    disabled
-                    placeholder="Coming soon..."
-                    crossOrigin={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="anthropic-key">API Key</Label>
+                    <Input
+                      id="anthropic-key"
+                      type="password"
+                      value=""
+                      disabled
+                      placeholder="Coming soon..."
+                    />
+                  </div>
                   <Button
                     size="sm"
-                    variant="outlined"
+                    variant="outline"
                     disabled
                     className="w-full"
-                    placeholder={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
                   >
                     Test Connection
                   </Button>
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
 
             {/* xAI */}
-            <Card className="border border-slate-200 dark:border-gray-700 opacity-60">
-              <CardBody className="p-6">
+            <Card className="opacity-60">
+              <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-3">
                     <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
                       <span className="text-white text-sm font-bold">X</span>
                     </div>
                     <div>
-                      <Typography variant="h6" className="text-slate-900 dark:text-white">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
                         xAI
-                      </Typography>
-                      <Typography className="text-xs text-slate-500 dark:text-gray-400">
+                      </h3>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
                         Grok for real-time insights
-                      </Typography>
+                      </p>
                     </div>
                   </div>
-                  <span className="text-xs bg-slate-100 dark:bg-gray-800 px-2 py-1 rounded-full text-slate-500 dark:text-gray-400">
+                  <Badge variant="secondary" className="text-xs">
                     Coming Soon
-                  </span>
+                  </Badge>
                 </div>
 
                 <div className="space-y-3">
-                  <Input
-                    type="password"
-                    label="API Key"
-                    value=""
-                    disabled
-                    placeholder="Coming soon..."
-                    crossOrigin={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="xai-key">API Key</Label>
+                    <Input
+                      id="xai-key"
+                      type="password"
+                      value=""
+                      disabled
+                      placeholder="Coming soon..."
+                    />
+                  </div>
                   <Button
                     size="sm"
-                    variant="outlined"
+                    variant="outline"
                     disabled
                     className="w-full"
-                    placeholder={undefined}
-                    onPointerEnterCapture={undefined}
-                    onPointerLeaveCapture={undefined}
                   >
                     Test Connection
                   </Button>
                 </div>
-              </CardBody>
+              </CardContent>
             </Card>
           </div>
         </div>
 
         {/* Job Search Platforms Section */}
         <div>
-          <Typography variant="h5" className="text-slate-800 dark:text-gray-200 mb-4 flex items-center">
+          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
             <Globe className="w-5 h-5 mr-2" />
             Job Search Platforms
-          </Typography>
+          </h2>
           
           <div className="grid gap-4 md:grid-cols-2">
             {/* Adzuna */}
