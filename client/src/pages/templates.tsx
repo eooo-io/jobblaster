@@ -501,7 +501,7 @@ export default function Templates() {
                               size="sm"
                               variant="outlined"
                               onClick={() => handleEdit(template)}
-                              className="flex items-center space-x-1"
+                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                             >
                               <Edit className="h-4 w-4" />
                               <span>Edit</span>
@@ -511,7 +511,7 @@ export default function Templates() {
                               color="red"
                               variant="outlined"
                               onClick={() => handleDelete(template.id)}
-                              className="flex items-center space-x-1"
+                              className="flex items-center space-x-1 border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
                             >
                               <Trash2 className="h-4 w-4" />
                               <span>Delete</span>
@@ -572,7 +572,7 @@ export default function Templates() {
                               size="sm"
                               variant="outlined"
                               onClick={() => handleEdit(template)}
-                              className="flex items-center space-x-1"
+                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                             >
                               <Edit className="h-4 w-4" />
                               <span>Edit</span>
@@ -582,7 +582,7 @@ export default function Templates() {
                               color="red"
                               variant="outlined"
                               onClick={() => handleDelete(template.id)}
-                              className="flex items-center space-x-1"
+                              className="flex items-center space-x-1 border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
                             >
                               <Trash2 className="h-4 w-4" />
                               <span>Delete</span>
