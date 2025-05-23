@@ -39,43 +39,24 @@ export class JobScraperService {
     const errors: string[] = [];
     let totalJobsFound = 0;
 
-    // Run LinkedIn scraper
+    // Run Adzuna connector using the new connector manager
     try {
-      console.log("🔍 Running LinkedIn scraper...");
-      const linkedinJobs = await this.connectorManager.searchLinkedIn(criteria);
-      console.log(`LinkedIn found ${linkedinJobs.length} jobs`);
+      console.log("🔍 Running Adzuna job search...");
       
-      for (const job of linkedinJobs) {
-        await this.saveScrapedJob(job, criteriaId, userId, "linkedin");
-        totalJobsFound++;
-      }
-    } catch (error) {
-      console.error("LinkedIn scraper error:", error);
-      errors.push(`LinkedIn: ${error.message}`);
-    }
+      const searchParams = {
+        keywords: criteria.keywords,
+        jobTitles: criteria.jobTitles,
+        locations: criteria.locations,
+        salaryMin: criteria.salaryMin,
+        salaryMax: criteria.salaryMax,
+        employmentTypes: criteria.employmentTypes,
+        experienceLevels: criteria.experienceLevels,
+      };
 
-    // Run Indeed scraper
-    try {
-      console.log("🔍 Running Indeed scraper...");
-      const indeedJobs = await this.connectorManager.searchIndeed(criteria);
-      console.log(`Indeed found ${indeedJobs.length} jobs`);
+      const results = await this.connectorManager.searchJobs(searchParams, ['adzuna']);
+      console.log(`🎯 Adzuna search completed! Found ${results.jobs.length} jobs`);
       
-      for (const job of indeedJobs) {
-        await this.saveScrapedJob(job, criteriaId, userId, "indeed");
-        totalJobsFound++;
-      }
-    } catch (error) {
-      console.error("Indeed scraper error:", error);
-      errors.push(`Indeed: ${error.message}`);
-    }
-
-    // Run Adzuna connector if configured
-    try {
-      console.log("🔍 Running Adzuna connector...");
-      const adzunaJobs = await this.connectorManager.searchAdzuna(criteria);
-      console.log(`Adzuna found ${adzunaJobs.length} jobs`);
-      
-      for (const job of adzunaJobs) {
+      for (const job of results.jobs) {
         await this.saveScrapedJob(job, criteriaId, userId, "adzuna");
         totalJobsFound++;
       }
