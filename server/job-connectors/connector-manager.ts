@@ -151,3 +151,6 @@ export class JobConnectorManager {
     return connector.getJobDetails(jobId);
   }
 }
+
+// Export alias for compatibility
+export const ConnectorManager = JobConnectorManager;
