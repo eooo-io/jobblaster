@@ -167,7 +167,7 @@ export default function ScrapedJobsPage() {
 
   // Run scraping session mutation
   const scrapeJobsMutation = useMutation({
-    mutationFn: () => apiRequest("/api/scrape-jobs", { method: "POST" }),
+    mutationFn: () => apiRequest("/api/scrape-jobs", "POST"),
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/scraped-jobs"] });
       toast({
