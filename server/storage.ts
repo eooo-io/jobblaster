@@ -340,10 +340,16 @@ export class MemStorage implements IStorage {
 export class DatabaseStorage implements IStorage {
   // Job Search Criteria Methods
   async getJobSearchCriteria(userId: number): Promise<JobSearchCriteria[]> {
-    console.log("Querying database for userId:", userId);
-    const results = await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.userId, userId));
-    console.log("Database query results:", JSON.stringify(results, null, 2));
-    return results;
+    try {
+      console.log("🎯 SEARCHING FOR CRITERIA - userId:", userId);
+      const results = await db.select().from(jobSearchCriteria).where(eq(jobSearchCriteria.userId, userId));
+      console.log("🎯 FOUND RESULTS:", results.length, "criteria");
+      console.log("🎯 FIRST RESULT:", results[0] ? JSON.stringify(results[0], null, 2) : "None");
+      return results;
+    } catch (error) {
+      console.error("🎯 DATABASE ERROR:", error);
+      throw error;
+    }
   }
 
   async getJobSearchCriteriaById(id: number): Promise<JobSearchCriteria | undefined> {
