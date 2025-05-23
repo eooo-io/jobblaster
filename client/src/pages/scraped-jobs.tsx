@@ -156,7 +156,7 @@ export default function ScrapedJobsPage() {
                           <SelectValue placeholder="All companies" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">All companies</SelectItem>
+                          <SelectItem value="all">All companies</SelectItem>
                           {getUniqueCompanies().map((company) => (
                             <SelectItem key={company} value={company}>
                               {company}
