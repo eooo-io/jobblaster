@@ -209,7 +209,7 @@ export default function Dashboard() {
                 className="flex items-center gap-2"
               >
                 <X className="w-4 h-4" />
-                Close
+                <span>Close</span>
               </Button>
             </div>
 
