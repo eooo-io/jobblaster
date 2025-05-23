@@ -3,6 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
 import { hashPassword } from "./auth";
+import { Logger, setupGlobalErrorHandling } from "./logger";
 
 const app = express();
 app.use(express.json());
@@ -40,6 +41,9 @@ app.use((req, res, next) => {
 
 // Bootstrap function to ensure admin user exists
 async function bootstrapApplication() {
+  // Setup global error handling for unhandled exceptions
+  setupGlobalErrorHandling();
+  
   try {
     // Check if admin user already exists
     const existingAdmin = await storage.getUserByUsername("ezraterlinden");
