@@ -592,7 +592,7 @@ export default function Templates() {
             </>
           )}
         </div>
-      </div>
+      </main>
     </div>
   );
 }
