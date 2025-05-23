@@ -1,9 +1,10 @@
 import { 
-  users, resumes, jobPostings, matchScores, coverLetters, applications, externalLogs, aiTemplates,
+  users, resumes, jobPostings, matchScores, coverLetters, applications, externalLogs, aiTemplates, templateAssignments,
   type User, type InsertUser, type Resume, type InsertResume, 
   type JobPosting, type InsertJobPosting, type MatchScore, type InsertMatchScore,
   type CoverLetter, type InsertCoverLetter, type Application, type InsertApplication,
-  type ExternalLog, type InsertExternalLog, type AiTemplate, type InsertAiTemplate
+  type ExternalLog, type InsertExternalLog, type AiTemplate, type InsertAiTemplate,
+  type TemplateAssignment, type InsertTemplateAssignment
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and } from "drizzle-orm";
@@ -522,6 +523,32 @@ export class DatabaseStorage implements IStorage {
   async deleteAiTemplate(id: number): Promise<boolean> {
     const result = await db.delete(aiTemplates).where(eq(aiTemplates.id, id));
     return (result.rowCount ?? 0) > 0;
+  }
+
+  // Template Assignments - Database Implementation
+  async getTemplateAssignments(userId: number): Promise<TemplateAssignment[]> {
+    const assignments = await db.select().from(templateAssignments).where(eq(templateAssignments.userId, userId));
+    return assignments;
+  }
+
+  async setTemplateAssignments(userId: number, assignments: InsertTemplateAssignment[]): Promise<TemplateAssignment[]> {
+    // Clear existing assignments for this user
+    await db.delete(templateAssignments).where(eq(templateAssignments.userId, userId));
+    
+    // Insert new assignments
+    const result = [];
+    for (const assignment of assignments) {
+      if (assignment.templateId) {
+        const [saved] = await db.insert(templateAssignments).values({
+          userId,
+          category: assignment.category,
+          templateId: assignment.templateId
+        }).returning();
+        result.push(saved);
+      }
+    }
+    
+    return result;
   }
 }
 
