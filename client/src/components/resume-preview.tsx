@@ -159,12 +159,12 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
     return (
       <div className="lg:col-span-1">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Resume Preview</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Resume Preview</h3>
         </div>
-        <div className="bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600 rounded-lg p-4 h-96 overflow-auto">
-          <div className="flex items-center justify-center h-full text-slate-500 dark:text-gray-400">
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 h-96 overflow-auto">
+          <div className="flex items-center justify-center h-full text-slate-500">
             <div className="text-center">
-              <div className="w-12 h-12 bg-slate-200 dark:bg-gray-600 rounded-lg mx-auto mb-2"></div>
+              <div className="w-12 h-12 bg-slate-200 rounded-lg mx-auto mb-2"></div>
               <p className="text-sm">Upload a resume to see the preview</p>
             </div>
           </div>
@@ -217,7 +217,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
     return (
       <div className="lg:col-span-1">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Resume Preview - Debug Mode</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Resume Preview - Debug Mode</h3>
           {showDownloadButton && (
             <Button
               onClick={handleDownloadPDF}
@@ -230,13 +230,13 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             </Button>
           )}
         </div>
-        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-          <div className="text-xs font-mono space-y-4 text-slate-700 dark:text-gray-300">
+        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 border border-slate-200'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
+          <div className="text-xs font-mono space-y-4 text-slate-700">
             
             {/* Basics Section */}
             {basics && Object.keys(basics).length > 0 && (
               <div>
-                <h4 className="font-bold text-blue-600 dark:text-blue-400 mb-2">BASICS:</h4>
+                <h4 className="font-bold text-blue-600 mb-2">BASICS:</h4>
                 {basics.name && <div>• Name: {basics.name}</div>}
                 {basics.label && <div>• Label: {basics.label}</div>}
                 {basics.email && <div>• Email: {basics.email}</div>}
@@ -255,9 +255,9 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Work Experience */}
             {work && work.length > 0 && (
               <div>
-                <h4 className="font-bold text-green-600 dark:text-green-400 mb-2">WORK EXPERIENCE ({work.length}):</h4>
+                <h4 className="font-bold text-green-600 mb-2">WORK EXPERIENCE ({work.length}):</h4>
                 {work.map((job: any, index: number) => (
-                  <div key={index} className="mb-3 pl-4 border-l-2 border-gray-300 dark:border-gray-600">
+                  <div key={index} className="mb-3 pl-4 border-l-2 border-gray-300">
                     <div className="font-semibold">{index + 1}. {job.position || 'Position'}</div>
                     {job.name && <div>   Company: {job.name}</div>}
                     {job.startDate && <div>   Duration: {job.startDate} - {job.endDate || 'Present'}</div>}
@@ -274,7 +274,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Skills */}
             {skills && skills.length > 0 && (
               <div>
-                <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-2">SKILLS ({skills.length}):</h4>
+                <h4 className="font-bold text-purple-600 mb-2">SKILLS ({skills.length}):</h4>
                 {skills.map((skill: any, index: number) => (
                   <div key={index} className="mb-2">
                     <div>• {skill.name || `Skill ${index + 1}`}</div>
@@ -290,9 +290,9 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Education */}
             {education && education.length > 0 && (
               <div>
-                <h4 className="font-bold text-orange-600 dark:text-orange-400 mb-2">EDUCATION ({education.length}):</h4>
+                <h4 className="font-bold text-orange-600 mb-2">EDUCATION ({education.length}):</h4>
                 {education.map((edu: any, index: number) => (
-                  <div key={index} className="mb-3 pl-4 border-l-2 border-gray-300 dark:border-gray-600">
+                  <div key={index} className="mb-3 pl-4 border-l-2 border-gray-300">
                     <div className="font-semibold">{index + 1}. {edu.studyType} {edu.area && `in ${edu.area}`}</div>
                     {edu.institution && <div>   Institution: {edu.institution}</div>}
                     {edu.startDate && <div>   Duration: {edu.startDate} - {edu.endDate || 'Present'}</div>}
@@ -308,7 +308,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Languages */}
             {languages && languages.length > 0 && (
               <div>
-                <h4 className="font-bold text-red-600 dark:text-red-400 mb-2">LANGUAGES ({languages.length}):</h4>
+                <h4 className="font-bold text-red-600 mb-2">LANGUAGES ({languages.length}):</h4>
                 {languages.map((lang: any, index: number) => (
                   <div key={index}>
                     • {lang.language || `Language ${index + 1}`} - {lang.fluency || 'Not specified'}
@@ -320,7 +320,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Additional Sections */}
             {resumeData.awards && resumeData.awards.length > 0 && (
               <div>
-                <h4 className="font-bold text-yellow-600 dark:text-yellow-400 mb-2">AWARDS ({resumeData.awards.length}):</h4>
+                <h4 className="font-bold text-yellow-600 mb-2">AWARDS ({resumeData.awards.length}):</h4>
                 {resumeData.awards.map((award: any, index: number) => (
                   <div key={index}>
                     • {award.title} - {award.awarder} ({award.date})
@@ -331,7 +331,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {resumeData.publications && resumeData.publications.length > 0 && (
               <div>
-                <h4 className="font-bold text-indigo-600 dark:text-indigo-400 mb-2">PUBLICATIONS ({resumeData.publications.length}):</h4>
+                <h4 className="font-bold text-indigo-600 mb-2">PUBLICATIONS ({resumeData.publications.length}):</h4>
                 {resumeData.publications.map((pub: any, index: number) => (
                   <div key={index}>
                     • {pub.name} - {pub.publisher} ({pub.releaseDate})
@@ -342,7 +342,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {resumeData.volunteer && resumeData.volunteer.length > 0 && (
               <div>
-                <h4 className="font-bold text-teal-600 dark:text-teal-400 mb-2">VOLUNTEER ({resumeData.volunteer.length}):</h4>
+                <h4 className="font-bold text-teal-600 mb-2">VOLUNTEER ({resumeData.volunteer.length}):</h4>
                 {resumeData.volunteer.map((vol: any, index: number) => (
                   <div key={index}>
                     • {vol.position} at {vol.organization} ({vol.startDate} - {vol.endDate || 'Present'})
@@ -353,7 +353,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {resumeData.interests && resumeData.interests.length > 0 && (
               <div>
-                <h4 className="font-bold text-pink-600 dark:text-pink-400 mb-2">INTERESTS ({resumeData.interests.length}):</h4>
+                <h4 className="font-bold text-pink-600 mb-2">INTERESTS ({resumeData.interests.length}):</h4>
                 {resumeData.interests.map((interest: any, index: number) => (
                   <div key={index}>
                     • {interest.name} {interest.keywords && `(${interest.keywords.join(', ')})`}
@@ -364,7 +364,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {resumeData.projects && resumeData.projects.length > 0 && (
               <div>
-                <h4 className="font-bold text-cyan-600 dark:text-cyan-400 mb-2">PROJECTS ({resumeData.projects.length}):</h4>
+                <h4 className="font-bold text-cyan-600 mb-2">PROJECTS ({resumeData.projects.length}):</h4>
                 {resumeData.projects.map((project: any, index: number) => (
                   <div key={index} className="mb-2">
                     <div className="font-semibold">• {project.name}</div>
@@ -386,7 +386,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
     return (
       <div className="lg:col-span-1">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Resume Preview - Lucide Theme</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Resume Preview - Lucide Theme</h3>
           {showDownloadButton && (
             <Button
               onClick={handleDownloadPDF}
@@ -399,8 +399,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             </Button>
           )}
         </div>
-        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-          <div className={`resume-content ${forceLightMode ? 'bg-white' : 'bg-white dark:bg-gray-900'} rounded shadow-sm min-h-full flex text-sm`}>
+        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 border border-slate-200'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
+          <div className={`resume-content ${forceLightMode ? 'bg-white' : 'bg-white'} rounded shadow-sm min-h-full flex text-sm`}>
             
             {/* Left Sidebar - Blue */}
             <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)', fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
@@ -700,7 +700,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
     return (
       <div className="lg:col-span-1">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Resume Preview - Modern Theme</h3>
+          <h3 className="text-lg font-semibold text-slate-900">Resume Preview - Modern Theme</h3>
           {showDownloadButton && (
             <Button
               onClick={handleDownloadPDF}
@@ -713,7 +713,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             </Button>
           )}
         </div>
-        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
+        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 border border-slate-200'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
           <div className="resume-content bg-white rounded shadow-sm p-6 text-sm space-y-4">
             
             {/* Header Section */}
@@ -792,13 +792,13 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       </span>
                     </div>
                     <div className="text-xs mb-1">
-                      <span className="text-blue-600 dark:text-blue-400 font-medium inline-block mr-2">
+                      <span className="text-blue-600 font-medium inline-block mr-2">
                         {job.name || job.company || "Company"}
                       </span>
                       {job.location && (
                         <>
-                          <span className="text-gray-500 dark:text-gray-400 inline-block mr-1">•</span>
-                          <span className="text-gray-600 dark:text-gray-300 font-normal inline-block">
+                          <span className="text-gray-500 inline-block mr-1">•</span>
+                          <span className="text-gray-600 font-normal inline-block">
                             {job.location}
                           </span>
                         </>
@@ -824,31 +824,31 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Education */}
             {education.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   EDUCATION
                 </h2>
                 {education.map((edu: any, index: number) => (
                   <div key={index} className="mb-2 last:mb-0">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                        <h3 className="font-semibold text-gray-900 text-xs">
                           {edu.studyType} {edu.area && `in ${edu.area}`}
                         </h3>
-                        <p className="text-xs text-blue-600 dark:text-blue-400">
+                        <p className="text-xs text-blue-600">
                           {edu.institution}
                         </p>
                         {edu.gpa && (
-                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                          <p className="text-xs text-gray-600">
                             GPA: {edu.gpa}
                           </p>
                         )}
                       </div>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-gray-500">
                         {formatDate(edu.startDate)}{edu.endDate ? ` - ${formatDate(edu.endDate)}` : ""}
                       </span>
                     </div>
                     {edu.courses && edu.courses.length > 0 && (
-                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                      <p className="text-xs text-gray-700 mt-1">
                         Relevant coursework: {edu.courses.slice(0, 3).join(', ')}
                       </p>
                     )}
@@ -860,13 +860,13 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Skills */}
             {skills.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   SKILLS
                 </h2>
                 <div className="space-y-3">
                   {skills.map((skill: any, index: number) => (
                     <div key={index}>
-                      <h3 className="text-xs font-semibold text-gray-900 dark:text-white mb-1">
+                      <h3 className="text-xs font-semibold text-gray-900 mb-1">
                         {skill.name || `Skill ${index + 1}`}
                       </h3>
                       {skill.keywords && skill.keywords.length > 0 && (
@@ -887,7 +887,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Languages */}
             {languages.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   LANGUAGES
                 </h2>
                 <div className="space-y-1">
@@ -904,17 +904,17 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       <div key={index} className="flex justify-between items-center">
                         <div className="flex items-center gap-2">
                           {getIcon(languageName) && (
-                            <div className="w-6 h-4 bg-gray-200 dark:bg-gray-700 rounded-sm flex items-center justify-center">
-                              <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
+                            <div className="w-6 h-4 bg-gray-200 rounded-sm flex items-center justify-center">
+                              <span className="text-xs font-bold text-gray-700">
                                 {getIcon(languageName)}
                               </span>
                             </div>
                           )}
-                          <span className="text-xs font-semibold text-gray-900 dark:text-white">
+                          <span className="text-xs font-semibold text-gray-900">
                             {languageName}
                           </span>
                         </div>
-                        <span className="text-xs text-gray-600 dark:text-gray-400">
+                        <span className="text-xs text-gray-600">
                           {lang.fluency || "Fluent"}
                         </span>
                       </div>
@@ -927,21 +927,21 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Projects */}
             {resumeData.projects && resumeData.projects.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   PROJECTS
                 </h2>
                 {resumeData.projects.slice(0, 3).map((project: any, index: number) => (
                   <div key={index} className="mb-2 last:mb-0">
-                    <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                    <h3 className="font-semibold text-gray-900 text-xs">
                       {project.name}
                       {project.url && (
-                        <span className="text-blue-600 dark:text-blue-400 font-normal ml-1">
+                        <span className="text-blue-600 font-normal ml-1">
                           ({project.url})
                         </span>
                       )}
                     </h3>
                     {project.description && (
-                      <p className="text-xs text-gray-700 dark:text-gray-300">
+                      <p className="text-xs text-gray-700">
                         {project.description}
                       </p>
                     )}
@@ -962,28 +962,28 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Awards */}
             {resumeData.awards && resumeData.awards.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   AWARDS & ACHIEVEMENTS
                 </h2>
                 {resumeData.awards.map((award: any, index: number) => (
                   <div key={index} className="mb-1 last:mb-0">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                        <h3 className="font-semibold text-gray-900 text-xs">
                           {award.title}
                         </h3>
-                        <p className="text-xs text-blue-600 dark:text-blue-400">
+                        <p className="text-xs text-blue-600">
                           {award.awarder}
                         </p>
                       </div>
                       {award.date && (
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-gray-500">
                           {formatDate(award.date)}
                         </span>
                       )}
                     </div>
                     {award.summary && (
-                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                      <p className="text-xs text-gray-700 mt-1">
                         {award.summary}
                       </p>
                     )}
@@ -995,26 +995,26 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Volunteer Experience */}
             {resumeData.volunteer && resumeData.volunteer.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   VOLUNTEER EXPERIENCE
                 </h2>
                 {resumeData.volunteer.map((vol: any, index: number) => (
                   <div key={index} className="mb-2 last:mb-0">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                        <h3 className="font-semibold text-gray-900 text-xs">
                           {vol.position}
                         </h3>
-                        <p className="text-xs text-blue-600 dark:text-blue-400">
+                        <p className="text-xs text-blue-600">
                           {vol.organization}
                         </p>
                       </div>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                      <span className="text-xs text-gray-500">
                         {formatDate(vol.startDate)}{vol.endDate ? ` - ${formatDate(vol.endDate)}` : " - Present"}
                       </span>
                     </div>
                     {vol.summary && (
-                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                      <p className="text-xs text-gray-700 mt-1">
                         {vol.summary}
                       </p>
                     )}
@@ -1026,28 +1026,28 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Publications */}
             {resumeData.publications && resumeData.publications.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   PUBLICATIONS
                 </h2>
                 {resumeData.publications.map((pub: any, index: number) => (
                   <div key={index} className="mb-1 last:mb-0">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-xs">
+                        <h3 className="font-semibold text-gray-900 text-xs">
                           {pub.name}
                         </h3>
-                        <p className="text-xs text-blue-600 dark:text-blue-400">
+                        <p className="text-xs text-blue-600">
                           {pub.publisher}
                         </p>
                       </div>
                       {pub.releaseDate && (
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                        <span className="text-xs text-gray-500">
                           {formatDate(pub.releaseDate)}
                         </span>
                       )}
                     </div>
                     {pub.summary && (
-                      <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
+                      <p className="text-xs text-gray-700 mt-1">
                         {pub.summary}
                       </p>
                     )}
@@ -1059,7 +1059,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Interests */}
             {resumeData.interests && resumeData.interests.length > 0 && (
               <div>
-                <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   INTERESTS
                 </h2>
                 <div className="flex flex-wrap gap-1">
@@ -1081,9 +1081,9 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
   // Default Theme Preview (for other themes)
   return (
     <div className="lg:col-span-1">
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">Resume Preview - {theme.charAt(0).toUpperCase() + theme.slice(1)} Theme</h3>
-      <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 dark:bg-gray-800 border border-slate-200 dark:border-gray-600'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-        <div className="bg-white dark:bg-gray-900 rounded shadow-sm p-6 text-sm">
+      <h3 className="text-lg font-semibold text-slate-900 mb-4">Resume Preview - {theme.charAt(0).toUpperCase() + theme.slice(1)} Theme</h3>
+      <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 border border-slate-200'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
+        <div className="bg-white rounded shadow-sm p-6 text-sm">
           {/* Header */}
           <div className="text-center mb-6">
             <h1 className="text-2xl font-bold text-slate-900 mb-1">
