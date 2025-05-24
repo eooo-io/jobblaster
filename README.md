@@ -45,62 +45,64 @@
 
 ## 📋 Overview
 
-**JobBlaster** is an AI-powered job application platform that revolutionizes the way professionals manage their resumes and discover career opportunities. Built with cutting-edge technology and intelligent automation, JobBlaster streamlines the entire job search process from resume creation to application tracking.
+**JobBlaster** is an intelligent job application tracking platform that gamifies the job search experience with AI-powered insights and engaging user interactions. Built with modern web technologies and responsive design, JobBlaster provides a comprehensive solution for managing resumes, tracking applications, and organizing your entire job search workflow.
 
 ### 🎯 Core Purpose
 
 JobBlaster solves the modern job seeker's biggest challenges:
 
-- **Resume Management Complexity**: Maintain multiple resume versions for different job types
-- **Job Discovery Inefficiency**: Find relevant opportunities across multiple platforms  
-- **Application Tracking Chaos**: Keep organized records of all job applications
-- **Skill-Job Matching Difficulty**: Identify how well your skills align with job requirements
-- **Cover Letter Personalization**: Create tailored cover letters for each application
+- **Resume Management Complexity**: Create, edit, and maintain multiple JSON Resume versions with professional themes
+- **Application Tracking Chaos**: Comprehensive job application tracking with notes, status updates, and chronological organization
+- **Mobile-First Experience**: Fully responsive design optimized for desktop, tablet, and mobile devices
+- **Data Organization**: Sortable tables, pagination, and advanced filtering for easy navigation
+- **Professional Workflow**: Streamlined interface with sidebar navigation and intuitive user experience
 
 ### ✨ Key Features
 
-#### 🧠 AI-Powered Intelligence
-- **Smart Job Matching**: Advanced algorithms analyze your resume against job descriptions
-- **Automated Cover Letter Generation**: AI creates personalized cover letters using OpenAI GPT
-- **Skills Gap Analysis**: Identify missing skills and get improvement recommendations
-- **Career Insights**: Data-driven suggestions for career advancement
-
 #### 📄 Advanced Resume Management
-- **JSON Resume Standard**: Industry-standard format for maximum compatibility
-- **Multiple Resume Versions**: Manage different resumes for various job types
+- **JSON Resume Standard**: Industry-standard format for maximum compatibility and portability
+- **Multiple Resume Versions**: Create and manage different resumes for various job types and industries
 - **Professional Themes**: Beautiful, customizable resume templates including:
   - Modern Professional
   - Creative Design
   - Technical Focus
-  - Lucide Picture (with profile photos)
-- **PDF Export**: High-quality PDF generation for easy sharing
-- **Real-time Preview**: See changes instantly as you edit
+  - Lucide Picture (with profile photos and enhanced visual elements)
+- **PDF Export**: High-quality PDF generation with print-optimized layouts
+- **Real-time Preview**: See changes instantly as you edit with live preview functionality
+- **Default Resume Selection**: Set and manage your primary resume for quick access
 
-#### 🔍 Intelligent Job Search
-- **Multi-Platform Integration**: Search across multiple job boards simultaneously
-- **Advanced Filtering**: Filter by location, salary, experience level, and more
-- **Real-time Updates**: Get notified of new opportunities matching your criteria
-- **Job Analytics**: Track application success rates and market trends
-
-#### 📊 Application Tracking System
-- **Complete Application History**: Track every application with detailed status updates
-- **Interview Scheduling**: Manage interview dates and preparation notes
-- **Follow-up Reminders**: Never miss important follow-up opportunities
-- **Success Analytics**: Analyze your job search performance
+#### 📊 Comprehensive Application Tracking
+- **Independent Application Management**: Track job applications separately from resumes and cover letters
+- **Detailed Application Records**: Store job title, company, description, application URLs, and dates
+- **Application Notes System**: Add multiple chronological notes to each application for tracking progress
+- **Status Management**: Track application status with visual indicators and easy updates
+- **Advanced Table Features**:
+  - Sortable columns (Job Title, Company, Applied Date)
+  - Pagination with configurable page sizes
+  - Search and filter functionality
+  - Mobile-optimized horizontal scrolling
 
 #### 🎨 User Experience Excellence
-- **Responsive Design**: Perfect experience on desktop, tablet, and mobile
-- **Dark/Light Theme**: Customizable interface themes
-- **Intuitive Navigation**: Clean, modern interface built with Shadcn/ui
-- **Real-time Collaboration**: Share resumes and get feedback from mentors
+- **Mobile-First Responsive Design**: Optimized experience across all device sizes
+- **Dark/Light Theme Support**: Complete theming with user preference persistence
+- **Intuitive Sidebar Navigation**: Clean, organized navigation with proper routing
+- **Modern UI Components**: Built with Shadcn/ui for consistent, accessible design
+- **Performance Optimized**: Efficient caching and query management for smooth interactions
+
+#### 🛠️ Developer-Friendly Architecture
+- **Type-Safe Development**: Full TypeScript implementation with Zod validation
+- **Database Integration**: PostgreSQL with Drizzle ORM for robust data management
+- **Authentication System**: Secure session-based authentication with admin user support
+- **API Design**: RESTful endpoints with proper error handling and response formatting
+- **Code Quality**: ESLint, Prettier, and comprehensive testing setup
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 20+ 
 - PostgreSQL 15+ (or use Docker)
-- OpenAI API Key (for AI features)
-- Adzuna API Key (for job search)
+- Optional: OpenAI API Key (for future AI features)
+- Optional: Adzuna API Key (for future job search integration)
 
 ### Installation Options
 
@@ -126,9 +128,9 @@ npm install
 
 # Set up environment variables
 cp .env.example .env
-# Edit .env with your API keys and database URL
+# Edit .env with your database URL and admin credentials
 
-# Initialize database
+# Initialize database and admin user
 npm run db:push
 
 # Start development server
@@ -151,22 +153,29 @@ npm start
 # Database
 DATABASE_URL=postgresql://user:password@localhost:5432/jobblaster
 
-# AI Services
-OPENAI_API_KEY=your_openai_api_key_here
-
-# Job Search APIs
-ADZUNA_APP_ID=your_adzuna_app_id
-ADZUNA_API_KEY=your_adzuna_api_key
+# Admin User Setup (Optional - will create default admin user on startup)
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=your_secure_password_here
 
 # Application Settings
 NODE_ENV=production
 PORT=3000
 SESSION_SECRET=your_session_secret_here
+
+# Optional AI Services (for future features)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Optional Job Search APIs (for future integration)
+ADZUNA_APP_ID=your_adzuna_app_id
+ADZUNA_API_KEY=your_adzuna_api_key
 ```
 
-### API Keys Setup
-1. **OpenAI**: Get your API key from [OpenAI Platform](https://platform.openai.com/)
-2. **Adzuna**: Register at [Adzuna Developer Portal](https://developer.adzuna.com/)
+### Admin User Setup
+JobBlaster automatically creates an admin user on first startup if one doesn't exist:
+- Set `ADMIN_USERNAME` and `ADMIN_PASSWORD` in your environment variables
+- The admin user will be created automatically when the server starts
+- If no admin credentials are provided, a default admin user will be created
+- You can log in and change these credentials through the profile settings
 
 ## 📚 Documentation
 
@@ -182,19 +191,47 @@ jobblaster/
 ├── client/                 # React frontend application
 │   ├── src/
 │   │   ├── components/     # Reusable UI components
+│   │   │   ├── sidebar.tsx             # Navigation sidebar
+│   │   │   ├── resume-editor.tsx       # Resume editing interface
+│   │   │   ├── resume-selector.tsx     # Resume management
+│   │   │   └── resume-preview.tsx      # Resume preview rendering
 │   │   ├── pages/          # Application pages
+│   │   │   ├── applications.tsx        # Job application tracking
+│   │   │   ├── cover-letters.tsx       # Cover letter management
+│   │   │   └── profile.tsx            # User profile settings
 │   │   ├── hooks/          # Custom React hooks
-│   │   └── lib/            # Utility functions
+│   │   └── lib/            # Utility functions and configurations
 ├── server/                 # Express.js backend
-│   ├── routes.ts           # API route definitions
-│   ├── storage.ts          # Database operations
+│   ├── routes.ts           # Main API route definitions
+│   ├── resume-routes.ts    # Resume-specific API endpoints
+│   ├── storage.ts          # Database operations and interfaces
 │   ├── auth.ts             # Authentication middleware
-│   └── openai.ts           # AI service integration
+│   ├── application-service.ts  # Application business logic
+│   ├── resume-service.ts   # Resume business logic
+│   └── admin-init.ts       # Admin user initialization
 ├── shared/                 # Shared types and schemas
-│   └── schema.ts           # Database schema definitions
+│   └── schema.ts           # Complete database schema with Drizzle
+├── attached_assets/        # Static assets and uploads
 ├── Docker files            # Multi-architecture containerization
-└── docs/                   # Project documentation
+└── Configuration files     # ESLint, Prettier, TypeScript, etc.
 ```
+
+## 🎯 Current Implementation Status
+
+### ✅ Fully Implemented Features
+- **Complete Resume Management System**: JSON Resume creation, editing, and PDF export
+- **Comprehensive Application Tracking**: Independent job application management with notes
+- **Responsive User Interface**: Mobile-optimized design with dark/light themes
+- **Database Integration**: PostgreSQL with Drizzle ORM and full CRUD operations
+- **Authentication System**: Secure login with admin user auto-creation
+- **Advanced Table Features**: Sorting, pagination, filtering, and search functionality
+- **Professional UI Components**: Built with Shadcn/ui for consistent design
+
+### 🚧 Ready for Future Development
+- **AI Integration Points**: OpenAI service integration prepared for cover letter generation
+- **Job Search API**: Adzuna API integration framework ready for implementation
+- **Advanced Analytics**: Infrastructure in place for application success tracking
+- **External Integrations**: Extensible architecture for additional job board APIs
 
 ## 🤝 Contributing
 
