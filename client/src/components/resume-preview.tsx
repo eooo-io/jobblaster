@@ -849,7 +849,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       {skill.keywords && skill.keywords.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {skill.keywords.slice(0, 6).map((keyword: string, kidx: number) => (
-                            <Badge key={kidx} variant="secondary" className="text-xs px-2 py-0">
+                            <Badge key={kidx} variant="secondary" className="text-xs px-2 py-1 rounded-sm">
                               {keyword}
                             </Badge>
                           ))}
@@ -906,7 +906,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                     {project.keywords && project.keywords.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {project.keywords.slice(0, 4).map((keyword: string, kidx: number) => (
-                          <Badge key={kidx} variant="outline" className="text-xs px-1 py-0">
+                          <Badge key={kidx} variant="outline" className="text-xs px-2 py-1 rounded-sm">
                             {keyword}
                           </Badge>
                         ))}
@@ -1022,7 +1022,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 </h2>
                 <div className="flex flex-wrap gap-1">
                   {resumeData.interests.map((interest: any, index: number) => (
-                    <Badge key={index} variant="secondary" className="text-xs px-2 py-1">
+                    <Badge key={index} variant="secondary" className="text-xs px-2 py-1 rounded-sm">
                       {interest.name}
                     </Badge>
                   ))}
