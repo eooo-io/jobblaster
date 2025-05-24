@@ -3,8 +3,11 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { 
   insertResumeSchema, insertJobPostingSchema, insertMatchScoreSchema, 
-  insertCoverLetterSchema, insertApplicationSchema, insertUserSchema
+  insertCoverLetterSchema, insertApplicationSchema, insertUserSchema,
+  applications
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from "./openai";
 import { setupAuth, hashPassword, verifyPassword, requireAuth, getCurrentUserId } from "./auth";
 import { logApiCall } from "./api-logger";
@@ -652,24 +655,7 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
       }
 
       const applications = await storage.getApplicationsByUserId(userId);
-      
-      // Fetch related data for each application
-      const applicationsWithDetails = await Promise.all(
-        applications.map(async (app) => {
-          const resume = app.resumeId ? await storage.getResume(app.resumeId) : undefined;
-          const jobPosting = app.jobId ? await storage.getJobPosting(app.jobId) : undefined;
-          const coverLetter = app.coverLetterId ? await storage.getCoverLetter(app.coverLetterId) : undefined;
-          
-          return {
-            ...app,
-            resume,
-            jobPosting,
-            coverLetter
-          };
-        })
-      );
-
-      res.json(applicationsWithDetails);
+      res.json(applications);
     } catch (error) {
       console.error("Error fetching applications:", error);
       res.status(500).json({ message: "Failed to fetch applications" });
