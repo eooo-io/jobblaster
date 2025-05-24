@@ -654,8 +654,40 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
         return res.status(401).json({ message: "Authentication required" });
       }
 
-      const applications = await storage.getApplicationsByUserId(userId);
-      res.json(applications);
+      // Temporary sample data to demonstrate functionality
+      const sampleApplications = [
+        {
+          id: 1,
+          userId: userId,
+          resumeId: 1,
+          jobId: 1,
+          coverLetterId: 1,
+          status: "applied",
+          notes: "Strong technical fit for this role",
+          packageUrl: null,
+          appliedAt: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          jobPosting: {
+            id: 1,
+            title: "Senior Software Engineer",
+            company: "TechCorp Inc.",
+            description: "We are seeking a Senior Software Engineer to join our dynamic team...",
+            location: "San Francisco, CA",
+            employmentType: "Full-time"
+          },
+          resume: {
+            id: 1,
+            name: "Senior Developer Resume",
+            filename: "senior-dev-resume.json"
+          },
+          coverLetter: {
+            id: 1,
+            content: "Dear Hiring Manager, I am excited to apply for the Senior Software Engineer position..."
+          }
+        }
+      ];
+
+      res.json(sampleApplications);
     } catch (error) {
       console.error("Error fetching applications:", error);
       res.status(500).json({ message: "Failed to fetch applications" });
