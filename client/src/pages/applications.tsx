@@ -27,6 +27,7 @@ interface ApplicationNotesProps {
   applicationId: number;
   notes: ApplicationNote[] | undefined;
   notesLoading: boolean;
+  notesError: any;
   createNoteMutation: any;
   deleteNoteMutation: any;
   newNote: string;
@@ -37,6 +38,7 @@ function ApplicationNotes({
   applicationId, 
   notes,
   notesLoading,
+  notesError,
   createNoteMutation, 
   deleteNoteMutation, 
   newNote, 
@@ -86,6 +88,10 @@ function ApplicationNotes({
       {/* Notes List */}
       {notesLoading ? (
         <div className="text-center py-4 text-gray-500">Loading notes...</div>
+      ) : notesError ? (
+        <div className="text-center py-4 text-red-500">
+          Failed to load notes. Please try refreshing the page.
+        </div>
       ) : notes && notes.length > 0 ? (
         <div className="space-y-3 max-h-96 overflow-y-auto">
           {notes
@@ -145,9 +151,10 @@ export default function Applications() {
   }) || [];
 
   // Notes queries and mutations
-  const { data: notes, isLoading: notesLoading } = useQuery<ApplicationNote[]>({
+  const { data: notes, isLoading: notesLoading, error: notesError } = useQuery<ApplicationNote[]>({
     queryKey: ["/api/applications", selectedApplicationId, "notes"],
     enabled: !!selectedApplicationId,
+    retry: 1,
   });
 
   const createNoteMutation = useMutation({
@@ -487,6 +494,7 @@ export default function Applications() {
               applicationId={selectedApplicationId}
               notes={notes}
               notesLoading={notesLoading}
+              notesError={notesError}
               createNoteMutation={createNoteMutation}
               deleteNoteMutation={deleteNoteMutation}
               newNote={newNote}
