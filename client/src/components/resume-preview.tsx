@@ -876,17 +876,32 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
                   LANGUAGES
                 </h2>
-                <div className="grid grid-cols-2 gap-2">
-                  {languages.map((lang: any, index: number) => (
-                    <div key={index} className="flex justify-between items-center">
-                      <span className="text-xs font-medium text-gray-900 dark:text-white">
-                        {lang.language || `Language ${index + 1}`}
-                      </span>
-                      <span className="text-xs text-gray-600 dark:text-gray-400">
-                        {lang.fluency || "Fluent"}
-                      </span>
-                    </div>
-                  ))}
+                <div className="space-y-1">
+                  {languages.map((lang: any, index: number) => {
+                    const languageName = lang.language || `Language ${index + 1}`;
+                    const getFlag = (language: string) => {
+                      const lowerLang = language.toLowerCase();
+                      if (lowerLang.includes('english')) return '🇺🇸';
+                      if (lowerLang.includes('german') || lowerLang.includes('deutsch')) return '🇩🇪';
+                      return '';
+                    };
+                    
+                    return (
+                      <div key={index} className="flex justify-between items-center">
+                        <div className="flex items-center gap-1">
+                          {getFlag(languageName) && (
+                            <span className="text-sm">{getFlag(languageName)}</span>
+                          )}
+                          <span className="text-xs font-semibold text-gray-900 dark:text-white">
+                            {languageName}
+                          </span>
+                        </div>
+                        <span className="text-xs text-gray-600 dark:text-gray-400">
+                          {lang.fluency || "Fluent"}
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}
