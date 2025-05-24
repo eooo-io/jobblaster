@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Download, Phone, Mail, MapPin, Globe, Link as LinkIcon } from "lucide-react";
+import { Download, Phone, Mail, MapPin, Globe, Link as LinkIcon, Github, Linkedin, Twitter, BookOpen } from "lucide-react";
 import type { Resume } from "@shared/schema";
 import type { JSONResumeSchema } from "@/lib/types";
 
@@ -772,7 +772,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Skills */}
               {skills.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                  <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                     TECHNICAL SKILLS
                   </h3>
                   <div className="space-y-4 text-xs">
@@ -805,7 +805,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Education */}
               {education.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                  <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                     EDUCATION
                   </h3>
                   <div className="space-y-4 text-xs">
@@ -827,16 +827,28 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Social Profiles */}
               {basics.profiles && basics.profiles.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                  <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                     SOCIAL PROFILES
                   </h3>
                   <div className="space-y-2 text-xs">
-                    {basics.profiles.map((profile: any, index: number) => (
-                      <div key={index} className="flex items-center">
-                        <LinkIcon className="h-3 w-3 mr-2" />
-                        <span>{profile.network}: {profile.username || profile.url}</span>
-                      </div>
-                    ))}
+                    {basics.profiles.map((profile: any, index: number) => {
+                      const getServiceIcon = (network: string) => {
+                        const lowerNetwork = network.toLowerCase();
+                        if (lowerNetwork.includes('linkedin')) return <Linkedin className="h-3 w-3 mr-2" />;
+                        if (lowerNetwork.includes('github')) return <Github className="h-3 w-3 mr-2" />;
+                        if (lowerNetwork.includes('twitter') || lowerNetwork.includes('x')) return <Twitter className="h-3 w-3 mr-2" />;
+                        if (lowerNetwork.includes('medium')) return <BookOpen className="h-3 w-3 mr-2" />;
+                        if (lowerNetwork.includes('website') || lowerNetwork.includes('portfolio')) return <Globe className="h-3 w-3 mr-2" />;
+                        return <LinkIcon className="h-3 w-3 mr-2" />;
+                      };
+                      
+                      return (
+                        <div key={index} className="flex items-center">
+                          {getServiceIcon(profile.network || '')}
+                          <span>{profile.network}: {profile.username || profile.url}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
