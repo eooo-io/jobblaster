@@ -879,18 +879,22 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 <div className="space-y-1">
                   {languages.map((lang: any, index: number) => {
                     const languageName = lang.language || `Language ${index + 1}`;
-                    const getFlag = (language: string) => {
+                    const getIcon = (language: string) => {
                       const lowerLang = language.toLowerCase();
-                      if (lowerLang.includes('english')) return '🇺🇸';
-                      if (lowerLang.includes('german') || lowerLang.includes('deutsch')) return '🇩🇪';
+                      if (lowerLang.includes('english')) return 'EN';
+                      if (lowerLang.includes('german') || lowerLang.includes('deutsch')) return 'DE';
                       return '';
                     };
                     
                     return (
                       <div key={index} className="flex justify-between items-center">
-                        <div className="flex items-center gap-1">
-                          {getFlag(languageName) && (
-                            <span className="text-sm">{getFlag(languageName)}</span>
+                        <div className="flex items-center gap-2">
+                          {getIcon(languageName) && (
+                            <div className="w-6 h-4 bg-gray-200 dark:bg-gray-700 rounded-sm flex items-center justify-center">
+                              <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
+                                {getIcon(languageName)}
+                              </span>
+                            </div>
                           )}
                           <span className="text-xs font-semibold text-gray-900 dark:text-white">
                             {languageName}
