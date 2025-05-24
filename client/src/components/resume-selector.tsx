@@ -28,6 +28,8 @@ interface ResumeSelectorProps {
 export default function ResumeSelector({ selectedResume, onResumeSelect }: ResumeSelectorProps) {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
+  const [editingFilenameId, setEditingFilenameId] = useState<number | null>(null);
+  const [editingFilename, setEditingFilename] = useState("");
   const [resumesOpen, setResumesOpen] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
   const { notification, showNotification, closeNotification } = useNotificationModal();
@@ -58,14 +60,14 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
 
   // Rename resume mutation
   const renameMutation = useMutation({
-    mutationFn: async ({ id, name }: { id: number; name: string }) => {
+    mutationFn: async ({ id, name, filename }: { id: number; name?: string; filename?: string }) => {
       const response = await fetch(`/api/resumes/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, filename }),
       });
       
       if (!response.ok) {
@@ -78,7 +80,8 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       setEditingId(null);
-      showNotification("success", "Resume Updated", "Resume renamed successfully!");
+      setEditingFilenameId(null);
+      showNotification("success", "Resume Updated", "Resume updated successfully!");
     },
     onError: (error: Error) => {
       showNotification("error", "Rename Failed", error.message);
@@ -177,6 +180,23 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   const handleCancel = () => {
     setEditingId(null);
     setEditingName("");
+  };
+
+  // Filename editing handlers
+  const handleEditFilename = (id: number, currentFilename: string) => {
+    setEditingFilenameId(id);
+    setEditingFilename(currentFilename || '');
+  };
+
+  const handleSaveFilename = (id: number) => {
+    if (editingFilename.trim()) {
+      renameMutation.mutate({ id, filename: editingFilename.trim() });
+    }
+  };
+
+  const handleCancelFilename = () => {
+    setEditingFilenameId(null);
+    setEditingFilename("");
   };
 
   const handleDelete = (id: number, resumeName: string) => {
@@ -298,9 +318,54 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                               {resume.name}
                             </span>
                             {resume.filename && (
-                              <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full font-mono">
-                                {resume.filename}
-                              </span>
+                              editingFilenameId === resume.id ? (
+                                <div className="flex items-center gap-1">
+                                  <Input
+                                    value={editingFilename}
+                                    onChange={(e) => setEditingFilename(e.target.value)}
+                                    className="h-6 text-xs font-mono px-2 py-1 min-w-0 w-32"
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') handleSaveFilename(resume.id);
+                                      if (e.key === 'Escape') handleCancelFilename();
+                                    }}
+                                    autoFocus
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-6 w-6 p-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleSaveFilename(resume.id);
+                                    }}
+                                  >
+                                    <Save className="h-3 w-3" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-6 w-6 p-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleCancelFilename();
+                                    }}
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              ) : (
+                                <button
+                                  className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-2 py-1 rounded-full font-mono transition-colors"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEditFilename(resume.id, resume.filename);
+                                  }}
+                                  title="Click to edit filename"
+                                >
+                                  {resume.filename}
+                                </button>
+                              )
                             )}
                             {selectedResume?.id === resume.id && (
                               <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
