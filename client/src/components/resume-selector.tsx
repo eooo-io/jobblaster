@@ -238,7 +238,7 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
         </button>
         
         {resumesOpen && (
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
+          <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-3 overflow-hidden">
           {/* New Resume Button */}
           <Card className="border-dashed border-2 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
             <CardContent className="p-3">
