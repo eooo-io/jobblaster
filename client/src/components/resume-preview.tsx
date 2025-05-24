@@ -840,29 +840,14 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 <h2 className="text-sm font-bold text-blue-600 dark:text-blue-400 border-b border-gray-200 dark:border-gray-700 pb-1 mb-2">
                   SKILLS
                 </h2>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   {skills.map((skill: any, index: number) => (
                     <div key={index}>
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs font-medium text-gray-900 dark:text-white">
-                          {skill.name || `Skill ${index + 1}`}
-                        </span>
-                        {skill.level && (
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            {skill.level}
-                          </span>
-                        )}
-                      </div>
-                      {skill.level && (
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1">
-                          <div 
-                            className="bg-blue-600 h-1 rounded-full" 
-                            style={{ width: `${getSkillPercentage(skill.level)}%` }}
-                          ></div>
-                        </div>
-                      )}
+                      <h3 className="text-xs font-semibold text-gray-900 dark:text-white mb-1">
+                        {skill.name || `Skill ${index + 1}`}
+                      </h3>
                       {skill.keywords && skill.keywords.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-1">
+                        <div className="flex flex-wrap gap-1">
                           {skill.keywords.slice(0, 6).map((keyword: string, kidx: number) => (
                             <Badge key={kidx} variant="secondary" className="text-xs px-2 py-0">
                               {keyword}
