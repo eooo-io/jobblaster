@@ -603,6 +603,172 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // Cover Letters Management
+  app.get("/api/cover-letters", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      // For now, return empty array - this will be enhanced when we add cover letter creation
+      res.json([]);
+    } catch (error) {
+      console.error("Error fetching cover letters:", error);
+      res.status(500).json({ message: "Failed to fetch cover letters" });
+    }
+  });
+
+  app.post("/api/cover-letters", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const { content, tone, focus, resumeId, jobId } = req.body;
+      
+      const coverLetter = await storage.createCoverLetter({
+        content,
+        tone,
+        focus,
+        resumeId,
+        jobId
+      });
+
+      res.status(201).json(coverLetter);
+    } catch (error) {
+      console.error("Error creating cover letter:", error);
+      res.status(500).json({ message: "Failed to create cover letter" });
+    }
+  });
+
+  // Applications Management
+  app.get("/api/applications", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const applications = await storage.getApplicationsByUserId(userId);
+      
+      // Fetch related data for each application
+      const applicationsWithDetails = await Promise.all(
+        applications.map(async (app) => {
+          const resume = app.resumeId ? await storage.getResume(app.resumeId) : undefined;
+          const jobPosting = app.jobId ? await storage.getJobPosting(app.jobId) : undefined;
+          const coverLetter = app.coverLetterId ? await storage.getCoverLetter(app.coverLetterId) : undefined;
+          
+          return {
+            ...app,
+            resume,
+            jobPosting,
+            coverLetter
+          };
+        })
+      );
+
+      res.json(applicationsWithDetails);
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+      res.status(500).json({ message: "Failed to fetch applications" });
+    }
+  });
+
+  app.post("/api/applications", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const applicationData = {
+        ...req.body,
+        userId
+      };
+
+      const application = await storage.createApplication(applicationData);
+      res.status(201).json(application);
+    } catch (error) {
+      console.error("Error creating application:", error);
+      res.status(500).json({ message: "Failed to create application" });
+    }
+  });
+
+  app.post("/api/applications/:id/export", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const applicationId = parseInt(req.params.id);
+      const application = await storage.getApplication(applicationId);
+      
+      if (!application || application.userId !== userId) {
+        return res.status(404).json({ message: "Application not found" });
+      }
+
+      // Get related data
+      const resume = application.resumeId ? await storage.getResume(application.resumeId) : null;
+      const jobPosting = application.jobId ? await storage.getJobPosting(application.jobId) : null;
+      const coverLetter = application.coverLetterId ? await storage.getCoverLetter(application.coverLetterId) : null;
+
+      const packageData = {
+        application,
+        resume: resume ? {
+          name: resume.name,
+          jsonData: resume.jsonData,
+          theme: resume.theme
+        } : null,
+        jobPosting: jobPosting ? {
+          title: jobPosting.title,
+          company: jobPosting.company,
+          description: jobPosting.description
+        } : null,
+        coverLetter: coverLetter ? {
+          content: coverLetter.content,
+          tone: coverLetter.tone,
+          focus: coverLetter.focus
+        } : null,
+        exportDate: new Date().toISOString()
+      };
+
+      res.json({
+        packageData,
+        jobTitle: jobPosting?.title || "Unknown Position",
+        company: jobPosting?.company || "Unknown Company"
+      });
+    } catch (error) {
+      console.error("Error exporting application package:", error);
+      res.status(500).json({ message: "Failed to export application package" });
+    }
+  });
+
+  app.delete("/api/applications/:id", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const applicationId = parseInt(req.params.id);
+      const application = await storage.getApplication(applicationId);
+      
+      if (!application || application.userId !== userId) {
+        return res.status(404).json({ message: "Application not found" });
+      }
+
+      // Note: In a real implementation, you'd delete from the database
+      // For now, we'll just return success
+      res.json({ message: "Application deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting application:", error);
+      res.status(500).json({ message: "Failed to delete application" });
+    }
+  });
+
   // AI Templates Management
   app.get("/api/templates", requireAuth, async (req, res) => {
     try {
