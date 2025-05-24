@@ -616,66 +616,68 @@ export default function Applications() {
           </div>
 
           {/* Table */}
-          <div className="border rounded-lg">
-            <Table>
+          <div className="border rounded-lg overflow-x-auto">
+            <Table className="min-w-full">
               <TableHeader>
                 <TableRow>
                   <TableHead 
-                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 select-none"
+                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 select-none min-w-[200px]"
                     onClick={() => handleSort("jobTitle")}
                   >
                     <div className="flex items-center gap-2">
-                      Job Title
+                      <span className="whitespace-nowrap">Job Title</span>
                       {sortField === "jobTitle" ? (
-                        sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
+                        sortDirection === "asc" ? <ArrowUp className="h-4 w-4 flex-shrink-0" /> : <ArrowDown className="h-4 w-4 flex-shrink-0" />
                       ) : (
-                        <ArrowUpDown className="h-4 w-4 opacity-50" />
+                        <ArrowUpDown className="h-4 w-4 opacity-50 flex-shrink-0" />
                       )}
                     </div>
                   </TableHead>
                   <TableHead 
-                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 select-none"
+                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 select-none min-w-[150px]"
                     onClick={() => handleSort("company")}
                   >
                     <div className="flex items-center gap-2">
-                      Company
+                      <span className="whitespace-nowrap">Company</span>
                       {sortField === "company" ? (
-                        sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
+                        sortDirection === "asc" ? <ArrowUp className="h-4 w-4 flex-shrink-0" /> : <ArrowDown className="h-4 w-4 flex-shrink-0" />
                       ) : (
-                        <ArrowUpDown className="h-4 w-4 opacity-50" />
+                        <ArrowUpDown className="h-4 w-4 opacity-50 flex-shrink-0" />
                       )}
                     </div>
                   </TableHead>
                   <TableHead 
-                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 select-none"
+                    className="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 select-none min-w-[120px]"
                     onClick={() => handleSort("appliedOn")}
                   >
                     <div className="flex items-center gap-2">
-                      Applied Date
+                      <span className="whitespace-nowrap">Applied</span>
                       {sortField === "appliedOn" ? (
-                        sortDirection === "asc" ? <ArrowUp className="h-4 w-4" /> : <ArrowDown className="h-4 w-4" />
+                        sortDirection === "asc" ? <ArrowUp className="h-4 w-4 flex-shrink-0" /> : <ArrowDown className="h-4 w-4 flex-shrink-0" />
                       ) : (
-                        <ArrowUpDown className="h-4 w-4 opacity-50" />
+                        <ArrowUpDown className="h-4 w-4 opacity-50 flex-shrink-0" />
                       )}
                     </div>
                   </TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead className="min-w-[80px]">Status</TableHead>
+                  <TableHead className="text-right min-w-[120px]">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {paginatedApplications.map((application) => (
                   <TableRow key={application.id}>
-                    <TableCell className="font-medium">
-                      {application.jobTitle}
+                    <TableCell className="font-medium max-w-[200px]">
+                      <div className="truncate">{application.jobTitle}</div>
                       {application.shortDescription && (
-                        <div className="text-sm text-gray-500 mt-1">
+                        <div className="text-sm text-gray-500 mt-1 truncate">
                           {application.shortDescription}
                         </div>
                       )}
                     </TableCell>
-                    <TableCell>{application.company}</TableCell>
-                    <TableCell>
+                    <TableCell className="max-w-[150px]">
+                      <div className="truncate">{application.company}</div>
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap">
                       {application.appliedOn 
                         ? new Date(application.appliedOn).toLocaleDateString()
                         : "Not set"
