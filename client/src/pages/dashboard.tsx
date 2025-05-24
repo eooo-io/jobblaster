@@ -207,8 +207,8 @@ export default function Dashboard() {
             </div>
 
             {/* Print Preview Content - Always Light Mode */}
-            <div className="flex-1 overflow-auto bg-gray-100" style={{ padding: '10px' }}>
-              <div className="flex justify-center min-h-full">
+            <div className="flex-1 overflow-auto bg-gray-100" style={{ padding: '5px' }}>
+              <div className="w-full overflow-x-auto">
                 {/* US Legal Paper Size Container with Page Breaks */}
                 <div 
                   className="bg-white shadow-xl transform origin-top scale-50 sm:scale-75 md:scale-90 lg:scale-100"
