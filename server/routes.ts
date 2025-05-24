@@ -12,6 +12,7 @@ import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from 
 import { setupAuth, hashPassword, verifyPassword, requireAuth, getCurrentUserId } from "./auth";
 import { logApiCall } from "./api-logger";
 import { setupResumeRoutes } from "./resume-routes";
+import { applicationService } from "./application-service";
 import multer from "multer";
 import JSZip from "jszip";
 
@@ -648,47 +649,20 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
   // Applications Management
   app.get("/api/applications", requireAuth, async (req, res) => {
-    const userId = getCurrentUserId(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Authentication required" });
-    }
-
-    console.log("Applications API called for user:", userId);
-    
-    // Return your actual application data directly
-    const applications = [
-      {
-        id: 1,
-        userId: 1,
-        resumeId: 20,
-        jobId: 1,
-        coverLetterId: 1,
-        status: "applied",
-        notes: "Applied through company website. Had a great conversation with the recruiter about the React architecture role.",
-        packageUrl: null,
-        appliedAt: "2025-05-21T19:02:44.171Z",
-        createdAt: "2025-05-24T19:02:44.171Z",
-        jobPosting: {
-          id: 1,
-          title: "Senior Software Engineer",
-          company: "TechCorp Inc.",
-          location: "San Francisco, CA",
-          employmentType: "Full-time"
-        },
-        resume: {
-          id: 20,
-          name: "Ezra Ter Linden",
-          filename: "egtl-default.json"
-        },
-        coverLetter: {
-          id: 1,
-          content: "Dear Hiring Manager, I am excited to apply for the Senior Software Engineer position at TechCorp Inc. With my extensive experience in React and full-stack development..."
-        }
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
       }
-    ];
-    
-    console.log("Returning applications:", applications.length);
-    res.json(applications);
+
+      console.log("Applications API called for user:", userId);
+      const applications = await applicationService.getByUserId(userId);
+      console.log("Found applications:", applications.length);
+      res.json(applications);
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+      res.status(500).json({ message: "Failed to fetch applications" });
+    }
   });
 
   app.post("/api/applications", requireAuth, async (req, res) => {
