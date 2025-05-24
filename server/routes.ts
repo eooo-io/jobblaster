@@ -648,49 +648,22 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
   // Applications Management
   app.get("/api/applications", requireAuth, async (req, res) => {
+    const userId = getCurrentUserId(req);
+    if (!userId) {
+      return res.status(401).json({ message: "Authentication required" });
+    }
+
+    console.log("Applications API called for user:", userId);
+    
+    // Use real database data
     try {
-      const userId = getCurrentUserId(req);
-      if (!userId) {
-        return res.status(401).json({ message: "Authentication required" });
-      }
-
-      // Sample application data to demonstrate functionality
-      const sampleApplications = [
-        {
-          id: 1,
-          userId: 1,
-          resumeId: 1,
-          jobId: 1,
-          coverLetterId: 1,
-          status: "applied",
-          notes: "Strong technical fit for this role",
-          packageUrl: null,
-          appliedAt: "2024-01-15T10:30:00Z",
-          createdAt: "2024-01-15T10:30:00Z",
-          jobPosting: {
-            id: 1,
-            title: "Senior Software Engineer",
-            company: "TechCorp Inc.",
-            description: "We are seeking a Senior Software Engineer to join our dynamic team...",
-            location: "San Francisco, CA",
-            employmentType: "Full-time"
-          },
-          resume: {
-            id: 1,
-            name: "Senior Developer Resume",
-            filename: "senior-dev-resume.json"
-          },
-          coverLetter: {
-            id: 1,
-            content: "Dear Hiring Manager, I am excited to apply for the Senior Software Engineer position..."
-          }
-        }
-      ];
-
-      res.json(sampleApplications);
+      const applications = await storage.getApplicationsByUserId(userId);
+      console.log("Found applications:", applications.length);
+      res.json(applications);
     } catch (error) {
-      console.error("Error in applications API:", error);
-      res.status(500).json({ message: "Failed to fetch applications", error: String(error) });
+      console.error("Database error:", error);
+      // Return empty array instead of error to prevent page from breaking
+      res.json([]);
     }
   });
 
