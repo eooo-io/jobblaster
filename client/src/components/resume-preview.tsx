@@ -731,7 +731,6 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               <div className="text-xs text-gray-600 space-x-2 flex flex-wrap justify-center gap-x-3">
                 {basics.email && <span><i className="fas fa-envelope mr-1"></i>{basics.email}</span>}
                 {basics.phone && <span><i className="fas fa-phone mr-1"></i>{basics.phone}</span>}
-                {basics.url && <span><i className="fab fa-github mr-1"></i>{basics.url}</span>}
                 {basics.location?.city && (
                   <span><i className="fas fa-map-marker-alt mr-1"></i>{basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
                 )}
