@@ -8,10 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { insertApplicationSchema } from "@shared/schema";
-import type { Application, InsertApplication } from "@shared/schema";
+import { insertApplicationSchema, insertApplicationNoteSchema } from "@shared/schema";
+import type { Application, InsertApplication, ApplicationNote, InsertApplicationNote } from "@shared/schema";
 import { z } from "zod";
-import { Plus, Edit, Trash2, ExternalLink, Building, Calendar } from "lucide-react";
+import { Plus, Edit, Trash2, ExternalLink, Building, Calendar, FileText, MessageSquare, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -24,11 +24,61 @@ type ApplicationFormData = z.infer<typeof applicationFormSchema>;
 export default function Applications() {
   const [editingApplication, setEditingApplication] = useState<Application | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [expandedNotes, setExpandedNotes] = useState<number | null>(null);
+  const [newNote, setNewNote] = useState("");
+  const [noteType, setNoteType] = useState("general");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const { data: applications, isLoading } = useQuery<Application[]>({
     queryKey: ["/api/applications"],
+  });
+
+  // Notes queries and mutations
+  const useNotesQuery = (applicationId: number) => {
+    return useQuery<ApplicationNote[]>({
+      queryKey: ["/api/applications", applicationId, "notes"],
+      enabled: expandedNotes === applicationId,
+    });
+  };
+
+  const createNoteMutation = useMutation({
+    mutationFn: ({ applicationId, data }: { applicationId: number; data: InsertApplicationNote }) => 
+      apiRequest(`/api/applications/${applicationId}/notes`, "POST", data),
+    onSuccess: (_, { applicationId }) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/applications", applicationId, "notes"] });
+      setNewNote("");
+      toast({
+        title: "Success",
+        description: "Note added successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to add note",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteNoteMutation = useMutation({
+    mutationFn: (noteId: number) => apiRequest(`/api/notes/${noteId}`, "DELETE"),
+    onSuccess: (_, noteId) => {
+      // Invalidate notes for all applications to be safe
+      queryClient.invalidateQueries({ queryKey: ["/api/applications"] });
+      toast({
+        title: "Success", 
+        description: "Note deleted successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to delete note",
+        variant: "destructive",
+      });
+    },
   });
 
   const createMutation = useMutation({
@@ -322,6 +372,14 @@ export default function Applications() {
                     </CardDescription>
                   </div>
                   <div className="flex gap-1">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => setExpandedNotes(expandedNotes === application.id ? null : application.id)}
+                      className="text-blue-600 hover:text-blue-700"
+                    >
+                      <MessageSquare className="h-3 w-3" />
+                    </Button>
                     <Button variant="ghost" size="sm" onClick={() => handleEdit(application)}>
                       <Edit className="h-3 w-3" />
                     </Button>
@@ -360,6 +418,20 @@ export default function Applications() {
                     </a>
                   )}
                 </div>
+                
+                {/* Notes Section */}
+                {expandedNotes === application.id && (
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <ApplicationNotes 
+                      applicationId={application.id}
+                      useNotesQuery={useNotesQuery}
+                      createNoteMutation={createNoteMutation}
+                      deleteNoteMutation={deleteNoteMutation}
+                      newNote={newNote}
+                      setNewNote={setNewNote}
+                    />
+                  </div>
+                )}
               </CardContent>
             </Card>
           ))}

@@ -801,6 +801,71 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
+  // Application Notes Management
+  app.get("/api/applications/:id/notes", requireAuth, async (req, res) => {
+    try {
+      const applicationId = parseInt(req.params.id);
+      const notes = await db.select().from(applicationNotes).where(eq(applicationNotes.applicationId, applicationId));
+      res.json(notes);
+    } catch (error) {
+      console.error("Database error:", error);
+      res.status(500).json({ message: "Failed to fetch notes" });
+    }
+  });
+
+  app.post("/api/applications/:id/notes", requireAuth, async (req, res) => {
+    try {
+      const applicationId = parseInt(req.params.id);
+      const validatedData = insertApplicationNoteSchema.parse({
+        ...req.body,
+        applicationId
+      });
+      
+      const result = await db.insert(applicationNotes).values(validatedData).returning();
+      res.status(201).json(result[0]);
+    } catch (error) {
+      console.error("Database error:", error);
+      res.status(500).json({ message: "Failed to create note" });
+    }
+  });
+
+  app.put("/api/notes/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertApplicationNoteSchema.partial().parse(req.body);
+      
+      const result = await db.update(applicationNotes)
+        .set({ ...validatedData, updatedAt: new Date() })
+        .where(eq(applicationNotes.id, id))
+        .returning();
+      
+      if (result.length === 0) {
+        return res.status(404).json({ message: "Note not found" });
+      }
+      
+      res.json(result[0]);
+    } catch (error) {
+      console.error("Database error:", error);
+      res.status(500).json({ message: "Failed to update note" });
+    }
+  });
+
+  app.delete("/api/notes/:id", requireAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const result = await db.delete(applicationNotes).where(eq(applicationNotes.id, id)).returning();
+      
+      if (result.length === 0) {
+        return res.status(404).json({ message: "Note not found" });
+      }
+      
+      res.json({ message: "Note deleted successfully" });
+    } catch (error) {
+      console.error("Database error:", error);
+      res.status(500).json({ message: "Failed to delete note" });
+    }
+  });
+
   // AI Templates Management
   app.get("/api/templates", requireAuth, async (req, res) => {
     try {
