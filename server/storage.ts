@@ -7,7 +7,7 @@ import {
   type TemplateAssignment, type InsertTemplateAssignment
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -401,28 +401,28 @@ export class DatabaseStorage implements IStorage {
 
   async deleteResume(id: number): Promise<boolean> {
     try {
-      console.log(`Attempting to delete resume with id: ${id}`);
+      console.log(`[STORAGE] Attempting to delete resume with id: ${id}`);
       
       // First check if the resume exists
       const [existingResume] = await db.select().from(resumes).where(eq(resumes.id, id));
       if (!existingResume) {
-        console.log(`Resume with id ${id} not found`);
+        console.log(`[STORAGE] Resume with id ${id} not found`);
         return false;
       }
+      console.log(`[STORAGE] Found resume:`, existingResume.name);
       
-      // Perform the delete
-      const result = await db.delete(resumes).where(eq(resumes.id, id));
-      console.log(`Delete result:`, result);
-      console.log(`Row count:`, result.rowCount);
+      // Use raw SQL as a more reliable approach
+      const result = await db.execute(sql`DELETE FROM resumes WHERE id = ${id}`);
+      console.log(`[STORAGE] Raw SQL delete result:`, result);
       
       // Verify the delete worked
       const [deletedCheck] = await db.select().from(resumes).where(eq(resumes.id, id));
       const actuallyDeleted = !deletedCheck;
-      console.log(`Actually deleted:`, actuallyDeleted);
+      console.log(`[STORAGE] Actually deleted:`, actuallyDeleted);
       
       return actuallyDeleted;
     } catch (error) {
-      console.error(`Error deleting resume ${id}:`, error);
+      console.error(`[STORAGE] Error deleting resume ${id}:`, error);
       return false;
     }
   }
