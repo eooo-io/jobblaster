@@ -351,7 +351,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getResumesByUserId(userId: number): Promise<Resume[]> {
-    const userResumes = await db.select().from(resumes).where(eq(resumes.userId, userId)).orderBy(resumes.id);
+    const userResumes = await db.select().from(resumes).where(eq(resumes.userId, userId));
     return userResumes;
   }
 
