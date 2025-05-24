@@ -216,16 +216,16 @@ export default function ExternalLogs() {
             </div>
           </div>
           {totalLogs > 0 && (
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
               <div className="flex items-center space-x-2">
-                <Typography variant="small" color="gray">
+                <Typography variant="small" color="gray" className="whitespace-nowrap">
                   Show:
                 </Typography>
-                <div className="w-20">
+                <div className="w-16 sm:w-20">
                   <select
                     value={pageSize}
                     onChange={(e) => handlePageSizeChange(e.target.value)}
-                    className="w-full px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-2 sm:px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -235,7 +235,7 @@ export default function ExternalLogs() {
                   </select>
                 </div>
               </div>
-              <Typography variant="small" color="gray">
+              <Typography variant="small" color="gray" className="text-xs sm:text-sm whitespace-nowrap">
                 {startIndex + 1}-{Math.min(endIndex, totalLogs)} of {totalLogs} logs
               </Typography>
             </div>
