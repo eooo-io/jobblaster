@@ -300,7 +300,7 @@ export default function Sidebar() {
         {/* Logo and Brand */}
         <div className="p-6 border-b border-slate-200 dark:border-gray-700">
           <div className="flex items-center justify-center">
-            <div className="w-24 h-24">
+            <div className="w-32 h-32">
               <img 
                 src={appIcon} 
                 alt="JobBlaster" 
