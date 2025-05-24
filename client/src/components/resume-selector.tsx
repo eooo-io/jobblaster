@@ -7,7 +7,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { FileText, Calendar, Palette, Edit2, Save, X, Star, ChevronDown, FolderOpen, Clock, Trash2 } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
-import { useToast } from '@/hooks/use-toast';
+import { NotificationModal, useNotificationModal } from '@/components/notification-modal';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface ResumeSelectorProps {
   selectedResume: any;
@@ -19,7 +30,7 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   const [editingName, setEditingName] = useState("");
   const [resumesOpen, setResumesOpen] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
-  const { toast } = useToast();
+  const { notification, showNotification, closeNotification } = useNotificationModal();
   const queryClient = useQueryClient();
 
   const { data: resumes, isLoading, refetch } = useQuery({
@@ -65,16 +76,10 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       setEditingId(null);
-      toast({
-        title: "Resume renamed successfully!",
-      });
+      showNotification("success", "Resume Updated", "Resume renamed successfully!");
     },
     onError: (error: Error) => {
-      toast({
-        title: "Error renaming resume",
-        description: error.message,
-        variant: "destructive",
-      });
+      showNotification("error", "Rename Failed", error.message);
     },
   });
 
@@ -117,16 +122,10 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       setRefreshKey(prev => prev + 1);
       
-      toast({
-        title: "Resume deleted successfully!",
-      });
+      showNotification("success", "Resume Deleted", "Resume deleted successfully!");
     },
     onError: (error: Error) => {
-      toast({
-        title: "Error deleting resume",
-        description: error.message,
-        variant: "destructive",
-      });
+      showNotification("error", "Delete Failed", error.message);
     },
   });
 
