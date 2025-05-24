@@ -156,14 +156,14 @@ export default function Applications() {
     enabled: !!selectedApplicationId,
     retry: 1,
     queryFn: async () => {
-      const response = await apiRequest(`/api/applications/${selectedApplicationId}/notes`, "GET");
+      const response = await apiRequest("GET", `/api/applications/${selectedApplicationId}/notes`);
       return response.json();
     },
   });
 
   const createNoteMutation = useMutation({
     mutationFn: ({ applicationId, data }: { applicationId: number; data: InsertApplicationNote }) => 
-      apiRequest(`/api/applications/${applicationId}/notes`, "POST", data),
+      apiRequest("POST", `/api/applications/${applicationId}/notes`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/applications/${selectedApplicationId}/notes`] });
       setNewNote("");
@@ -182,7 +182,7 @@ export default function Applications() {
   });
 
   const deleteNoteMutation = useMutation({
-    mutationFn: (noteId: number) => apiRequest(`/api/notes/${noteId}`, "DELETE"),
+    mutationFn: (noteId: number) => apiRequest("DELETE", `/api/notes/${noteId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [`/api/applications/${selectedApplicationId}/notes`] });
       toast({
@@ -200,7 +200,7 @@ export default function Applications() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data: InsertApplication) => apiRequest("/api/applications", "POST", data),
+    mutationFn: (data: InsertApplication) => apiRequest("POST", "/api/applications", data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/applications"] });
       setIsDialogOpen(false);
@@ -220,7 +220,7 @@ export default function Applications() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: InsertApplication }) => 
-      apiRequest(`/api/applications/${id}`, "PUT", data),
+      apiRequest("PUT", `/api/applications/${id}`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/applications"] });
       setIsDialogOpen(false);
