@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+
+# JobBlaster Pre-commit Hook
+# Runs code quality checks before allowing commits
+
+echo "🔍 Running pre-commit checks..."
+
+# Run lint-staged for automatic fixing and checking
+npx lint-staged
+
+# If lint-staged passes, run additional checks
+if [ $? -eq 0 ]; then
+    echo "✅ Lint-staged checks passed"
+    
+    # Run TypeScript type checking
+    echo "🔎 Checking TypeScript types..."
+    npx tsc --noEmit
+    
+    if [ $? -eq 0 ]; then
+        echo "✅ TypeScript checks passed"
+        echo "🎉 All pre-commit checks passed! Ready to commit."
+    else
+        echo "❌ TypeScript check failed"
+        echo "Please fix type errors before committing"
+        exit 1
+    fi
+else
+    echo "❌ Lint-staged checks failed"
+    echo "Please fix linting/formatting issues before committing"
+    exit 1
+fi
