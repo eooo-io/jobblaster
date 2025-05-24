@@ -394,11 +394,18 @@ export class DatabaseStorage implements IStorage {
 
   async deleteResume(id: number): Promise<boolean> {
     try {
-      // Use raw SQL to ensure the delete actually happens
-      const result = await db.execute(sql`DELETE FROM resumes WHERE id = ${id} RETURNING id`);
+      console.log(`Attempting to delete resume with ID: ${id}`);
       
-      // Return true if we got a result back (meaning something was deleted)
-      return result.rows && result.rows.length > 0;
+      // Use the standard Drizzle delete operation with proper verification
+      const result = await db.delete(resumes).where(eq(resumes.id, id)).returning({ id: resumes.id });
+      
+      console.log(`Delete result:`, result);
+      
+      // Return true if we deleted exactly one record
+      const success = result.length === 1;
+      console.log(`Delete success: ${success}`);
+      
+      return success;
     } catch (error) {
       console.error(`Error deleting resume ${id}:`, error);
       return false;
