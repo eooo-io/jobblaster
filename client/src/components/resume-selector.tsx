@@ -18,11 +18,14 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
   const [resumesOpen, setResumesOpen] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: resumes, isLoading } = useQuery({
-    queryKey: ['/api/resumes'],
+  const { data: resumes, isLoading, refetch } = useQuery({
+    queryKey: ['/api/resumes', refreshKey],
+    staleTime: 0, // Always consider data stale
+    gcTime: 0, // Don't cache (gcTime is the v5 equivalent of cacheTime)
   });
 
   // Rename resume mutation
@@ -90,14 +93,8 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       }
     },
     onSuccess: (data, variables) => {
-      // Update the cache data directly by removing the deleted resume
-      queryClient.setQueryData(['/api/resumes'], (oldData: any[]) => {
-        if (!oldData) return [];
-        return oldData.filter(resume => resume.id !== variables);
-      });
-      
-      // Also invalidate to force a fresh fetch
-      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      // Force a complete refresh by changing the query key
+      setRefreshKey(prev => prev + 1);
       
       toast({
         title: "Resume deleted successfully!",
