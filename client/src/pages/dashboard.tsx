@@ -207,15 +207,16 @@ export default function Dashboard() {
             </div>
 
             {/* Print Preview Content - Always Light Mode */}
-            <div className="flex-1 overflow-auto bg-gray-100" style={{ padding: '20px 0' }}>
-              <div className="flex justify-center">
+            <div className="flex-1 overflow-auto bg-gray-100" style={{ padding: '10px' }}>
+              <div className="flex justify-center min-h-full">
                 {/* US Legal Paper Size Container with Page Breaks */}
                 <div 
-                  className="bg-white shadow-xl"
+                  className="bg-white shadow-xl transform origin-top scale-50 sm:scale-75 md:scale-90 lg:scale-100"
                   style={{
                     width: '8.5in',
                     minHeight: '14in',
-                    margin: '0 auto 20px',
+                    margin: '0 auto',
+                    marginBottom: '40px', // Extra space for mobile scaling
                     padding: '0.5in',
                     fontSize: '10pt',
                     lineHeight: '1.3',
