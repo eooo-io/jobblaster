@@ -26,8 +26,9 @@ export const users = pgTable("users", {
   // Future connector configurations
   indeedApiKey: text("indeed_api_key"),
   glassdoorApiKey: text("glassdoor_api_key"), 
-  greenhouseApiKey: text("greenhouse_api_key"),
-  ziprecruiterApiKey: text("ziprecruiter_api_key"),
+  linkedinApiKey: text("linkedin_api_key"),
+  // User roles and permissions
+  isAdmin: boolean("is_admin").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
 

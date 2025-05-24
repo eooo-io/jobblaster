@@ -1,8 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { storage } from "./storage";
-import { hashPassword } from "./auth";
+import { initializeAdminUser, displayAdminInfo } from "./admin-init";
 
 const app = express();
 app.use(express.json());
@@ -38,31 +37,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// Bootstrap function to ensure admin user exists
-async function bootstrapApplication() {
-  try {
-    // Check if admin user already exists
-    const existingAdmin = await storage.getUserByUsername("admin");
-    
-    if (!existingAdmin) {
-      // Create admin user with default password
-      const hashedPassword = await hashPassword("admin123");
-      await storage.createUser({
-        username: "admin",
-        password: hashedPassword
-      });
-      log("✓ Admin user created: username=admin, password=admin123");
-    } else {
-      log("✓ Admin user already exists");
-    }
-  } catch (error) {
-    log("Error during bootstrap:", error);
-  }
-}
-
 (async () => {
-  // Bootstrap the application
-  await bootstrapApplication();
+  // Initialize admin user from environment variables
+  await initializeAdminUser();
+  
+  // Display admin information for easy login
+  displayAdminInfo();
   
   const server = await registerRoutes(app);
 
