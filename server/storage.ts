@@ -471,8 +471,14 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getApplicationsByUserId(userId: number): Promise<Application[]> {
-    const result = await db.execute(sql`SELECT * FROM applications WHERE user_id = ${userId}`);
-    return result.rows as Application[];
+    try {
+      const result = await db.execute(sql`SELECT * FROM applications WHERE user_id = ${userId}`);
+      return result.rows as Application[];
+    } catch (error) {
+      console.error("Database error in getApplicationsByUserId:", error);
+      // Fallback to empty array for now
+      return [];
+    }
   }
 
   async createApplication(insertApplication: InsertApplication): Promise<Application> {
