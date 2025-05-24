@@ -126,3 +126,24 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
+
+/* Dark mode button overrides for Material Tailwind */
+.dark .template-edit-btn {
+  border-color: rgb(107 114 128) !important;
+  color: rgb(229 231 235) !important;
+}
+
+.dark .template-edit-btn:hover {
+  background-color: rgb(75 85 99) !important;
+  border-color: rgb(156 163 175) !important;
+}
+
+.dark .template-delete-btn {
+  border-color: rgb(239 68 68) !important;
+  color: rgb(248 113 113) !important;
+}
+
+.dark .template-delete-btn:hover {
+  background-color: rgba(127 29 29 / 0.3) !important;
+  border-color: rgb(239 68 68) !important;
+}
