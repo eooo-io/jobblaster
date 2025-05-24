@@ -386,11 +386,11 @@ export default function ExternalLogs() {
 
         {/* Pagination Controls */}
         {totalPages > 1 && (
-          <div className="mt-8 flex items-center justify-between">
-            <Typography variant="small" className="text-gray-600 dark:text-gray-400">
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <Typography variant="small" className="text-gray-600 dark:text-gray-400 text-center sm:text-left">
               Showing {startIndex + 1}-{Math.min(endIndex, totalLogs)} of {totalLogs} logs
             </Typography>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2 overflow-x-auto">
               {renderPaginationButtons()}
             </div>
           </div>
