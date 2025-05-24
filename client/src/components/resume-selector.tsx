@@ -69,19 +69,33 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       });
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Network error' }));
-        throw new Error(errorData.message || `HTTP ${response.status}`);
+        let errorMessage = `HTTP ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          // If JSON parsing fails, use the status text or default message
+          errorMessage = response.statusText || errorMessage;
+        }
+        throw new Error(errorMessage);
       }
       
-      return response.json();
+      // Check if response has content before parsing JSON
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        return response.json();
+      } else {
+        // If not JSON, just return success
+        return { success: true };
+      }
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       toast({
         title: "Resume deleted successfully!",
       });
       // If the deleted resume was selected, clear the selection
-      if (selectedResume && deleteMutation.variables === selectedResume.id) {
+      if (selectedResume && variables === selectedResume.id) {
         onResumeSelect(null);
       }
     },

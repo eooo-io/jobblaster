@@ -376,7 +376,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Resume not found" });
       }
       
-      res.json({ message: "Resume deleted successfully" });
+      res.status(200).json({ message: "Resume deleted successfully" });
     } catch (error) {
       console.error("Resume delete error:", error);
       res.status(500).json({ message: "Failed to delete resume" });
