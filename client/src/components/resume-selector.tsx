@@ -297,6 +297,11 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                             <span className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate">
                               {resume.name}
                             </span>
+                            {resume.filename && (
+                              <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded-full font-mono">
+                                {resume.filename}
+                              </span>
+                            )}
                             {selectedResume?.id === resume.id && (
                               <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
                                 Selected
@@ -304,12 +309,6 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                             )}
                           </div>
                           <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mt-1">
-                            {resume.filename && (
-                              <div className="flex items-center gap-1">
-                                <FolderOpen className="h-3 w-3" />
-                                <span className="truncate max-w-32" title={resume.filename}>{resume.filename}</span>
-                              </div>
-                            )}
                             <div className="flex items-center gap-1">
                               <Palette className="h-3 w-3" />
                               <span className="capitalize">{resume.theme}</span>
