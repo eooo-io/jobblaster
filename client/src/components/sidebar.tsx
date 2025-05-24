@@ -129,7 +129,37 @@ export default function Sidebar() {
               </div>
             </Link>
             
-            {navigation.slice(1).map((item) => (
+            <Link href="/cover-letters">
+              <div 
+                className={cn(
+                  "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
+                  location === "/cover-letters"
+                    ? "bg-jobblaster-teal/10 text-jobblaster-teal dark:bg-jobblaster-teal/20 dark:text-jobblaster-teal"
+                    : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+                )}
+                onClick={closeMobileMenu}
+              >
+                <Mail className="w-5 h-5" />
+                <span>Cover Letters</span>
+              </div>
+            </Link>
+
+            <Link href="/application-history">
+              <div 
+                className={cn(
+                  "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
+                  location === "/application-history"
+                    ? "bg-jobblaster-teal/10 text-jobblaster-teal dark:bg-jobblaster-teal/20 dark:text-jobblaster-teal"
+                    : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+                )}
+                onClick={closeMobileMenu}
+              >
+                <History className="w-5 h-5" />
+                <span>Application History</span>
+              </div>
+            </Link>
+
+            {navigation.slice(1, -2).map((item) => (
               <div
                 key={item.name}
                 className="flex items-center space-x-3 px-3 py-3 rounded-lg font-medium text-slate-400 dark:text-gray-500 cursor-not-allowed"
@@ -418,3 +448,5 @@ export default function Sidebar() {
     </>
   );
 }
+
+export { Sidebar };
