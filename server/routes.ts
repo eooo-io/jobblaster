@@ -697,15 +697,27 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
-  // Applications Management - Clean implementation
+  // Applications Management - Fixed database connection
   app.get("/api/applications", requireAuth, async (req, res) => {
     try {
-      console.log("Fetching applications via route...");
-      const applications = await applicationService.getAll();
-      console.log("Applications fetched successfully:", applications.length);
-      res.json(applications);
+      const result = await pool.query(`
+        SELECT 
+          id,
+          job_title as "jobTitle",
+          short_description as "shortDescription", 
+          full_text as "fullText",
+          company,
+          listing_url as "listingUrl",
+          applied_on as "appliedOn",
+          created_at as "createdAt",
+          updated_at as "updatedAt"
+        FROM applications 
+        ORDER BY created_at DESC
+      `);
+      
+      res.json(result.rows);
     } catch (error) {
-      console.error("Route error fetching applications:", error);
+      console.error("Error fetching applications:", error);
       res.status(500).json({ message: "Failed to fetch applications" });
     }
   });

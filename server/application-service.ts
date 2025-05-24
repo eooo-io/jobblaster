@@ -1,7 +1,5 @@
-import { db, pool } from "./db";
-import { applications } from "../shared/schema";
+import { pool } from "./db";
 import type { InsertApplication, Application } from "../shared/schema";
-import { eq } from "drizzle-orm";
 
 export class ApplicationService {
   async getAll(): Promise<Application[]> {
