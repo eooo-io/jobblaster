@@ -90,6 +90,8 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       }
     },
     onSuccess: (data, variables) => {
+      // Remove the cache completely and refetch
+      queryClient.removeQueries({ queryKey: ['/api/resumes'] });
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       toast({
         title: "Resume deleted successfully!",
