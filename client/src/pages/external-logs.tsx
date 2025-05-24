@@ -264,35 +264,36 @@ export default function ExternalLogs() {
               return (
                 <Card key={service} className="bg-white dark:bg-gray-800 shadow-sm">
                   <CardHeader 
-                    className="bg-gray-50 dark:bg-gray-700 py-4 px-6 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                    className="bg-gray-50 dark:bg-gray-700 py-3 px-4 sm:py-4 sm:px-6 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
                     onClick={() => toggleServiceExpansion(service)}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className="flex items-center space-x-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <div className="flex items-center space-x-1.5 sm:space-x-2">
                           {isServiceExpanded ? 
-                            <ChevronDown className="h-5 w-5 text-gray-500" /> : 
-                            <ChevronRight className="h-5 w-5 text-gray-500" />
+                            <ChevronDown className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" /> : 
+                            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-500" />
                           }
-                          <span className="text-2xl">{getServiceIcon(service)}</span>
+                          <span className="text-xl sm:text-2xl">{getServiceIcon(service)}</span>
                         </div>
-                        <div>
-                          <Typography variant="h6" className="text-gray-900 dark:text-white">
+                        <div className="min-w-0 flex-1">
+                          <Typography variant="h6" className="text-gray-900 dark:text-white text-sm sm:text-base">
                             {service} API
                           </Typography>
-                          <Typography variant="small" className="text-gray-600 dark:text-gray-400">
-                            {stats.total} total calls • {stats.successful} successful • {stats.failed} failed
+                          <Typography variant="small" className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
+                            <span className="sm:hidden">{stats.total} calls • {stats.successful} ok • {stats.failed} err</span>
+                            <span className="hidden sm:inline">{stats.total} total calls • {stats.successful} successful • {stats.failed} failed</span>
                           </Typography>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center justify-between sm:justify-end space-x-2">
                         <Chip
                           value={stats.failed === 0 ? "Healthy" : "Issues"}
                           color={stats.failed === 0 ? "green" : "orange"}
                           size="sm"
                         />
-                        <div className="text-sm text-gray-500">
-                          {stats.successful}/{stats.total} success rate
+                        <div className="text-xs sm:text-sm text-gray-500 whitespace-nowrap">
+                          {stats.successful}/{stats.total} success
                         </div>
                       </div>
                     </div>
