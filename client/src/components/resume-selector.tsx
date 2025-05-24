@@ -261,8 +261,9 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
             </CardContent>
           </Card>
 
-            {/* Resume List - Clean Rows */}
-            <div className="space-y-2">
+            {/* Resume List - Mobile Scrollable, Desktop Paginated */}
+            <div className="lg:hidden max-h-80 overflow-y-auto space-y-2 pr-2">
+              {/* Mobile: Scrollable List */}
               {resumes?.map((resume: any) => (
                 <div 
                   key={resume.id}
@@ -473,6 +474,239 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                   </div>
                 </div>
               ))}
+            </div>
+            
+            {/* Desktop: Paginated List */}
+            <div className="hidden lg:block space-y-2">
+              {resumes?.slice(0, 5).map((resume: any) => (
+                <div 
+                  key={resume.id}
+                  className={`group flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all hover:shadow-sm ${
+                    selectedResume?.id === resume.id 
+                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-sm' 
+                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                  }`}
+                  onClick={() => onResumeSelect(resume)}
+                >
+                  {/* Left side - Resume info */}
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    {/* Icon and star */}
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      {resume.isDefault && (
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      )}
+                      <FileText className="h-4 w-4 text-gray-400" />
+                    </div>
+
+                    {/* Resume details */}
+                    <div className="flex-1 min-w-0">
+                      {editingId === resume.id ? (
+                        <div className="flex items-center gap-2">
+                          <Input
+                            value={editingName}
+                            onChange={(e) => setEditingName(e.target.value)}
+                            className="h-8 text-sm font-medium"
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleSave(resume.id);
+                              if (e.key === 'Escape') handleCancel();
+                            }}
+                            autoFocus
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 w-8 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSave(resume.id);
+                            }}
+                          >
+                            <Save className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 w-8 p-0"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCancel();
+                            }}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate">
+                              {resume.name}
+                            </span>
+                            {resume.filename && (
+                              editingFilenameId === resume.id ? (
+                                <div className="flex items-center gap-1">
+                                  <Input
+                                    value={editingFilename}
+                                    onChange={(e) => setEditingFilename(e.target.value)}
+                                    className="h-6 text-xs font-mono px-2 py-1 min-w-0 w-32"
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') handleSaveFilename(resume.id);
+                                      if (e.key === 'Escape') handleCancelFilename();
+                                    }}
+                                    autoFocus
+                                    onClick={(e) => e.stopPropagation()}
+                                  />
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-6 w-6 p-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleSaveFilename(resume.id);
+                                    }}
+                                  >
+                                    <Save className="h-3 w-3" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="h-6 w-6 p-0"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleCancelFilename();
+                                    }}
+                                  >
+                                    <X className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              ) : (
+                                <button
+                                  className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 px-2 py-1 rounded-full font-mono transition-colors"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEditFilename(resume.id, resume.filename);
+                                  }}
+                                  title="Click to edit filename"
+                                >
+                                  {resume.filename}
+                                </button>
+                              )
+                            )}
+                            {selectedResume?.id === resume.id && (
+                              <span className="text-xs bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                                Selected
+                              </span>
+                            )}
+                          </div>
+                          <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            <div className="flex items-center gap-1">
+                              <Palette className="h-3 w-3" />
+                              <span className="capitalize">{resume.theme}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              <span>
+                                {new Date(resume.createdAt).toLocaleTimeString('en-US', {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                  hour12: false
+                                })}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              <span>{new Date(resume.createdAt).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right side - Action buttons */}
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setDefaultMutation.mutate(resume.id);
+                      }}
+                      disabled={setDefaultMutation.isPending}
+                      title={resume.isDefault ? "Default resume" : "Set as default"}
+                    >
+                      <Star className={`h-3 w-3 ${resume.isDefault ? 'fill-yellow-400 text-yellow-400' : 'text-gray-400'}`} />
+                    </Button>
+                    
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(resume.id, resume.name);
+                      }}
+                      title="Rename resume"
+                    >
+                      <Edit2 className="h-3 w-3" />
+                    </Button>
+
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 p-0 hover:text-red-500"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          disabled={deleteMutation.isPending}
+                          title="Delete resume"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Resume</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete "{resume.name}"? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(resume.id, resume.name)}
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </div>
+              ))}
+              
+              {/* Pagination for Desktop */}
+              {resumes && resumes.length > 5 && (
+                <div className="flex justify-center pt-4">
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+                      <span className="sr-only">Previous</span>
+                      <ChevronDown className="h-4 w-4 rotate-90" />
+                    </Button>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      1 of {Math.ceil(resumes.length / 5)}
+                    </span>
+                    <Button variant="outline" size="sm" className="h-8 w-8 p-0">
+                      <span className="sr-only">Next</span>
+                      <ChevronDown className="h-4 w-4 -rotate-90" />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
