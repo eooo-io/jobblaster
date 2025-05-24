@@ -38,6 +38,7 @@ export const resumes = pgTable("resumes", {
   jsonData: jsonb("json_data").notNull(),
   theme: text("theme").notNull().default("modern"),
   isDefault: boolean("is_default").default(false),
+  filename: text("filename"), // Original filename when uploaded
   createdAt: timestamp("created_at").defaultNow(),
 });
 

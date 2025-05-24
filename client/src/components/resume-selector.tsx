@@ -304,6 +304,12 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                             )}
                           </div>
                           <div className="flex items-center gap-4 text-xs text-gray-500 dark:text-gray-400 mt-1">
+                            {resume.filename && (
+                              <div className="flex items-center gap-1">
+                                <FolderOpen className="h-3 w-3" />
+                                <span className="truncate max-w-32" title={resume.filename}>{resume.filename}</span>
+                              </div>
+                            )}
                             <div className="flex items-center gap-1">
                               <Palette className="h-3 w-3" />
                               <span className="capitalize">{resume.theme}</span>
