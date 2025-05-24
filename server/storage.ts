@@ -484,7 +484,7 @@ export class DatabaseStorage implements IStorage {
           coverLetterId: applications.coverLetterId,
           status: applications.status,
           notes: applications.notes,
-          packageUrl: applications.packageUrl,
+
           appliedAt: applications.appliedAt,
           createdAt: applications.createdAt,
           // Job posting details
@@ -514,7 +514,7 @@ export class DatabaseStorage implements IStorage {
         coverLetterId: app.coverLetterId,
         status: app.status,
         notes: app.notes,
-        packageUrl: app.packageUrl,
+
         appliedAt: app.appliedAt,
         createdAt: app.createdAt,
         jobPosting: app.jobTitle ? {

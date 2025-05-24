@@ -31,7 +31,7 @@ interface Application {
   coverLetterId: number;
   status: string;
   notes: string;
-  packageUrl: string | null;
+
   appliedAt: string;
   createdAt: string;
   jobPosting?: JobPosting;
@@ -171,17 +171,7 @@ export default function ApplicationHistory() {
                   </div>
                 )}
 
-                {application.packageUrl && (
-                  <div className="flex items-center gap-2 p-3 bg-green-50 rounded-lg">
-                    <FileText className="h-4 w-4 text-green-600" />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium text-gray-900">Application Package</p>
-                      <Button variant="link" className="p-0 h-auto text-xs text-green-600">
-                        Download Package
-                      </Button>
-                    </div>
-                  </div>
-                )}
+
               </div>
 
               {application.notes && (
