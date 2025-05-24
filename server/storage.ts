@@ -508,13 +508,12 @@ export class DatabaseStorage implements IStorage {
 
       const formattedApplications = result.map(app => ({
         id: app.id,
-        userId: app.userId,
-        resumeId: app.resumeId,
-        jobId: app.jobId,
-        coverLetterId: app.coverLetterId,
-        status: app.status,
-        notes: app.notes,
-
+        userId: app.userId || 0,
+        resumeId: app.resumeId || 0,
+        jobId: app.jobId || 0,
+        coverLetterId: app.coverLetterId || 0,
+        status: app.status || 'draft',
+        notes: app.notes || '',
         appliedAt: app.appliedAt,
         createdAt: app.createdAt,
         jobPosting: app.jobTitle ? {
@@ -536,7 +535,7 @@ export class DatabaseStorage implements IStorage {
       }));
 
       console.log("Formatted applications:", formattedApplications);
-      return formattedApplications as Application[];
+      return formattedApplications;
     } catch (error) {
       console.error("Database error in getApplicationsByUserId:", error);
       console.error("Error details:", error instanceof Error ? error.message : 'Unknown error');
