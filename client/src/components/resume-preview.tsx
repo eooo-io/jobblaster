@@ -713,7 +713,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             </Button>
           )}
         </div>
-        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 border border-slate-200'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 overflow-auto" style={{ height: '70vh' }}>
           <div className="resume-content bg-white rounded shadow-sm p-6 text-sm space-y-4">
             
             {/* Header Section */}
