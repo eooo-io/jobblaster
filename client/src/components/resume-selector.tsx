@@ -24,8 +24,23 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
 
   const { data: resumes, isLoading, refetch } = useQuery({
     queryKey: ['/api/resumes', refreshKey],
-    staleTime: 0, // Always consider data stale
-    gcTime: 0, // Don't cache (gcTime is the v5 equivalent of cacheTime)
+    queryFn: async () => {
+      const response = await fetch(`/api/resumes?t=${Date.now()}`, {
+        credentials: 'include',
+        cache: 'no-cache',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch resumes');
+      }
+      return response.json();
+    },
+    staleTime: 0,
+    gcTime: 0,
   });
 
   // Rename resume mutation
@@ -93,17 +108,19 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       }
     },
     onSuccess: (data, variables) => {
-      // Force a complete refresh by changing the query key
-      setRefreshKey(prev => prev + 1);
+      // Clear selection if the deleted resume was selected
+      if (selectedResume && variables === selectedResume.id) {
+        onResumeSelect(null);
+      }
       
       toast({
         title: "Resume deleted successfully!",
       });
       
-      // If the deleted resume was selected, clear the selection
-      if (selectedResume && variables === selectedResume.id) {
-        onResumeSelect(null);
-      }
+      // Force a page refresh to ensure data is current
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     },
     onError: (error: Error) => {
       toast({
