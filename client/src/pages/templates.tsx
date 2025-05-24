@@ -394,20 +394,20 @@ export default function Templates() {
                   {templates.filter(t => t.provider === 'openai').map((template) => (
                     <Card key={template.id} className="bg-white dark:bg-gray-800 shadow-sm">
                       <CardBody className="p-6">
-                        <div className="flex items-start justify-between">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                           <div className="flex-1">
-                            <div className="flex items-center space-x-3 mb-2">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mb-2 gap-2 sm:gap-0">
                               <Typography variant="h6" className="text-gray-900 dark:text-white">
                                 {template.name}
                               </Typography>
-                              <span className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-xs font-medium">
+                              <span className="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded text-xs font-medium w-fit">
                                 OpenAI
                               </span>
                             </div>
                             <Typography variant="small" className="text-gray-600 dark:text-gray-300 mb-4">
                               {template.description}
                             </Typography>
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 text-sm">
                               <div>
                                 <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
                                   Temperature: {template.temperature}
@@ -425,25 +425,25 @@ export default function Templates() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-2 ml-4">
+                          <div className="flex flex-row lg:flex-col xl:flex-row items-start lg:items-center space-x-2 lg:space-x-0 lg:space-y-2 xl:space-y-0 xl:space-x-2">
                             <Button
                               size="sm"
                               variant="outlined"
                               onClick={() => handleEdit(template)}
-                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Edit className="h-4 w-4" />
-                              <span>Edit</span>
+                              <span className="hidden sm:inline">Edit</span>
                             </Button>
                             <Button
                               size="sm"
                               color="red"
                               variant="outlined"
                               onClick={() => handleDelete(template.id)}
-                              className="flex items-center space-x-1 border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              className="flex items-center space-x-1 border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Trash2 className="h-4 w-4" />
-                              <span>Delete</span>
+                              <span className="hidden sm:inline">Delete</span>
                             </Button>
                           </div>
                         </div>
@@ -465,20 +465,20 @@ export default function Templates() {
                   {templates.filter(t => t.provider === 'anthropic').map((template) => (
                     <Card key={template.id} className="bg-white dark:bg-gray-800 shadow-sm">
                       <CardBody className="p-6">
-                        <div className="flex items-start justify-between">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                           <div className="flex-1">
-                            <div className="flex items-center space-x-3 mb-2">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mb-2 gap-2 sm:gap-0">
                               <Typography variant="h6" className="text-gray-900 dark:text-white">
                                 {template.name}
                               </Typography>
-                              <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-xs font-medium">
+                              <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded text-xs font-medium w-fit">
                                 Anthropic
                               </span>
                             </div>
                             <Typography variant="small" className="text-gray-600 dark:text-gray-300 mb-4">
                               {template.description}
                             </Typography>
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 text-sm">
                               <div>
                                 <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
                                   Temperature: {template.temperature}
@@ -496,25 +496,25 @@ export default function Templates() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-2 ml-4">
+                          <div className="flex flex-row lg:flex-col xl:flex-row items-start lg:items-center space-x-2 lg:space-x-0 lg:space-y-2 xl:space-y-0 xl:space-x-2">
                             <Button
                               size="sm"
                               variant="outlined"
                               onClick={() => handleEdit(template)}
-                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Edit className="h-4 w-4" />
-                              <span>Edit</span>
+                              <span className="hidden sm:inline">Edit</span>
                             </Button>
                             <Button
                               size="sm"
                               color="red"
                               variant="outlined"
                               onClick={() => handleDelete(template.id)}
-                              className="flex items-center space-x-1 border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              className="flex items-center space-x-1 border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Trash2 className="h-4 w-4" />
-                              <span>Delete</span>
+                              <span className="hidden sm:inline">Delete</span>
                             </Button>
                           </div>
                         </div>
@@ -536,20 +536,20 @@ export default function Templates() {
                   {templates.filter(t => t.provider === 'xai').map((template) => (
                     <Card key={template.id} className="bg-white dark:bg-gray-800 shadow-sm">
                       <CardBody className="p-6">
-                        <div className="flex items-start justify-between">
+                        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
                           <div className="flex-1">
-                            <div className="flex items-center space-x-3 mb-2">
+                            <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mb-2 gap-2 sm:gap-0">
                               <Typography variant="h6" className="text-gray-900 dark:text-white">
                                 {template.name}
                               </Typography>
-                              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-xs font-medium">
+                              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded text-xs font-medium w-fit">
                                 xAI
                               </span>
                             </div>
                             <Typography variant="small" className="text-gray-600 dark:text-gray-300 mb-4">
                               {template.description}
                             </Typography>
-                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 text-sm">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-4 text-sm">
                               <div>
                                 <Typography variant="small" className="font-semibold text-gray-700 dark:text-gray-300">
                                   Temperature: {template.temperature}
@@ -567,25 +567,25 @@ export default function Templates() {
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center space-x-2 ml-4">
+                          <div className="flex flex-row lg:flex-col xl:flex-row items-start lg:items-center space-x-2 lg:space-x-0 lg:space-y-2 xl:space-y-0 xl:space-x-2">
                             <Button
                               size="sm"
                               variant="outlined"
                               onClick={() => handleEdit(template)}
-                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Edit className="h-4 w-4" />
-                              <span>Edit</span>
+                              <span className="hidden sm:inline">Edit</span>
                             </Button>
                             <Button
                               size="sm"
                               color="red"
                               variant="outlined"
                               onClick={() => handleDelete(template.id)}
-                              className="flex items-center space-x-1 border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              className="flex items-center space-x-1 border-red-300 dark:border-red-600 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Trash2 className="h-4 w-4" />
-                              <span>Delete</span>
+                              <span className="hidden sm:inline">Delete</span>
                             </Button>
                           </div>
                         </div>
