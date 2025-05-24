@@ -697,34 +697,22 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
-  // Applications Management - Working solution
+  // Applications Management - Debug version
   app.get("/api/applications", requireAuth, async (req, res) => {
     try {
-      const { Pool } = require('pg');
-      const dbPool = new Pool({ 
-        connectionString: process.env.DATABASE_URL,
-        ssl: false
-      });
-      
-      const result = await dbPool.query('SELECT * FROM applications ORDER BY created_at DESC');
-      
-      const applications = result.rows.map(row => ({
-        id: row.id,
-        jobTitle: row.job_title,
-        shortDescription: row.short_description,
-        fullText: row.full_text,
-        company: row.company,
-        listingUrl: row.listing_url,
-        appliedOn: row.applied_on,
-        createdAt: row.created_at,
-        updatedAt: row.updated_at
-      }));
-      
-      await dbPool.end();
-      res.json(applications);
+      console.log("Attempting to fetch applications...");
+      console.log("Applications table schema:", applications);
+      const result = await db.select().from(applications);
+      console.log("Raw result:", result);
+      res.json(result);
     } catch (error) {
-      console.error("Error:", error.message);
-      res.status(500).json({ message: "Failed to fetch applications" });
+      console.error("Detailed error:", error);
+      console.error("Error message:", error.message);
+      console.error("Error stack:", error.stack);
+      res.status(500).json({ 
+        message: "Failed to fetch applications",
+        error: error.message 
+      });
     }
   });
 
