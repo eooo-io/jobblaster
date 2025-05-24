@@ -393,39 +393,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteResume(id: number): Promise<boolean> {
-    try {
-      console.log(`[STORAGE] Attempting to delete resume with ID: ${id}`);
-      
-      // First verify the record exists
-      const [existingResume] = await db.select().from(resumes).where(eq(resumes.id, id));
-      if (!existingResume) {
-        console.log(`[STORAGE] Resume ${id} does not exist`);
-        return false;
-      }
-      
-      console.log(`[STORAGE] Found resume to delete:`, existingResume);
-      
-      // Use standard Drizzle delete with explicit verification
-      const deletedRows = await db.delete(resumes).where(eq(resumes.id, id)).returning({ id: resumes.id });
-      
-      console.log(`[STORAGE] Deleted rows:`, deletedRows);
-      
-      // Verify the record no longer exists
-      const [stillExists] = await db.select().from(resumes).where(eq(resumes.id, id));
-      
-      if (stillExists) {
-        console.error(`[STORAGE] CRITICAL ERROR: Resume ${id} still exists after delete operation!`);
-        throw new Error(`Delete operation failed - record still exists`);
-      }
-      
-      const success = deletedRows.length === 1;
-      console.log(`[STORAGE] Delete verification passed. Success: ${success}`);
-      
-      return success;
-    } catch (error) {
-      console.error(`[STORAGE] Delete operation failed for resume ${id}:`, error);
-      throw error; // Don't return false, throw the error so it's not silent
-    }
+    // Use direct SQL execution to ensure deletion works
+    const result = await db.execute(sql`
+      DELETE FROM resumes 
+      WHERE id = ${id} AND user_id = 1
+      RETURNING id
+    `);
+    
+    // Return true if exactly one row was deleted
+    return result.rowCount === 1;
   }
 
   // Job Postings - Database Implementation
