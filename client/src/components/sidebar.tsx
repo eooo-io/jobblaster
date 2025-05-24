@@ -351,6 +351,18 @@ export default function Sidebar() {
             </div>
           </Link>
 
+          <Link href="/applications">
+            <div className={cn(
+              "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
+              location === "/applications"
+                ? "bg-green-600/10 text-green-600 dark:bg-green-600/20 dark:text-green-400"
+                : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+            )}>
+              <Briefcase className="w-4 h-4" />
+              <span>Applications</span>
+            </div>
+          </Link>
+
           <Link href="/application-history">
             <div className={cn(
               "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
