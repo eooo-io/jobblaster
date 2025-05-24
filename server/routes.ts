@@ -700,10 +700,12 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
   // Applications Management - Clean implementation
   app.get("/api/applications", requireAuth, async (req, res) => {
     try {
+      console.log("Fetching applications via route...");
       const applications = await applicationService.getAll();
+      console.log("Applications fetched successfully:", applications.length);
       res.json(applications);
     } catch (error) {
-      console.error("Error fetching applications:", error);
+      console.error("Route error fetching applications:", error);
       res.status(500).json({ message: "Failed to fetch applications" });
     }
   });

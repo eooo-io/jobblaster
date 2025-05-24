@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm";
 export class ApplicationService {
   async getAll(): Promise<Application[]> {
     try {
+      console.log("Attempting to fetch applications...");
       const query = `
         SELECT 
           id,
@@ -21,20 +22,41 @@ export class ApplicationService {
         ORDER BY created_at DESC
       `;
       const result = await pool.query(query);
+      console.log("Applications query result:", result.rows);
       return result.rows;
     } catch (error) {
       console.error("Error fetching applications:", error);
-      throw new Error("Failed to fetch applications");
+      console.error("Error stack:", error);
+      throw error;
     }
   }
 
   async create(applicationData: InsertApplication): Promise<Application> {
     try {
-      const [newApplication] = await db
-        .insert(applications)
-        .values(applicationData)
-        .returning();
-      return newApplication;
+      const query = `
+        INSERT INTO applications (job_title, company, short_description, full_text, listing_url, applied_on, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+        RETURNING 
+          id,
+          job_title as "jobTitle",
+          short_description as "shortDescription", 
+          full_text as "fullText",
+          company,
+          listing_url as "listingUrl",
+          applied_on as "appliedOn",
+          created_at as "createdAt",
+          updated_at as "updatedAt"
+      `;
+      const values = [
+        applicationData.jobTitle,
+        applicationData.company,
+        applicationData.shortDescription || null,
+        applicationData.fullText || null,
+        applicationData.listingUrl || null,
+        applicationData.appliedOn || null
+      ];
+      const result = await pool.query(query, values);
+      return result.rows[0];
     } catch (error) {
       console.error("Error creating application:", error);
       throw new Error("Failed to create application");
