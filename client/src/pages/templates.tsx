@@ -195,31 +195,44 @@ export default function Templates() {
       <main className="flex-1 flex flex-col overflow-hidden lg:ml-0 pt-16 lg:pt-0">
         <div className="flex-1 overflow-y-auto p-6 max-w-6xl mx-auto w-full">
           {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <Settings className="h-8 w-8 text-blue-600 dark:text-blue-400" />
-                <div>
-                  <Typography variant="h4" className="text-gray-900 dark:text-white">
-                    AI Prompt Templates
-                  </Typography>
-                  <Typography variant="small" className="text-gray-600 dark:text-gray-300">
-                    Manage your AI prompt templates for job analysis and other AI features
-                  </Typography>
+          <div className="mb-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
+                  <Settings className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                  <div>
+                    <Typography variant="h4" className="text-gray-900 dark:text-white">
+                      AI Prompt Templates
+                    </Typography>
+                    <Typography variant="small" className="text-gray-600 dark:text-gray-300">
+                      Manage your AI prompt templates for job analysis and other AI features
+                    </Typography>
+                  </div>
                 </div>
               </div>
+              {!isCreating && !editingTemplate && (
+                <Button
+                  onClick={() => setIsCreating(true)}
+                  className="hidden lg:flex items-center space-x-2"
+                  color="blue"
+                >
+                  <Plus className="h-4 w-4" />
+                  <span>New Template</span>
+                </Button>
+              )}
+            </div>
+            {/* Mobile New Template Button */}
+            {!isCreating && !editingTemplate && (
+              <Button
+                onClick={() => setIsCreating(true)}
+                className="lg:hidden flex items-center justify-center space-x-2 w-full mt-4"
+                color="blue"
+              >
+                <Plus className="h-4 w-4" />
+                <span>New Template</span>
+              </Button>
+            )}
           </div>
-          {!isCreating && !editingTemplate && (
-            <Button
-              onClick={() => setIsCreating(true)}
-              className="flex items-center space-x-2"
-              color="blue"
-            >
-              <Plus className="h-4 w-4" />
-              <span>New Template</span>
-            </Button>
-          )}
-        </div>
 
         {/* Create/Edit Form */}
         {(isCreating || editingTemplate) && (
