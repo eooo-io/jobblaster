@@ -52,6 +52,8 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
     },
     staleTime: 0,
     gcTime: 0,
+    refetchInterval: 2000, // Poll every 2 seconds for real-time updates
+    refetchIntervalInBackground: true, // Keep polling even when tab is not active
   });
 
   // Rename resume mutation
