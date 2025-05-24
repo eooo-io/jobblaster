@@ -777,14 +777,14 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                         {formatDate(job.startDate)}{job.endDate ? ` - ${formatDate(job.endDate)}` : " - Present"}
                       </span>
                     </div>
-                    <div className="text-xs mb-1 flex flex-wrap items-center gap-1">
-                      <span className="text-blue-600 dark:text-blue-400 font-medium">
+                    <div className="text-xs mb-1">
+                      <span className="text-blue-600 dark:text-blue-400 font-medium inline-block mr-2">
                         {job.name || job.company || "Company"}
                       </span>
                       {job.location && (
                         <>
-                          <span className="text-gray-500 dark:text-gray-400">•</span>
-                          <span className="text-gray-600 dark:text-gray-300 font-normal">
+                          <span className="text-gray-500 dark:text-gray-400 inline-block mr-1">•</span>
+                          <span className="text-gray-600 dark:text-gray-300 font-normal inline-block">
                             {job.location}
                           </span>
                         </>
