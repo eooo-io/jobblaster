@@ -8,8 +8,7 @@ import {
 import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from "./openai";
 import { setupAuth, hashPassword, verifyPassword, requireAuth, getCurrentUserId } from "./auth";
 import { logApiCall } from "./api-logger";
-import { db } from "./db";
-import { sql } from "drizzle-orm";
+import { pool } from "./db";
 import multer from "multer";
 import JSZip from "jszip";
 
@@ -373,8 +372,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Not authorized to delete this resume" });
       }
 
-      // Execute delete operation
-      const result = await db.execute(sql`DELETE FROM resumes WHERE id = ${resumeId} AND user_id = ${userId}`);
+      // Execute delete operation using raw SQL
+      const result = await pool.query('DELETE FROM resumes WHERE id = $1 AND user_id = $2', [resumeId, userId]);
       
       // Check if any rows were affected
       if (result.rowCount && result.rowCount > 0) {
