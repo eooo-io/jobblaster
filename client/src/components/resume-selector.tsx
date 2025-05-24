@@ -90,12 +90,19 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       }
     },
     onSuccess: (data, variables) => {
-      // Remove the cache completely and refetch
-      queryClient.removeQueries({ queryKey: ['/api/resumes'] });
+      // Update the cache data directly by removing the deleted resume
+      queryClient.setQueryData(['/api/resumes'], (oldData: any[]) => {
+        if (!oldData) return [];
+        return oldData.filter(resume => resume.id !== variables);
+      });
+      
+      // Also invalidate to force a fresh fetch
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      
       toast({
         title: "Resume deleted successfully!",
       });
+      
       // If the deleted resume was selected, clear the selection
       if (selectedResume && variables === selectedResume.id) {
         onResumeSelect(null);
