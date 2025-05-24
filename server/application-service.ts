@@ -120,8 +120,12 @@ export class ApplicationService {
       return true;
     } catch (error) {
       console.error("Error deleting application:", error);
-      throw error;
+      return false;
     }
+  }
+
+  async getWithDetails(userId: number) {
+    return this.getByUserId(userId);
   }
 }
 

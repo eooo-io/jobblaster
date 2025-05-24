@@ -648,57 +648,21 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
   });
 
   // Applications Management
-  app.get("/api/applications", requireAuth, (req, res) => {
-    const userId = getCurrentUserId(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Authentication required" });
-    }
-
-    console.log("Applications API called for user:", userId);
-
+  app.get("/api/applications", requireAuth, async (req, res) => {
     try {
-      // Query from database using the pool directly
-      pool.query('SELECT * FROM applications WHERE user_id = $1', [userId], (err, result) => {
-        if (err) {
-          console.error("Database error:", err);
-          return res.status(500).json({ message: "Failed to fetch applications" });
-        }
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
 
-        // Transform database rows to match frontend expectations
-        const formattedApplications = result.rows.map(row => ({
-          id: row.id,
-          userId: row.user_id,
-          resumeId: row.resume_id,
-          jobId: row.job_id,
-          coverLetterId: row.cover_letter_id,
-          status: row.status,
-          notes: row.notes,
-          packageUrl: row.package_url,
-          appliedAt: row.applied_at,
-          createdAt: row.created_at,
-          jobPosting: {
-            id: row.job_id,
-            title: "Senior Software Engineer",
-            company: "TechCorp Inc.",
-            location: "San Francisco, CA",
-            employmentType: "Full-time"
-          },
-          resume: {
-            id: row.resume_id,
-            name: "Ezra Ter Linden",
-            filename: "egtl-default.json"
-          },
-          coverLetter: row.cover_letter_id ? {
-            id: row.cover_letter_id,
-            content: row.notes
-          } : null
-        }));
+      console.log("Applications API called for user:", userId);
 
-        console.log("Applications found:", formattedApplications.length);
-        res.json(formattedApplications);
-      });
+      const applications = await applicationService.getByUserId(userId);
+      
+      console.log("Applications found:", applications.length);
+      res.json(applications);
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error fetching applications:", error);
       res.status(500).json({ message: "Failed to fetch applications" });
     }
   });
