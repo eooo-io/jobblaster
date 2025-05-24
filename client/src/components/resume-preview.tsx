@@ -474,7 +474,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                             {skill.keywords && skill.keywords.length > 0 && (
                               <div className="flex flex-wrap gap-1 mb-3">
                                 {skill.keywords.map((keyword: string, kidx: number) => (
-                                  <span key={kidx} className="inline-block bg-gray-900 text-white px-2 py-1 rounded-md text-xs text-center">
+                                  <span key={kidx} className="inline-block bg-gray-900 text-white px-2 py-1 rounded-md text-xs text-left">
                                     {keyword}
                                   </span>
                                 ))}
@@ -570,7 +570,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                               {job.startDate && formatDate(job.startDate)}
                               {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Current"}
                             </span>
-                            <h4 className="text-sm font-bold text-gray-900">
+                            <h4 className="text-gray-900 font-semibold text-[13px]">
                               {job.position || "Position"}
                             </h4>
                           </div>
@@ -578,7 +578,6 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                             <p className="text-blue-600 font-medium">
                               {job.name || job.company || "Company"}
                             </p>
-                            <span className="text-xs text-gray-500"><i className="fas fa-map-marker-alt mr-1"></i> {job.location || "Location"}</span>
                           </div>
                         </div>
                       </div>
