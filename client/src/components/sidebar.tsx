@@ -51,7 +51,7 @@ export default function Sidebar() {
     <>
       {/* Mobile Header with Hamburger Menu */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-slate-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center">
           <div className="w-8 h-8">
             <img 
               src={appIcon} 
@@ -59,7 +59,6 @@ export default function Sidebar() {
               className="w-full h-full object-contain rounded-lg"
             />
           </div>
-          <h1 className="text-lg font-bold text-slate-900 dark:text-white">JobBlaster</h1>
         </div>
         
         <div className="flex items-center space-x-2">
@@ -102,17 +101,13 @@ export default function Sidebar() {
         <div className="flex flex-col h-full">
           {/* Logo and Brand - Moved to top */}
           <div className="p-6 border-b border-slate-200 dark:border-gray-700">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-center">
               <div className="w-12 h-12">
                 <img 
                   src={appIcon} 
                   alt="JobBlaster" 
                   className="w-full h-full object-contain rounded-lg"
                 />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-slate-900 dark:text-white">JobBlaster</h1>
-                <p className="text-xs text-slate-500 dark:text-gray-400">AI-Powered Job Application Platform</p>
               </div>
             </div>
           </div>
@@ -274,17 +269,13 @@ export default function Sidebar() {
       <aside className="hidden lg:flex w-64 bg-white dark:bg-gray-900 border-r border-slate-200 dark:border-gray-700 flex-col">
         {/* Logo and Brand */}
         <div className="p-6 border-b border-slate-200 dark:border-gray-700">
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center justify-center">
             <div className="w-12 h-12">
               <img 
                 src={appIcon} 
                 alt="JobBlaster" 
                 className="w-full h-full object-contain rounded-lg"
               />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 dark:text-white">JobBlaster</h1>
-              <p className="text-xs text-slate-500 dark:text-gray-400">AI-Powered Job Application Platform</p>
             </div>
           </div>
         </div>
