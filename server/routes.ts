@@ -318,77 +318,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // PATCH route for renaming resumes
-  app.patch("/api/resumes/:id", requireAuth, async (req, res) => {
-    try {
-      const userId = getCurrentUserId(req);
-      if (!userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
-
-      const resumeId = parseInt(req.params.id);
-      const { name } = req.body;
-
-      if (!name || typeof name !== 'string' || !name.trim()) {
-        return res.status(400).json({ message: "Valid name is required" });
-      }
-
-      // Check if resume belongs to the user
-      const existingResume = await storage.getResume(resumeId);
-      if (!existingResume) {
-        return res.status(404).json({ message: "Resume not found" });
-      }
-
-      if (existingResume.userId !== userId) {
-        return res.status(403).json({ message: "Not authorized to update this resume" });
-      }
-
-      const resume = await storage.updateResume(resumeId, { name: name.trim() });
-      if (!resume) {
-        return res.status(404).json({ message: "Resume not found" });
-      }
-      
-      res.json(resume);
-    } catch (error) {
-      console.error("Resume rename error:", error);
-      res.status(500).json({ message: "Failed to rename resume" });
-    }
-  });
-
-  // DELETE route for deleting resumes
-  app.delete("/api/resumes/:id", requireAuth, async (req, res) => {
-    try {
-      const userId = getCurrentUserId(req);
-      if (!userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
-
-      const resumeId = parseInt(req.params.id);
-
-      // Check if resume belongs to the user
-      const existingResume = await storage.getResume(resumeId);
-      if (!existingResume) {
-        return res.status(404).json({ message: "Resume not found" });
-      }
-
-      if (existingResume.userId !== userId) {
-        return res.status(403).json({ message: "Not authorized to delete this resume" });
-      }
-
-      // Execute delete operation using raw SQL
-      const result = await pool.query('DELETE FROM resumes WHERE id = $1 AND user_id = $2', [resumeId, userId]);
-      
-      // Check if any rows were affected
-      if (result.rowCount && result.rowCount > 0) {
-        res.status(200).json({ message: "Resume deleted successfully" });
-      } else {
-        res.status(404).json({ message: "Resume not found or not authorized" });
-      }
-    } catch (error) {
-      console.error("Resume delete error:", error);
-      res.status(500).json({ message: "Failed to delete resume" });
-    }
-  });
+  // Old resume routes removed - using new resume service instead
 
   // Job Postings
   app.get("/api/jobs", async (req, res) => {
