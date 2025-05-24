@@ -11,6 +11,35 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       colors: {
+        // JobBlaster Brand Colors from Logo
+        jobblaster: {
+          brown: {
+            DEFAULT: "#B8763A",
+            light: "#D4955C",
+            dark: "#8B5A2B",
+          },
+          teal: {
+            DEFAULT: "#2D8B8B", 
+            light: "#5DABA8",
+            dark: "#1F5F5F",
+          },
+          target: {
+            red: "#E53935",
+            "red-dark": "#C62828", 
+            orange: "#FF9800",
+            yellow: "#FFC107",
+          },
+          cream: {
+            DEFAULT: "#F5E6D3",
+            light: "#FAF0E6",
+            dark: "#E6D7C3",
+          },
+          charcoal: {
+            DEFAULT: "#2C2C2C",
+            light: "#404040",
+            dark: "#1A1A1A",
+          },
+        },
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

@@ -186,7 +186,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
 
               <Button
                 type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700"
+                className="w-full bg-jobblaster-teal hover:bg-jobblaster-teal-dark"
                 disabled={loginMutation.isPending || registerMutation.isPending}
               >
                 {isLogin ? (
@@ -207,7 +207,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+                className="text-sm text-jobblaster-teal dark:text-jobblaster-teal-light hover:text-jobblaster-teal-dark dark:hover:text-jobblaster-teal font-medium"
               >
                 {isLogin 
                   ? "Don't have an account? Create one" 
