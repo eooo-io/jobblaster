@@ -657,13 +657,21 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
       console.log("Applications API called for user:", userId);
 
-      const applications = await applicationService.getByUserId(userId);
+      // Test database connection first
+      console.log("Testing database connection...");
+      const testQuery = await db.select().from(applications).limit(1);
+      console.log("Database test successful, found", testQuery.length, "applications");
+
+      const userApplications = await applicationService.getByUserId(userId);
       
-      console.log("Applications found:", applications.length);
-      res.json(applications);
+      console.log("Applications found:", userApplications.length);
+      console.log("First application:", userApplications[0]);
+      
+      res.json(userApplications);
     } catch (error) {
-      console.error("Error fetching applications:", error);
-      res.status(500).json({ message: "Failed to fetch applications" });
+      console.error("Detailed error:", error);
+      console.error("Error stack:", error instanceof Error ? error.stack : 'Unknown error');
+      res.status(500).json({ message: "Failed to fetch applications", error: error instanceof Error ? error.message : 'Unknown error' });
     }
   });
 
