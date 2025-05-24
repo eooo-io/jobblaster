@@ -1,4 +1,4 @@
-import { db } from "./db";
+import { db, pool } from "./db";
 import { applications } from "../shared/schema";
 import type { InsertApplication, Application } from "../shared/schema";
 import { eq } from "drizzle-orm";
@@ -6,12 +6,24 @@ import { eq } from "drizzle-orm";
 export class ApplicationService {
   async getAll(): Promise<Application[]> {
     try {
-      const result = await db.select().from(applications);
-      console.log("Applications fetched successfully:", result);
-      return result;
+      const query = `
+        SELECT 
+          id,
+          job_title as "jobTitle",
+          short_description as "shortDescription", 
+          full_text as "fullText",
+          company,
+          listing_url as "listingUrl",
+          applied_on as "appliedOn",
+          created_at as "createdAt",
+          updated_at as "updatedAt"
+        FROM applications 
+        ORDER BY created_at DESC
+      `;
+      const result = await pool.query(query);
+      return result.rows;
     } catch (error) {
       console.error("Error fetching applications:", error);
-      console.error("Error details:", error);
       throw new Error("Failed to fetch applications");
     }
   }
