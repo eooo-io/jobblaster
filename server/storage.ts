@@ -505,30 +505,30 @@ export class DatabaseStorage implements IStorage {
 
       const formattedApplications = result.map(app => ({
         id: app.id,
-        userId: app.userId || 0,
-        resumeId: app.resumeId || 0,
-        jobId: app.jobId || 0,
-        coverLetterId: app.coverLetterId || 0,
-        status: app.status || 'draft',
-        notes: app.notes || '',
+        userId: app.userId,
+        resumeId: app.resumeId,
+        jobId: app.jobId,
+        coverLetterId: app.coverLetterId,
+        status: app.status,
+        notes: app.notes,
         appliedAt: app.appliedAt,
         createdAt: app.createdAt,
         jobPosting: app.jobTitle ? {
-          id: app.jobId!,
+          id: app.jobId,
           title: app.jobTitle,
-          company: app.jobCompany!,
-          location: app.jobLocation || '',
-          employmentType: app.jobEmploymentType || 'Full-time',
-        } : undefined,
+          company: app.jobCompany,
+          location: app.jobLocation,
+          employmentType: app.jobEmploymentType,
+        } : null,
         resume: app.resumeName ? {
-          id: app.resumeId!,
+          id: app.resumeId,
           name: app.resumeName,
-          filename: app.resumeFilename || '',
-        } : undefined,
+          filename: app.resumeFilename,
+        } : null,
         coverLetter: app.coverLetterContent ? {
-          id: app.coverLetterId!,
+          id: app.coverLetterId,
           content: app.coverLetterContent,
-        } : undefined,
+        } : null,
       }));
 
       console.log("Formatted applications:", formattedApplications);
