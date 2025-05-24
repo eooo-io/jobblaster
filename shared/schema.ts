@@ -93,6 +93,15 @@ export const applications = pgTable("applications", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+export const applicationNotes = pgTable("application_notes", {
+  id: serial("id").primaryKey(),
+  applicationId: integer("application_id").notNull().references(() => applications.id),
+  content: text("content").notNull(),
+  noteType: varchar("note_type", { length: 50 }).default("general"), // general, interview, follow_up, rejection, etc.
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 
 
 export const externalLogs = pgTable("external_logs", {
@@ -170,6 +179,12 @@ export const insertApplicationSchema = createInsertSchema(applications).omit({
   updatedAt: true,
 });
 
+export const insertApplicationNoteSchema = createInsertSchema(applicationNotes).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 
 
 export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
@@ -207,6 +222,9 @@ export type CoverLetter = typeof coverLetters.$inferSelect;
 
 export type InsertApplication = z.infer<typeof insertApplicationSchema>;
 export type Application = typeof applications.$inferSelect;
+
+export type InsertApplicationNote = z.infer<typeof insertApplicationNoteSchema>;
+export type ApplicationNote = typeof applicationNotes.$inferSelect;
 
 export type InsertApplicationPackage = z.infer<typeof insertApplicationPackageSchema>;
 export type ApplicationPackage = typeof applicationPackages.$inferSelect;

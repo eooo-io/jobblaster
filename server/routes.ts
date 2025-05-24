@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { 
   insertResumeSchema, insertJobPostingSchema, insertMatchScoreSchema, 
   insertCoverLetterSchema, insertApplicationSchema, insertUserSchema,
-  applications
+  applications, applicationNotes, insertApplicationNoteSchema
 } from "@shared/schema";
 import { db, pool } from "./db";
 import { eq } from "drizzle-orm";
