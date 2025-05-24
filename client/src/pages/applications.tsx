@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Sidebar from "@/components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -346,21 +347,30 @@ export default function Applications() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">Loading applications...</div>
+      <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
+        <Sidebar />
+        <main className="flex-1 flex flex-col overflow-hidden lg:ml-0 pt-16 lg:pt-0">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">Loading applications...</div>
+          </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Job Applications</h1>
-        <Button onClick={handleNewApplication} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Add Application
-        </Button>
-      </div>
+    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
+      <Sidebar />
+      
+      <main className="flex-1 flex flex-col overflow-hidden lg:ml-0 pt-16 lg:pt-0">
+        <div className="container mx-auto px-4 py-8 flex-1 overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-3xl font-bold">Job Applications</h1>
+              <Button onClick={handleNewApplication} className="flex items-center gap-2">
+                <Plus className="h-4 w-4" />
+                Add Application
+              </Button>
+            </div>
 
       {/* Application Form Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -686,6 +696,8 @@ export default function Applications() {
           )}
         </>
       )}
+        </div>
+      </main>
     </div>
   );
 }
