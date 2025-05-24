@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Download, Phone, Mail, MapPin, Globe, Link as LinkIcon, Github, Linkedin, Twitter, BookOpen } from "lucide-react";
+import { Download, Phone, Mail, MapPin, Globe, Link as LinkIcon, Github, Linkedin, Twitter, BookOpen, Lightbulb } from "lucide-react";
 import type { Resume } from "@shared/schema";
 import type { JSONResumeSchema } from "@/lib/types";
 
@@ -513,7 +513,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                   </h3>
                   <div className="space-y-2 text-xs">
                     {interests.map((interest: any, index: number) => (
-                      <div key={index}>
+                      <div key={index} className="flex items-center gap-2">
+                        <Lightbulb className="w-3 h-3 text-yellow-400" />
                         {typeof interest === 'string' ? interest : interest.name}
                       </div>
                     ))}
@@ -878,7 +879,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                   </h3>
                   <div className="space-y-2 text-xs">
                     {interests.map((interest: any, index: number) => (
-                      <div key={index}>
+                      <div key={index} className="flex items-center gap-2">
+                        <Lightbulb className="w-3 h-3 text-yellow-400" />
                         {typeof interest === 'string' ? interest : interest.name}
                       </div>
                     ))}
