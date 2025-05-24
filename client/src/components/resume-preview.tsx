@@ -612,7 +612,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                   </h3>
                   <div className="grid grid-cols-3 gap-4">
                     {skills.map((skill: any, index: number) => (
-                      <div key={index} className="bg-gray-900 text-white px-3 py-2 rounded-md text-xs text-center">
+                      <div key={index} className="bg-gray-900 text-white px-3 py-2 rounded-md text-xs flex items-center justify-center">
                         {typeof skill === 'string' ? skill : skill.name}
                       </div>
                     ))}
