@@ -197,7 +197,7 @@ export default function ExternalLogs() {
             <Button 
               variant="outlined" 
               size="sm" 
-              className="flex items-center space-x-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-2 px-4 rounded-lg border hover:opacity-75 focus:ring focus:ring-gray-300 active:opacity-[0.85] flex items-center space-x-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 pl-[1px] pr-[1px] bg-[#1b60c4]"
               onClick={() => setLocation('/')}
             >
               <ArrowLeft className="h-4 w-4" />
