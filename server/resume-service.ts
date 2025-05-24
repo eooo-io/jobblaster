@@ -5,9 +5,9 @@ export class ResumeService {
   // Create a new resume
   async create(resumeData: InsertResume): Promise<Resume> {
     const query = `
-      INSERT INTO resumes (name, user_id, json_data, theme, is_default)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, name, user_id, json_data, theme, is_default, created_at
+      INSERT INTO resumes (name, user_id, json_data, theme, is_default, filename)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id, name, user_id, json_data, theme, is_default, filename, created_at
     `;
     
     const values = [
@@ -15,7 +15,8 @@ export class ResumeService {
       resumeData.userId,
       JSON.stringify(resumeData.jsonData),
       resumeData.theme || 'default',
-      resumeData.isDefault || false
+      resumeData.isDefault || false,
+      resumeData.filename || null
     ];
     
     const result = await pool.query(query, values);
