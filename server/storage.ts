@@ -473,6 +473,8 @@ export class DatabaseStorage implements IStorage {
 
   async getApplicationsByUserId(userId: number): Promise<Application[]> {
     try {
+      console.log("Querying applications for user:", userId);
+      
       const result = await db
         .select({
           id: applications.id,
@@ -502,9 +504,9 @@ export class DatabaseStorage implements IStorage {
         .leftJoin(coverLetters, eq(applications.coverLetterId, coverLetters.id))
         .where(eq(applications.userId, userId));
 
-      console.log("Found applications for user:", userId, "count:", result.length);
+      console.log("Raw database result:", result);
 
-      return result.map(app => ({
+      const formattedApplications = result.map(app => ({
         id: app.id,
         userId: app.userId,
         resumeId: app.resumeId,
@@ -531,10 +533,15 @@ export class DatabaseStorage implements IStorage {
           id: app.coverLetterId!,
           content: app.coverLetterContent,
         } : undefined,
-      })) as Application[];
+      }));
+
+      console.log("Formatted applications:", formattedApplications);
+      return formattedApplications as Application[];
     } catch (error) {
       console.error("Database error in getApplicationsByUserId:", error);
-      return [];
+      console.error("Error details:", error instanceof Error ? error.message : 'Unknown error');
+      console.error("Error stack:", error instanceof Error ? error.stack : 'No stack trace');
+      throw error; // Re-throw to see the actual error in the API response
     }
   }
 
