@@ -565,7 +565,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                     <div key={index} className="mb-6 last:mb-0">
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
-                          <div className="flex items-center gap-4 mb-1">
+                          <div className="flex justify-between items-center mb-1">
                             <h4 className="text-gray-900 font-semibold text-[13px]">
                               {job.position || "Position"}
                             </h4>
