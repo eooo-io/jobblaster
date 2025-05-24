@@ -58,6 +58,16 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
     refetchIntervalInBackground: true, // Keep polling even when tab is not active
   });
 
+  // Auto-select default resume if no resume is currently selected
+  useEffect(() => {
+    if (resumes && resumes.length > 0 && !selectedResume) {
+      const defaultResume = resumes.find((resume: any) => resume.isDefault);
+      if (defaultResume) {
+        onResumeSelect(defaultResume);
+      }
+    }
+  }, [resumes, selectedResume, onResumeSelect]);
+
   // Rename resume mutation
   const renameMutation = useMutation({
     mutationFn: async ({ id, name, filename }: { id: number; name?: string; filename?: string }) => {
