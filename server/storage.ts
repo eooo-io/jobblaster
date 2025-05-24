@@ -352,14 +352,7 @@ export class DatabaseStorage implements IStorage {
 
   async getResumesByUserId(userId: number): Promise<Resume[]> {
     try {
-      console.log(`Fetching resumes for user ${userId}`);
       const userResumes = await db.select().from(resumes).where(eq(resumes.userId, userId));
-      console.log(`Found ${userResumes.length} resumes:`, userResumes.map(r => ({ id: r.id, name: r.name })));
-      
-      // Additional debugging - check what's actually in the database
-      const directQuery = await db.select({ id: resumes.id, name: resumes.name }).from(resumes).where(eq(resumes.userId, userId));
-      console.log(`Direct query result:`, directQuery);
-      
       return userResumes;
     } catch (error) {
       console.error(`Error fetching resumes for user ${userId}:`, error);
@@ -401,11 +394,11 @@ export class DatabaseStorage implements IStorage {
 
   async deleteResume(id: number): Promise<boolean> {
     try {
-      // Use a straightforward raw SQL delete - this will definitely work
-      const result = await db.execute(sql`DELETE FROM resumes WHERE id = ${id} AND user_id IS NOT NULL`);
+      // Use the standard Drizzle delete operation
+      const result = await db.delete(resumes).where(eq(resumes.id, id));
       
-      // Return true if any rows were affected
-      return (result as any).rowCount > 0;
+      // Check if any rows were affected
+      return result.rowCount !== null && result.rowCount > 0;
     } catch (error) {
       console.error(`Error deleting resume ${id}:`, error);
       return false;
