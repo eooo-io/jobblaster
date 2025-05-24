@@ -48,6 +48,7 @@ export interface IStorage {
   getApplicationsByUserId(userId: number): Promise<Application[]>;
   createApplication(application: InsertApplication): Promise<Application>;
   updateApplication(id: number, application: Partial<InsertApplication>): Promise<Application | undefined>;
+  deleteApplication(id: number): Promise<boolean>;
 
   // Application Packages
   getApplicationPackage(id: number): Promise<ApplicationPackage | undefined>;
@@ -473,11 +474,64 @@ export class DatabaseStorage implements IStorage {
   async getApplicationsByUserId(userId: number): Promise<Application[]> {
     try {
       const result = await db
-        .select()
+        .select({
+          id: applications.id,
+          userId: applications.userId,
+          resumeId: applications.resumeId,
+          jobId: applications.jobId,
+          coverLetterId: applications.coverLetterId,
+          status: applications.status,
+          notes: applications.notes,
+          packageUrl: applications.packageUrl,
+          appliedAt: applications.appliedAt,
+          createdAt: applications.createdAt,
+          // Job posting details
+          jobTitle: jobPostings.title,
+          jobCompany: jobPostings.company,
+          jobLocation: jobPostings.location,
+          jobEmploymentType: jobPostings.employmentType,
+          // Resume details
+          resumeName: resumes.name,
+          resumeFilename: resumes.filename,
+          // Cover letter details
+          coverLetterContent: coverLetters.content,
+        })
         .from(applications)
+        .leftJoin(jobPostings, eq(applications.jobId, jobPostings.id))
+        .leftJoin(resumes, eq(applications.resumeId, resumes.id))
+        .leftJoin(coverLetters, eq(applications.coverLetterId, coverLetters.id))
         .where(eq(applications.userId, userId));
+
       console.log("Found applications for user:", userId, "count:", result.length);
-      return result;
+
+      return result.map(app => ({
+        id: app.id,
+        userId: app.userId,
+        resumeId: app.resumeId,
+        jobId: app.jobId,
+        coverLetterId: app.coverLetterId,
+        status: app.status,
+        notes: app.notes,
+        packageUrl: app.packageUrl,
+        appliedAt: app.appliedAt,
+        createdAt: app.createdAt,
+        jobPosting: app.jobTitle ? {
+          id: app.jobId!,
+          title: app.jobTitle,
+          company: app.jobCompany!,
+          location: app.jobLocation || '',
+          employmentType: app.jobEmploymentType || 'Full-time',
+        } : undefined,
+        resume: app.resumeName ? {
+          id: app.resumeId!,
+          name: app.resumeName,
+          filename: app.resumeFilename || '',
+        } : undefined,
+        coverLetter: app.coverLetterContent ? {
+          id: app.coverLetterId!,
+          content: app.coverLetterContent,
+        } : undefined,
+      })) as Application[];
     } catch (error) {
       console.error("Database error in getApplicationsByUserId:", error);
       return [];
@@ -492,6 +546,16 @@ export class DatabaseStorage implements IStorage {
   async updateApplication(id: number, appUpdate: Partial<InsertApplication>): Promise<Application | undefined> {
     const [application] = await db.update(applications).set(appUpdate).where(eq(applications.id, id)).returning();
     return application;
+  }
+
+  async deleteApplication(id: number): Promise<boolean> {
+    try {
+      await db.delete(applications).where(eq(applications.id, id));
+      return true;
+    } catch (error) {
+      console.error("Error deleting application:", error);
+      return false;
+    }
   }
 
   // External Logs
