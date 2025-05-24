@@ -407,7 +407,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               
               {/* Contact Information */}
               <div className="mb-8">
-                <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                   CONTACT
                 </h3>
                 <div className="space-y-3 text-xs">
@@ -474,7 +474,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                             {skill.keywords && skill.keywords.length > 0 && (
                               <div className="flex flex-wrap gap-1 mb-3">
                                 {skill.keywords.map((keyword: string, kidx: number) => (
-                                  <span key={kidx} className="inline-block bg-gray-900 text-white px-2 py-1 rounded-md text-xs">
+                                  <span key={kidx} className="inline-block bg-gray-900 text-white px-2 py-1 rounded-md text-xs text-center">
                                     {keyword}
                                   </span>
                                 ))}
@@ -612,7 +612,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                   </h3>
                   <div className="grid grid-cols-3 gap-4">
                     {skills.map((skill: any, index: number) => (
-                      <div key={index} className="bg-gray-900 text-white px-3 py-2 rounded-md text-xs flex items-center justify-center">
+                      <div key={index} className="bg-gray-900 text-white px-3 py-2 rounded-md text-xs flex items-center justify-center text-center">
                         {typeof skill === 'string' ? skill : skill.name}
                       </div>
                     ))}
@@ -674,12 +674,9 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       )}
                       
                       {project.highlights && project.highlights.length > 0 && (
-                        <ul className="text-gray-700 space-y-1 text-sm">
+                        <ul className="text-xs text-gray-700 ml-3 list-disc space-y-0.5">
                           {project.highlights.map((highlight: string, idx: number) => (
-                            <li key={idx} className="flex items-start">
-                              <span className="text-blue-600 mr-2 mt-1">•</span>
-                              <span>{highlight}</span>
-                            </li>
+                            <li key={idx}>{highlight}</li>
                           ))}
                         </ul>
                       )}
