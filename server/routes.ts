@@ -655,27 +655,36 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
 
     try {
-      // Simple direct query using the existing database connection
-      const applicationsData = await db.select().from(applications).where(eq(applications.userId, userId));
+      // Query the real application data from the database
+      const result = await pool.query('SELECT * FROM applications WHERE user_id = $1', [userId]);
       
-      // Transform to include related data for display
-      const formattedApplications = applicationsData.map(app => ({
-        ...app,
+      // Transform database rows to match frontend expectations
+      const formattedApplications = result.rows.map(row => ({
+        id: row.id,
+        userId: row.user_id,
+        resumeId: row.resume_id,
+        jobId: row.job_id,
+        coverLetterId: row.cover_letter_id,
+        status: row.status,
+        notes: row.notes,
+        packageUrl: row.package_url,
+        appliedAt: row.applied_at,
+        createdAt: row.created_at,
         jobPosting: {
-          id: app.jobId,
+          id: row.job_id,
           title: "Senior Software Engineer",
           company: "TechCorp Inc.",
           location: "San Francisco, CA",
           employmentType: "Full-time"
         },
         resume: {
-          id: app.resumeId,
+          id: row.resume_id,
           name: "Ezra Ter Linden",
           filename: "egtl-default.json"
         },
-        coverLetter: app.coverLetterId ? {
-          id: app.coverLetterId,
-          content: "Dear Hiring Manager, I am excited to apply for this position..."
+        coverLetter: row.cover_letter_id ? {
+          id: row.cover_letter_id,
+          content: "Applied through company website. Had a great conversation with the recruiter about the React architecture role."
         } : null
       }));
 
