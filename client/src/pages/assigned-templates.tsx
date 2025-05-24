@@ -178,7 +178,7 @@ export default function AssignedTemplates() {
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar />
       <main className="flex-1 overflow-y-auto">
-        <div className="p-6">
+        <div className="p-6 pt-8">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-3">
               <Settings className="h-8 w-8 text-blue-600 dark:text-blue-400" />
