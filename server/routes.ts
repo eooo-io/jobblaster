@@ -8,7 +8,7 @@ import {
 import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from "./openai";
 import { setupAuth, hashPassword, verifyPassword, requireAuth, getCurrentUserId } from "./auth";
 import { logApiCall } from "./api-logger";
-import { pool } from "./db";
+import { setupResumeRoutes } from "./resume-routes";
 import multer from "multer";
 import JSZip from "jszip";
 
@@ -17,6 +17,9 @@ const upload = multer({ storage: multer.memoryStorage() });
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication middleware
   setupAuth(app);
+  
+  // Setup the new resume routes
+  setupResumeRoutes(app);
 
   // Authentication routes
   app.post("/api/auth/register", async (req, res) => {
