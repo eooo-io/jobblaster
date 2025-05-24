@@ -258,7 +258,7 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                   key={resume.id}
                   className={`group flex items-center justify-between p-3 rounded-lg border cursor-pointer transition-all hover:shadow-sm ${
                     selectedResume?.id === resume.id 
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 shadow-sm' 
+                      ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-sm' 
                       : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800/50'
                   }`}
                   onClick={() => onResumeSelect(resume)}
