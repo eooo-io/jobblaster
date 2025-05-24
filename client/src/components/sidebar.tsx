@@ -28,9 +28,7 @@ const navigation = [
   { name: "Resume Builder", icon: FileText, current: true },
   { name: "Job Analysis", icon: Briefcase, current: false },
   { name: "Match Scoring", icon: TrendingUp, current: false },
-  { name: "Cover Letters", icon: Mail, current: false },
   { name: "Export Package", icon: Download, current: false },
-  { name: "Application History", icon: History, current: false },
 ];
 
 export default function Sidebar() {
