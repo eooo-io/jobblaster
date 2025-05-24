@@ -21,6 +21,101 @@ const applicationFormSchema = insertApplicationSchema.extend({
 
 type ApplicationFormData = z.infer<typeof applicationFormSchema>;
 
+interface ApplicationNotesProps {
+  applicationId: number;
+  useNotesQuery: (applicationId: number) => any;
+  createNoteMutation: any;
+  deleteNoteMutation: any;
+  newNote: string;
+  setNewNote: (note: string) => void;
+}
+
+function ApplicationNotes({ 
+  applicationId, 
+  useNotesQuery, 
+  createNoteMutation, 
+  deleteNoteMutation, 
+  newNote, 
+  setNewNote 
+}: ApplicationNotesProps) {
+  const { data: notes, isLoading: notesLoading } = useNotesQuery(applicationId);
+
+  const handleAddNote = () => {
+    if (!newNote.trim()) return;
+    
+    createNoteMutation.mutate({
+      applicationId,
+      data: {
+        content: newNote.trim(),
+        noteType: "general"
+      }
+    });
+  };
+
+  const handleDeleteNote = (noteId: number) => {
+    deleteNoteMutation.mutate(noteId);
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center gap-2 mb-3">
+        <FileText className="h-4 w-4 text-blue-600" />
+        <h4 className="font-medium text-sm">Notes</h4>
+      </div>
+      
+      {/* Add Note Form */}
+      <div className="flex gap-2">
+        <Textarea
+          placeholder="Add a note about this application..."
+          value={newNote}
+          onChange={(e) => setNewNote(e.target.value)}
+          className="flex-1 min-h-[60px] text-sm"
+        />
+        <Button 
+          onClick={handleAddNote}
+          disabled={!newNote.trim() || createNoteMutation.isPending}
+          size="sm"
+          className="self-end"
+        >
+          <Plus className="h-3 w-3" />
+        </Button>
+      </div>
+
+      {/* Notes List */}
+      {notesLoading ? (
+        <div className="text-sm text-gray-500">Loading notes...</div>
+      ) : notes && notes.length > 0 ? (
+        <div className="space-y-2 max-h-60 overflow-y-auto">
+          {notes.map((note: ApplicationNote) => (
+            <div key={note.id} className="bg-gray-50 rounded-lg p-3 text-sm">
+              <div className="flex justify-between items-start gap-2">
+                <p className="flex-1 whitespace-pre-wrap">{note.content}</p>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleDeleteNote(note.id)}
+                  className="text-red-600 hover:text-red-700 h-6 w-6 p-0"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+              {note.createdAt && (
+                <div className="text-xs text-gray-400 mt-1">
+                  {new Date(note.createdAt).toLocaleString()}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-sm text-gray-500 text-center py-2">
+          No notes yet. Add your first note above.
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function Applications() {
   const [editingApplication, setEditingApplication] = useState<Application | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
