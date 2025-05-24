@@ -207,24 +207,22 @@ export default function Dashboard() {
             </div>
 
             {/* Print Preview Content - Always Light Mode */}
-            <div className="flex-1 overflow-auto bg-gray-100" style={{ padding: '5px' }}>
-              <div className="w-full overflow-x-auto">
-                {/* US Legal Paper Size Container with Page Breaks */}
-                <div 
-                  className="bg-white shadow-xl transform origin-top scale-50 sm:scale-75 md:scale-90 lg:scale-100"
-                  style={{
-                    width: '8.5in',
-                    minHeight: '14in',
-                    margin: '0 auto',
-                    marginBottom: '40px', // Extra space for mobile scaling
-                    padding: '0.5in',
-                    fontSize: '10pt',
-                    lineHeight: '1.3',
-                    fontFamily: 'Arial, sans-serif',
-                    position: 'relative',
-                    pageBreakAfter: 'always'
-                  }}
-                >
+            <div className="flex-1 overflow-auto bg-gray-100 p-2">
+              {/* US Legal Paper Size Container with Page Breaks */}
+              <div 
+                className="bg-white shadow-xl transform origin-top scale-50 sm:scale-75 md:scale-90 lg:scale-100 mx-auto"
+                style={{
+                  width: '8.5in',
+                  minHeight: '14in',
+                  marginBottom: '40px', // Extra space for mobile scaling
+                  padding: '0.5in',
+                  fontSize: '10pt',
+                  lineHeight: '1.3',
+                  fontFamily: 'Arial, sans-serif',
+                  position: 'relative',
+                  pageBreakAfter: 'always'
+                }}
+              >
                   {/* Page Break Indicator */}
                   <div 
                     className="absolute top-0 left-0 right-0 border-t-2 border-dashed border-gray-300"
@@ -240,26 +238,25 @@ export default function Dashboard() {
                     Page 1
                   </div>
                   
-                  <div style={{ height: '100%', overflow: 'hidden' }}>
-                    <ResumePreview resume={selectedResume} theme={selectedTheme} forceLightMode={true} />
-                  </div>
+                <div style={{ height: '100%', overflow: 'hidden' }}>
+                  <ResumePreview resume={selectedResume} theme={selectedTheme} forceLightMode={true} />
                 </div>
               </div>
             </div>
 
             {/* Print Actions Footer */}
-            <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
-              <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex flex-col sm:flex-row items-center justify-between p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 gap-3">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 <span>📄 US Legal (8.5" × 14")</span>
                 <span>🎨 {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)} Theme</span>
                 <span>📏 0.5" margins</span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 w-full sm:w-auto">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => window.print()}
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-2 flex-1 sm:flex-none"
                 >
                   <Printer className="w-4 h-4" />
                   Print Resume
@@ -267,7 +264,7 @@ export default function Dashboard() {
                 <Button
                   size="sm"
                   onClick={() => setShowPrintPreview(false)}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none"
                 >
                   Done
                 </Button>
