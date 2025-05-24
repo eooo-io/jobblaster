@@ -471,7 +471,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getApplicationsByUserId(userId: number): Promise<Application[]> {
-    const userApplications = await db.select().from(applications).where(eq(applications.userId, userId));
+    const userApplications = await db.select().from(schema.applications).where(eq(schema.applications.userId, userId));
     return userApplications;
   }
 
