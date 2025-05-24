@@ -150,6 +150,19 @@ export default function Applications() {
     return matchesSearch;
   }) || [];
 
+  // Pagination calculations
+  const totalItems = filteredApplications.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedApplications = filteredApplications.slice(startIndex, endIndex);
+
+  // Reset to first page when search changes
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
   // Notes queries and mutations
   const { data: notes, isLoading: notesLoading, error: notesError } = useQuery<ApplicationNote[]>({
     queryKey: [`/api/applications/${selectedApplicationId}/notes`],
@@ -533,10 +546,7 @@ export default function Applications() {
                 <Input
                   placeholder="Search applications..."
                   value={searchTerm}
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                    setCurrentPage(1);
-                  }}
+                  onChange={(e) => handleSearchChange(e.target.value)}
                   className="pl-10"
                 />
               </div>
@@ -572,7 +582,7 @@ export default function Applications() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredApplications.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((application) => (
+                {paginatedApplications.map((application) => (
                   <TableRow key={application.id}>
                     <TableCell className="font-medium">
                       {application.jobTitle}
