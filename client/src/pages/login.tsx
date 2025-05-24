@@ -136,7 +136,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
 
         {/* Login/Register Form */}
         <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 shadow-xl">
-          <CardContent>
+          <CardContent className="p-6 ml-[0px] mr-[0px] pl-[10px] pr-[10px] pt-[10px] pb-[10px]">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <Label htmlFor="username" className="text-sm font-medium text-slate-700 dark:text-gray-300">
