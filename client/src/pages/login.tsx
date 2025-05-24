@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LogIn, UserPlus, Sun, Moon } from "lucide-react";
+import appIcon from "@assets/app-icon-jobblaster.png";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/contexts/ThemeContext";
 import { apiRequest } from "@/lib/queryClient";
@@ -123,8 +124,12 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       <div className="w-full max-w-md">
         {/* Logo and Brand */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <i className="fa-solid fa-bullseye text-white text-2xl"></i>
+          <div className="w-40 h-40 sm:w-20 sm:h-20 mx-auto mb-4">
+            <img 
+              src={appIcon} 
+              alt="JobBlaster" 
+              className="w-full h-full object-contain rounded-xl"
+            />
           </div>
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">JobBlaster</h1>
           <p className="text-slate-600 dark:text-gray-300">Personal Intelligent Resume & Job Match Engine</p>

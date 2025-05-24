@@ -22,6 +22,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
+import appIcon from "@assets/app-icon-jobblaster.png";
 
 const navigation = [
   { name: "Resume Builder", icon: FileText, current: true },
@@ -51,8 +52,12 @@ export default function Sidebar() {
       {/* Mobile Header with Hamburger Menu */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 border-b border-slate-200 dark:border-gray-700 px-4 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-            <i className="fas fa-bullseye text-white text-sm"></i>
+          <div className="w-8 h-8">
+            <img 
+              src={appIcon} 
+              alt="JobBlaster" 
+              className="w-full h-full object-contain rounded-lg"
+            />
           </div>
           <h1 className="text-lg font-bold text-slate-900 dark:text-white">JobBlaster</h1>
         </div>
@@ -94,12 +99,16 @@ export default function Sidebar() {
         isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
       )}>
         {/* Mobile Sidebar Content */}
-        <div className="pt-16 flex flex-col h-full">
-          {/* Logo and Brand */}
+        <div className="flex flex-col h-full">
+          {/* Logo and Brand - Moved to top */}
           <div className="p-6 border-b border-slate-200 dark:border-gray-700">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <i className="fas fa-bullseye text-white text-lg"></i>
+              <div className="w-12 h-12">
+                <img 
+                  src={appIcon} 
+                  alt="JobBlaster" 
+                  className="w-full h-full object-contain rounded-lg"
+                />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-slate-900 dark:text-white">JobBlaster</h1>
@@ -266,8 +275,12 @@ export default function Sidebar() {
         {/* Logo and Brand */}
         <div className="p-6 border-b border-slate-200 dark:border-gray-700">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-              <i className="fas fa-bullseye text-white text-lg"></i>
+            <div className="w-12 h-12">
+              <img 
+                src={appIcon} 
+                alt="JobBlaster" 
+                className="w-full h-full object-contain rounded-lg"
+              />
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-900 dark:text-white">JobBlaster</h1>
