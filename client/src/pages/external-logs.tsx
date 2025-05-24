@@ -264,7 +264,7 @@ export default function ExternalLogs() {
               return (
                 <Card key={service} className="bg-white dark:bg-gray-800 shadow-sm">
                   <CardHeader 
-                    className="bg-gray-50 dark:bg-gray-700 py-3 px-4 sm:py-4 sm:px-6 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                    className="relative bg-clip-border mx-4 rounded-xl overflow-hidden text-gray-700 shadow-lg -mt-6 bg-gray-50 dark:bg-gray-700 py-3 px-4 sm:py-4 sm:px-6 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors ml-[0px] mr-[0px]"
                     onClick={() => toggleServiceExpansion(service)}
                   >
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
@@ -298,10 +298,9 @@ export default function ExternalLogs() {
                       </div>
                     </div>
                   </CardHeader>
-                  
                   {isServiceExpanded && (
                     <CardBody className="p-0">
-                      <div className="space-y-2 p-4">
+                      <div className="space-y-2 p-4 pl-[1px] pr-[1px]">
                         {serviceLogs.map((log) => {
                           const isExpanded = expandedLogs.has(log.id);
                           
