@@ -7,9 +7,11 @@ export class ApplicationService {
   async getAll(): Promise<Application[]> {
     try {
       const result = await db.select().from(applications);
+      console.log("Applications fetched successfully:", result);
       return result;
     } catch (error) {
       console.error("Error fetching applications:", error);
+      console.error("Error details:", error);
       throw new Error("Failed to fetch applications");
     }
   }
@@ -59,7 +61,7 @@ export class ApplicationService {
       const result = await db
         .delete(applications)
         .where(eq(applications.id, id));
-      return result.rowCount > 0;
+      return result.rowCount !== undefined && result.rowCount > 0;
     } catch (error) {
       console.error("Error deleting application:", error);
       throw new Error("Failed to delete application");
