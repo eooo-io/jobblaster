@@ -152,17 +152,11 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
       // Force a complete refresh of the resumes data
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       queryClient.refetchQueries({ queryKey: ['/api/resumes'] });
-      toast({
-        title: "Default resume updated!",
-      });
+      showNotification("success", "Default Updated", "Default resume updated!");
     },
     onError: (error: Error) => {
       console.error('Set default error:', error);
-      toast({
-        title: "Error setting default resume",
-        description: error.message,
-        variant: "destructive",
-      });
+      showNotification("error", "Update Failed", error.message);
     },
   });
 
@@ -382,6 +376,15 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
           </div>
         )}
       </div>
+
+      {/* Notification Modal */}
+      <NotificationModal
+        isOpen={notification.isOpen}
+        onClose={closeNotification}
+        type={notification.type}
+        title={notification.title}
+        message={notification.message}
+      />
     </div>
   );
 }
