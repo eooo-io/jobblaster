@@ -324,7 +324,32 @@ export default function Sidebar() {
             </div>
           </Link>
           
-          {navigation.slice(1).map((item) => (
+          <Link href="/cover-letters">
+            <div className={cn(
+              "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
+              location === "/cover-letters"
+                ? "bg-jobblaster-teal/10 text-jobblaster-teal dark:bg-jobblaster-teal/20 dark:text-jobblaster-teal"
+                : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+            )}>
+              <Mail className="w-4 h-4" />
+              <span>Cover Letters</span>
+            </div>
+          </Link>
+
+          <Link href="/application-history">
+            <div className={cn(
+              "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
+              location === "/application-history"
+                ? "bg-jobblaster-teal/10 text-jobblaster-teal dark:bg-jobblaster-teal/20 dark:text-jobblaster-teal"
+                : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+            )}>
+              <History className="w-4 h-4" />
+              <span>Application History</span>
+            </div>
+          </Link>
+
+          {/* Remaining features coming soon */}
+          {navigation.slice(1, -2).map((item) => (
             <div
               key={item.name}
               className="flex items-center space-x-2 px-3 py-2 rounded-lg font-medium text-slate-400 dark:text-gray-500 cursor-not-allowed text-sm"
