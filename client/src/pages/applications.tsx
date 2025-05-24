@@ -152,16 +152,20 @@ export default function Applications() {
 
   // Notes queries and mutations
   const { data: notes, isLoading: notesLoading, error: notesError } = useQuery<ApplicationNote[]>({
-    queryKey: ["/api/applications", selectedApplicationId, "notes"],
+    queryKey: [`/api/applications/${selectedApplicationId}/notes`],
     enabled: !!selectedApplicationId,
     retry: 1,
+    queryFn: async () => {
+      const response = await apiRequest(`/api/applications/${selectedApplicationId}/notes`, "GET");
+      return response.json();
+    },
   });
 
   const createNoteMutation = useMutation({
     mutationFn: ({ applicationId, data }: { applicationId: number; data: InsertApplicationNote }) => 
       apiRequest(`/api/applications/${applicationId}/notes`, "POST", data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/applications", selectedApplicationId, "notes"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/applications/${selectedApplicationId}/notes`] });
       setNewNote("");
       toast({
         title: "Success",
@@ -180,7 +184,7 @@ export default function Applications() {
   const deleteNoteMutation = useMutation({
     mutationFn: (noteId: number) => apiRequest(`/api/notes/${noteId}`, "DELETE"),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/applications", selectedApplicationId, "notes"] });
+      queryClient.invalidateQueries({ queryKey: [`/api/applications/${selectedApplicationId}/notes`] });
       toast({
         title: "Success", 
         description: "Note deleted successfully",
