@@ -351,6 +351,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // DELETE route for deleting resumes
+  app.delete("/api/resumes/:id", requireAuth, async (req, res) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      const resumeId = parseInt(req.params.id);
+
+      // Check if resume belongs to the user
+      const existingResume = await storage.getResume(resumeId);
+      if (!existingResume) {
+        return res.status(404).json({ message: "Resume not found" });
+      }
+
+      if (existingResume.userId !== userId) {
+        return res.status(403).json({ message: "Not authorized to delete this resume" });
+      }
+
+      const deleted = await storage.deleteResume(resumeId);
+      if (!deleted) {
+        return res.status(404).json({ message: "Resume not found" });
+      }
+      
+      res.json({ message: "Resume deleted successfully" });
+    } catch (error) {
+      console.error("Resume delete error:", error);
+      res.status(500).json({ message: "Failed to delete resume" });
+    }
+  });
+
   // Job Postings
   app.get("/api/jobs", async (req, res) => {
     try {

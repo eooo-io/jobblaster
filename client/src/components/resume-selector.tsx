@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { FileText, Calendar, Palette, Edit2, Save, X, Star, ChevronDown, FolderOpen, Clock } from 'lucide-react';
+import { FileText, Calendar, Palette, Edit2, Save, X, Star, ChevronDown, FolderOpen, Clock, Trash2 } from 'lucide-react';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 
@@ -54,6 +54,40 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
     onError: (error: Error) => {
       toast({
         title: "Error renaming resume",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete resume mutation
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const response = await fetch(`/api/resumes/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+        throw new Error(errorData.message || `HTTP ${response.status}`);
+      }
+      
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      toast({
+        title: "Resume deleted successfully!",
+      });
+      // If the deleted resume was selected, clear the selection
+      if (selectedResume && deleteMutation.variables === selectedResume.id) {
+        onResumeSelect(null);
+      }
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Error deleting resume",
         description: error.message,
         variant: "destructive",
       });
@@ -111,6 +145,12 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   const handleCancel = () => {
     setEditingId(null);
     setEditingName("");
+  };
+
+  const handleDelete = (id: number, resumeName: string) => {
+    if (window.confirm(`Are you sure you want to delete "${resumeName}"? This action cannot be undone.`)) {
+      deleteMutation.mutate(id);
+    }
   };
 
   if (isLoading) {
@@ -285,6 +325,20 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                       title="Rename resume"
                     >
                       <Edit2 className="h-3 w-3" />
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-8 w-8 p-0 hover:text-red-500"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(resume.id, resume.name);
+                      }}
+                      disabled={deleteMutation.isPending}
+                      title="Delete resume"
+                    >
+                      <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
                 </div>
