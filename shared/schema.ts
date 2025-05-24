@@ -89,7 +89,18 @@ export const applications = pgTable("applications", {
   coverLetterId: integer("cover_letter_id").references(() => coverLetters.id),
   status: text("status").notNull().default("draft"),
   notes: text("notes"),
+  packageUrl: text("package_url"), // URL to the exported application package
   appliedAt: timestamp("applied_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const applicationPackages = pgTable("application_packages", {
+  id: serial("id").primaryKey(),
+  applicationId: integer("application_id").references(() => applications.id),
+  userId: integer("user_id").references(() => users.id),
+  jobTitle: text("job_title").notNull(),
+  company: text("company").notNull(),
+  packageData: jsonb("package_data").notNull(), // Contains all exported files as base64
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -167,6 +178,11 @@ export const insertApplicationSchema = createInsertSchema(applications).omit({
   createdAt: true,
 });
 
+export const insertApplicationPackageSchema = createInsertSchema(applicationPackages).omit({
+  id: true,
+  createdAt: true,
+});
+
 export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
   id: true,
   createdAt: true,
@@ -202,6 +218,9 @@ export type CoverLetter = typeof coverLetters.$inferSelect;
 
 export type InsertApplication = z.infer<typeof insertApplicationSchema>;
 export type Application = typeof applications.$inferSelect;
+
+export type InsertApplicationPackage = z.infer<typeof insertApplicationPackageSchema>;
+export type ApplicationPackage = typeof applicationPackages.$inferSelect;
 
 export type InsertExternalLog = z.infer<typeof insertExternalLogSchema>;
 export type ExternalLog = typeof externalLogs.$inferSelect;
