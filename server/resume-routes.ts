@@ -115,6 +115,41 @@ export function setupResumeRoutes(app: Express) {
     }
   });
 
+  // PATCH /api/resumes/:id - Update a resume (partial update)
+  app.patch("/api/resumes/:id", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+
+      const resumeId = parseInt(req.params.id);
+      if (isNaN(resumeId)) {
+        return res.status(400).json({ message: "Invalid resume ID" });
+      }
+
+      // Validate request body (partial update)
+      const updateSchema = insertResumeSchema.partial();
+      const validationResult = updateSchema.safeParse(req.body);
+      if (!validationResult.success) {
+        return res.status(400).json({ 
+          message: "Invalid resume data", 
+          errors: validationResult.error.errors 
+        });
+      }
+
+      const updatedResume = await resumeService.update(resumeId, userId, validationResult.data);
+      if (!updatedResume) {
+        return res.status(404).json({ message: "Resume not found or access denied" });
+      }
+
+      res.json(updatedResume);
+    } catch (error) {
+      console.error("Error updating resume:", error);
+      res.status(500).json({ message: "Failed to update resume" });
+    }
+  });
+
   // DELETE /api/resumes/:id - Delete a resume
   app.delete("/api/resumes/:id", requireAuth, async (req: Request, res: Response) => {
     try {
