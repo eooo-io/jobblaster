@@ -206,7 +206,7 @@ export default function ExternalLogs() {
             <div className="flex items-center space-x-3">
               <Database className="h-8 w-8 text-blue-600" />
               <div>
-                <Typography variant="h4" color="blue-gray">
+                <Typography variant="h4" color="blue-gray" className="block antialiased tracking-normal font-sans font-semibold text-blue-gray-900 text-center text-[14px]">
                   External API Logs
                 </Typography>
                 <Typography variant="small" color="gray">
