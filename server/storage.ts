@@ -472,10 +472,12 @@ export class DatabaseStorage implements IStorage {
 
   async getApplicationsByUserId(userId: number): Promise<Application[]> {
     try {
-      // Simple query using pool directly
-      const result = await db.execute(sql`SELECT * FROM applications WHERE user_id = ${userId}`);
-      console.log("Query result rows:", result.rows?.length || 0);
-      return result.rows as Application[] || [];
+      const result = await db
+        .select()
+        .from(applications)
+        .where(eq(applications.userId, userId));
+      console.log("Found applications for user:", userId, "count:", result.length);
+      return result;
     } catch (error) {
       console.error("Database error in getApplicationsByUserId:", error);
       return [];
