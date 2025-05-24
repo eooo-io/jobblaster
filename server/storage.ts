@@ -50,10 +50,7 @@ export interface IStorage {
   updateApplication(id: number, application: Partial<InsertApplication>): Promise<Application | undefined>;
   deleteApplication(id: number): Promise<boolean>;
 
-  // Application Packages
-  getApplicationPackage(id: number): Promise<ApplicationPackage | undefined>;
-  getApplicationPackagesByUserId(userId: number): Promise<ApplicationPackage[]>;
-  createApplicationPackage(applicationPackage: InsertApplicationPackage): Promise<ApplicationPackage>;
+
 
   // External Logs
   getExternalLogs(userId: number, limit?: number): Promise<ExternalLog[]>;

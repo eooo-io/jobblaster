@@ -93,15 +93,7 @@ export const applications = pgTable("applications", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const applicationPackages = pgTable("application_packages", {
-  id: serial("id").primaryKey(),
-  applicationId: integer("application_id").references(() => applications.id),
-  userId: integer("user_id").references(() => users.id),
-  jobTitle: text("job_title").notNull(),
-  company: text("company").notNull(),
-  packageData: jsonb("package_data").notNull(), // Contains all exported files as base64
-  createdAt: timestamp("created_at").defaultNow(),
-});
+
 
 export const externalLogs = pgTable("external_logs", {
   id: serial("id").primaryKey(),
