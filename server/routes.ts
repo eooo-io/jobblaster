@@ -15,6 +15,16 @@ import JSZip from "jszip";
 const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health check endpoint for Docker
+  app.get("/api/health", (req, res) => {
+    res.status(200).json({ 
+      status: "healthy", 
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      environment: process.env.NODE_ENV || "development"
+    });
+  });
+
   // Setup authentication middleware
   setupAuth(app);
   
