@@ -697,16 +697,11 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
-  // Applications Management - Clean implementation following test patterns
+  // Applications Management - Clean implementation
   app.get("/api/applications", requireAuth, async (req, res) => {
-    const userId = getCurrentUserId(req);
-    if (!userId) {
-      return res.status(401).json({ message: "Authentication required" });
-    }
-
     try {
-      const userApplications = await storage.getApplicationsByUserId(userId);
-      res.json(userApplications);
+      const applications = await applicationService.getAll();
+      res.json(applications);
     } catch (error) {
       console.error("Error fetching applications:", error);
       res.status(500).json({ message: "Failed to fetch applications" });
