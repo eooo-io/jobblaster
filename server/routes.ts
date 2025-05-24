@@ -654,19 +654,19 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
         return res.status(401).json({ message: "Authentication required" });
       }
 
-      // Temporary sample data to demonstrate functionality
+      // Sample application data to demonstrate functionality
       const sampleApplications = [
         {
           id: 1,
-          userId: userId,
+          userId: 1,
           resumeId: 1,
           jobId: 1,
           coverLetterId: 1,
           status: "applied",
           notes: "Strong technical fit for this role",
           packageUrl: null,
-          appliedAt: new Date().toISOString(),
-          createdAt: new Date().toISOString(),
+          appliedAt: "2024-01-15T10:30:00Z",
+          createdAt: "2024-01-15T10:30:00Z",
           jobPosting: {
             id: 1,
             title: "Senior Software Engineer",
@@ -689,8 +689,8 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
       res.json(sampleApplications);
     } catch (error) {
-      console.error("Error fetching applications:", error);
-      res.status(500).json({ message: "Failed to fetch applications" });
+      console.error("Error in applications API:", error);
+      res.status(500).json({ message: "Failed to fetch applications", error: String(error) });
     }
   });
 
