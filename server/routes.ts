@@ -263,62 +263,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Resumes (protected routes)
-  app.get("/api/resumes", requireAuth, async (req, res) => {
-    try {
-      const userId = getCurrentUserId(req);
-      if (!userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
-      const resumes = await storage.getResumesByUserId(userId);
-      res.json(resumes);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch resumes" });
-    }
-  });
-
-  app.get("/api/resumes/:id", async (req, res) => {
-    try {
-      const resume = await storage.getResume(parseInt(req.params.id));
-      if (!resume) {
-        return res.status(404).json({ message: "Resume not found" });
-      }
-      res.json(resume);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch resume" });
-    }
-  });
-
-  app.post("/api/resumes", requireAuth, async (req, res) => {
-    try {
-      const userId = getCurrentUserId(req);
-      if (!userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
-      const resumeData = insertResumeSchema.parse({
-        ...req.body,
-        userId
-      });
-      const resume = await storage.createResume(resumeData);
-      res.json(resume);
-    } catch (error) {
-      res.status(400).json({ message: "Invalid resume data" });
-    }
-  });
-
-  app.put("/api/resumes/:id", async (req, res) => {
-    try {
-      const resume = await storage.updateResume(parseInt(req.params.id), req.body);
-      if (!resume) {
-        return res.status(404).json({ message: "Resume not found" });
-      }
-      res.json(resume);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to update resume" });
-    }
-  });
-
-  // Old resume routes removed - using new resume service instead
+  // Resume routes are now handled by resume-service.ts via setupResumeRoutes()
 
   // Job Postings
   app.get("/api/jobs", async (req, res) => {
