@@ -430,7 +430,7 @@ export default function Templates() {
                               size="sm"
                               variant="outlined"
                               onClick={() => handleEdit(template)}
-                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
+                              className="flex items-center space-x-1 !border-gray-300 dark:!border-gray-500 !text-gray-700 dark:!text-gray-200 hover:!bg-gray-50 dark:hover:!bg-gray-600 hover:!border-gray-400 dark:hover:!border-gray-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Edit className="h-4 w-4" />
                               <span className="hidden sm:inline">Edit</span>
@@ -439,7 +439,7 @@ export default function Templates() {
                               size="sm"
                               variant="outlined"
                               onClick={() => handleDelete(template.id)}
-                              className="flex items-center space-x-1 border-red-300 dark:border-red-500 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-400 dark:hover:border-red-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
+                              className="flex items-center space-x-1 !border-red-300 dark:!border-red-500 !text-red-700 dark:!text-red-400 hover:!bg-red-50 dark:hover:!bg-red-900/30 hover:!border-red-400 dark:hover:!border-red-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Trash2 className="h-4 w-4" />
                               <span className="hidden sm:inline">Delete</span>
@@ -500,7 +500,7 @@ export default function Templates() {
                               size="sm"
                               variant="outlined"
                               onClick={() => handleEdit(template)}
-                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
+                              className="flex items-center space-x-1 !border-gray-300 dark:!border-gray-500 !text-gray-700 dark:!text-gray-200 hover:!bg-gray-50 dark:hover:!bg-gray-600 hover:!border-gray-400 dark:hover:!border-gray-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Edit className="h-4 w-4" />
                               <span className="hidden sm:inline">Edit</span>
@@ -509,7 +509,7 @@ export default function Templates() {
                               size="sm"
                               variant="outlined"
                               onClick={() => handleDelete(template.id)}
-                              className="flex items-center space-x-1 border-red-300 dark:border-red-500 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-400 dark:hover:border-red-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
+                              className="flex items-center space-x-1 !border-red-300 dark:!border-red-500 !text-red-700 dark:!text-red-400 hover:!bg-red-50 dark:hover:!bg-red-900/30 hover:!border-red-400 dark:hover:!border-red-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Trash2 className="h-4 w-4" />
                               <span className="hidden sm:inline">Delete</span>
@@ -570,7 +570,7 @@ export default function Templates() {
                               size="sm"
                               variant="outlined"
                               onClick={() => handleEdit(template)}
-                              className="flex items-center space-x-1 border-gray-300 dark:border-gray-500 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 hover:border-gray-400 dark:hover:border-gray-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
+                              className="flex items-center space-x-1 !border-gray-300 dark:!border-gray-500 !text-gray-700 dark:!text-gray-200 hover:!bg-gray-50 dark:hover:!bg-gray-600 hover:!border-gray-400 dark:hover:!border-gray-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Edit className="h-4 w-4" />
                               <span className="hidden sm:inline">Edit</span>
@@ -579,7 +579,7 @@ export default function Templates() {
                               size="sm"
                               variant="outlined"
                               onClick={() => handleDelete(template.id)}
-                              className="flex items-center space-x-1 border-red-300 dark:border-red-500 text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-400 dark:hover:border-red-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
+                              className="flex items-center space-x-1 !border-red-300 dark:!border-red-500 !text-red-700 dark:!text-red-400 hover:!bg-red-50 dark:hover:!bg-red-900/30 hover:!border-red-400 dark:hover:!border-red-400 flex-1 lg:flex-none lg:w-full xl:w-auto"
                             >
                               <Trash2 className="h-4 w-4" />
                               <span className="hidden sm:inline">Delete</span>
