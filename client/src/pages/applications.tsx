@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { insertApplicationSchema, insertApplicationNoteSchema } from "@shared/schema";
 import type { Application, InsertApplication, ApplicationNote, InsertApplicationNote } from "@shared/schema";
 import { z } from "zod";
-import { Plus, Edit, Trash2, ExternalLink, Building, Calendar, FileText, MessageSquare, X, Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Edit, Trash2, ExternalLink, Building, Calendar, FileText, MessageSquare, X, Search, Filter, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -98,20 +98,20 @@ function ApplicationNotes({
           {notes
             .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
             .map((note: ApplicationNote) => (
-            <div key={note.id} className="bg-gray-50 rounded-lg p-4 border">
+            <div key={note.id} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
               <div className="flex justify-between items-start gap-3">
-                <p className="flex-1 whitespace-pre-wrap text-sm">{note.content}</p>
+                <p className="flex-1 whitespace-pre-wrap text-sm text-gray-900 dark:text-gray-100">{note.content}</p>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => handleDeleteNote(note.id)}
-                  className="text-red-600 hover:text-red-700 h-8 w-8 p-0"
+                  className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 h-8 w-8 p-0"
                 >
                   <X className="h-4 w-4" />
                 </Button>
               </div>
               {note.createdAt && (
-                <div className="text-xs text-gray-400 mt-2">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                   {new Date(note.createdAt).toLocaleString()}
                 </div>
               )}
@@ -137,6 +137,8 @@ export default function Applications() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const [sortField, setSortField] = useState<keyof Application>("appliedOn");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -144,24 +146,58 @@ export default function Applications() {
     queryKey: ["/api/applications"],
   });
 
-  // Filter and pagination logic
-  const filteredApplications = applications?.filter(app => {
+  // Filter, sort and pagination logic
+  const filteredAndSortedApplications = applications?.filter(app => {
     const matchesSearch = app.jobTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          app.company.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
+  }).sort((a, b) => {
+    const aValue = a[sortField];
+    const bValue = b[sortField];
+    
+    // Handle null values
+    if (aValue === null && bValue === null) return 0;
+    if (aValue === null) return sortDirection === "asc" ? 1 : -1;
+    if (bValue === null) return sortDirection === "asc" ? -1 : 1;
+    
+    // Handle date sorting
+    if (sortField === "appliedOn" || sortField === "createdAt" || sortField === "updatedAt") {
+      const dateA = new Date(aValue as string);
+      const dateB = new Date(bValue as string);
+      return sortDirection === "asc" ? dateA.getTime() - dateB.getTime() : dateB.getTime() - dateA.getTime();
+    }
+    
+    // Handle string sorting
+    const stringA = String(aValue).toLowerCase();
+    const stringB = String(bValue).toLowerCase();
+    
+    if (stringA < stringB) return sortDirection === "asc" ? -1 : 1;
+    if (stringA > stringB) return sortDirection === "asc" ? 1 : -1;
+    return 0;
   }) || [];
 
   // Pagination calculations
-  const totalItems = filteredApplications.length;
+  const totalItems = filteredAndSortedApplications.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedApplications = filteredApplications.slice(startIndex, endIndex);
+  const paginatedApplications = filteredAndSortedApplications.slice(startIndex, endIndex);
 
   // Reset to first page when search changes
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     setCurrentPage(1);
+  };
+
+  // Handle column sorting
+  const handleSort = (field: keyof Application) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+    setCurrentPage(1); // Reset to first page when sorting
   };
 
   // Notes queries and mutations
@@ -664,10 +700,10 @@ export default function Applications() {
           </div>
 
           {/* Pagination */}
-          {Math.ceil(filteredApplications.length / itemsPerPage) > 1 && (
+          {Math.ceil(filteredAndSortedApplications.length / itemsPerPage) > 1 && (
             <div className="flex items-center justify-between mt-4">
               <div className="text-sm text-gray-500">
-                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredApplications.length)} of {filteredApplications.length} applications
+                Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, filteredAndSortedApplications.length)} of {filteredAndSortedApplications.length} applications
               </div>
               <div className="flex gap-2">
                 <Button
@@ -680,13 +716,13 @@ export default function Applications() {
                   Previous
                 </Button>
                 <span className="text-sm text-gray-500 px-4 py-2">
-                  Page {currentPage} of {Math.ceil(filteredApplications.length / itemsPerPage)}
+                  Page {currentPage} of {Math.ceil(filteredAndSortedApplications.length / itemsPerPage)}
                 </span>
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(prev => Math.min(Math.ceil(filteredApplications.length / itemsPerPage), prev + 1))}
-                  disabled={currentPage === Math.ceil(filteredApplications.length / itemsPerPage)}
+                  onClick={() => setCurrentPage(prev => Math.min(Math.ceil(filteredAndSortedApplications.length / itemsPerPage), prev + 1))}
+                  disabled={currentPage === Math.ceil(filteredAndSortedApplications.length / itemsPerPage)}
                 >
                   Next
                   <ChevronRight className="h-4 w-4" />
