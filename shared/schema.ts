@@ -88,7 +88,7 @@ export const applications = pgTable("applications", {
   fullText: text("full_text"),
   company: varchar("company", { length: 255 }).notNull(),
   listingUrl: varchar("listing_url", { length: 500 }),
-  appliedOn: date("applied_on"),
+  appliedOn: varchar("applied_on", { length: 10 }),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -170,10 +170,7 @@ export const insertApplicationSchema = createInsertSchema(applications).omit({
   updatedAt: true,
 });
 
-export const insertApplicationPackageSchema = createInsertSchema(applicationPackages).omit({
-  id: true,
-  createdAt: true,
-});
+
 
 export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
   id: true,

@@ -14,6 +14,7 @@ import AssignedTemplates from "@/pages/assigned-templates";
 import ExternalLogs from "@/pages/external-logs";
 import CoverLetters from "@/pages/cover-letters";
 import ApplicationHistory from "@/pages/application-history";
+import Applications from "@/pages/applications";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -48,6 +49,7 @@ function Router() {
       <Route path="/external-logs" component={ExternalLogs} />
       <Route path="/cover-letters" component={CoverLetters} />
       <Route path="/application-history" component={ApplicationHistory} />
+      <Route path="/applications" component={Applications} />
       <Route component={NotFound} />
     </Switch>
   );

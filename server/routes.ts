@@ -470,16 +470,74 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
 
 
+  // Applications CRUD
+  app.get("/api/applications", async (req, res) => {
+    try {
+      const applications = await applicationService.getAll();
+      res.json(applications);
+    } catch (error) {
+      console.error("Error fetching applications:", error);
+      res.status(500).json({ message: "Failed to fetch applications" });
+    }
+  });
+
   app.post("/api/applications", async (req, res) => {
     try {
-      const applicationData = insertApplicationSchema.parse({
-        ...req.body,
-        userId: mockUserId
-      });
-      const application = await storage.createApplication(applicationData);
+      const applicationData = insertApplicationSchema.parse(req.body);
+      const newApplication = await applicationService.create(applicationData);
+      res.status(201).json(newApplication);
+    } catch (error) {
+      console.error("Error creating application:", error);
+      res.status(500).json({ message: "Failed to create application" });
+    }
+  });
+
+  app.get("/api/applications/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const application = await applicationService.getById(id);
+      
+      if (!application) {
+        return res.status(404).json({ message: "Application not found" });
+      }
+      
       res.json(application);
     } catch (error) {
-      res.status(400).json({ message: "Invalid application data" });
+      console.error("Error fetching application:", error);
+      res.status(500).json({ message: "Failed to fetch application" });
+    }
+  });
+
+  app.put("/api/applications/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const updateData = insertApplicationSchema.parse(req.body);
+      const updatedApplication = await applicationService.update(id, updateData);
+      
+      if (!updatedApplication) {
+        return res.status(404).json({ message: "Application not found" });
+      }
+      
+      res.json(updatedApplication);
+    } catch (error) {
+      console.error("Error updating application:", error);
+      res.status(500).json({ message: "Failed to update application" });
+    }
+  });
+
+  app.delete("/api/applications/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const deleted = await applicationService.delete(id);
+      
+      if (!deleted) {
+        return res.status(404).json({ message: "Application not found" });
+      }
+      
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting application:", error);
+      res.status(500).json({ message: "Failed to delete application" });
     }
   });
 
