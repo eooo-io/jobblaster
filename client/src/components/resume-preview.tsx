@@ -715,6 +715,23 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             {/* Left Sidebar - Blue */}
             <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)', fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
               
+              {/* Profile Picture */}
+              <div className="mb-8 flex justify-center">
+                <div className="w-24 h-24 rounded-full flex items-center justify-center bg-gray-200 border-4 border-white overflow-hidden">
+                  {basics.image ? (
+                    <img 
+                      src={basics.image} 
+                      alt="Profile" 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-2xl font-bold text-gray-600">
+                      ETL
+                    </span>
+                  )}
+                </div>
+              </div>
+              
               {/* Contact Information */}
               <div className="mb-8">
                 <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
