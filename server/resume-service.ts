@@ -36,7 +36,7 @@ export class ResumeService {
   // Get all resumes for a user
   async getByUserId(userId: number): Promise<Resume[]> {
     const query = `
-      SELECT id, name, user_id, json_data, theme, is_default, created_at
+      SELECT id, name, user_id, json_data, theme, is_default, filename, created_at
       FROM resumes
       WHERE user_id = $1
       ORDER BY created_at DESC
@@ -51,6 +51,7 @@ export class ResumeService {
       jsonData: row.json_data,
       theme: row.theme,
       isDefault: row.is_default,
+      filename: row.filename,
       createdAt: row.created_at
     }));
   }
