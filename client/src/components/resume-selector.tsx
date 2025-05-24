@@ -38,24 +38,16 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   const { data: resumes, isLoading, refetch } = useQuery({
     queryKey: ['/api/resumes', refreshKey],
     queryFn: async () => {
-      const response = await fetch(`/api/resumes?t=${Date.now()}`, {
-        credentials: 'include',
-        cache: 'no-cache',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
+      const response = await fetch(`/api/resumes`, {
+        credentials: 'include'
       });
       if (!response.ok) {
         throw new Error('Failed to fetch resumes');
       }
       return response.json();
     },
-    staleTime: 0,
-    gcTime: 0,
-    refetchInterval: 2000, // Poll every 2 seconds for real-time updates
-    refetchIntervalInBackground: true, // Keep polling even when tab is not active
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // Auto-select default resume if no resume is currently selected
