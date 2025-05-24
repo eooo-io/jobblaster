@@ -697,22 +697,14 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     }
   });
 
-  // Applications Management - Debug version
+  // Applications Management - Simple working version
   app.get("/api/applications", requireAuth, async (req, res) => {
     try {
-      console.log("Attempting to fetch applications...");
-      console.log("Applications table schema:", applications);
       const result = await db.select().from(applications);
-      console.log("Raw result:", result);
       res.json(result);
     } catch (error) {
-      console.error("Detailed error:", error);
-      console.error("Error message:", error.message);
-      console.error("Error stack:", error.stack);
-      res.status(500).json({ 
-        message: "Failed to fetch applications",
-        error: error.message 
-      });
+      console.error("Database error:", error);
+      res.status(500).json({ message: "Failed to fetch applications" });
     }
   });
 
