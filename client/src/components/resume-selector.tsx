@@ -180,9 +180,7 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
   };
 
   const handleDelete = (id: number, resumeName: string) => {
-    if (window.confirm(`Are you sure you want to delete "${resumeName}"? This action cannot be undone.`)) {
-      deleteMutation.mutate(id);
-    }
+    deleteMutation.mutate(id);
   };
 
   if (isLoading) {
@@ -359,19 +357,39 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
                       <Edit2 className="h-3 w-3" />
                     </Button>
 
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-8 w-8 p-0 hover:text-red-500"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(resume.id, resume.name);
-                      }}
-                      disabled={deleteMutation.isPending}
-                      title="Delete resume"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="h-8 w-8 p-0 hover:text-red-500"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          disabled={deleteMutation.isPending}
+                          title="Delete resume"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent onClick={(e) => e.stopPropagation()}>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete Resume</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to delete "{resume.name}"? This action cannot be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(resume.id, resume.name)}
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                          >
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               ))}
