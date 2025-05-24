@@ -263,8 +263,9 @@ export default function Dashboard() {
                 </Button>
                 <Button
                   size="sm"
+                  variant="teal"
                   onClick={() => setShowPrintPreview(false)}
-                  className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none"
+                  className="flex-1 sm:flex-none"
                 >
                   Done
                 </Button>

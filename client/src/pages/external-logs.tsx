@@ -156,14 +156,10 @@ export default function ExternalLogs() {
       buttons.push(
         <Button
           key={i}
-          variant={i === currentPage ? "filled" : "outlined"}
+          variant={i === currentPage ? "teal" : "outline"}
           size="sm"
           onClick={() => handlePageChange(i)}
-          className={`min-w-[40px] ${
-            i === currentPage 
-              ? "bg-blue-600 border-blue-600 text-white" 
-              : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-          }`}
+          className="min-w-[40px]"
         >
           {i}
         </Button>
