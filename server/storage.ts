@@ -393,15 +393,13 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteResume(id: number): Promise<boolean> {
-    // Use direct SQL execution to ensure deletion works
-    const result = await db.execute(sql`
-      DELETE FROM resumes 
-      WHERE id = ${id} AND user_id = 1
-      RETURNING id
-    `);
-    
-    // Return true if exactly one row was deleted
-    return result.rowCount === 1;
+    try {
+      const result = await db.delete(resumes).where(eq(resumes.id, id));
+      return true;
+    } catch (error) {
+      console.error("Delete error:", error);
+      return false;
+    }
   }
 
   // Job Postings - Database Implementation
