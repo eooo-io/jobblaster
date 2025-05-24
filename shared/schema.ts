@@ -89,7 +89,6 @@ export const applications = pgTable("applications", {
   coverLetterId: integer("cover_letter_id").references(() => coverLetters.id),
   status: text("status").notNull().default("draft"),
   notes: text("notes"),
-  packageUrl: text("package_url"), // URL to the exported application package
   appliedAt: timestamp("applied_at"),
   createdAt: timestamp("created_at").defaultNow(),
 });
