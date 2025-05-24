@@ -351,7 +351,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getResumesByUserId(userId: number): Promise<Resume[]> {
+    console.log(`Fetching resumes for user ${userId}`);
     const userResumes = await db.select().from(resumes).where(eq(resumes.userId, userId));
+    console.log(`Found ${userResumes.length} resumes:`, userResumes.map(r => ({ id: r.id, name: r.name })));
     return userResumes;
   }
 
