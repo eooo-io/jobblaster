@@ -154,25 +154,12 @@ export default function Sidebar() {
                 )}
                 onClick={closeMobileMenu}
               >
-                <History className="w-5 h-5" />
+                <Briefcase className="w-5 h-5" />
                 <span>Applications</span>
               </div>
             </Link>
 
-            <Link href="/application-history">
-              <div 
-                className={cn(
-                  "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
-                  location === "/application-history"
-                    ? "bg-jobblaster-teal/10 text-jobblaster-teal dark:bg-jobblaster-teal/20 dark:text-jobblaster-teal"
-                    : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
-                )}
-                onClick={closeMobileMenu}
-              >
-                <History className="w-5 h-5" />
-                <span>Application History</span>
-              </div>
-            </Link>
+
 
             {navigation.slice(1, -2).map((item) => (
               <div
@@ -363,17 +350,7 @@ export default function Sidebar() {
             </div>
           </Link>
 
-          <Link href="/application-history">
-            <div className={cn(
-              "flex items-center space-x-2 px-3 py-2 rounded-lg font-medium cursor-pointer text-sm",
-              location === "/application-history"
-                ? "bg-jobblaster-teal/10 text-jobblaster-teal dark:bg-jobblaster-teal/20 dark:text-jobblaster-teal"
-                : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
-            )}>
-              <History className="w-4 h-4" />
-              <span>Application History</span>
-            </div>
-          </Link>
+
 
           {/* Remaining features coming soon */}
           {navigation.slice(1, -2).map((item) => (
