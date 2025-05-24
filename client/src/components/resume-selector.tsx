@@ -113,14 +113,13 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
         onResumeSelect(null);
       }
       
+      // Immediately invalidate and refetch the data
+      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      setRefreshKey(prev => prev + 1);
+      
       toast({
         title: "Resume deleted successfully!",
       });
-      
-      // Force a page refresh to ensure data is current
-      setTimeout(() => {
-        window.location.reload();
-      }, 500);
     },
     onError: (error: Error) => {
       toast({
