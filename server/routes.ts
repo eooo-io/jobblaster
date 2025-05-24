@@ -371,22 +371,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Not authorized to delete this resume" });
       }
 
-      console.log(`[DELETE ROUTE] About to delete resume ID: ${resumeId} for user: ${userId}`);
+      // Direct database delete to ensure it works
+      const result = await db.execute(sql`DELETE FROM resumes WHERE id = ${resumeId} AND user_id = ${userId} RETURNING id`);
       
-      try {
-        const deleted = await storage.deleteResume(resumeId);
-        console.log(`[DELETE ROUTE] Delete result: ${deleted}`);
-        
-        if (!deleted) {
-          console.log(`[DELETE ROUTE] Delete failed for resume ID: ${resumeId}`);
-          return res.status(500).json({ message: "Failed to delete resume" });
-        }
-        
-        console.log(`[DELETE ROUTE] Successfully deleted resume ID: ${resumeId}`);
+      if (result.rows && result.rows.length > 0) {
         res.status(200).json({ message: "Resume deleted successfully" });
-      } catch (deleteError) {
-        console.error(`[DELETE ROUTE] Delete operation threw error:`, deleteError);
-        return res.status(500).json({ message: "Delete operation failed" });
+      } else {
+        res.status(404).json({ message: "Resume not found or not authorized" });
       }
     } catch (error) {
       console.error("Resume delete error:", error);
