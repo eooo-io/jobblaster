@@ -18,6 +18,12 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // JobBlaster brand semantic variants
+        success: "bg-jobblaster-success text-white hover:bg-jobblaster-success-dark",
+        warning: "bg-jobblaster-warning text-jobblaster-charcoal hover:bg-jobblaster-warning-dark",
+        error: "bg-jobblaster-error text-white hover:bg-jobblaster-error-dark",
+        teal: "bg-jobblaster-teal text-white hover:bg-jobblaster-teal-dark",
+        brown: "bg-jobblaster-brown text-white hover:bg-jobblaster-brown-dark",
       },
       size: {
         default: "h-10 px-4 py-2",

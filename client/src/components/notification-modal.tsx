@@ -35,30 +35,30 @@ export function NotificationModal({
   const getIcon = () => {
     switch (type) {
       case "success":
-        return <CheckCircle className="h-6 w-6 text-green-500" />;
+        return <CheckCircle className="h-6 w-6 text-jobblaster-success" />;
       case "error":
-        return <XCircle className="h-6 w-6 text-red-500" />;
+        return <XCircle className="h-6 w-6 text-jobblaster-error" />;
       case "warning":
-        return <AlertCircle className="h-6 w-6 text-yellow-500" />;
+        return <AlertCircle className="h-6 w-6 text-jobblaster-warning" />;
       case "info":
-        return <Info className="h-6 w-6 text-blue-500" />;
+        return <Info className="h-6 w-6 text-jobblaster-teal" />;
       default:
-        return <Info className="h-6 w-6 text-blue-500" />;
+        return <Info className="h-6 w-6 text-jobblaster-teal" />;
     }
   };
 
   const getBackgroundColor = () => {
     switch (type) {
       case "success":
-        return "bg-green-50 dark:bg-green-950";
+        return "bg-jobblaster-success/10 dark:bg-jobblaster-success/5";
       case "error":
-        return "bg-red-50 dark:bg-red-950";
+        return "bg-jobblaster-error/10 dark:bg-jobblaster-error/5";
       case "warning":
-        return "bg-yellow-50 dark:bg-yellow-950";
+        return "bg-jobblaster-warning/10 dark:bg-jobblaster-warning/5";
       case "info":
-        return "bg-blue-50 dark:bg-blue-950";
+        return "bg-jobblaster-teal/10 dark:bg-jobblaster-teal/5";
       default:
-        return "bg-blue-50 dark:bg-blue-950";
+        return "bg-jobblaster-teal/10 dark:bg-jobblaster-teal/5";
     }
   };
 

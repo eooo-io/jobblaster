@@ -29,6 +29,22 @@ export default {
             orange: "#FF9800",
             yellow: "#FFC107",
           },
+          // Semantic colors from target design
+          success: {
+            DEFAULT: "#4CAF50", // Green tone to match target theme
+            light: "#81C784",
+            dark: "#388E3C",
+          },
+          warning: {
+            DEFAULT: "#FFC107", // Yellow from target
+            light: "#FFD54F", 
+            dark: "#F57F17",
+          },
+          error: {
+            DEFAULT: "#E53935", // Red from target center
+            light: "#EF5350",
+            dark: "#C62828",
+          },
           cream: {
             DEFAULT: "#F5E6D3",
             light: "#FAF0E6",
