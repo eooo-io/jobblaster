@@ -717,7 +717,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               
               {/* Profile Picture */}
               <div className="mb-8 flex justify-center">
-                <div className="w-24 h-24 rounded-full flex items-center justify-center bg-gray-200 border-4 border-white overflow-hidden">
+                <div className="w-32 h-32 rounded-full flex items-center justify-center bg-gray-200 border-4 border-white overflow-hidden">
                   {basics.image ? (
                     <img 
                       src={basics.image} 
@@ -725,7 +725,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="text-2xl font-bold text-gray-600">
+                    <span className="text-3xl font-bold text-gray-600">
                       ETL
                     </span>
                   )}
@@ -856,7 +856,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Languages */}
               {languages.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                  <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                     LANGUAGES
                   </h3>
                   <div className="space-y-2 text-xs">
@@ -873,7 +873,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               {/* Interests */}
               {interests.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                  <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                     INTERESTS
                   </h3>
                   <div className="space-y-2 text-xs">
@@ -888,7 +888,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
               {/* References */}
               <div>
-                <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
                   REFERENCES
                 </h3>
                 <div className="text-xs leading-relaxed">
@@ -998,7 +998,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                             {edu.startDate && formatDate(edu.startDate)}
                             {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
                           </span>
-                          <h4 className="font-bold text-gray-900">
+                          <h4 className="font-bold text-gray-900 text-[12px]">
                             {edu.studyType} {edu.area && `en ${edu.area}`}
                           </h4>
                           <p className="text-blue-600 font-medium">
