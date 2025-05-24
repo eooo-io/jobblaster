@@ -121,10 +121,10 @@ export default function Login({ onLoginSuccess }: LoginProps) {
         )}
       </Button>
 
-      <div className="w-full max-w-md">
+      <div className="w-full max-w-4xl">
         {/* Logo and Brand */}
         <div className="text-center mb-8">
-          <div className="w-40 h-40 sm:w-200 sm:h-200 mx-auto mb-4">
+          <div className="w-40 h-40 md:w-200 md:h-200 mx-auto mb-4">
             <img 
               src={appIcon} 
               alt="JobBlaster" 
@@ -135,7 +135,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
         </div>
 
         {/* Login/Register Form */}
-        <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 shadow-xl">
+        <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 shadow-xl max-w-md mx-auto">
           <CardContent className="p-6 ml-[0px] mr-[0px] pl-[10px] pr-[10px] pt-[10px] pb-[10px]">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
