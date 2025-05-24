@@ -96,6 +96,7 @@ export default function Dashboard() {
                 >
                   <option value="modern">Modern</option>
                   <option value="lucide">Lucide</option>
+                  <option value="lucide-picture">Lucide Picture</option>
                   <option value="debug">Debug</option>
                 </select>
               </div>

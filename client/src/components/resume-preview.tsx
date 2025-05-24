@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
+import { Download, Phone, Mail, MapPin, Globe, Link as LinkIcon } from "lucide-react";
 import type { Resume } from "@shared/schema";
 import type { JSONResumeSchema } from "@/lib/types";
 
@@ -482,6 +482,342 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                             )}
                           </>
                         )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Languages */}
+              {languages.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                    LANGUAGES
+                  </h3>
+                  <div className="space-y-2 text-xs">
+                    {languages.map((lang: any, index: number) => (
+                      <div key={index}>
+                        <div className="font-medium">{lang.language}</div>
+                        <div className="text-blue-200 text-xs">{lang.fluency}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Interests */}
+              {interests.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                    INTERESTS
+                  </h3>
+                  <div className="space-y-2 text-xs">
+                    {interests.map((interest: any, index: number) => (
+                      <div key={index}>
+                        {typeof interest === 'string' ? interest : interest.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* References */}
+              <div>
+                <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                  REFERENCES
+                </h3>
+                <div className="text-xs leading-relaxed">
+                  <p className="italic">
+                    "Professional references available upon request. Previous colleagues and supervisors can attest to technical expertise, work ethic, and collaborative abilities."
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Content Area */}
+            <div className="w-2/3 p-6 bg-gray-50" style={{ fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
+              
+              {/* Header */}
+              <div className="mb-8">
+                <h1 className="text-3xl font-bold mb-2 uppercase" style={{ color: 'rgb(28, 35, 51)' }}>
+                  {basics.name || "Your Name"}
+                </h1>
+                {basics.label && (
+                  <h2 className="text-lg text-blue-600 font-medium mb-4">
+                    {basics.label}
+                  </h2>
+                )}
+                
+                {basics.summary && (
+                  <p className="text-gray-700 leading-relaxed text-xs">
+                    {basics.summary}
+                  </p>
+                )}
+              </div>
+
+              {/* Work Experience */}
+              {work.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                    PROFESSIONAL EXPERIENCES
+                  </h3>
+                  {work.map((job: any, index: number) => (
+                    <div key={index} className="mb-6 last:mb-0">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <div className="flex justify-between items-center mb-1">
+                            <h4 className="text-gray-900 font-semibold text-[13px]">
+                              {job.position || "Position"}
+                            </h4>
+                            <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
+                              {job.startDate && formatDate(job.startDate)}
+                              {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Current"}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <p className="text-blue-600 font-medium">
+                              {job.name || job.company || "Company"}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {job.summary && (
+                        <p className="text-gray-700 mb-3 text-xs leading-relaxed">
+                          {job.summary}
+                        </p>
+                      )}
+                      
+                      {job.highlights && job.highlights.length > 0 && (
+                        <ul className="text-gray-700 space-y-0.5 text-xs">
+                          {job.highlights.map((highlight: string, idx: number) => (
+                            <li key={idx} className="flex items-start">
+                              <span className="text-blue-600 mr-2 mt-1">•</span>
+                              <span>{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Skills/Competences */}
+              {skills.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                    CORE COMPETENCIES
+                  </h3>
+                  <div className="grid grid-cols-3 gap-4">
+                    {skills.map((skill: any, index: number) => (
+                      <div key={index} className="bg-gray-900 text-white px-3 py-2 rounded-md text-xs flex items-center justify-center text-center">
+                        {typeof skill === 'string' ? skill : skill.name}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Education */}
+              {education.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                    EDUCATION
+                  </h3>
+                  {education.map((edu: any, index: number) => (
+                    <div key={index} className="mb-4 last:mb-0">
+                      <div className="flex justify-between items-start mb-1">
+                        <div>
+                          <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
+                            {edu.startDate && formatDate(edu.startDate)}
+                            {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
+                          </span>
+                          <h4 className="font-bold text-gray-900">
+                            {edu.studyType} {edu.area && `en ${edu.area}`}
+                          </h4>
+                          <p className="text-blue-600 font-medium">
+                            {edu.institution}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Projects */}
+              {projects.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
+                    PROJECTS
+                  </h3>
+                  {projects.map((project: any, index: number) => (
+                    <div key={index} className="mb-6 last:mb-0">
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <span className="text-sm font-medium text-gray-600">
+                            {project.startDate && formatDate(project.startDate)}
+                            {project.endDate ? ` – ${formatDate(project.endDate)}` : project.startDate && " – Current"}
+                          </span>
+                          <h4 className="font-bold text-gray-900">
+                            {project.name}
+                          </h4>
+                        </div>
+                      </div>
+                      
+                      {project.description && (
+                        <p className="text-gray-700 mb-2 text-sm leading-relaxed">
+                          {project.description}
+                        </p>
+                      )}
+                      
+                      {project.highlights && project.highlights.length > 0 && (
+                        <ul className="text-xs text-gray-700 ml-3 list-disc space-y-0.5">
+                          {project.highlights.map((highlight: string, idx: number) => (
+                            <li key={idx}>{highlight}</li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Lucide Picture Theme - Blue sidebar layout with enhanced picture support
+  if (theme === "lucide-picture") {
+    return (
+      <div className="lg:col-span-1">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-slate-900">Resume Preview - Lucide Picture Theme</h3>
+          {showDownloadButton && (
+            <Button
+              onClick={handleDownloadPDF}
+              size="sm"
+              variant="outline"
+              className="flex items-center space-x-2"
+            >
+              <Download className="h-4 w-4" />
+              <span>Download PDF</span>
+            </Button>
+          )}
+        </div>
+        <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 border border-slate-200'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
+          <div className={`resume-content ${forceLightMode ? 'bg-white' : 'bg-white'} rounded shadow-sm min-h-full flex text-sm`}>
+            
+            {/* Left Sidebar - Blue */}
+            <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)', fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
+              
+              {/* Contact Information */}
+              <div className="mb-8">
+                <h3 className="font-bold mb-4 py-2 px-6 -mx-6 text-[15px]" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                  CONTACT
+                </h3>
+                <div className="space-y-3 text-xs">
+                  {basics.phone && (
+                    <div className="flex items-center">
+                      <Phone className="h-3 w-3 mr-2" />
+                      <span>{basics.phone}</span>
+                    </div>
+                  )}
+                  {basics.email && (
+                    <div className="flex items-center">
+                      <Mail className="h-3 w-3 mr-2" />
+                      <span>{basics.email}</span>
+                    </div>
+                  )}
+                  {basics.location && (
+                    <div className="flex items-center">
+                      <MapPin className="h-3 w-3 mr-2" />
+                      <span>
+                        {basics.location.city && basics.location.city}
+                        {basics.location.region && `, ${basics.location.region}`}
+                        {basics.location.countryCode && `, ${basics.location.countryCode}`}
+                      </span>
+                    </div>
+                  )}
+                  {basics.url && (
+                    <div className="flex items-center">
+                      <Globe className="h-3 w-3 mr-2" />
+                      <span>{basics.url}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Skills */}
+              {skills.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                    TECHNICAL SKILLS
+                  </h3>
+                  <div className="space-y-4 text-xs">
+                    {skills.map((skill: any, index: number) => (
+                      <div key={index}>
+                        {typeof skill === 'string' ? (
+                          <div>
+                            <div className="font-medium">{skill}</div>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="font-medium">{skill.name || `Skill ${index + 1}`}</div>
+                            {skill.keywords && skill.keywords.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {skill.keywords.map((keyword: string, kidx: number) => (
+                                  <div key={kidx} className="bg-gray-900 text-white px-2 py-1 rounded-sm text-xs flex items-center justify-center">
+                                    {keyword}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Education */}
+              {education.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                    EDUCATION
+                  </h3>
+                  <div className="space-y-4 text-xs">
+                    {education.map((edu: any, index: number) => (
+                      <div key={index}>
+                        <div className="font-medium">{edu.studyType} {edu.area && `en ${edu.area}`}</div>
+                        <div className="text-blue-200">{edu.institution}</div>
+                        <div className="text-blue-200 text-xs">
+                          {edu.startDate && formatDate(edu.startDate)}
+                          {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
+                        </div>
+                        {edu.gpa && <div className="text-blue-200 text-xs">GPA: {edu.gpa}</div>}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Social Profiles */}
+              {basics.profiles && basics.profiles.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-base font-bold mb-4 py-2 px-6 -mx-6" style={{ backgroundColor: 'rgb(20, 25, 35)' }}>
+                    SOCIAL PROFILES
+                  </h3>
+                  <div className="space-y-2 text-xs">
+                    {basics.profiles.map((profile: any, index: number) => (
+                      <div key={index} className="flex items-center">
+                        <LinkIcon className="h-3 w-3 mr-2" />
+                        <span>{profile.network}: {profile.username || profile.url}</span>
                       </div>
                     ))}
                   </div>
