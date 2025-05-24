@@ -83,14 +83,14 @@ export const coverLetters = pgTable("cover_letters", {
 
 export const applications = pgTable("applications", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
-  resumeId: integer("resume_id").references(() => resumes.id),
-  jobId: integer("job_id").references(() => jobPostings.id),
-  coverLetterId: integer("cover_letter_id").references(() => coverLetters.id),
-  status: text("status").notNull().default("draft"),
-  notes: text("notes"),
-  appliedAt: timestamp("applied_at"),
+  jobTitle: varchar("job_title", { length: 255 }).notNull(),
+  shortDescription: text("short_description"),
+  fullText: text("full_text"),
+  company: varchar("company", { length: 255 }).notNull(),
+  listingUrl: varchar("listing_url", { length: 500 }),
+  appliedOn: date("applied_on"),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 
@@ -167,6 +167,7 @@ export const insertCoverLetterSchema = createInsertSchema(coverLetters).omit({
 export const insertApplicationSchema = createInsertSchema(applications).omit({
   id: true,
   createdAt: true,
+  updatedAt: true,
 });
 
 export const insertApplicationPackageSchema = createInsertSchema(applicationPackages).omit({
