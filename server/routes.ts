@@ -372,16 +372,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       console.log(`[DELETE ROUTE] About to delete resume ID: ${resumeId} for user: ${userId}`);
-      const deleted = await storage.deleteResume(resumeId);
-      console.log(`[DELETE ROUTE] Delete result: ${deleted}`);
       
-      if (!deleted) {
-        console.log(`[DELETE ROUTE] Delete failed for resume ID: ${resumeId}`);
-        return res.status(404).json({ message: "Resume not found" });
+      try {
+        const deleted = await storage.deleteResume(resumeId);
+        console.log(`[DELETE ROUTE] Delete result: ${deleted}`);
+        
+        if (!deleted) {
+          console.log(`[DELETE ROUTE] Delete failed for resume ID: ${resumeId}`);
+          return res.status(500).json({ message: "Failed to delete resume" });
+        }
+        
+        console.log(`[DELETE ROUTE] Successfully deleted resume ID: ${resumeId}`);
+        res.status(200).json({ message: "Resume deleted successfully" });
+      } catch (deleteError) {
+        console.error(`[DELETE ROUTE] Delete operation threw error:`, deleteError);
+        return res.status(500).json({ message: "Delete operation failed" });
       }
-      
-      console.log(`[DELETE ROUTE] Successfully deleted resume ID: ${resumeId}`);
-      res.status(200).json({ message: "Resume deleted successfully" });
     } catch (error) {
       console.error("Resume delete error:", error);
       res.status(500).json({ message: "Failed to delete resume" });
