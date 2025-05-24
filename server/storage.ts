@@ -396,21 +396,35 @@ export class DatabaseStorage implements IStorage {
     try {
       console.log(`[STORAGE] Attempting to delete resume with ID: ${id}`);
       
-      // Use raw SQL to ensure deletion actually happens
-      const result = await db.execute(sql`DELETE FROM resumes WHERE id = ${id} RETURNING id`);
+      // First verify the record exists
+      const [existingResume] = await db.select().from(resumes).where(eq(resumes.id, id));
+      if (!existingResume) {
+        console.log(`[STORAGE] Resume ${id} does not exist`);
+        return false;
+      }
       
-      console.log(`[STORAGE] Raw SQL delete result:`, result);
-      console.log(`[STORAGE] Rows affected:`, result.rowCount);
-      console.log(`[STORAGE] Returned rows:`, result.rows);
+      console.log(`[STORAGE] Found resume to delete:`, existingResume);
       
-      // Check if we actually deleted something
-      const success = result.rowCount === 1 && result.rows && result.rows.length > 0;
-      console.log(`[STORAGE] Delete success: ${success}`);
+      // Use standard Drizzle delete with explicit verification
+      const deletedRows = await db.delete(resumes).where(eq(resumes.id, id)).returning({ id: resumes.id });
+      
+      console.log(`[STORAGE] Deleted rows:`, deletedRows);
+      
+      // Verify the record no longer exists
+      const [stillExists] = await db.select().from(resumes).where(eq(resumes.id, id));
+      
+      if (stillExists) {
+        console.error(`[STORAGE] CRITICAL ERROR: Resume ${id} still exists after delete operation!`);
+        throw new Error(`Delete operation failed - record still exists`);
+      }
+      
+      const success = deletedRows.length === 1;
+      console.log(`[STORAGE] Delete verification passed. Success: ${success}`);
       
       return success;
     } catch (error) {
-      console.error(`[STORAGE] Error deleting resume ${id}:`, error);
-      return false;
+      console.error(`[STORAGE] Delete operation failed for resume ${id}:`, error);
+      throw error; // Don't return false, throw the error so it's not silent
     }
   }
 
