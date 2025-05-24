@@ -180,3 +180,26 @@ button[variant="outlined"].text-red-700:hover {
   background-color: rgb(29 78 216) !important;
   border-color: rgb(29 78 216) !important;
 }
+
+/* Mobile-specific button text visibility fixes */
+@media (max-width: 640px) {
+  button[variant="outlined"] * {
+    color: inherit !important;
+  }
+  
+  button[variant="outlined"] span {
+    color: rgb(55 65 81) !important;
+  }
+  
+  .dark button[variant="outlined"] span {
+    color: rgb(229 231 235) !important;
+  }
+  
+  button[variant="outlined"].text-red-700 span {
+    color: rgb(185 28 28) !important;
+  }
+  
+  .dark button[variant="outlined"].text-red-700 span {
+    color: rgb(248 113 113) !important;
+  }
+}
