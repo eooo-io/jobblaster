@@ -144,6 +144,21 @@ export default function Sidebar() {
               </div>
             </Link>
 
+            <Link href="/applications">
+              <div 
+                className={cn(
+                  "flex items-center space-x-3 px-3 py-3 rounded-lg font-medium cursor-pointer",
+                  location === "/applications"
+                    ? "bg-jobblaster-teal/10 text-jobblaster-teal dark:bg-jobblaster-teal/20 dark:text-jobblaster-teal"
+                    : "text-slate-600 dark:text-gray-300 hover:bg-slate-100 dark:hover:bg-gray-800"
+                )}
+                onClick={closeMobileMenu}
+              >
+                <History className="w-5 h-5" />
+                <span>Applications</span>
+              </div>
+            </Link>
+
             <Link href="/application-history">
               <div 
                 className={cn(
