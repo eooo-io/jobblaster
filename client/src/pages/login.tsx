@@ -124,7 +124,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       <div className="w-full max-w-4xl">
         {/* Logo and Brand */}
         <div className="text-center mb-8">
-          <div className="w-40 h-40 md:w-200 md:h-200 mx-auto mb-4">
+          <div className="w-40 h-40 md:w-96 md:h-96 mx-auto mb-4">
             <img 
               src={appIcon} 
               alt="JobBlaster" 
