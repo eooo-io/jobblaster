@@ -131,24 +131,11 @@ export default function Login({ onLoginSuccess }: LoginProps) {
               className="w-full h-full object-contain rounded-xl"
             />
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2">JobBlaster</h1>
           <p className="text-slate-600 dark:text-gray-300">Personal Intelligent Resume & Job Match Engine</p>
         </div>
 
         {/* Login/Register Form */}
         <Card className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-white/20 dark:border-gray-700/50 shadow-xl">
-          <CardHeader className="text-center">
-            <CardTitle className="text-xl font-semibold text-slate-900 dark:text-white">
-              {isLogin ? "Welcome Back" : "Create Account"}
-            </CardTitle>
-            <p className="text-sm text-slate-600 dark:text-gray-300">
-              {isLogin 
-                ? "Sign in to access your resume optimization tools" 
-                : "Set up your personal resume optimization workspace"
-              }
-            </p>
-          </CardHeader>
-
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
