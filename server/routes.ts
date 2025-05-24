@@ -469,11 +469,17 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
   });
 
   // Applications
-  app.get("/api/applications", async (req, res) => {
+  app.get("/api/applications", requireAuth, async (req, res) => {
     try {
-      const applications = await storage.getApplicationsByUserId(mockUserId);
+      const userId = getCurrentUserId(req);
+      if (!userId) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      const applications = await storage.getApplicationsByUserId(userId);
       res.json(applications);
     } catch (error) {
+      console.error("Error fetching applications:", error);
       res.status(500).json({ message: "Failed to fetch applications" });
     }
   });
