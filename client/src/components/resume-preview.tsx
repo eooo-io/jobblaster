@@ -566,13 +566,13 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       <div className="flex justify-between items-start mb-2">
                         <div className="flex-1">
                           <div className="flex items-center gap-4 mb-1">
+                            <h4 className="text-gray-900 font-semibold text-[13px]">
+                              {job.position || "Position"}
+                            </h4>
                             <span className="text-xs font-medium text-gray-600 whitespace-nowrap">
                               {job.startDate && formatDate(job.startDate)}
                               {job.endDate ? ` – ${formatDate(job.endDate)}` : " – Current"}
                             </span>
-                            <h4 className="text-gray-900 font-semibold text-[13px]">
-                              {job.position || "Position"}
-                            </h4>
                           </div>
                           <div className="flex items-center gap-2 mb-2">
                             <p className="text-blue-600 font-medium">
