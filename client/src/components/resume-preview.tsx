@@ -739,12 +739,27 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               
               {/* Social Profiles */}
               {basics.profiles && basics.profiles.length > 0 && (
-                <div className="text-xs text-gray-600 mt-1 flex flex-wrap justify-center gap-x-2">
-                  {basics.profiles.map((profile: any, index: number) => (
-                    <span key={index}>
-                      {profile.network}: {profile.username || profile.url}
-                    </span>
-                  ))}
+                <div className="text-xs text-gray-600 mt-1 flex flex-wrap justify-center gap-x-3">
+                  {basics.profiles.map((profile: any, index: number) => {
+                    const getProfileIcon = (network: string) => {
+                      const lowerNetwork = network.toLowerCase();
+                      if (lowerNetwork.includes('linkedin')) return 'fab fa-linkedin';
+                      if (lowerNetwork.includes('github')) return 'fab fa-github';
+                      if (lowerNetwork.includes('twitter') || lowerNetwork.includes('x')) return 'fab fa-twitter';
+                      if (lowerNetwork.includes('facebook')) return 'fab fa-facebook';
+                      if (lowerNetwork.includes('instagram')) return 'fab fa-instagram';
+                      if (lowerNetwork.includes('youtube')) return 'fab fa-youtube';
+                      if (lowerNetwork.includes('website') || lowerNetwork.includes('portfolio')) return 'fas fa-globe';
+                      return 'fas fa-link';
+                    };
+                    
+                    return (
+                      <span key={index}>
+                        <i className={`${getProfileIcon(profile.network || '')} mr-1`}></i>
+                        {profile.username || profile.url}
+                      </span>
+                    );
+                  })}
                 </div>
               )}
             </div>
