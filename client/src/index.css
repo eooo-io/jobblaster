@@ -147,3 +147,15 @@
   background-color: rgba(127 29 29 / 0.3) !important;
   border-color: rgb(239 68 68) !important;
 }
+
+/* Primary button colors in dark mode */
+.dark button[color="blue"]:not([variant="outlined"]) {
+  background-color: rgb(37 99 235) !important;
+  color: rgb(255 255 255) !important;
+  border-color: rgb(37 99 235) !important;
+}
+
+.dark button[color="blue"]:not([variant="outlined"]):hover {
+  background-color: rgb(29 78 216) !important;
+  border-color: rgb(29 78 216) !important;
+}
