@@ -88,7 +88,9 @@ function ApplicationNotes({
         <div className="text-center py-4 text-gray-500">Loading notes...</div>
       ) : notes && notes.length > 0 ? (
         <div className="space-y-3 max-h-96 overflow-y-auto">
-          {notes.map((note: ApplicationNote) => (
+          {notes
+            .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime())
+            .map((note: ApplicationNote) => (
             <div key={note.id} className="bg-gray-50 rounded-lg p-4 border">
               <div className="flex justify-between items-start gap-3">
                 <p className="flex-1 whitespace-pre-wrap text-sm">{note.content}</p>
@@ -145,7 +147,7 @@ export default function Applications() {
   // Notes queries and mutations
   const { data: notes, isLoading: notesLoading } = useQuery<ApplicationNote[]>({
     queryKey: ["/api/applications", selectedApplicationId, "notes"],
-    enabled: !!selectedApplicationId && notesModalOpen,
+    enabled: !!selectedApplicationId,
   });
 
   const createNoteMutation = useMutation({
@@ -289,7 +291,16 @@ export default function Applications() {
 
   const handleNotesClick = (applicationId: number) => {
     setSelectedApplicationId(applicationId);
+    setNewNote(""); // Clear any existing note input
     setNotesModalOpen(true);
+  };
+
+  const handleNotesModalClose = (open: boolean) => {
+    setNotesModalOpen(open);
+    if (!open) {
+      setNewNote(""); // Clear note input when modal closes
+      setSelectedApplicationId(null);
+    }
   };
 
   const onSubmit = (data: ApplicationFormData) => {
@@ -458,12 +469,17 @@ export default function Applications() {
       </Dialog>
 
       {/* Notes Modal */}
-      <Dialog open={notesModalOpen} onOpenChange={setNotesModalOpen}>
+      <Dialog open={notesModalOpen} onOpenChange={handleNotesModalClose}>
         <DialogContent className="sm:max-w-[700px] max-h-[80vh]">
           <DialogHeader>
             <DialogTitle>Application Notes</DialogTitle>
             <DialogDescription>
-              Manage notes for this job application.
+              {selectedApplicationId && applications && (
+                <>
+                  Notes for <strong>{applications.find(app => app.id === selectedApplicationId)?.jobTitle}</strong> at{' '}
+                  <strong>{applications.find(app => app.id === selectedApplicationId)?.company}</strong>
+                </>
+              )}
             </DialogDescription>
           </DialogHeader>
           {selectedApplicationId && (
