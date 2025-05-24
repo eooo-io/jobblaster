@@ -351,10 +351,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getResumesByUserId(userId: number): Promise<Resume[]> {
-    console.log(`Fetching resumes for user ${userId}`);
-    const userResumes = await db.select().from(resumes).where(eq(resumes.userId, userId));
-    console.log(`Found ${userResumes.length} resumes:`, userResumes.map(r => ({ id: r.id, name: r.name })));
-    return userResumes;
+    try {
+      console.log(`Fetching resumes for user ${userId}`);
+      const userResumes = await db.select().from(resumes).where(eq(resumes.userId, userId));
+      console.log(`Found ${userResumes.length} resumes:`, userResumes.map(r => ({ id: r.id, name: r.name })));
+      
+      // Additional debugging - check what's actually in the database
+      const directQuery = await db.select({ id: resumes.id, name: resumes.name }).from(resumes).where(eq(resumes.userId, userId));
+      console.log(`Direct query result:`, directQuery);
+      
+      return userResumes;
+    } catch (error) {
+      console.error(`Error fetching resumes for user ${userId}:`, error);
+      return [];
+    }
   }
 
   async getDefaultResume(userId: number): Promise<Resume | undefined> {
