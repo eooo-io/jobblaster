@@ -1,0 +1,59 @@
+app-1       | file:///app/node_modules/@neondatabase/serverless/index.mjs:1345
+app-1       | o?t(o):n(u)},"cb"),s=new r(function(o,u){n=o,t=u}).catch(o=>{throw Error.captureStackTrace(
+app-1       |                                                                          ^
+app-1       | ErrorEvent {
+app-1       |   [Symbol(kTarget)]: WebSocket {
+app-1       |     _events: [Object: null prototype] {
+app-1       |       error: [Function: onError] {
+app-1       |         [Symbol(kIsForOnEventAttribute)]: false,
+app-1       |         [Symbol(kListener)]: [Function (anonymous)]
+app-1       |       },
+app-1       |       message: [Function: onMessage] {
+app-1       |         [Symbol(kIsForOnEventAttribute)]: false,
+app-1       |         [Symbol(kListener)]: [Function (anonymous)]
+app-1       |       },
+app-1       |       close: [Function: onClose] {
+app-1       |         [Symbol(kIsForOnEventAttribute)]: false,
+app-1       |         [Symbol(kListener)]: [Function (anonymous)]
+app-1       |       },
+app-1       |       open: [Function: onOpen] {
+app-1       |         [Symbol(kIsForOnEventAttribute)]: false,
+app-1       |         [Symbol(kListener)]: [Function: handleWebSocketOpen]
+app-1       |       }
+app-1       |     },
+app-1       |     _eventsCount: 4,
+app-1       |     _maxListeners: undefined,
+app-1       |     _binaryType: 'arraybuffer',
+app-1       |     _closeCode: 1006,
+app-1       |     _closeFrameReceived: false,
+app-1       |     _closeFrameSent: false,
+app-1       |     _closeMessage: Buffer(0) [Uint8Array] [],
+app-1       |     _closeTimer: null,
+app-1       |     _errorEmitted: true,
+app-1       |     _extensions: {},
+app-1       |     _paused: false,
+app-1       |     _protocol: '',
+app-1       |     _readyState: 3,
+app-1       |     _receiver: null,
+app-1       |     _sender: null,
+app-1       |     _socket: null,
+app-1       |     _bufferedAmount: 0,
+app-1       |     _isServer: false,
+app-1       |     _redirects: 0,
+app-1       |     _autoPong: true,
+app-1       |     _url: 'wss://postgres/v2',
+app-1       |     _req: null,
+app-1       |     [Symbol(shapeMode)]: false,
+app-1       |     [Symbol(kCapture)]: false
+app-1       |   },
+app-1       |   [Symbol(kType)]: 'error',
+app-1       |   [Symbol(kError)]: Error: connect ECONNREFUSED 172.20.0.2:443
+app-1       |       at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1611:16) {
+app-1       |     errno: -111,
+app-1       |     code: 'ECONNREFUSED',
+app-1       |     syscall: 'connect',
+app-1       |     address: '172.20.0.2',
+app-1       |     port: 443
+app-1       |   },
+app-1       |   [Symbol(kMessage)]: 'connect ECONNREFUSED 172.20.0.2:443'
+app-1       | }
