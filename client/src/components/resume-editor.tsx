@@ -29,9 +29,13 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   // Auto-load selected resume into JSON editor
   useEffect(() => {
+    console.log('Selected resume changed:', selectedResume);
     if (selectedResume?.jsonData) {
+      console.log('Loading JSON data into editor:', selectedResume.jsonData);
       setJsonContent(selectedResume.jsonData);
       setUploadedFilename(""); // Clear filename when switching resumes
+    } else if (selectedResume) {
+      console.log('Resume selected but no jsonData found:', selectedResume);
     }
   }, [selectedResume]);
 
