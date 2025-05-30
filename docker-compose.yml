@@ -8,6 +8,11 @@ services:
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://jobblaster:jobblaster_password@postgres:5432/jobblaster
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin123
+      - ADMIN_EMAIL=admin@jobblaster.local
+      - ADZUNA_APP_ID=17d34542
+      - ADZUNA_API_KEY=d2ef014f5e751407895b6b7ef87f2dd4
     depends_on:
       postgres:
         condition: service_healthy
