@@ -31,6 +31,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   useEffect(() => {
     if (selectedResume?.jsonData) {
       setJsonContent(selectedResume.jsonData);
+      setUploadedFilename(""); // Clear filename when switching resumes
     }
   }, [selectedResume]);
 
@@ -361,6 +362,11 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                 onChange={handleFileUpload}
                 className="hidden"
               />
+              {uploadedFilename && (
+                <div className="mt-2 text-xs text-slate-600 dark:text-gray-400">
+                  Uploaded: <span className="font-mono bg-slate-100 dark:bg-gray-700 px-1 rounded">{uploadedFilename}</span>
+                </div>
+              )}
             </div>
 
             {/* Save Resume */}
