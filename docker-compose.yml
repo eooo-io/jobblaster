@@ -2,31 +2,19 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     ports:
-      - "3000:3000"
+      - "5000:5000"
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://jobblaster:jobblaster_password@postgres:5432/jobblaster
-      - PGHOST=postgres
-      - PGPORT=5432
-      - PGUSER=jobblaster
-      - PGPASSWORD=jobblaster_password
-      - PGDATABASE=jobblaster
     depends_on:
       postgres:
         condition: service_healthy
-    volumes:
-      - app_uploads:/app/uploads
-    networks:
-      - jobblaster_network
     restart: unless-stopped
 
   postgres:
     image: postgres:15-alpine
-    platform: ${DOCKER_PLATFORM:-linux/amd64}
     environment:
       - POSTGRES_DB=jobblaster
       - POSTGRES_USER=jobblaster
@@ -36,49 +24,12 @@ services:
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     ports:
       - "5432:5432"
-    networks:
-      - jobblaster_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U jobblaster -d jobblaster"]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 30s
-    restart: unless-stopped
-
-  # Development service for hot reloading
-  app-dev:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-      - "5173:5173"  # Vite dev server
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://jobblaster:jobblaster_password@postgres:5432/jobblaster
-      - PGHOST=postgres
-      - PGPORT=5432
-      - PGUSER=jobblaster
-      - PGPASSWORD=jobblaster_password
-      - PGDATABASE=jobblaster
-    depends_on:
-      postgres:
-        condition: service_healthy
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - app_uploads:/app/uploads
-    networks:
-      - jobblaster_network
-    profiles:
-      - dev
     restart: unless-stopped
 
 volumes:
   postgres_data:
-  app_uploads:
-
-networks:
-  jobblaster_network:
-    driver: bridge

@@ -1,59 +1,48 @@
-# Multi-stage build for JobBlaster Resume Application
-FROM node:20-alpine AS base
+# Multi-architecture Dockerfile for JobBlaster
+FROM --platform=$BUILDPLATFORM node:20-alpine AS base
 
-# Install dependencies only when needed
-FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+# Install dependencies and setup
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package files
+# Install dependencies
+FROM base AS deps
 COPY package*.json ./
 RUN npm ci --only=production
 
-# Development stage
-FROM base AS dev-deps
-RUN apk add --no-cache libc6-compat
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-
 # Build stage
 FROM base AS builder
-WORKDIR /app
-COPY --from=dev-deps /app/node_modules ./node_modules
+COPY package*.json ./
+RUN npm ci
 COPY . .
-
-# Build the application
 RUN npm run build
 
-# Production stage
-FROM base AS runner
+# Production runtime
+FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Set environment to production
 ENV NODE_ENV=production
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN adduser --system --uid 1001 appuser
 
-# Copy built application
+# Copy built application and dependencies
+COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/client/dist ./client/dist
-COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/package*.json ./
 
-# Set correct permissions
-RUN chown -R nextjs:nodejs /app
-USER nextjs
+# Create necessary directories
+RUN mkdir -p uploads && chown -R appuser:nodejs /app
+USER appuser
 
 # Expose port
-EXPOSE 3000
+EXPOSE 5000
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/api/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:5000/api/auth/user', (res) => process.exit(res.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"
 
 # Start the application
 CMD ["npm", "start"]

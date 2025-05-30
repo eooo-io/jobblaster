@@ -57,9 +57,9 @@ JobBlaster solves the modern job seeker's biggest challenges:
 - **Data Organization**: Sortable tables, pagination, and advanced filtering for easy navigation
 - **Professional Workflow**: Streamlined interface with sidebar navigation and intuitive user experience
 
-### Key Features
+### ✨ Key Features
 
-#### Advanced Resume Management
+#### 📄 Advanced Resume Management
 - **JSON Resume Standard**: Industry-standard format for maximum compatibility and portability
 - **Multiple Resume Versions**: Create and manage different resumes for various job types and industries
 - **Professional Themes**: Beautiful, customizable resume templates including:
@@ -71,7 +71,7 @@ JobBlaster solves the modern job seeker's biggest challenges:
 - **Real-time Preview**: See changes instantly as you edit with live preview functionality
 - **Default Resume Selection**: Set and manage your primary resume for quick access
 
-#### Comprehensive Application Tracking
+#### 📊 Comprehensive Application Tracking
 - **Independent Application Management**: Track job applications separately from resumes and cover letters
 - **Detailed Application Records**: Store job title, company, description, application URLs, and dates
 - **Application Notes System**: Add multiple chronological notes to each application for tracking progress
@@ -82,14 +82,14 @@ JobBlaster solves the modern job seeker's biggest challenges:
   - Search and filter functionality
   - Mobile-optimized horizontal scrolling
 
-#### User Experience Excellence
+#### 🎨 User Experience Excellence
 - **Mobile-First Responsive Design**: Optimized experience across all device sizes
 - **Dark/Light Theme Support**: Complete theming with user preference persistence
 - **Intuitive Sidebar Navigation**: Clean, organized navigation with proper routing
 - **Modern UI Components**: Built with Shadcn/ui for consistent, accessible design
 - **Performance Optimized**: Efficient caching and query management for smooth interactions
 
-####️ Developer-Friendly Architecture
+#### 🛠️ Developer-Friendly Architecture
 - **Type-Safe Development**: Full TypeScript implementation with Zod validation
 - **Database Integration**: PostgreSQL with Drizzle ORM for robust data management
 - **Authentication System**: Secure session-based authentication with admin user support
@@ -112,11 +112,12 @@ JobBlaster solves the modern job seeker's biggest challenges:
 git clone https://github.com/yourusername/jobblaster.git
 cd jobblaster
 
-# Run with interactive script (auto-detects your architecture)
-./run-docker.sh
-
-# Or use Docker Compose
+# Start with Docker Compose
 docker-compose up
+
+# Or build and run manually
+docker build -t jobblaster .
+docker run -p 5000:5000 jobblaster
 ```
 
 #### Option 2: Local Development
@@ -146,7 +147,7 @@ npm run build
 npm start
 ```
 
-##  Configuration
+## 🔧 Configuration
 
 ### Environment Variables
 ```env
@@ -177,7 +178,7 @@ JobBlaster automatically creates an admin user on first startup if one doesn't e
 - If no admin credentials are provided, a default admin user will be created
 - You can log in and change these credentials through the profile settings
 
-##  Documentation
+## 📚 Documentation
 
 - [Docker Setup Guide](./README-Docker.md) - Complete containerization documentation
 - [API Documentation](./docs/api.md) - REST API reference
@@ -243,7 +244,7 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Testing
+## 🧪 Testing
 
 ```bash
 # Run all tests
@@ -259,7 +260,7 @@ npm run test:coverage
 npm test resume-service.test.ts
 ```
 
-## Roadmap
+## 📈 Roadmap
 
 ### Upcoming Features
 - [ ] LinkedIn Integration
@@ -278,7 +279,7 @@ npm test resume-service.test.ts
 - [ ] Integration with ATS Systems
 - [ ] Custom AI Training Models
 
-##  Performance
+## 📊 Performance
 
 - **Build Time**: < 2 minutes
 - **Bundle Size**: < 1MB (gzipped)
@@ -286,7 +287,7 @@ npm test resume-service.test.ts
 - **Time to Interactive**: < 3s
 - **Lighthouse Score**: 95+
 
-##  Security
+## 🛡️ Security
 
 - JWT-based authentication
 - bcrypt password hashing
@@ -295,25 +296,28 @@ npm test resume-service.test.ts
 - HTTPS enforcement in production
 - Rate limiting on API endpoints
 
-##  Browser Support
+## 🌍 Browser Support
 
 - Chrome 90+
 - Firefox 88+
 - Safari 14+
 - Edge 90+
 
-##  License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-##  Support
+## 🙋 Support
 
-- 📧 Email: dev@eooo.io
+- 📧 Email: support@jobblaster.com
+- 💬 Discord: [Join our community](https://discord.gg/jobblaster)
+- 📖 Documentation: [docs.jobblaster.com](https://docs.jobblaster.com)
 - 🐛 Issues: [GitHub Issues](https://github.com/yourusername/jobblaster/issues)
 
-## Acknowledgments
+## 🎉 Acknowledgments
 
 - [OpenAI](https://openai.com/) for AI capabilities
+- [Adzuna](https://www.adzuna.com/) for job search API
 - [Shadcn/ui](https://ui.shadcn.com/) for beautiful UI components
 - [JSON Resume](https://jsonresume.org/) for the resume standard
 - All our amazing contributors and community members
@@ -322,7 +326,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 <div align="center">
 
-**Made by :(e): from eooo.io**
+**Made with ❤️ by the JobBlaster Team**
 
 [Website](https://jobblaster.com) • [Documentation](https://docs.jobblaster.com) • [Community](https://discord.gg/jobblaster)
 
