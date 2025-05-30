@@ -112,11 +112,12 @@ JobBlaster solves the modern job seeker's biggest challenges:
 git clone https://github.com/yourusername/jobblaster.git
 cd jobblaster
 
-# Run with interactive script (auto-detects your architecture)
-./run-docker.sh
-
-# Or use Docker Compose
+# Start with Docker Compose
 docker-compose up
+
+# Or build and run manually
+docker build -t jobblaster .
+docker run -p 5000:5000 jobblaster
 ```
 
 #### Option 2: Local Development
