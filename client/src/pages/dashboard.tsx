@@ -163,7 +163,11 @@ export default function Dashboard() {
               {/* Preview Container */}
               <div className="bg-slate-50 dark:bg-gray-800 rounded-lg p-3 lg:p-6 border border-slate-200 dark:border-gray-600 overflow-auto">
                 <div className="min-w-0">
-                  <ResumePreview resume={selectedResume} theme={selectedTheme} />
+                  <ResumePreview 
+                    key={selectedResume?.id || 'no-resume'} 
+                    resume={selectedResume} 
+                    theme={selectedTheme} 
+                  />
                 </div>
               </div>
             </div>
@@ -239,7 +243,12 @@ export default function Dashboard() {
                   </div>
                   
                 <div style={{ height: '100%', overflow: 'hidden' }}>
-                  <ResumePreview resume={selectedResume} theme={selectedTheme} forceLightMode={true} />
+                  <ResumePreview 
+                    key={selectedResume?.id || 'no-resume'} 
+                    resume={selectedResume} 
+                    theme={selectedTheme} 
+                    forceLightMode={true} 
+                  />
                 </div>
               </div>
             </div>
