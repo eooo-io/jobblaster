@@ -4,43 +4,26 @@ This document describes how to build and run JobBlaster using Docker with suppor
 
 ## 🚀 Quick Start
 
-### Option 1: Using the Interactive Script (Recommended)
+### Using Docker Compose (Recommended)
 ```bash
-# Make the script executable (if not already)
-chmod +x run-docker.sh
-
-# Run the interactive script
-./run-docker.sh
-```
-
-The script will:
-- Detect your system architecture automatically
-- Prompt you to choose between AMD64, ARM64, or auto-detection
-- Allow you to select Production or Development environment
-- Set up PostgreSQL database automatically
-- Start the application with proper health checks
-
-### Option 2: Using Docker Compose
-```bash
-# Production environment
+# Start the application with PostgreSQL
 docker-compose up
-
-# Development environment (with hot reloading)
-docker-compose --profile dev up app-dev
 
 # Run in background
 docker-compose up -d
+
+# Stop and remove containers
+docker-compose down
 ```
 
-### Option 3: Manual Docker Commands
+### Manual Docker Commands
 ```bash
-# Create network
-docker network create jobblaster-network
+# Build the image
+docker build -t jobblaster .
 
 # Start PostgreSQL
 docker run -d \
   --name jobblaster-postgres \
-  --network jobblaster-network \
   -e POSTGRES_DB=jobblaster \
   -e POSTGRES_USER=jobblaster \
   -e POSTGRES_PASSWORD=jobblaster_password \
@@ -51,9 +34,9 @@ docker run -d \
 # Start JobBlaster (production)
 docker run -d \
   --name jobblaster-app \
-  --network jobblaster-network \
-  -e DATABASE_URL="postgresql://jobblaster:jobblaster_password@jobblaster-postgres:5432/jobblaster" \
-  -p 3000:3000 \
+  --link jobblaster-postgres:postgres \
+  -e DATABASE_URL="postgresql://jobblaster:jobblaster_password@postgres:5432/jobblaster" \
+  -p 5000:5000 \
   jobblaster:latest
 ```
 
@@ -61,14 +44,11 @@ docker run -d \
 
 ### Build for Multiple Architectures
 ```bash
-# Make the script executable
-chmod +x build-docker.sh
-
 # Build for both AMD64 and ARM64
 ./build-docker.sh
 
 # Build with custom version tag
-./build-docker.sh v1.0.0
+./build-docker.sh jobblaster v1.0.0
 
 # Build with custom registry
 DOCKER_REGISTRY=your-registry.com ./build-docker.sh
@@ -79,19 +59,10 @@ DOCKER_REGISTRY=your-registry.com ./build-docker.sh
 # Create multi-arch builder
 docker buildx create --name jobblaster-builder --platform linux/amd64,linux/arm64 --use
 
-# Build and push production image
+# Build for multiple architectures
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
   --tag jobblaster:latest \
-  --file Dockerfile \
-  --push \
-  .
-
-# Build and push development image
-docker buildx build \
-  --platform linux/amd64,linux/arm64 \
-  --tag jobblaster:dev-latest \
-  --file Dockerfile.dev \
   --push \
   .
 ```
