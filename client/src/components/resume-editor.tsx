@@ -24,6 +24,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const [editingId, setEditingId] = useState<number | null>(null);
   const [newName, setNewName] = useState("");
   const [jsonEditorOpen, setJsonEditorOpen] = useState(true);
+  const [uploadedFilename, setUploadedFilename] = useState<string>("");
   const { toast } = useToast();
 
   // Auto-load selected resume into JSON editor
@@ -104,17 +105,21 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Store the uploaded filename
+    setUploadedFilename(file.name);
+
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
         const json = JSON.parse(e.target?.result as string);
         setJsonContent(json);
         
-        const resumeName = json.basics?.name || "Untitled Resume";
+        // Use filename (without extension) as the resume name, fallback to JSON name
+        const resumeName = file.name.replace(/\.json$/, '') || json.basics?.name || "Untitled Resume";
         uploadMutation.mutate({
           name: resumeName,
           jsonData: json,
-          theme: theme,
+          theme: "modern",
         });
       } catch (error) {
         toast({
@@ -129,16 +134,10 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   const handleJsonChange = (newJson: any) => {
     setJsonContent(newJson);
-    if (selectedResume) {
-      updateMutation.mutate({
-        id: selectedResume.id,
-        jsonData: newJson,
-        theme: selectedResume.theme,
-      });
-    }
+    // Don't auto-save on every change, only when validate button is clicked
   };
 
-  const handleSaveResume = () => {
+  const handleValidateAndSave = () => {
     if (!jsonContent) return;
     
     try {
@@ -155,13 +154,22 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         return;
       }
 
-      const resumeName = parsedJson.basics?.name || `Resume ${new Date().toLocaleDateString()}`;
-      
-      uploadMutation.mutate({
-        name: resumeName,
-        jsonData: parsedJson,
-        theme: "modern",
-      });
+      if (selectedResume) {
+        // Update existing resume
+        updateMutation.mutate({
+          id: selectedResume.id,
+          jsonData: parsedJson,
+          theme: selectedResume.theme || "modern",
+        });
+      } else {
+        // Create new resume
+        const resumeName = parsedJson.basics?.name || `Resume ${new Date().toLocaleDateString()}`;
+        uploadMutation.mutate({
+          name: resumeName,
+          jsonData: parsedJson,
+          theme: "modern",
+        });
+      }
     } catch (error) {
       toast({
         title: "Invalid JSON",
@@ -365,10 +373,10 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               <Button
                 className="bg-green-600 hover:bg-green-700"
                 size="sm"
-                disabled={!jsonContent || uploadMutation.isPending}
-                onClick={handleSaveResume}
+                disabled={!jsonContent || uploadMutation.isPending || updateMutation.isPending}
+                onClick={handleValidateAndSave}
               >
-                {uploadMutation.isPending ? "Saving..." : "Save & Validate"}
+                {(uploadMutation.isPending || updateMutation.isPending) ? "Saving..." : "Save & Validate"}
               </Button>
             </div>
           </div>
@@ -399,15 +407,11 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                     <Button
                       variant="ghost"
                       size="sm"
-                      disabled={!jsonContent}
-                      onClick={() => {
-                        if (jsonContent) {
-                          handleJsonChange(jsonContent);
-                        }
-                      }}
+                      disabled={!jsonContent || uploadMutation.isPending || updateMutation.isPending}
+                      onClick={handleValidateAndSave}
                     >
                       <RefreshCw className="w-4 h-4 mr-1" />
-                      Validate
+                      {(uploadMutation.isPending || updateMutation.isPending) ? "Saving..." : "Validate & Save"}
                     </Button>
                   </div>
                   <div className="flex-1 min-h-0">
