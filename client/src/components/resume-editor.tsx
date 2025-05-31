@@ -12,6 +12,7 @@ import JsonEditor from "@/components/json-editor";
 import ResumeSelector from "@/components/resume-selector";
 import { generatePDF } from "@/lib/pdf-generator";
 import type { Resume } from "@shared/schema";
+import type { JSONResumeSchema } from "@/lib/json-resume-types";
 
 interface ResumeEditorProps {
   selectedResume: Resume | null;
@@ -41,8 +42,8 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   const uploadMutation = useMutation({
     mutationFn: async (data: { name: string; jsonData: any; theme: string }) => {
-      const response = await apiRequest('POST', '/api/resumes', data);
-      return response.json();
+      const response = await apiRequest('/api/resumes', 'POST', data);
+      return response;
     },
     onSuccess: (newResume) => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
@@ -63,11 +64,11 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   const updateMutation = useMutation({
     mutationFn: async (data: { id: number; jsonData: any; theme: string }) => {
-      const response = await apiRequest('PUT', `/api/resumes/${data.id}`, {
+      const response = await apiRequest(`/api/resumes/${data.id}`, 'PUT', {
         jsonData: data.jsonData,
         theme: data.theme,
       });
-      return response.json();
+      return response;
     },
     onSuccess: (updatedResume) => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
@@ -193,7 +194,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
 
     try {
-      await generatePDF(selectedResume.jsonData, selectedResume.theme);
+      await generatePDF(selectedResume.jsonData as JSONResumeSchema, selectedResume.theme);
       toast({
         title: "PDF generated",
         description: "Your resume has been downloaded as a PDF.",
@@ -213,9 +214,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
 
     try {
-      await apiRequest(`/api/resumes/${resumeId}`, {
-        method: "DELETE",
-      });
+      await apiRequest(`/api/resumes/${resumeId}`, "DELETE");
       
       queryClient.invalidateQueries({ queryKey: ["/api/resumes"] });
       
@@ -241,7 +240,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const handleCreateNewResume = async () => {
     try {
       // Try to get the default resume template
-      const defaultResume = await apiRequest('/api/resumes/default');
+      const defaultResume = await apiRequest('/api/resumes/default', 'GET');
       
       if (defaultResume) {
         // Use the default resume as template
