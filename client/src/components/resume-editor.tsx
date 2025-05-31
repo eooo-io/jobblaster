@@ -26,6 +26,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const [newName, setNewName] = useState("");
   const [jsonEditorOpen, setJsonEditorOpen] = useState(true);
   const [uploadedFilename, setUploadedFilename] = useState<string>("");
+  const [forceCreateNew, setForceCreateNew] = useState(false);
   const { toast } = useToast();
 
   // Auto-load selected resume into JSON editor
@@ -117,6 +118,9 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       try {
         const json = JSON.parse(e.target?.result as string);
         
+        // Set flag to force creation of new resume
+        setForceCreateNew(true);
+        
         // Use filename (without extension) as the resume name, fallback to JSON name
         const resumeName = file.name.replace(/\.json$/, '') || json.basics?.name || "Untitled Resume";
         
@@ -159,7 +163,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         return;
       }
 
-      if (selectedResume) {
+      if (selectedResume && !forceCreateNew) {
         // Update existing resume
         updateMutation.mutate({
           id: selectedResume.id,
@@ -174,6 +178,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
           jsonData: parsedJson,
           theme: "modern",
         });
+        setForceCreateNew(false); // Reset flag after creating
       }
     } catch (error) {
       toast({
@@ -277,10 +282,12 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       // Clear current selection to start fresh
       onResumeSelect(null as any);
       setUploadedFilename('');
+      setForceCreateNew(true);
       
     } catch (error) {
       // If there's an error getting default template, use basic structure
       onResumeSelect(null as any);
+      setForceCreateNew(true);
       setJsonContent({
         basics: {
           name: "",
