@@ -474,7 +474,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                             {skill.keywords && skill.keywords.length > 0 && (
                               <div className="flex flex-wrap gap-1 mb-3">
                                 {skill.keywords.map((keyword: string, kidx: number) => (
-                                  <span key={kidx} className="inline-block bg-gray-900 text-white px-2 py-1 rounded-md text-xs text-left">
+                                  <span key={kidx} className="inline-block bg-gray-900 text-white px-1.5 py-0.5 rounded-sm text-xs text-left leading-tight">
                                     {keyword}
                                   </span>
                                 ))}
