@@ -115,13 +115,15 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     reader.onload = (e) => {
       try {
         const json = JSON.parse(e.target?.result as string);
-        setJsonContent(json);
         
-        // Clear current selection so this creates a new resume
+        // Clear current selection FIRST, then set content
         onResumeSelect(null as any);
+        setJsonContent(json);
         
         // Use filename (without extension) as the resume name, fallback to JSON name
         const resumeName = file.name.replace(/\.json$/, '') || json.basics?.name || "Untitled Resume";
+        
+        // Create new resume immediately
         uploadMutation.mutate({
           name: resumeName,
           jsonData: json,
