@@ -1235,7 +1235,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       {skill.keywords && skill.keywords.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {skill.keywords.slice(0, 6).map((keyword: string, kidx: number) => (
-                            <Badge key={kidx} variant="secondary" className="text-xs px-2 py-1 rounded-sm font-normal">
+                            <Badge key={kidx} variant="secondary" className="text-[10px] px-1.5 py-0.5 rounded-sm font-normal leading-tight">
                               {keyword}
                             </Badge>
                           ))}
@@ -1311,7 +1311,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                     {project.keywords && project.keywords.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
                         {project.keywords.slice(0, 4).map((keyword: string, kidx: number) => (
-                          <Badge key={kidx} variant="outline" className="text-xs px-2 py-1 rounded-sm">
+                          <Badge key={kidx} variant="outline" className="text-[10px] px-1.5 py-0.5 rounded-sm leading-tight">
                             {keyword}
                           </Badge>
                         ))}
@@ -1427,7 +1427,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 </h2>
                 <div className="flex flex-wrap gap-1">
                   {resumeData.interests.map((interest: any, index: number) => (
-                    <Badge key={index} variant="secondary" className="text-xs px-2 py-1 rounded-sm">
+                    <Badge key={index} variant="secondary" className="text-[10px] px-1.5 py-0.5 rounded-sm leading-tight">
                       {interest.name}
                     </Badge>
                   ))}
@@ -1503,13 +1503,13 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                   <Badge
                     key={index}
                     variant="secondary"
-                    className="text-xs px-2 py-1 bg-slate-100 text-slate-700"
+                    className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-700 leading-tight"
                   >
                     {typeof skill === 'string' ? skill : skill.name || skill.keywords?.[0]}
                   </Badge>
                 ))}
                 {skills.length > 8 && (
-                  <Badge variant="outline" className="text-xs">
+                  <Badge variant="outline" className="text-[10px] px-1.5 py-0.5 leading-tight">
                     +{skills.length - 8} more
                   </Badge>
                 )}
