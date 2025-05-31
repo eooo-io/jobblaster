@@ -34,6 +34,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     if (selectedResume?.jsonData) {
       setJsonContent(selectedResume.jsonData);
       setUploadedFilename(""); // Clear filename when switching resumes
+      setForceCreateNew(false); // Reset force create flag when selecting existing resume
     }
   }, [selectedResume]);
 
@@ -51,9 +52,10 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       setJsonContent(newResume.jsonData);
       onResumeSelect(newResume);
       setUploadedFilename('');
+      setForceCreateNew(false); // Reset the flag
       toast({
-        title: "Resume uploaded successfully",
-        description: "Your resume has been saved and is ready for analysis.",
+        title: "Resume created successfully",
+        description: "Your new resume has been saved and is ready for editing.",
       });
     },
     onError: () => {
