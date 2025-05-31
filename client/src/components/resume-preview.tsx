@@ -765,7 +765,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                           </div>
                         ) : (
                           <>
-                            <div className="font-medium">{skill.name || `Skill ${index + 1}`}</div>
+                            <div className="font-bold text-white text-xs mb-2 uppercase tracking-wide border-b border-blue-300 pb-1 whitespace-nowrap">{skill.name || `Skill ${index + 1}`}</div>
                             {skill.keywords && skill.keywords.length > 0 && (
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {skill.keywords.map((keyword: string, kidx: number) => (
