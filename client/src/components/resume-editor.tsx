@@ -165,9 +165,13 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         return;
       }
 
+      // Debug logging to see the state
+      console.log("Save operation - forceCreateNew:", forceCreateNew, "selectedResume:", selectedResume?.id);
+      
       // Determine if we should create or update based on forceCreateNew flag
       if (forceCreateNew || !selectedResume) {
         // Create new resume (either forced or no resume selected)
+        console.log("Creating new resume");
         const resumeName = parsedJson.basics?.name || `Resume ${new Date().toLocaleDateString()}`;
         uploadMutation.mutate({
           name: resumeName,
@@ -177,6 +181,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         setForceCreateNew(false); // Reset flag immediately after starting creation
       } else {
         // Update existing resume
+        console.log("Updating existing resume with ID:", selectedResume.id);
         updateMutation.mutate({
           id: selectedResume.id,
           jsonData: parsedJson,
@@ -249,6 +254,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   };
 
   const handleCreateNewResume = () => {
+    console.log("Creating new resume - clearing selection and setting force flag");
     // Clear current selection completely and force new creation
     onResumeSelect(null as any);
     setUploadedFilename('');
@@ -270,6 +276,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     };
     
     setJsonContent(basicTemplate);
+    console.log("New resume template set, forceCreateNew should be true");
     toast({
       title: "New resume started",
       description: "Fill in the JSON editor and click 'Save & Validate' to create your new resume.",
