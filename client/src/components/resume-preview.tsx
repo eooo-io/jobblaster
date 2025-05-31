@@ -761,12 +761,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       </span>
                     </div>
                   )}
-                  {basics.url && (
-                    <div className="flex items-center">
-                      <Globe className="h-3 w-3 mr-2" />
-                      <span>{basics.url}</span>
-                    </div>
-                  )}
+
                 </div>
               </div>
 
