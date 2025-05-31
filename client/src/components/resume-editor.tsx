@@ -241,11 +241,12 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const handleCreateNewResume = async () => {
     try {
       // Try to get the default resume template
-      const defaultResume = await apiRequest('/api/resumes/default', 'GET');
+      const response = await apiRequest('GET', '/api/resumes/default');
+      const defaultResume = await response.json();
       
       if (defaultResume) {
         // Use the default resume as template
-        setJsonContent((defaultResume as any).jsonData);
+        setJsonContent(defaultResume.jsonData);
         toast({
           title: "New resume started",
           description: "Loaded your default resume template. Modify it and save as a new resume!",
