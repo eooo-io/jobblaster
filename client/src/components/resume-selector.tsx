@@ -130,10 +130,8 @@ export default function ResumeSelector({ selectedResume, onResumeSelect, onCreat
         onResumeSelect(null);
       }
       
-      // Force immediate data refresh
-      queryClient.removeQueries({ queryKey: ['/api/resumes'] });
-      setRefreshKey(prev => prev + 1);
-      refetch();
+      // Simple invalidation without forced refetch
+      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       
       showNotification("success", "Resume Deleted", "Resume deleted successfully!");
     },
@@ -162,9 +160,8 @@ export default function ResumeSelector({ selectedResume, onResumeSelect, onCreat
       return response.json();
     },
     onSuccess: () => {
-      // Force a complete refresh of the resumes data
+      // Simple invalidation without forced refetch
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
-      queryClient.refetchQueries({ queryKey: ['/api/resumes'] });
       showNotification("success", "Default Updated", "Default resume updated!");
     },
     onError: (error: Error) => {
