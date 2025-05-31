@@ -604,21 +604,6 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 </div>
               )}
 
-              {/* Skills/Competences */}
-              {skills.length > 0 && (
-                <div className="mb-8">
-                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
-                    CORE COMPETENCIES
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.map((skill: any, index: number) => (
-                      <div key={index} className="bg-gray-900 text-white px-2 py-1 rounded-md text-[10px] leading-tight flex items-center justify-center text-center">
-                        {typeof skill === 'string' ? skill : skill.name}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* Education */}
               {education.length > 0 && (
@@ -965,21 +950,6 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                 </div>
               )}
 
-              {/* Skills/Competences */}
-              {skills.length > 0 && (
-                <div className="mb-8">
-                  <h3 className="text-lg font-bold mb-6 border-b-2 pb-2" style={{ color: 'rgb(28, 35, 51)', borderColor: 'rgb(28, 35, 51)' }}>
-                    CORE COMPETENCIES
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.map((skill: any, index: number) => (
-                      <div key={index} className="bg-gray-900 text-white px-2 py-1 rounded-md text-[10px] leading-tight flex items-center justify-center text-center">
-                        {typeof skill === 'string' ? skill : skill.name}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* Education */}
               {education.length > 0 && (
