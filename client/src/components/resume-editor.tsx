@@ -165,22 +165,23 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         return;
       }
 
-      if (selectedResume && !forceCreateNew) {
-        // Update existing resume
-        updateMutation.mutate({
-          id: selectedResume.id,
-          jsonData: parsedJson,
-          theme: selectedResume.theme || "modern",
-        });
-      } else {
-        // Create new resume
+      // Determine if we should create or update based on forceCreateNew flag
+      if (forceCreateNew || !selectedResume) {
+        // Create new resume (either forced or no resume selected)
         const resumeName = parsedJson.basics?.name || `Resume ${new Date().toLocaleDateString()}`;
         uploadMutation.mutate({
           name: resumeName,
           jsonData: parsedJson,
           theme: "modern",
         });
-        setForceCreateNew(false); // Reset flag after creating
+        setForceCreateNew(false); // Reset flag immediately after starting creation
+      } else {
+        // Update existing resume
+        updateMutation.mutate({
+          id: selectedResume.id,
+          jsonData: parsedJson,
+          theme: selectedResume.theme || "modern",
+        });
       }
     } catch (error) {
       toast({
@@ -247,68 +248,32 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
   };
 
-  const handleCreateNewResume = async () => {
-    try {
-      // Try to get the default resume template
-      const response = await apiRequest('GET', '/api/resumes/default');
-      const defaultResume = await response.json();
-      
-      if (defaultResume) {
-        // Use the default resume as template
-        setJsonContent(defaultResume.jsonData);
-        toast({
-          title: "New resume started",
-          description: "Loaded your default resume template. Modify it and save as a new resume!",
-        });
-      } else {
-        // No default template, use basic structure
-        setJsonContent({
-          basics: {
-            name: "",
-            label: "",
-            email: "",
-            phone: "",
-            summary: ""
-          },
-          work: [],
-          education: [],
-          skills: [],
-          projects: []
-        });
-        toast({
-          title: "New resume started",
-          description: "Fill in the JSON editor and click 'Save Resume' to create your new resume.",
-        });
-      }
-      
-      // Clear current selection to start fresh
-      onResumeSelect(null as any);
-      setUploadedFilename('');
-      setForceCreateNew(true);
-      
-    } catch (error) {
-      // If there's an error getting default template, use basic structure
-      onResumeSelect(null as any);
-      setForceCreateNew(true);
-      setJsonContent({
-        basics: {
-          name: "",
-          label: "",
-          email: "",
-          phone: "",
-          summary: ""
-        },
-        work: [],
-        education: [],
-        skills: [],
-        projects: []
-      });
-      
-      toast({
-        title: "New resume started",
-        description: "Fill in the JSON editor and click 'Save Resume' to create your new resume.",
-      });
-    }
+  const handleCreateNewResume = () => {
+    // Clear current selection completely and force new creation
+    onResumeSelect(null as any);
+    setUploadedFilename('');
+    setForceCreateNew(true);
+    
+    // Set up basic template structure
+    const basicTemplate = {
+      basics: {
+        name: "",
+        label: "",
+        email: "",
+        phone: "",
+        summary: ""
+      },
+      work: [],
+      education: [],
+      skills: [],
+      projects: []
+    };
+    
+    setJsonContent(basicTemplate);
+    toast({
+      title: "New resume started",
+      description: "Fill in the JSON editor and click 'Save & Validate' to create your new resume.",
+    });
   };
 
   // Edit handlers for renaming
