@@ -12,7 +12,7 @@ import JsonEditor from "@/components/json-editor";
 import ResumeSelector from "@/components/resume-selector";
 import { generatePDF } from "@/lib/pdf-generator";
 import type { Resume } from "@shared/schema";
-import type { JSONResumeSchema } from "@/lib/json-resume-types";
+// Remove the problematic import for now
 
 interface ResumeEditorProps {
   selectedResume: Resume | null;
@@ -42,12 +42,13 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   const uploadMutation = useMutation({
     mutationFn: async (data: { name: string; jsonData: any; theme: string }) => {
-      const response = await apiRequest('/api/resumes', 'POST', data);
-      return response;
+      const response = await apiRequest('POST', '/api/resumes', data);
+      return await response.json();
     },
     onSuccess: (newResume) => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       onResumeSelect(newResume);
+      setUploadedFilename('');
       toast({
         title: "Resume uploaded successfully",
         description: "Your resume has been saved and is ready for analysis.",
@@ -64,11 +65,11 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   const updateMutation = useMutation({
     mutationFn: async (data: { id: number; jsonData: any; theme: string }) => {
-      const response = await apiRequest(`/api/resumes/${data.id}`, 'PUT', {
+      const response = await apiRequest('PUT', `/api/resumes/${data.id}`, {
         jsonData: data.jsonData,
         theme: data.theme,
       });
-      return response;
+      return await response.json();
     },
     onSuccess: (updatedResume) => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
@@ -194,7 +195,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
 
     try {
-      await generatePDF(selectedResume.jsonData as JSONResumeSchema, selectedResume.theme);
+      await generatePDF(selectedResume.jsonData as any, selectedResume.theme);
       toast({
         title: "PDF generated",
         description: "Your resume has been downloaded as a PDF.",
@@ -244,7 +245,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       
       if (defaultResume) {
         // Use the default resume as template
-        setJsonContent(defaultResume.jsonData);
+        setJsonContent((defaultResume as any).jsonData);
         toast({
           title: "New resume started",
           description: "Loaded your default resume template. Modify it and save as a new resume!",
