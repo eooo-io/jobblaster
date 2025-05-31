@@ -117,6 +117,9 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         const json = JSON.parse(e.target?.result as string);
         setJsonContent(json);
         
+        // Clear current selection so this creates a new resume
+        onResumeSelect(null as any);
+        
         // Use filename (without extension) as the resume name, fallback to JSON name
         const resumeName = file.name.replace(/\.json$/, '') || json.basics?.name || "Untitled Resume";
         uploadMutation.mutate({
