@@ -348,6 +348,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
           <ResumeSelector 
             selectedResume={selectedResume}
             onResumeSelect={onResumeSelect}
+            onCreateNew={handleCreateNewResume}
           />
         </div>
 

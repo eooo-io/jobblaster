@@ -23,9 +23,10 @@ import {
 interface ResumeSelectorProps {
   selectedResume: any;
   onResumeSelect: (resume: any) => void;
+  onCreateNew?: () => void;
 }
 
-export default function ResumeSelector({ selectedResume, onResumeSelect }: ResumeSelectorProps) {
+export default function ResumeSelector({ selectedResume, onResumeSelect, onCreateNew }: ResumeSelectorProps) {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
   const [editingFilenameId, setEditingFilenameId] = useState<number | null>(null);
@@ -245,7 +246,7 @@ export default function ResumeSelector({ selectedResume, onResumeSelect }: Resum
               <Button 
                 variant="ghost" 
                 className="w-full h-auto p-2 flex items-center justify-center gap-2 text-gray-600 dark:text-gray-400"
-                onClick={() => onResumeSelect(null)}
+                onClick={() => onCreateNew ? onCreateNew() : onResumeSelect(null)}
               >
                 <FileText className="h-4 w-4" />
                 <span className="text-sm">New Resume</span>
