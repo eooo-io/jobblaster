@@ -47,6 +47,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     },
     onSuccess: (newResume) => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      setJsonContent(newResume.jsonData);
       onResumeSelect(newResume);
       setUploadedFilename('');
       toast({
@@ -116,14 +117,10 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       try {
         const json = JSON.parse(e.target?.result as string);
         
-        // Clear current selection FIRST, then set content
-        onResumeSelect(null as any);
-        setJsonContent(json);
-        
         // Use filename (without extension) as the resume name, fallback to JSON name
         const resumeName = file.name.replace(/\.json$/, '') || json.basics?.name || "Untitled Resume";
         
-        // Create new resume immediately
+        // Create new resume immediately with upload mutation
         uploadMutation.mutate({
           name: resumeName,
           jsonData: json,
@@ -279,6 +276,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       
       // Clear current selection to start fresh
       onResumeSelect(null as any);
+      setUploadedFilename('');
       
     } catch (error) {
       // If there's an error getting default template, use basic structure
