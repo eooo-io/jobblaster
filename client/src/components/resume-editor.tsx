@@ -80,7 +80,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     },
     onSuccess: (updatedResume) => {
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
-      onResumeSelect(updatedResume);
+      // Don't force re-selection - let user maintain their current selection
       toast({
         title: "Resume updated",
         description: "Your changes have been saved.",
