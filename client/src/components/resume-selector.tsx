@@ -51,19 +51,8 @@ export default function ResumeSelector({ selectedResume, onResumeSelect, onCreat
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
-  // Auto-select default resume only on initial load
-  const [hasInitiallyLoaded, setHasInitiallyLoaded] = useState(false);
-  
-  useEffect(() => {
-    if (resumes && resumes.length > 0 && !selectedResume && !hasInitiallyLoaded) {
-      const defaultResume = resumes.find((resume: any) => resume.isDefault);
-      if (defaultResume) {
-        console.log("Auto-selecting default resume on initial load:", defaultResume.id);
-        onResumeSelect(defaultResume);
-      }
-      setHasInitiallyLoaded(true);
-    }
-  }, [resumes, selectedResume, onResumeSelect, hasInitiallyLoaded]);
+  // Disabled auto-selection to prevent state conflicts
+  // Users can manually select resumes from the list
 
   // Rename resume mutation
   const renameMutation = useMutation({
