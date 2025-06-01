@@ -86,6 +86,14 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         description: "Your changes have been saved.",
       });
     },
+    onError: (error) => {
+      console.error("Update failed:", error);
+      toast({
+        title: "Save failed",
+        description: "There was an error saving your resume. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   // Rename mutation
@@ -152,11 +160,19 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   };
 
   const handleValidateAndSave = () => {
-    if (!jsonContent) return;
+    if (!jsonContent) {
+      toast({
+        title: "No content to save",
+        description: "Please add some content to your resume before saving.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     try {
       // Basic JSON validation
       const parsedJson = typeof jsonContent === 'string' ? JSON.parse(jsonContent) : jsonContent;
+      console.log("Parsed JSON for validation:", parsedJson);
       
       // Check for basic JSON Resume schema structure
       if (!parsedJson.basics && !parsedJson.work && !parsedJson.skills) {
@@ -170,6 +186,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
       // Debug logging to see the state
       console.log("Save operation - forceCreateNew:", forceCreateNew, "selectedResume:", selectedResume?.id);
+      console.log("JSON content being saved:", parsedJson);
       
       // Determine if we should create or update based on forceCreateNew flag
       if (forceCreateNew || !selectedResume) {
@@ -192,6 +209,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         });
       }
     } catch (error) {
+      console.error("JSON validation error:", error);
       toast({
         title: "Invalid JSON",
         description: "Please check your JSON syntax. Make sure it's properly formatted.",
