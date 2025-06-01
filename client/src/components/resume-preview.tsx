@@ -38,12 +38,12 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
           {/* Page break line */}
           <div
             className="absolute left-0 right-0 border-t-2 border-dashed border-red-400 bg-red-100 opacity-75 print:hidden"
-            style={{ top: `${pageBreakPosition}px` }}
+            style={{ top: `${pageBreakPosition}px`, zIndex: 50 }}
           >
-            <div className="absolute right-0 -top-5 bg-red-400 text-white text-xs px-2 py-1 rounded shadow-sm">
+            <div className="absolute right-2 -top-6 bg-red-400 text-white text-xs px-2 py-1 rounded shadow-sm z-50">
               Page {i + 1}
             </div>
-            <div className="absolute left-2 -top-4 text-red-600 text-xs font-medium">
+            <div className="absolute left-2 -top-6 bg-white text-red-600 text-xs font-medium px-2 py-1 rounded shadow-sm border border-red-200 z-50">
               Page Break
             </div>
           </div>
