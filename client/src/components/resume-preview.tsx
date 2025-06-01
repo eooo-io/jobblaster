@@ -467,7 +467,9 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
           )}
         </div>
         <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 border border-slate-200'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-          <div className={`resume-content ${forceLightMode ? 'bg-white' : 'bg-white'} rounded shadow-sm min-h-full flex text-sm`}>
+          <div className="relative">
+            {generatePageBreaks(2000)}
+            <div className={`resume-content ${forceLightMode ? 'bg-white' : 'bg-white'} rounded shadow-sm min-h-full flex text-sm`}>
             
             {/* Left Sidebar - Blue */}
             <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)', fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
@@ -738,6 +740,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               )}
             </div>
 
+            </div>
           </div>
         </div>
       </div>
@@ -763,7 +766,9 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
           )}
         </div>
         <div className={`${forceLightMode ? 'bg-slate-50 border-slate-200' : 'bg-slate-50 border border-slate-200'} rounded-lg p-4 overflow-auto`} style={{ height: '70vh' }}>
-          <div className={`resume-content ${forceLightMode ? 'bg-white' : 'bg-white'} rounded shadow-sm min-h-full flex text-sm`}>
+          <div className="relative">
+            {generatePageBreaks(2000)}
+            <div className={`resume-content ${forceLightMode ? 'bg-white' : 'bg-white'} rounded shadow-sm min-h-full flex text-sm`}>
             
             {/* Left Sidebar - Blue */}
             <div className="w-1/3 text-white p-6" style={{ backgroundColor: 'rgb(28, 35, 51)', fontFamily: 'Indivisa Text Sans-Regular, sans-serif' }}>
@@ -1084,6 +1089,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               )}
             </div>
 
+            </div>
           </div>
         </div>
       </div>
