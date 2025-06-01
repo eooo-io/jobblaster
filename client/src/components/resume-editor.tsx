@@ -96,7 +96,8 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       console.log("Update mutation onSuccess called:", updatedResume);
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       setIsEditing(false); // Reset editing state after successful save
-      // Don't force re-selection - let user maintain their current selection
+      // Update the selected resume with fresh data to trigger preview refresh
+      onResumeSelect(updatedResume);
       toast({
         title: "Resume updated",
         description: "Your changes have been saved.",
