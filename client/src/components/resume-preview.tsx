@@ -1255,7 +1255,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                               </span>
                             </div>
                           )}
-                          <span className="text-xs font-semibold text-gray-900">
+                          <span className="text-xs text-gray-900 font-normal">
                             {languageName}
                           </span>
                         </div>
