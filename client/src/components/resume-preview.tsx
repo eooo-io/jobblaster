@@ -1216,7 +1216,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
                       </h3>
                       {skill.keywords && skill.keywords.length > 0 && (
                         <div className="flex flex-wrap gap-1">
-                          {skill.keywords.slice(0, 6).map((keyword: string, kidx: number) => (
+                          {skill.keywords.map((keyword: string, kidx: number) => (
                             <Badge key={kidx} variant="secondary" className="text-[10px] px-1.5 py-0.5 rounded-sm font-normal leading-tight">
                               {keyword}
                             </Badge>
