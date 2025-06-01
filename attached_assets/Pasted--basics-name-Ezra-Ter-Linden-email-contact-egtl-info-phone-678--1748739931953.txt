@@ -1,0 +1,244 @@
+{
+  "basics": {
+    "name": "Ezra Ter Linden",
+    "email": "contact@egtl.info",
+    "phone": "(678) 490-8930",
+    "location": {
+      "city": "Atlanta",
+      "region": "GA",
+      "country": "USA"
+    },
+    "url": "https://www.linkedin.com/in/ezraterlinden/",
+    "summary": "I bring almost three decades of real-world experience across web development, QA automation, software engineering, DevOps, and system architecture. Currently building AI-powered toolchains to boost productivity and code quality\u2014designed not just for individual velocity, but as scalable frameworks for future-ready teams."
+  },
+  "work": [
+    {
+      "name": "Immotege (Leonberg, Germany)",
+      "position": "Head of Development / Systems Cloud Architect",
+      "startDate": "2020-11",
+      "endDate": "2024-10",
+      "summary": "Led architecture and dev team at FinTech startup building multi-tenant SaaS using modular monolith and microservices.",
+      "highlights": [
+        "Designed multi-tenancy SaaS using TALL Stack + Laravel Ecosystem and microservices",
+        "Built and led a team of 6 devs, mentoring junior staff",
+        "Built hybrid cloud infrastructure: Docker, Kubernetes, AWS, OpenShift",
+        "Implemented CI/CD pipelines via GitLab",
+        "Translated complete PRD and technical docs"
+      ]
+    },
+    {
+      "name": "ITPlusX (Stuttgart, Germany)",
+      "position": "Senior Backend Developer",
+      "startDate": "2016-07",
+      "endDate": "2020-09",
+      "summary": "Developed APIs and transitioned legacy systems to scalable microservices.",
+      "highlights": [
+        "Built Laravel/Lumen REST APIs",
+        "Migrated legacy monoliths to microservices",
+        "Introduced Selenium/Docker-based end-to-end testing",
+        "Maintained and built Typo3/CMS extensions",
+        "Internal and Client Server Management, Linux and Windows"
+      ]
+    },
+    {
+      "name": "Werbewelt (Stuttgart, Germany)",
+      "position": "Senior Backend Developer",
+      "startDate": "2015-04",
+      "endDate": "2016-06",
+      "summary": "Laravel development for headles CMS and eCommerce sites.",
+      "highlights": [
+        "Introduced Git/GitLab workflows",
+        "Maintained Magento eCommerce sites",
+        "Integrated social media APIs"
+      ]
+    },
+    {
+      "name": "boingMedia (Goeppingen, Germany)",
+      "position": "PHP Developer / Infrastructure Engineer",
+      "startDate": "2014-01",
+      "endDate": "2015-05",
+      "summary": "Modernized internal tooling and maintained infrastructure.",
+      "highlights": [
+        "Refactored code to object-oriented PHP",
+        "Maintained 99.9% infrastructure uptime"
+      ]
+    },
+    {
+      "name": "IHG (Atlanta, GA)",
+      "position": "Lead QA / Developer",
+      "startDate": "2009-02",
+      "endDate": "2010-01",
+      "summary": "Worked on QA automation and backend development for global hospitality systems.",
+      "highlights": [
+        "Automated regression testing pipelines",
+        "Collaborated with devs on backend fixes and features"
+      ]
+    },
+    {
+      "name": "ChannelAdvisor (Atlanta, GA)",
+      "position": "Lead QA Automation Engineer",
+      "startDate": "2008-03",
+      "endDate": "2008-11",
+      "summary": "Tested and validated eCommerce optimization systems.",
+      "highlights": [
+        "Used FitNesse, shell scripts, and Selenium for testing",
+        "Improved coverage and regression test quality"
+      ]
+    },
+    {
+      "name": "VeriSign (Atlanta, GA)",
+      "position": "Senior QA Automation Engineer",
+      "startDate": "2004-12",
+      "endDate": "2008-01",
+      "summary": "Led automation QA for critical infrastructure systems.",
+      "highlights": [
+        "Used WinRunner, LoadRunner, and shell scripting",
+        "Implemented test automation and infrastructure monitoring"
+        "Help drive UAT effors for clients"
+      ]
+    },
+    {
+      "name": "mediaOcean (Atlanta, GA)",
+      "position": "Senior QA / Automation Engineer",
+      "startDate": "2002-02",
+      "endDate": "2004-11",
+      "summary": "Led QA for media and ad tech software systems.",
+      "highlights": [
+        "Established code driven automation practices",
+        "Worked on distributed QA across teams"
+      ]
+    },
+    {
+      "name": "CNN (Atlanta, GA)",
+      "position": "Web Developer / Lead QA Engineer",
+      "startDate": "1996-08",
+      "endDate": "2002-01",
+      "summary": "Pioneered early web systems and project leadership for CNN and associated brands.",
+      "highlights": [
+        "Participated in the construction of first CMS platforms at CNN",
+        "Led major content projects for CNN, NASCAR, and Cartoon Network",
+        "Wrote vaarious internal Perl modules",
+        "Wrote early plug-in/extnsion for properetary systems."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Semblance AI and RAG System",
+      "startDate": "2024-01",
+      "summary": "Domain-specific AI retrieval system built on FastAPI + vector search.",
+      "url": "https://github.com/eooo-io/semblance-ai",
+      "highlights": [
+        "Modular AI assistant using FastAPI, PostgreSQL, Redis, MinIO, Elasticsearch, Weaviate",
+        "Exploring LLMs via Ollama with focus on privacy and IP-secure retrieval",
+        "Full stack documentation: https://eooo-io.github.io/semblance-ai/"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Georgia Institute of Technology",
+      "location": "Atlanta, GA",
+      "area": "Computer Science & Systems",
+      "studyType": "Continued Learning Courses",
+      "startDate": "1999-01",
+      "endDate": "2000-01",
+      "courses": [
+        "C Programming",
+        "Perl Programming",
+        "Unix System Administration"
+      ]
+    },
+    {
+      "institution": "Georgia State University",
+      "location": "Atlanta, GA",
+      "area": "Music Theory / Music Industry Management",
+      "studyType": "Bachelor's (not completed)",
+      "startDate": "1992-01",
+      "endDate": "1994-01"
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming",
+      "keywords": [
+        "PHP (object-oriented)",
+        "Python",
+        "JavaScript",
+        "TypeScript",
+        "C",
+        "Shell"
+      ]
+    },
+    {
+      "name": "DevOps & Infrastructure",
+      "keywords": [
+        "Docker",
+        "Kubernetes",
+        "AWS",
+        "OpenShift",
+        "Linux (Any)",
+        "VMware",
+        "Proxmox"
+      ]
+    },
+    {
+      "name": "Architecture",
+      "keywords": [
+        "Modular Monolith",
+        "Microservices",
+        "Event-Driven",
+        "API-First"
+      ]
+    },
+    {
+      "name": "Testing",
+      "keywords": [
+        "TDD",
+        "PHPUnit",
+        "Pest",
+        "Jest",
+        "Selenium",
+        "Cypress",
+        "Nightwatch"
+      ]
+    },
+    {
+      "name": "CI/CD",
+      "keywords": [
+        "GitLab CI/CD",
+        "GitHub Actions",
+        "ArgonCD",
+        "IoC",
+        "Terraform",
+        "Helm",
+        "Ansible"
+      ]
+    },
+    {
+      "name": "Additional",
+      "keywords": [
+        "Leadership",
+        "Mentoring",
+        "Project Management",
+        "Agile",
+        "Scrum",
+        "Technical Writing"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native"
+    },
+    {
+      "language": "German",
+      "fluency": "Fluent"
+    }
+  ],
+  "meta": {
+    "canonical": "https://ezraterlinden.dev/resume",
+    "version": "v1.0.0"
+  }
+}
