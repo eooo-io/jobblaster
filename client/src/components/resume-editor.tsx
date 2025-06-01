@@ -72,13 +72,17 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   const updateMutation = useMutation({
     mutationFn: async (data: { id: number; jsonData: any; theme: string }) => {
+      console.log("Starting update mutation for resume ID:", data.id);
       const response = await apiRequest('PUT', `/api/resumes/${data.id}`, {
         jsonData: data.jsonData,
         theme: data.theme,
       });
-      return await response.json();
+      const result = await response.json();
+      console.log("Update mutation response:", result);
+      return result;
     },
     onSuccess: (updatedResume) => {
+      console.log("Update mutation onSuccess called:", updatedResume);
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
       // Don't force re-selection - let user maintain their current selection
       toast({
