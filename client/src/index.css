@@ -252,14 +252,8 @@ button[variant="outlined"].text-red-700:hover {
     break-after: avoid;
   }
   
-  /* Add breathing room for sections that might start new pages */
-  .resume-content > div:not(:first-child) {
-    margin-top: 1.5rem;
-  }
-  
-  /* Ensure section headings have proper spacing */
-  h2[class*="text-blue-600"] {
-    margin-top: 1.25rem;
-    margin-bottom: 0.75rem;
+  /* Ensure proper spacing between sections */
+  .resume-content > div:not(:first-child):not(.mb-4) {
+    margin-top: 1rem;
   }
 }
