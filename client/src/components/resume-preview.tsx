@@ -15,48 +15,58 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
   // Page break calculation - standard A4 page is ~11 inches, with margins ~9.5 inches usable
   // At typical print resolution, this is roughly 950-1000px height per page
   const pageHeight = 1056; // A4 height in pixels at 96dpi (11 inches * 96)
-  const pageMargin = 48; // Top/bottom margins
-  const usablePageHeight = pageHeight - (pageMargin * 2); // ~960px usable height per page
+  const pageMargin = 72; // Top/bottom margins (1 inch = 72px at 96dpi)
+  const contentBuffer = 24; // Additional buffer to prevent content from hitting page edges
+  const usablePageHeight = pageHeight - (pageMargin * 2) - (contentBuffer * 2); // Safe content area
 
-  // Generate page break indicators with proper spacing
+  // Generate page break indicators with proper spacing and safe margins
   const generatePageBreaks = (maxHeight: number) => {
     const breaks = [];
     for (let i = 1; i * usablePageHeight < maxHeight; i++) {
-      const pageBreakPosition = i * usablePageHeight;
+      const actualPageStart = (i * pageHeight) + pageMargin + contentBuffer;
+      const actualPageEnd = ((i + 1) * pageHeight) - pageMargin - contentBuffer;
+      
       breaks.push(
-        <div key={i}>
-          {/* Margin before page break */}
+        <div key={`page-${i}`}>
+          {/* Top margin indicator - shows safe content area start */}
           <div
-            className="absolute left-0 right-0 bg-gradient-to-b from-transparent to-red-50 opacity-50 print:hidden"
-            style={{ 
-              top: `${pageBreakPosition - 24}px`, 
-              height: '24px',
-              borderBottom: '1px solid rgba(248, 113, 113, 0.3)'
-            }}
-          />
-          
-          {/* Page break line */}
-          <div
-            className="absolute left-0 right-0 border-t-2 border-dashed border-red-400 bg-red-100 opacity-75 print:hidden"
-            style={{ top: `${pageBreakPosition}px`, zIndex: 50 }}
+            className="absolute left-0 right-0 border-t border-blue-300 bg-blue-50 opacity-60 print:hidden"
+            style={{ top: `${actualPageStart - contentBuffer}px`, height: `${contentBuffer}px` }}
           >
-            <div className="absolute right-2 -top-6 bg-red-400 text-white text-xs px-2 py-1 rounded shadow-sm z-50">
-              Page {i + 1}
-            </div>
-            <div className="absolute left-2 -top-6 bg-white text-red-600 text-xs font-medium px-2 py-1 rounded shadow-sm border border-red-200 z-50">
-              Page Break
+            <div className="absolute left-2 top-1 text-blue-600 text-xs font-medium">
+              Page {i + 1} - Top Margin
             </div>
           </div>
           
-          {/* Margin after page break */}
+          {/* Content area indicator */}
           <div
-            className="absolute left-0 right-0 bg-gradient-to-b from-red-50 to-transparent opacity-50 print:hidden"
+            className="absolute left-0 right-0 border-l-4 border-green-400 opacity-30 print:hidden"
             style={{ 
-              top: `${pageBreakPosition + 1}px`, 
-              height: '24px',
-              borderTop: '1px solid rgba(248, 113, 113, 0.3)'
+              top: `${actualPageStart}px`, 
+              height: `${usablePageHeight}px`,
+              borderLeftColor: 'rgba(34, 197, 94, 0.4)'
             }}
           />
+          
+          {/* Bottom margin indicator - shows safe content area end */}
+          <div
+            className="absolute left-0 right-0 border-b border-red-400 bg-red-50 opacity-60 print:hidden"
+            style={{ top: `${actualPageEnd}px`, height: `${contentBuffer}px` }}
+          >
+            <div className="absolute right-2 bottom-1 text-red-600 text-xs font-medium">
+              Page {i + 1} - Bottom Margin
+            </div>
+          </div>
+          
+          {/* Page break line */}
+          <div
+            className="absolute left-0 right-0 border-t-2 border-dashed border-red-500 bg-red-100 print:hidden"
+            style={{ top: `${actualPageEnd + contentBuffer}px`, zIndex: 50 }}
+          >
+            <div className="absolute right-2 -top-6 bg-red-500 text-white text-xs px-2 py-1 rounded shadow-sm z-50">
+              Page {i + 2} Start
+            </div>
+          </div>
         </div>
       );
     }
