@@ -12,6 +12,30 @@ interface ResumePreviewProps {
 }
 
 export default function ResumePreview({ resume, theme = "modern", forceLightMode = false, showDownloadButton = true }: ResumePreviewProps) {
+  // Page break calculation - standard A4 page is ~11 inches, with margins ~9.5 inches usable
+  // At typical print resolution, this is roughly 950-1000px height per page
+  const pageHeight = 1056; // A4 height in pixels at 96dpi (11 inches * 96)
+  const pageMargin = 48; // Top/bottom margins
+  const usablePageHeight = pageHeight - (pageMargin * 2); // ~960px usable height per page
+
+  // Generate page break indicators
+  const generatePageBreaks = (maxHeight: number) => {
+    const breaks = [];
+    for (let i = 1; i * usablePageHeight < maxHeight; i++) {
+      breaks.push(
+        <div
+          key={i}
+          className="absolute left-0 right-0 border-t-2 border-dashed border-red-400 bg-red-50 opacity-75 print:hidden"
+          style={{ top: `${i * usablePageHeight}px` }}
+        >
+          <div className="absolute right-0 -top-5 bg-red-400 text-white text-xs px-2 py-1 rounded">
+            Page {i + 1}
+          </div>
+        </div>
+      );
+    }
+    return breaks;
+  };
   const handleDownloadPDF = () => {
     if (!resume?.jsonData) return;
     
@@ -1059,7 +1083,9 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
           )}
         </div>
         <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 overflow-auto" style={{ height: '70vh' }}>
-          <div className="resume-content bg-white rounded shadow-sm p-6 text-sm space-y-4">
+          <div className="relative">
+            {generatePageBreaks(2000)}
+            <div className="resume-content bg-white rounded shadow-sm p-6 text-sm space-y-4">
             
             {/* Header Section */}
             <div className="text-center border-b border-blue-100 pb-4">
@@ -1417,6 +1443,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               </div>
             )}
 
+            </div>
           </div>
         </div>
       </div>
