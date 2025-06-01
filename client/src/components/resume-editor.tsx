@@ -27,16 +27,18 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const [jsonEditorOpen, setJsonEditorOpen] = useState(true);
   const [uploadedFilename, setUploadedFilename] = useState<string>("");
   const [forceCreateNew, setForceCreateNew] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
 
   // Auto-load selected resume into JSON editor
   useEffect(() => {
     if (selectedResume?.jsonData) {
       console.log("Loading resume into editor:", selectedResume.id);
-      // Only reload if we don't have content or if the resume ID changed
-      if (!jsonContent || (jsonContent && selectedResume.id !== editingId)) {
+      // Only reload if we're not actively editing or if the resume ID changed
+      if (!isEditing && (!jsonContent || selectedResume.id !== editingId)) {
         setJsonContent(selectedResume.jsonData);
         setEditingId(selectedResume.id);
+        setIsEditing(false);
       }
       setUploadedFilename(""); // Clear filename when switching resumes
       setForceCreateNew(false); // Reset force create flag when selecting existing resume
@@ -44,8 +46,9 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       console.log("No resume selected or no jsonData");
       setJsonContent(null);
       setEditingId(null);
+      setIsEditing(false);
     }
-  }, [selectedResume]);
+  }, [selectedResume, isEditing]);
 
   const { data: resumes, isLoading: resumesLoading } = useQuery({
     queryKey: ['/api/resumes'],
@@ -90,6 +93,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     onSuccess: (updatedResume) => {
       console.log("Update mutation onSuccess called:", updatedResume);
       queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      setIsEditing(false); // Reset editing state after successful save
       // Don't force re-selection - let user maintain their current selection
       toast({
         title: "Resume updated",
@@ -166,6 +170,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
   const handleJsonChange = (newJson: any) => {
     setJsonContent(newJson);
+    setIsEditing(true); // Mark as editing when content changes
     // Don't auto-save on every change, only when validate button is clicked
   };
 
