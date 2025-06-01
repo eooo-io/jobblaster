@@ -1190,14 +1190,14 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Work Experience */}
             {work.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   WORK EXPERIENCE
                 </h2>
                 {work.map((job: any, index: number) => (
-                  <div key={index} className="mb-3 last:mb-0">
+                  <div key={index} className="mb-3 last:mb-0 page-break-inside-avoid">
                     <div className="flex justify-between items-start mb-1">
-                      <h3 className="font-semibold text-gray-900 text-xs">
+                      <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid">
                         {job.position || "Position"}
                       </h3>
                       <span className="text-xs text-gray-500">
@@ -1236,15 +1236,15 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Education */}
             {education.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   EDUCATION
                 </h2>
                 {education.map((edu: any, index: number) => (
-                  <div key={index} className="mb-2 last:mb-0">
+                  <div key={index} className="mb-2 last:mb-0 page-break-inside-avoid">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-xs">
+                        <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid">
                           {edu.studyType} {edu.area && `in ${edu.area}`}
                         </h3>
                         <p className="text-xs text-blue-600">
@@ -1272,14 +1272,14 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Skills */}
             {skills.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   SKILLS
                 </h2>
                 <div className="space-y-3">
                   {skills.map((skill: any, index: number) => (
-                    <div key={index}>
-                      <h3 className="text-xs font-semibold text-gray-900 mb-1">
+                    <div key={index} className="page-break-inside-avoid">
+                      <h3 className="text-xs font-semibold text-gray-900 mb-1 page-break-after-avoid">
                         {skill.name || `Skill ${index + 1}`}
                       </h3>
                       {skill.keywords && skill.keywords.length > 0 && (
@@ -1299,8 +1299,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Languages */}
             {languages.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   LANGUAGES
                 </h2>
                 <div className="space-y-1">
@@ -1339,13 +1339,13 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Projects */}
             {resumeData.projects && resumeData.projects.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   PROJECTS
                 </h2>
                 {resumeData.projects.slice(0, 3).map((project: any, index: number) => (
-                  <div key={index} className="mb-2 last:mb-0">
-                    <h3 className="font-semibold text-gray-900 text-xs">
+                  <div key={index} className="mb-2 last:mb-0 page-break-inside-avoid">
+                    <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid">
                       {project.name}
                       {project.url && (
                         <span className="text-blue-600 font-normal ml-1">
@@ -1374,15 +1374,15 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Awards */}
             {resumeData.awards && resumeData.awards.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   AWARDS & ACHIEVEMENTS
                 </h2>
                 {resumeData.awards.map((award: any, index: number) => (
-                  <div key={index} className="mb-1 last:mb-0">
+                  <div key={index} className="mb-1 last:mb-0 page-break-inside-avoid">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-xs">
+                        <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid">
                           {award.title}
                         </h3>
                         <p className="text-xs text-blue-600">
@@ -1407,15 +1407,15 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Volunteer Experience */}
             {resumeData.volunteer && resumeData.volunteer.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   VOLUNTEER EXPERIENCE
                 </h2>
                 {resumeData.volunteer.map((vol: any, index: number) => (
-                  <div key={index} className="mb-2 last:mb-0">
+                  <div key={index} className="mb-2 last:mb-0 page-break-inside-avoid">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-xs">
+                        <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid">
                           {vol.position}
                         </h3>
                         <p className="text-xs text-blue-600">
@@ -1438,15 +1438,15 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Publications */}
             {resumeData.publications && resumeData.publications.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   PUBLICATIONS
                 </h2>
                 {resumeData.publications.map((pub: any, index: number) => (
-                  <div key={index} className="mb-1 last:mb-0">
+                  <div key={index} className="mb-1 last:mb-0 page-break-inside-avoid">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-semibold text-gray-900 text-xs">
+                        <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid">
                           {pub.name}
                         </h3>
                         <p className="text-xs text-blue-600">
