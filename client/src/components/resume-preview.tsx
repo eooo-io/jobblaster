@@ -18,19 +18,45 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
   const pageMargin = 48; // Top/bottom margins
   const usablePageHeight = pageHeight - (pageMargin * 2); // ~960px usable height per page
 
-  // Generate page break indicators
+  // Generate page break indicators with proper spacing
   const generatePageBreaks = (maxHeight: number) => {
     const breaks = [];
     for (let i = 1; i * usablePageHeight < maxHeight; i++) {
+      const pageBreakPosition = i * usablePageHeight;
       breaks.push(
-        <div
-          key={i}
-          className="absolute left-0 right-0 border-t-2 border-dashed border-red-400 bg-red-50 opacity-75 print:hidden"
-          style={{ top: `${i * usablePageHeight}px` }}
-        >
-          <div className="absolute right-0 -top-5 bg-red-400 text-white text-xs px-2 py-1 rounded">
-            Page {i + 1}
+        <div key={i}>
+          {/* Margin before page break */}
+          <div
+            className="absolute left-0 right-0 bg-gradient-to-b from-transparent to-red-50 opacity-50 print:hidden"
+            style={{ 
+              top: `${pageBreakPosition - 24}px`, 
+              height: '24px',
+              borderBottom: '1px solid rgba(248, 113, 113, 0.3)'
+            }}
+          />
+          
+          {/* Page break line */}
+          <div
+            className="absolute left-0 right-0 border-t-2 border-dashed border-red-400 bg-red-100 opacity-75 print:hidden"
+            style={{ top: `${pageBreakPosition}px` }}
+          >
+            <div className="absolute right-0 -top-5 bg-red-400 text-white text-xs px-2 py-1 rounded shadow-sm">
+              Page {i + 1}
+            </div>
+            <div className="absolute left-2 -top-4 text-red-600 text-xs font-medium">
+              Page Break
+            </div>
           </div>
+          
+          {/* Margin after page break */}
+          <div
+            className="absolute left-0 right-0 bg-gradient-to-b from-red-50 to-transparent opacity-50 print:hidden"
+            style={{ 
+              top: `${pageBreakPosition + 1}px`, 
+              height: '24px',
+              borderTop: '1px solid rgba(248, 113, 113, 0.3)'
+            }}
+          />
         </div>
       );
     }
