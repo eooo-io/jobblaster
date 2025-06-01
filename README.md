@@ -127,7 +127,7 @@ services:
 #### Option 2: Docker (Build Locally)
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/jobblaster.git
+git clone git@github.com:eooo-io/jobblaster.git
 cd jobblaster
 
 # Start with Docker Compose
@@ -141,7 +141,7 @@ docker run -p 5000:5000 jobblaster
 #### Option 3: Local Development
 ```bash
 # Clone and install dependencies
-git clone https://github.com/yourusername/jobblaster.git
+git clone git@github.com:eooo-io/jobblaster.git
 cd jobblaster
 npm install
 
@@ -329,7 +329,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Email: support@jobblaster.com
 - Documentation: [docs.jobblaster.com](https://docs.jobblaster.com)
-- Issues: [GitHub Issues](https://github.com/yourusername/jobblaster/issues)
+- Issues: [GitHub Issues](https://github.com/eooo-io/jobblaster/issues)
 
 ## Acknowledgments
 
