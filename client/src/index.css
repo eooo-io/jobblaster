@@ -237,12 +237,6 @@ button[variant="outlined"].text-red-700:hover {
   border-bottom: 1px solid rgba(34, 197, 94, 0.3);
 }
 
-/* Special styling for sections that appear at the top of new pages */
-.page-break-top-section {
-  margin-top: 1rem !important;
-  padding-top: 0.5rem !important;
-}
-
 @media print {
   .page-break-indicator {
     display: none;
@@ -258,9 +252,14 @@ button[variant="outlined"].text-red-700:hover {
     break-after: avoid;
   }
   
-  /* Enhanced spacing for sections that start new pages in print */
-  .page-break-top-section {
-    margin-top: 1.5rem !important;
-    padding-top: 0.75rem !important;
+  /* Add breathing room for sections that might start new pages */
+  .resume-content > div:not(:first-child) {
+    margin-top: 1.5rem;
+  }
+  
+  /* Ensure section headings have proper spacing */
+  h2[class*="text-blue-600"] {
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
   }
 }

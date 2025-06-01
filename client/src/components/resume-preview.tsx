@@ -33,7 +33,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             className="absolute left-0 right-0 border-t border-blue-300 bg-blue-50 opacity-60 print:hidden"
             style={{ top: `${actualPageStart - contentBuffer}px`, height: `${contentBuffer}px` }}
           >
-            <div className="absolute left-2 top-1 text-blue-600 text-xs font-medium">
+            <div className="absolute left-2 top-1 text-blue-600 text-xs font-medium print:hidden">
               Page {i + 1} - Top Margin
             </div>
           </div>
@@ -53,7 +53,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             className="absolute left-0 right-0 border-b border-red-400 bg-red-50 opacity-60 print:hidden"
             style={{ top: `${actualPageEnd}px`, height: `${contentBuffer}px` }}
           >
-            <div className="absolute right-2 bottom-1 text-red-600 text-xs font-medium">
+            <div className="absolute right-2 bottom-1 text-red-600 text-xs font-medium print:hidden">
               Page {i + 1} - Bottom Margin
             </div>
           </div>
@@ -63,7 +63,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             className="absolute left-0 right-0 border-t-2 border-dashed border-red-500 bg-red-100 print:hidden"
             style={{ top: `${actualPageEnd + contentBuffer}px`, zIndex: 50 }}
           >
-            <div className="absolute right-2 -top-6 bg-red-500 text-white text-xs px-2 py-1 rounded shadow-sm z-50">
+            <div className="absolute right-2 -top-6 bg-red-500 text-white text-xs px-2 py-1 rounded shadow-sm z-50 print:hidden">
               Page {i + 2} Start
             </div>
           </div>
@@ -1141,37 +1141,22 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               )}
               
               {/* Contact Information */}
-              <div className="text-xs text-gray-600 space-x-2 flex flex-wrap justify-center gap-x-3">
-                {basics.email && <span><i className="fas fa-envelope mr-1"></i>{basics.email}</span>}
-                {basics.phone && <span><i className="fas fa-phone mr-1"></i>{basics.phone}</span>}
+              <div className="text-xs text-gray-600 flex justify-center items-center gap-x-4">
+                {basics.email && <span>{basics.email}</span>}
+                {basics.phone && <span>{basics.phone}</span>}
                 {basics.location?.city && (
-                  <span><i className="fas fa-map-marker-alt mr-1"></i>{basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
+                  <span>{basics.location.city}{basics.location.region && `, ${basics.location.region}`}</span>
                 )}
               </div>
               
               {/* Social Profiles */}
               {basics.profiles && basics.profiles.length > 0 && (
                 <div className="text-xs text-gray-600 mt-1 flex flex-wrap justify-center gap-x-3">
-                  {basics.profiles.map((profile: any, index: number) => {
-                    const getProfileIcon = (network: string) => {
-                      const lowerNetwork = network.toLowerCase();
-                      if (lowerNetwork.includes('linkedin')) return 'fab fa-linkedin';
-                      if (lowerNetwork.includes('github')) return 'fab fa-github';
-                      if (lowerNetwork.includes('twitter') || lowerNetwork.includes('x')) return 'fab fa-twitter';
-                      if (lowerNetwork.includes('facebook')) return 'fab fa-facebook';
-                      if (lowerNetwork.includes('instagram')) return 'fab fa-instagram';
-                      if (lowerNetwork.includes('youtube')) return 'fab fa-youtube';
-                      if (lowerNetwork.includes('website') || lowerNetwork.includes('portfolio')) return 'fas fa-globe';
-                      return 'fas fa-link';
-                    };
-                    
-                    return (
-                      <span key={index}>
-                        <i className={`${getProfileIcon(profile.network || '')} mr-1`}></i>
-                        {profile.username || profile.url}
-                      </span>
-                    );
-                  })}
+                  {basics.profiles.map((profile: any, index: number) => (
+                    <span key={index}>
+                      {profile.network}: {profile.username || profile.url}
+                    </span>
+                  ))}
                 </div>
               )}
             </div>
