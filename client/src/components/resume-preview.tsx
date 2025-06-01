@@ -208,8 +208,25 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
   const formatDate = (dateStr: string | undefined): string => {
     if (!dateStr) return '';
+    
+    // Handle YYYY-MM format (e.g., "2020-11" -> "Nov 2020")
+    if (dateStr.match(/^\d{4}-\d{2}$/)) {
+      const [year, month] = dateStr.split('-');
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const monthIndex = parseInt(month, 10) - 1;
+      return `${monthNames[monthIndex]} ${year}`;
+    }
+    
+    // Handle other date formats
     const date = new Date(dateStr);
-    return date.getFullYear().toString();
+    if (isNaN(date.getTime())) {
+      return dateStr; // Return as-is if not a valid date
+    }
+    
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
   };
 
   // Debug theme - shows all data in plain text format
