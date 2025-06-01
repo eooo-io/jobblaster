@@ -1471,8 +1471,8 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Interests */}
             {resumeData.interests && resumeData.interests.length > 0 && (
-              <div>
-                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
+              <div className="page-break-inside-avoid">
+                <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   INTERESTS
                 </h2>
                 <div className="flex flex-wrap gap-1">
