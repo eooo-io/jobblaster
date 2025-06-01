@@ -1130,18 +1130,18 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
             <div className="resume-content bg-white rounded shadow-sm p-6 text-sm space-y-4">
             
             {/* Header Section */}
-            <div className="text-center border-b border-blue-100 pb-4">
-              <h1 className="text-2xl font-bold text-gray-900 mb-1">
+            <div className="text-center bg-black text-white border border-gray-300 rounded-lg p-6 mb-4">
+              <h1 className="text-2xl font-bold text-white mb-1">
                 {basics.name || "Your Name"}
               </h1>
               {basics.label && (
-                <p className="text-blue-600 font-medium mb-2">
+                <p className="text-blue-300 font-medium mb-2">
                   {basics.label}
                 </p>
               )}
               
               {/* Contact Information */}
-              <div className="text-xs text-gray-600 flex justify-center items-center gap-x-4">
+              <div className="text-xs text-gray-300 flex justify-center items-center gap-x-4">
                 {basics.email && <span>{basics.email}</span>}
                 {basics.phone && <span>{basics.phone}</span>}
                 {basics.location?.city && (
@@ -1151,7 +1151,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
               
               {/* Social Profiles */}
               {basics.profiles && basics.profiles.length > 0 && (
-                <div className="text-xs text-gray-600 mt-1 flex flex-wrap justify-center gap-x-3">
+                <div className="text-xs text-gray-300 mt-1 flex flex-wrap justify-center gap-x-3">
                   {basics.profiles.map((profile: any, index: number) => (
                     <span key={index}>
                       {profile.network}: {profile.username || profile.url}
