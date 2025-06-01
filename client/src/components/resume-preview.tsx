@@ -1178,7 +1178,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Summary */}
             {basics.summary && (
-              <div>
+              <div className="mb-4">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2">
                   PROFESSIONAL SUMMARY
                 </h2>
@@ -1190,7 +1190,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Work Experience */}
             {work.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   WORK EXPERIENCE
                 </h2>
@@ -1236,7 +1236,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Education */}
             {education.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   EDUCATION
                 </h2>
@@ -1272,7 +1272,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Skills */}
             {skills.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   SKILLS
                 </h2>
@@ -1299,7 +1299,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Languages */}
             {languages.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   LANGUAGES
                 </h2>
@@ -1339,7 +1339,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Projects */}
             {resumeData.projects && resumeData.projects.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   PROJECTS
                 </h2>
@@ -1374,7 +1374,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Awards */}
             {resumeData.awards && resumeData.awards.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   AWARDS & ACHIEVEMENTS
                 </h2>
@@ -1407,7 +1407,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Volunteer Experience */}
             {resumeData.volunteer && resumeData.volunteer.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   VOLUNTEER EXPERIENCE
                 </h2>
@@ -1438,7 +1438,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Publications */}
             {resumeData.publications && resumeData.publications.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   PUBLICATIONS
                 </h2>
@@ -1471,7 +1471,7 @@ export default function ResumePreview({ resume, theme = "modern", forceLightMode
 
             {/* Interests */}
             {resumeData.interests && resumeData.interests.length > 0 && (
-              <div className="page-break-inside-avoid page-break-top-section">
+              <div className="page-break-inside-avoid">
                 <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
                   INTERESTS
                 </h2>

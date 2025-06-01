@@ -239,8 +239,8 @@ button[variant="outlined"].text-red-700:hover {
 
 /* Special styling for sections that appear at the top of new pages */
 .page-break-top-section {
-  margin-top: 2rem !important;
-  padding-top: 1rem !important;
+  margin-top: 1rem !important;
+  padding-top: 0.5rem !important;
 }
 
 @media print {
