@@ -8,12 +8,12 @@
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/Docker-Multi--Arch-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 
-## AI-Powered Integrations 🤖
+## AI-Powered Integrations
 
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-412991?logo=openai&logoColor=white)](https://openai.com/)
 [![Adzuna API](https://img.shields.io/badge/Adzuna-Job_Search-FF6B35?logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMTMuMDkgOC4yNkwyMCA5TDEzLjA5IDE1Ljc0TDEyIDIyTDEwLjkxIDE1Ljc0TDQgOUwxMC45MSA4LjI2TDEyIDJaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K)](https://developer.adzuna.com/)
 
-## Technology Stack 🛠️
+## Technology Stack
 
 ### Frontend
 [![Vite](https://img.shields.io/badge/Vite-5+-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -43,11 +43,11 @@
 
 ---
 
-## 📋 Overview
+##  Overview
 
 **JobBlaster** is an intelligent job application tracking platform that gamifies the job search experience with AI-powered insights and engaging user interactions. Built with modern web technologies and responsive design, JobBlaster provides a comprehensive solution for managing resumes, tracking applications, and organizing your entire job search workflow.
 
-### 🎯 Core Purpose
+###  Core Purpose
 
 JobBlaster solves the modern job seeker's biggest challenges:
 
@@ -57,9 +57,9 @@ JobBlaster solves the modern job seeker's biggest challenges:
 - **Data Organization**: Sortable tables, pagination, and advanced filtering for easy navigation
 - **Professional Workflow**: Streamlined interface with sidebar navigation and intuitive user experience
 
-### ✨ Key Features
+###  Key Features
 
-#### 📄 Advanced Resume Management
+####  Advanced Resume Management
 - **JSON Resume Standard**: Industry-standard format for maximum compatibility and portability
 - **Multiple Resume Versions**: Create and manage different resumes for various job types and industries
 - **Professional Themes**: Beautiful, customizable resume templates including:
@@ -71,7 +71,7 @@ JobBlaster solves the modern job seeker's biggest challenges:
 - **Real-time Preview**: See changes instantly as you edit with live preview functionality
 - **Default Resume Selection**: Set and manage your primary resume for quick access
 
-#### 📊 Comprehensive Application Tracking
+####  Comprehensive Application Tracking
 - **Independent Application Management**: Track job applications separately from resumes and cover letters
 - **Detailed Application Records**: Store job title, company, description, application URLs, and dates
 - **Application Notes System**: Add multiple chronological notes to each application for tracking progress
@@ -82,31 +82,49 @@ JobBlaster solves the modern job seeker's biggest challenges:
   - Search and filter functionality
   - Mobile-optimized horizontal scrolling
 
-#### 🎨 User Experience Excellence
+#### User Experience Excellence
 - **Mobile-First Responsive Design**: Optimized experience across all device sizes
 - **Dark/Light Theme Support**: Complete theming with user preference persistence
 - **Intuitive Sidebar Navigation**: Clean, organized navigation with proper routing
 - **Modern UI Components**: Built with Shadcn/ui for consistent, accessible design
 - **Performance Optimized**: Efficient caching and query management for smooth interactions
 
-#### 🛠️ Developer-Friendly Architecture
+#### Developer-Friendly Architecture
 - **Type-Safe Development**: Full TypeScript implementation with Zod validation
 - **Database Integration**: PostgreSQL with Drizzle ORM for robust data management
 - **Authentication System**: Secure session-based authentication with admin user support
 - **API Design**: RESTful endpoints with proper error handling and response formatting
 - **Code Quality**: ESLint, Prettier, and comprehensive testing setup
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
-- Node.js 20+ 
+- Node.js 20+
 - PostgreSQL 15+ (or use Docker)
 - Optional: OpenAI API Key (for future AI features)
 - Optional: Adzuna API Key (for future job search integration)
 
 ### Installation Options
 
-#### Option 1: Docker (Recommended)
+#### Option 1: Pre-built Docker Image
+```bash
+# Pull and run the latest version from Docker Hub
+docker pull eooo/jobblaster:latest
+docker run -p 5000:5000 eooo/jobblaster:latest
+
+# Or use with docker-compose
+version: '3.8'
+services:
+  jobblaster:
+    image: eooo/jobblaster:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      # Add other environment variables as needed
+```
+
+#### Option 2: Docker (Build Locally)
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/jobblaster.git
@@ -120,7 +138,7 @@ docker build -t jobblaster .
 docker run -p 5000:5000 jobblaster
 ```
 
-#### Option 2: Local Development
+#### Option 3: Local Development
 ```bash
 # Clone and install dependencies
 git clone https://github.com/yourusername/jobblaster.git
@@ -138,7 +156,7 @@ npm run db:push
 npm run dev
 ```
 
-#### Option 3: Production Deployment
+#### Option 4: Production Deployment
 ```bash
 # Build for production
 npm run build
@@ -178,14 +196,14 @@ JobBlaster automatically creates an admin user on first startup if one doesn't e
 - If no admin credentials are provided, a default admin user will be created
 - You can log in and change these credentials through the profile settings
 
-## 📚 Documentation
+## Documentation
 
 - [Docker Setup Guide](./README-Docker.md) - Complete containerization documentation
 - [API Documentation](./docs/api.md) - REST API reference
 - [Development Guide](./docs/development.md) - Contributing and development setup
 - [Deployment Guide](./docs/deployment.md) - Production deployment instructions
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 jobblaster/
@@ -217,9 +235,9 @@ jobblaster/
 └── Configuration files     # ESLint, Prettier, TypeScript, etc.
 ```
 
-## 🎯 Current Implementation Status
+## Current Implementation Status
 
-### ✅ Fully Implemented Features
+### Fully Implemented Features
 - **Complete Resume Management System**: JSON Resume creation, editing, and PDF export
 - **Comprehensive Application Tracking**: Independent job application management with notes
 - **Responsive User Interface**: Mobile-optimized design with dark/light themes
@@ -228,13 +246,13 @@ jobblaster/
 - **Advanced Table Features**: Sorting, pagination, filtering, and search functionality
 - **Professional UI Components**: Built with Shadcn/ui for consistent design
 
-### 🚧 Ready for Future Development
+### Ready for Future Development
 - **AI Integration Points**: OpenAI service integration prepared for cover letter generation
 - **Job Search API**: Adzuna API integration framework ready for implementation
 - **Advanced Analytics**: Infrastructure in place for application success tracking
 - **External Integrations**: Extensible architecture for additional job board APIs
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
 
@@ -244,7 +262,7 @@ We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 🧪 Testing
+## Testing
 
 ```bash
 # Run all tests
@@ -260,7 +278,7 @@ npm run test:coverage
 npm test resume-service.test.ts
 ```
 
-## 📈 Roadmap
+## Roadmap
 
 ### Upcoming Features
 - [ ] LinkedIn Integration
@@ -279,7 +297,7 @@ npm test resume-service.test.ts
 - [ ] Integration with ATS Systems
 - [ ] Custom AI Training Models
 
-## 📊 Performance
+## Performance
 
 - **Build Time**: < 2 minutes
 - **Bundle Size**: < 1MB (gzipped)
@@ -287,7 +305,7 @@ npm test resume-service.test.ts
 - **Time to Interactive**: < 3s
 - **Lighthouse Score**: 95+
 
-## 🛡️ Security
+## Security
 
 - JWT-based authentication
 - bcrypt password hashing
@@ -296,38 +314,28 @@ npm test resume-service.test.ts
 - HTTPS enforcement in production
 - Rate limiting on API endpoints
 
-## 🌍 Browser Support
+## Browser Support
 
 - Chrome 90+
 - Firefox 88+
 - Safari 14+
 - Edge 90+
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙋 Support
+## Support
 
-- 📧 Email: support@jobblaster.com
-- 💬 Discord: [Join our community](https://discord.gg/jobblaster)
-- 📖 Documentation: [docs.jobblaster.com](https://docs.jobblaster.com)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/jobblaster/issues)
+- Email: support@jobblaster.com
+- Documentation: [docs.jobblaster.com](https://docs.jobblaster.com)
+- Issues: [GitHub Issues](https://github.com/yourusername/jobblaster/issues)
 
-## 🎉 Acknowledgments
+## Acknowledgments
 
 - [OpenAI](https://openai.com/) for AI capabilities
-- [Adzuna](https://www.adzuna.com/) for job search API
 - [Shadcn/ui](https://ui.shadcn.com/) for beautiful UI components
 - [JSON Resume](https://jsonresume.org/) for the resume standard
 - All our amazing contributors and community members
 
 ---
-
-<div align="center">
-
-**Made with ❤️ by the JobBlaster Team**
-
-[Website](https://jobblaster.com) • [Documentation](https://docs.jobblaster.com) • [Community](https://discord.gg/jobblaster)
-
-</div>

@@ -30,11 +30,14 @@ RUN adduser --system --uid 1001 appuser
 # Copy built application and dependencies
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/client/dist ./client/dist
+COPY --from=builder /app/dist/public ./client/dist
 COPY --from=builder /app/package*.json ./
 
-# Create necessary directories
+# Create necessary directories and set up start script
 RUN mkdir -p uploads && chown -R appuser:nodejs /app
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 USER appuser
 
 # Expose port
@@ -43,10 +46,6 @@ EXPOSE 5000
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5000/api/auth/user', (res) => process.exit(res.statusCode < 500 ? 0 : 1)).on('error', () => process.exit(1))"
-
-# Copy startup script
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
 
 # Start the application with migrations
 CMD ["/app/start.sh"]
