@@ -34,11 +34,13 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   useEffect(() => {
     if (selectedResume?.jsonData) {
       console.log("Loading resume into editor:", selectedResume.id);
-      // Only reload if we're not actively editing or if the resume ID changed
-      if (!isEditing && (!jsonContent || selectedResume.id !== editingId)) {
+      // Only reload if we're not actively editing AND if the resume ID actually changed
+      if (!isEditing && selectedResume.id !== editingId) {
+        console.log("Actually loading new resume data - ID changed from", editingId, "to", selectedResume.id);
         setJsonContent(selectedResume.jsonData);
         setEditingId(selectedResume.id);
-        setIsEditing(false);
+      } else {
+        console.log("Skipping reload - isEditing:", isEditing, "editingId:", editingId, "selectedId:", selectedResume.id);
       }
       setUploadedFilename(""); // Clear filename when switching resumes
       setForceCreateNew(false); // Reset force create flag when selecting existing resume
@@ -48,7 +50,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       setEditingId(null);
       setIsEditing(false);
     }
-  }, [selectedResume, isEditing]);
+  }, [selectedResume?.id, isEditing, editingId]);
 
   const { data: resumes, isLoading: resumesLoading } = useQuery({
     queryKey: ['/api/resumes'],
