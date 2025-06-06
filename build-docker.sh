@@ -6,7 +6,7 @@
 set -e
 
 # Configuration
-IMAGE_NAME=${1:-"eooo/jobblaster"}
+IMAGE_NAME=${1:-"jobblaster"}
 VERSION=${2:-"latest"}
 REGISTRY=${DOCKER_REGISTRY:-""}
 

@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect, useRef, useState } from "react";
 
 interface JsonEditorProps {
   value: any;
@@ -11,19 +11,24 @@ export default function JsonEditor({ value, onChange, height = "300px" }: JsonEd
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { toast } = useToast();
   const [textValue, setTextValue] = useState("");
+  const [lastValidValue, setLastValidValue] = useState<any>(null);
 
-  // Update text value when the value prop changes
+  // Update text value when the value prop changes and it's different from our last valid value
   useEffect(() => {
-    const formattedValue = value ? JSON.stringify(value, null, 2) : "";
-    setTextValue(formattedValue);
+    if (JSON.stringify(value) !== JSON.stringify(lastValidValue)) {
+      const formattedValue = value ? JSON.stringify(value, null, 2) : "";
+      setTextValue(formattedValue);
+      setLastValidValue(value);
+    }
   }, [value]);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = event.target.value;
     setTextValue(text);
-    
+
     try {
       const parsed = JSON.parse(text);
+      setLastValidValue(parsed);
       onChange(parsed);
     } catch (error) {
       // Don't update the value if JSON is invalid
@@ -33,9 +38,10 @@ export default function JsonEditor({ value, onChange, height = "300px" }: JsonEd
 
   const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
     const text = event.target.value;
-    
+
     try {
       const parsed = JSON.parse(text);
+      setLastValidValue(parsed);
       onChange(parsed);
     } catch (error) {
       toast({
@@ -44,8 +50,10 @@ export default function JsonEditor({ value, onChange, height = "300px" }: JsonEd
         variant: "destructive",
       });
       // Reset to last valid value
-      const formattedValue = value ? JSON.stringify(value, null, 2) : "";
-      setTextValue(formattedValue);
+      if (lastValidValue) {
+        const formattedValue = JSON.stringify(lastValidValue, null, 2);
+        setTextValue(formattedValue);
+      }
     }
   };
 

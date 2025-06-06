@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
-import { CloudUpload, Download, RefreshCw, Edit3, Check, X, ChevronDown, Code } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { apiRequest, queryClient } from "@/lib/queryClient";
 import JsonEditor from "@/components/json-editor";
 import ResumeSelector from "@/components/resume-selector";
+import { useToast } from "@/hooks/use-toast";
 import { generatePDF } from "@/lib/pdf-generator";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { Resume } from "@shared/schema";
+import { ChevronDown, CloudUpload, Code, Download, RefreshCw } from "lucide-react";
 // Remove the problematic import for now
 
 interface ResumeEditorProps {
@@ -33,24 +31,20 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   // Auto-load selected resume into JSON editor
   useEffect(() => {
     if (selectedResume?.jsonData) {
-      console.log("Loading resume into editor:", selectedResume.id);
-      // Only reload if we're not actively editing AND if the resume ID actually changed
-      if (!isEditing && selectedResume.id !== editingId) {
-        console.log("Actually loading new resume data - ID changed from", editingId, "to", selectedResume.id);
+      // Only reload if we're not actively editing OR if the resume ID actually changed
+      if (!isEditing || selectedResume.id !== editingId) {
         setJsonContent(selectedResume.jsonData);
         setEditingId(selectedResume.id);
-      } else {
-        console.log("Skipping reload - isEditing:", isEditing, "editingId:", editingId, "selectedId:", selectedResume.id);
+        setIsEditing(false); // Reset editing state when loading new resume
       }
       setUploadedFilename(""); // Clear filename when switching resumes
       setForceCreateNew(false); // Reset force create flag when selecting existing resume
     } else {
-      console.log("No resume selected or no jsonData");
       setJsonContent(null);
       setEditingId(null);
       setIsEditing(false);
     }
-  }, [selectedResume?.id, isEditing, editingId]);
+  }, [selectedResume?.id, selectedResume?.jsonData]);
 
   const { data: resumes, isLoading: resumesLoading } = useQuery({
     queryKey: ['/api/resumes'],
@@ -147,13 +141,13 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     reader.onload = (e) => {
       try {
         const json = JSON.parse(e.target?.result as string);
-        
+
         // Set flag to force creation of new resume
         setForceCreateNew(true);
-        
+
         // Use filename (without extension) as the resume name, fallback to JSON name
         const resumeName = file.name.replace(/\.json$/, '') || json.basics?.name || "Untitled Resume";
-        
+
         // Create new resume immediately with upload mutation
         uploadMutation.mutate({
           name: resumeName,
@@ -174,7 +168,6 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const handleJsonChange = (newJson: any) => {
     setJsonContent(newJson);
     setIsEditing(true); // Mark as editing when content changes
-    // Don't auto-save on every change, only when validate button is clicked
   };
 
   const handleValidateAndSave = () => {
@@ -186,12 +179,11 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       });
       return;
     }
-    
+
     try {
       // Basic JSON validation
       const parsedJson = typeof jsonContent === 'string' ? JSON.parse(jsonContent) : jsonContent;
-      console.log("Parsed JSON for validation:", parsedJson);
-      
+
       // Check for basic JSON Resume schema structure
       if (!parsedJson.basics && !parsedJson.work && !parsedJson.skills) {
         toast({
@@ -202,24 +194,16 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         return;
       }
 
-      // Debug logging to see the state
-      console.log("Save operation - forceCreateNew:", forceCreateNew, "selectedResume:", selectedResume?.id);
-      console.log("JSON content being saved:", parsedJson);
-      
-      // Determine if we should create or update based on forceCreateNew flag
+      // Only create new if explicitly forced or no resume selected
       if (forceCreateNew || !selectedResume) {
-        // Create new resume (either forced or no resume selected)
-        console.log("Creating new resume");
         const resumeName = parsedJson.basics?.name || `Resume ${new Date().toLocaleDateString()}`;
         uploadMutation.mutate({
           name: resumeName,
           jsonData: parsedJson,
           theme: "modern",
         });
-        setForceCreateNew(false); // Reset flag immediately after starting creation
       } else {
         // Update existing resume
-        console.log("Updating existing resume with ID:", selectedResume.id);
         updateMutation.mutate({
           id: selectedResume.id,
           jsonData: parsedJson,
@@ -235,8 +219,6 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       });
     }
   };
-
-
 
   const handleDownloadPDF = async () => {
     if (!selectedResume) {
@@ -270,15 +252,15 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
 
     try {
       await apiRequest(`/api/resumes/${resumeId}`, "DELETE");
-      
+
       queryClient.invalidateQueries({ queryKey: ["/api/resumes"] });
-      
+
       // If we deleted the currently selected resume, clear the selection
       if (selectedResume?.id === resumeId) {
         onResumeSelect(null as any);
         setJsonContent(null);
       }
-      
+
       toast({
         title: "Resume deleted",
         description: "The resume has been successfully deleted.",
@@ -298,7 +280,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     onResumeSelect(null as any);
     setUploadedFilename('');
     setForceCreateNew(true);
-    
+
     // Set up basic template structure
     const basicTemplate = {
       basics: {
@@ -313,7 +295,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       skills: [],
       projects: []
     };
-    
+
     setJsonContent(basicTemplate);
     console.log("New resume template set, forceCreateNew should be true");
     toast({
@@ -358,7 +340,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       <CardContent className="flex-1 flex flex-col p-0">
         {/* Resume Selector with Accordions */}
         <div className="p-3 lg:p-6 border-b border-slate-200 dark:border-gray-700">
-          <ResumeSelector 
+          <ResumeSelector
             selectedResume={selectedResume}
             onResumeSelect={onResumeSelect}
             onCreateNew={handleCreateNewResume}
@@ -414,12 +396,10 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
           <p className="text-xs text-slate-500 dark:text-gray-400 mt-3 text-center">Supports JSON Resume Schema format</p>
         </div>
 
-
-
         {/* JSON Editor Accordion */}
         <div className="flex-1 p-3 lg:p-6 min-h-0">
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
-            <button 
+            <button
               onClick={() => setJsonEditorOpen(!jsonEditorOpen)}
               className="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
@@ -429,7 +409,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               </div>
               <ChevronDown className={`h-4 w-4 transition-transform ${jsonEditorOpen ? 'rotate-180' : ''}`} />
             </button>
-            
+
             {jsonEditorOpen && (
               <div className="p-3 border-t border-gray-200 dark:border-gray-700">
                 <div className="h-full flex flex-col">

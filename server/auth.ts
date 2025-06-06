@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
-import session from "express-session";
 import connectPg from "connect-pg-simple";
-import type { Express, Request, Response, NextFunction } from "express";
-import { storage } from "./storage";
+import type { Express, NextFunction, Request, Response } from "express";
+import session from "express-session";
+import { pool } from "./db";
 
-declare module 'express-session' {
+declare module "express-session" {
   interface SessionData {
     userId?: number;
     username?: string;
@@ -16,23 +16,29 @@ export function setupAuth(app: Express) {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
-    conString: process.env.DATABASE_URL,
+    pool: pool, // Use the pool directly
     createTableIfMissing: true,
     ttl: sessionTtl,
     tableName: "sessions",
+    pruneSessionInterval: 60, // Cleanup old sessions every minute
   });
 
-  app.use(session({
-    store: sessionStore,
-    secret: process.env.SESSION_SECRET || "your-secret-key-change-in-production",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
-      maxAge: sessionTtl,
-    },
-  }));
+  app.use(
+    session({
+      store: sessionStore,
+      secret: process.env.SESSION_SECRET || "your-secret-key-change-in-production",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: false, // Allow non-HTTPS in development
+        sameSite: "lax",
+        maxAge: sessionTtl,
+        domain: "localhost", // Allow sharing between ports
+      },
+      name: "jobblaster.sid", // Custom cookie name
+    })
+  );
 }
 
 export async function hashPassword(password: string): Promise<string> {

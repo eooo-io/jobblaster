@@ -1,0 +1,234 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "TargetLock",
+    "description": "AI-powered resume and job matching platform that helps users optimize resumes, analyze job descriptions, and generate tailored cover letters using AI",
+    "technical": {
+      "frontend": {
+        "framework": "React 18",
+        "styling": "Tailwind CSS with shadcn/ui",
+        "stateManagement": "TanStack Query",
+        "buildTool": "Vite",
+        "components": "Radix UI primitives"
+      },
+      "backend": {
+        "runtime": "Node.js",
+        "framework": "Express.js",
+        "language": "TypeScript",
+        "pattern": "RESTful API"
+      },
+      "database": {
+        "type": "PostgreSQL",
+        "orm": "Drizzle ORM",
+        "deployment": "Neon serverless"
+      },
+      "ai": {
+        "provider": "OpenAI GPT-4o",
+        "features": [
+          "Job description analysis",
+          "Resume-job compatibility scoring",
+          "Cover letter generation"
+        ]
+      }
+    }
+  },
+  "collaboration": {
+    "style": {
+      "communication": "professional",
+      "verbosity": "detailed",
+      "codeExplanations": true,
+      "suggestAlternatives": true,
+      "includeReferences": true
+    },
+    "preferences": {
+      "autoSuggestTests": true,
+      "enforceTypeScript": true,
+      "suggestPerformanceImprovements": true,
+      "validateAccessibility": true
+    },
+    "reviewFocus": {
+      "security": true,
+      "performance": true,
+      "accessibility": true,
+      "maintainability": true,
+      "testCoverage": true
+    }
+  },
+  "conventions": {
+    "commits": {
+      "useConventionalCommits": true,
+      "prefixes": ["feat", "fix", "docs", "style", "refactor", "test", "chore"]
+    },
+    "codeStyle": {
+      "maxLineLength": 100,
+      "quoteStyle": "single",
+      "indentation": "spaces",
+      "indentSize": 2
+    }
+  },
+  "git": {
+    "workflow": {
+      "branchStrategy": "feature-branch",
+      "mainBranch": "main",
+      "createBranchBeforeChanges": true,
+      "createPRAfterPush": true,
+      "branchNaming": {
+        "pattern": "${type}/${description}",
+        "allowedTypes": ["feature", "bugfix", "hotfix", "docs", "chore"],
+        "separator": "/"
+      },
+      "pullRequests": {
+        "required": true,
+        "createDraft": false,
+        "template": true,
+        "autoLinkIssues": true,
+        "requireDescription": true,
+        "assignToCreator": true
+      },
+      "commands": {
+        "newFeature": "gh repo sync && git checkout -b feature/${name} main",
+        "createPR": "gh pr create --web"
+      }
+    },
+    "protection": {
+      "requireReview": true,
+      "requireTests": true,
+      "preventDirectPush": ["main"]
+    }
+  },
+  "codeQuality": {
+    "complexity": {
+      "maxCyclomaticComplexity": 10,
+      "maxCognitiveComplexity": 15,
+      "maxFunctionLength": 30,
+      "maxFileLength": 300
+    },
+    "naming": {
+      "components": "PascalCase",
+      "functions": "camelCase",
+      "variables": "camelCase",
+      "constants": "UPPER_SNAKE_CASE",
+      "types": "PascalCase",
+      "minimumLength": 2,
+      "maximumLength": 40
+    },
+    "patterns": {
+      "preferFunctional": true,
+      "avoidMutation": true,
+      "useTypedConstants": true,
+      "preferEarlyReturns": true,
+      "preferConst": true
+    }
+  },
+  "performance": {
+    "optimization": {
+      "memoization": true,
+      "lazyLoading": true,
+      "codeSpitting": true,
+      "imageOptimization": true
+    },
+    "monitoring": {
+      "bundleSize": true,
+      "renderTime": true,
+      "networkCalls": true
+    },
+    "thresholds": {
+      "maxBundleSize": "250kb",
+      "maxFirstContentfulPaint": "1.5s",
+      "maxTimeToInteractive": "3.5s"
+    }
+  },
+  "accessibility": {
+    "compliance": "WCAG2.1",
+    "level": "AA",
+    "requirements": {
+      "semanticHTML": true,
+      "ariaLabels": true,
+      "keyboardNavigation": true,
+      "colorContrast": true,
+      "responsiveDesign": true
+    }
+  },
+  "documentation": {
+    "requireJSDoc": true,
+    "updateReadme": true,
+    "includeExamples": true,
+    "components": {
+      "propsDoc": true,
+      "usageExamples": true,
+      "storybook": true
+    },
+    "api": {
+      "swagger": true,
+      "endpoints": true,
+      "errorCodes": true
+    }
+  },
+  "dependencies": {
+    "management": {
+      "lockfileRequired": true,
+      "strictVersions": true,
+      "regularUpdates": true,
+      "securityScanning": true
+    },
+    "policies": {
+      "preferStable": true,
+      "maxAge": "6 months",
+      "licenseCheck": true,
+      "allowedLicenses": ["MIT", "Apache-2.0", "BSD-3-Clause"]
+    }
+  },
+  "errorHandling": {
+    "requirements": {
+      "typedErrors": true,
+      "errorBoundaries": true,
+      "gracefulDegradation": true,
+      "userFeedback": true
+    },
+    "logging": {
+      "errorReporting": true,
+      "performanceMetrics": true,
+      "userActions": true
+    }
+  },
+  "security": {
+    "checkForVulnerabilities": true,
+    "preventSecretLeaks": true,
+    "validateInputs": true,
+    "requirements": {
+      "sanitizeInput": true,
+      "validateOutput": true,
+      "preventXSS": true,
+      "secureCookies": true,
+      "csrfProtection": true
+    },
+    "scanning": {
+      "dependencies": true,
+      "staticAnalysis": true,
+      "secretDetection": true
+    }
+  },
+  "testing": {
+    "requireTests": true,
+    "coverageThreshold": 80,
+    "testFramework": "React Testing Library",
+    "types": {
+      "unit": true,
+      "integration": true,
+      "e2e": true,
+      "accessibility": true,
+      "performance": true
+    },
+    "practices": {
+      "tdd": true,
+      "isolatedTests": true,
+      "mockExternals": true,
+      "snapshotTesting": false,
+      "aiTesting": {
+        "jobAnalysis": true,
+        "matchScoring": true,
+        "coverLetterGeneration": true
+      }
+    }
+  }
+}

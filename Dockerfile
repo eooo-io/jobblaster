@@ -2,7 +2,8 @@
 FROM --platform=$BUILDPLATFORM node:20-alpine AS base
 
 # Install dependencies and setup
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat netcat-openbsd postgresql-client postgresql15-client
+RUN npm install -g tsx@latest vite@latest
 WORKDIR /app
 
 # Install dependencies
@@ -22,6 +23,10 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+
+# Install runtime dependencies
+RUN apk add --no-cache libc6-compat netcat-openbsd postgresql-client postgresql15-client
+RUN npm install -g tsx@latest vite@latest
 
 # Create non-root user
 RUN addgroup --system --gid 1001 nodejs

@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  dev:
+    build:
+      context: .
+      target: base
+    working_dir: /app
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"  # Vite dev server
+      - "5001:5001"  # Backend server
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://jobblaster:jobblaster_password@postgres:5432/jobblaster
+      - SESSION_SECRET=dev_session_secret_change_in_production
+      - ADMIN_USERNAME=admin
+      - ADMIN_PASSWORD=admin123
+      - ADMIN_EMAIL=admin@jobblaster.local
+      - ADZUNA_APP_ID=17d34542
+      - ADZUNA_API_KEY=d2ef014f5e751407895b6b7ef87f2dd4
+      - PORT=5001
+    command: >
+      /bin/sh -c "
+      echo 'Waiting for database...' &&
+      while ! nc -z postgres 5432; do
+        sleep 1;
+      done &&
+      echo 'Database is ready!' &&
+      npm ci &&
+      npm install concurrently vite typescript tsx drizzle-kit --save-dev &&
+      echo 'Running database migrations...' &&
+      PGPASSWORD=jobblaster_password psql -h postgres -U jobblaster -d jobblaster -f ./drizzle/0000_initial.sql &&
+      echo 'Migrations complete!' &&
+      echo 'Creating admin user...' &&
+      tsx server/init.ts &&
+      npm run dev
+      "
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=jobblaster
+      - POSTGRES_USER=jobblaster
+      - POSTGRES_PASSWORD=jobblaster_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jobblaster"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
