@@ -807,13 +807,15 @@ export default function ResumePreview({
                     <div className="space-y-4 text-xs">
                       {education.map((edu: any, index: number) => (
                         <div key={index}>
-                          <div className="font-medium">
-                            {edu.studyType} {edu.area && `en ${edu.area}`}
+                          <div className="text-blue-200 flex justify-between items-center">
+                            <div className="flex-shrink">{edu.institution}</div>
+                            <div className="flex-shrink-0 ml-2 whitespace-nowrap">
+                              {edu.startDate && formatDate(edu.startDate)}
+                              {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
+                            </div>
                           </div>
-                          <div className="text-blue-200">{edu.institution}</div>
-                          <div className="text-blue-200 text-xs">
-                            {edu.startDate && formatDate(edu.startDate)}
-                            {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
+                          <div className="font-medium mt-1">
+                            {edu.studyType} {edu.area && `en ${edu.area}`}
                           </div>
                           {edu.gpa && <div className="text-blue-200 text-xs">GPA: {edu.gpa}</div>}
                         </div>
@@ -981,48 +983,27 @@ export default function ResumePreview({
                       EDUCATION
                     </h2>
                     {education.map((edu: any, index: number) => (
-                      <div key={index} className="mb-4 last:mb-0">
-                        <div className="flex justify-between items-start mb-1">
-                          <h3 className="font-semibold text-gray-900 text-sm">
-                            {edu.studyType} {edu.area}
-                          </h3>
-                          <span className="text-xs text-gray-600">
+                      <div key={index} className="mb-2 last:mb-0 page-break-inside-avoid">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-shrink">
+                            <p className="text-blue-600 font-medium">{edu.institution}</p>
+                            <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid mt-1">
+                              {edu.studyType} {edu.area && `in ${edu.area}`}
+                            </h3>
+                            {edu.gpa && <p className="text-blue-600 text-xs">GPA: {edu.gpa}</p>}
+                          </div>
+                          <span className="text-xs text-gray-600 flex-shrink-0 ml-2 whitespace-nowrap">
                             {formatDate(edu.startDate)}
-                            {edu.endDate ? ` - ${formatDate(edu.endDate)}` : " - Present"}
+                            {edu.endDate ? ` - ${formatDate(edu.endDate)}` : ""}
                           </span>
                         </div>
-                        <div className="text-sm">
-                          <span className="text-blue-600 font-medium">{edu.institution}</span>
-                          {edu.location && (
-                            <>
-                              <span className="text-gray-500 mx-1">•</span>
-                              <span className="text-gray-600">{edu.location}</span>
-                            </>
-                          )}
-                        </div>
+                        {edu.courses && edu.courses.length > 0 && (
+                          <p className="text-xs text-gray-700 mt-1">
+                            Relevant coursework: {edu.courses.slice(0, 3).join(", ")}
+                          </p>
+                        )}
                       </div>
                     ))}
-                  </div>
-                )}
-
-                {/* Skills */}
-                {skills.length > 0 && (
-                  <div className="mb-6">
-                    <h2 className="text-base font-bold text-gray-900 mb-3 pb-1 border-b-2 border-gray-200">
-                      SKILLS
-                    </h2>
-                    <div className="grid grid-cols-2 gap-2">
-                      {skills.map((skill: any, index: number) => (
-                        <div
-                          key={index}
-                          className="bg-gray-50 rounded-md p-2 border border-gray-100"
-                        >
-                          <div className="font-medium text-gray-900 text-sm">
-                            {typeof skill === "string" ? skill : skill.name}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 )}
 
@@ -1035,7 +1016,9 @@ export default function ResumePreview({
                     {projects.map((project: any, index: number) => (
                       <div key={index} className="mb-4 last:mb-0">
                         <div className="flex justify-between items-start mb-1">
-                          <h3 className="font-semibold text-gray-900 text-sm">{project.name}</h3>
+                          <h3 className="font-semibold text-gray-900 text-[13px]">
+                            {project.name}
+                          </h3>
                           {project.startDate && (
                             <span className="text-xs text-gray-600">
                               {formatDate(project.startDate)}
@@ -1044,7 +1027,9 @@ export default function ResumePreview({
                           )}
                         </div>
                         {project.description && (
-                          <p className="text-sm text-gray-700 mb-2">{project.description}</p>
+                          <p className="text-[12px] leading-[1.5] text-gray-700 mb-2">
+                            {project.description}
+                          </p>
                         )}
                         {project.highlights && project.highlights.length > 0 && (
                           <ul className="text-gray-700 space-y-0.5 text-xs">
@@ -1329,13 +1314,15 @@ export default function ResumePreview({
                     <div className="space-y-4 text-xs">
                       {education.map((edu: any, index: number) => (
                         <div key={index}>
-                          <div className="font-medium">
-                            {edu.studyType} {edu.area && `en ${edu.area}`}
+                          <div className="text-blue-200 flex justify-between items-center">
+                            <div className="flex-shrink">{edu.institution}</div>
+                            <div className="flex-shrink-0 ml-2 whitespace-nowrap">
+                              {edu.startDate && formatDate(edu.startDate)}
+                              {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
+                            </div>
                           </div>
-                          <div className="text-blue-200">{edu.institution}</div>
-                          <div className="text-blue-200 text-xs">
-                            {edu.startDate && formatDate(edu.startDate)}
-                            {edu.endDate ? ` – ${formatDate(edu.endDate)}` : ""}
+                          <div className="font-medium mt-1">
+                            {edu.studyType} {edu.area && `en ${edu.area}`}
                           </div>
                           {edu.gpa && <div className="text-blue-200 text-xs">GPA: {edu.gpa}</div>}
                         </div>
@@ -1503,25 +1490,25 @@ export default function ResumePreview({
                       EDUCATION
                     </h2>
                     {education.map((edu: any, index: number) => (
-                      <div key={index} className="mb-4 last:mb-0">
-                        <div className="flex justify-between items-start mb-1">
-                          <h3 className="font-semibold text-gray-900 text-sm">
-                            {edu.studyType} {edu.area}
-                          </h3>
-                          <span className="text-xs text-gray-600">
+                      <div key={index} className="mb-2 last:mb-0 page-break-inside-avoid">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-shrink">
+                            <p className="text-blue-600 font-medium">{edu.institution}</p>
+                            <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid mt-1">
+                              {edu.studyType} {edu.area && `in ${edu.area}`}
+                            </h3>
+                            {edu.gpa && <p className="text-blue-600 text-xs">GPA: {edu.gpa}</p>}
+                          </div>
+                          <span className="text-xs text-gray-600 flex-shrink-0 ml-2 whitespace-nowrap">
                             {formatDate(edu.startDate)}
-                            {edu.endDate ? ` - ${formatDate(edu.endDate)}` : " - Present"}
+                            {edu.endDate ? ` - ${formatDate(edu.endDate)}` : ""}
                           </span>
                         </div>
-                        <div className="text-sm">
-                          <span className="text-blue-600 font-medium">{edu.institution}</span>
-                          {edu.location && (
-                            <>
-                              <span className="text-gray-500 mx-1">•</span>
-                              <span className="text-gray-600">{edu.location}</span>
-                            </>
-                          )}
-                        </div>
+                        {edu.courses && edu.courses.length > 0 && (
+                          <p className="text-xs text-gray-700 mt-1">
+                            Relevant coursework: {edu.courses.slice(0, 3).join(", ")}
+                          </p>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -1557,7 +1544,9 @@ export default function ResumePreview({
                     {projects.map((project: any, index: number) => (
                       <div key={index} className="mb-4 last:mb-0">
                         <div className="flex justify-between items-start mb-1">
-                          <h3 className="font-semibold text-gray-900 text-sm">{project.name}</h3>
+                          <h3 className="font-semibold text-gray-900 text-[13px]">
+                            {project.name}
+                          </h3>
                           {project.startDate && (
                             <span className="text-xs text-gray-600">
                               {formatDate(project.startDate)}
@@ -1566,7 +1555,9 @@ export default function ResumePreview({
                           )}
                         </div>
                         {project.description && (
-                          <p className="text-sm text-gray-700 mb-2">{project.description}</p>
+                          <p className="text-[12px] leading-[1.5] text-gray-700 mb-2">
+                            {project.description}
+                          </p>
                         )}
                         {project.highlights && project.highlights.length > 0 && (
                           <ul className="text-gray-700 space-y-0.5 text-xs">
@@ -1703,6 +1694,18 @@ export default function ResumePreview({
                           {job.endDate ? ` - ${formatDate(job.endDate)}` : " - Present"}
                         </span>
                       </div>
+                      {job.summary && (
+                        <p className="text-xs text-gray-700 leading-relaxed mb-2">{job.summary}</p>
+                      )}
+                      {job.highlights && job.highlights.length > 0 && (
+                        <ul className="list-disc list-inside text-xs text-gray-700 leading-relaxed space-y-1">
+                          {job.highlights.map((highlight: string, highlightIndex: number) => (
+                            <li key={highlightIndex} className="pl-1">
+                              {highlight}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -1717,14 +1720,14 @@ export default function ResumePreview({
                   {education.map((edu: any, index: number) => (
                     <div key={index} className="mb-2 last:mb-0 page-break-inside-avoid">
                       <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid">
+                        <div className="flex-shrink">
+                          <p className="text-blue-600 font-medium">{edu.institution}</p>
+                          <h3 className="font-semibold text-gray-900 text-xs page-break-after-avoid mt-1">
                             {edu.studyType} {edu.area && `in ${edu.area}`}
                           </h3>
-                          <p className="text-blue-600 font-medium">{edu.institution}</p>
                           {edu.gpa && <p className="text-blue-600 text-xs">GPA: {edu.gpa}</p>}
                         </div>
-                        <span className="text-xs text-gray-600">
+                        <span className="text-xs text-gray-600 flex-shrink-0 ml-2 whitespace-nowrap">
                           {formatDate(edu.startDate)}
                           {edu.endDate ? ` - ${formatDate(edu.endDate)}` : ""}
                         </span>
@@ -1736,36 +1739,6 @@ export default function ResumePreview({
                       )}
                     </div>
                   ))}
-                </div>
-              )}
-
-              {/* Skills */}
-              {skills.length > 0 && (
-                <div>
-                  <h2 className="text-sm font-bold text-blue-600 border-b border-gray-200 pb-1 mb-2 page-break-after-avoid">
-                    SKILLS
-                  </h2>
-                  <div className="space-y-3">
-                    {skills.map((skill: any, index: number) => (
-                      <div key={index} className="page-break-inside-avoid">
-                        <h3 className="text-xs font-semibold text-gray-900 mb-1 page-break-after-avoid">
-                          {skill.name || `Skill ${index + 1}`}
-                        </h3>
-                        {skill.keywords && skill.keywords.length > 0 && (
-                          <div className="flex flex-wrap gap-1">
-                            {skill.keywords.map((keyword: string, kidx: number) => (
-                              <span
-                                key={kidx}
-                                className="inline-block bg-gray-900 text-white px-1.5 py-0.5 rounded-sm text-xs text-left leading-tight"
-                              >
-                                {keyword}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
                 </div>
               )}
 
@@ -1842,7 +1815,7 @@ export default function ResumePreview({
                       </div>
 
                       {project.description && (
-                        <p className="text-gray-700 mb-2 text-xs leading-relaxed">
+                        <p className="text-xs leading-relaxed text-gray-700 mb-2">
                           {project.description}
                         </p>
                       )}
