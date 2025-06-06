@@ -1,10 +1,12 @@
 # JobBlaster - Docker Multi-Architecture Setup
 
-This document describes how to build and run JobBlaster using Docker with support for both AMD64 and ARM64 architectures.
+This document describes how to build and run JobBlaster using Docker with
+support for both AMD64 and ARM64 architectures.
 
 ## 🚀 Quick Start
 
 ### Using Docker Compose (Recommended)
+
 ```bash
 # Start the application with PostgreSQL
 docker-compose up
@@ -17,6 +19,7 @@ docker-compose down
 ```
 
 ### Manual Docker Commands
+
 ```bash
 # Build the image
 docker build -t jobblaster .
@@ -43,6 +46,7 @@ docker run -d \
 ## 🏗️ Building Images
 
 ### Build for Multiple Architectures
+
 ```bash
 # Build for both AMD64 and ARM64
 ./build-docker.sh
@@ -55,6 +59,7 @@ DOCKER_REGISTRY=your-registry.com ./build-docker.sh
 ```
 
 ### Manual Build Commands
+
 ```bash
 # Create multi-arch builder
 docker buildx create --name jobblaster-builder --platform linux/amd64,linux/arm64 --use
@@ -83,15 +88,17 @@ docker buildx build \
 ## 🐳 Docker Images
 
 ### Production Image (`jobblaster:latest`)
+
 - **Base**: Node.js 20 Alpine Linux
 - **Architecture**: AMD64, ARM64
-- **Features**: 
+- **Features**:
   - Multi-stage build for optimal size
   - Non-root user for security
   - Health checks included
   - Production optimizations
 
 ### Development Image (`jobblaster:dev-latest`)
+
 - **Base**: Node.js 20 Alpine Linux
 - **Architecture**: AMD64, ARM64
 - **Features**:
@@ -102,19 +109,20 @@ docker buildx build \
 
 ## 🌐 Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `NODE_ENV` | Environment mode | `production` |
-| `DATABASE_URL` | PostgreSQL connection string | Required |
-| `PGHOST` | PostgreSQL host | `postgres` |
-| `PGPORT` | PostgreSQL port | `5432` |
-| `PGUSER` | PostgreSQL username | `jobblaster` |
-| `PGPASSWORD` | PostgreSQL password | `jobblaster_password` |
-| `PGDATABASE` | PostgreSQL database name | `jobblaster` |
+| Variable       | Description                  | Default               |
+| -------------- | ---------------------------- | --------------------- |
+| `NODE_ENV`     | Environment mode             | `production`          |
+| `DATABASE_URL` | PostgreSQL connection string | Required              |
+| `PGHOST`       | PostgreSQL host              | `postgres`            |
+| `PGPORT`       | PostgreSQL port              | `5432`                |
+| `PGUSER`       | PostgreSQL username          | `jobblaster`          |
+| `PGPASSWORD`   | PostgreSQL password          | `jobblaster_password` |
+| `PGDATABASE`   | PostgreSQL database name     | `jobblaster`          |
 
 ## 🏥 Health Checks
 
 The application includes a health endpoint at `/api/health` that returns:
+
 ```json
 {
   "status": "healthy",
@@ -125,6 +133,7 @@ The application includes a health endpoint at `/api/health` that returns:
 ```
 
 Docker health checks are configured to:
+
 - Check every 30 seconds
 - Timeout after 30 seconds
 - Start checking after 5 seconds
@@ -133,6 +142,7 @@ Docker health checks are configured to:
 ## 🗄️ Database Setup
 
 The PostgreSQL container is configured with:
+
 - **Database**: `jobblaster`
 - **User**: `jobblaster`
 - **Password**: `jobblaster_password`
@@ -143,6 +153,7 @@ The PostgreSQL container is configured with:
 ## 🔧 Development Mode
 
 When running in development mode:
+
 - Code changes are reflected immediately (hot reloading)
 - Source code is mounted as a volume
 - Additional debugging tools are available
@@ -176,6 +187,7 @@ docker stats
 ### Common Issues
 
 1. **Port already in use**
+
    ```bash
    # Stop existing containers
    docker stop jobblaster-app jobblaster-postgres
@@ -183,15 +195,17 @@ docker stats
    ```
 
 2. **Database connection issues**
+
    ```bash
    # Check if PostgreSQL is running
    docker logs jobblaster-postgres
-   
+
    # Test database connection
    docker exec -it jobblaster-postgres psql -U jobblaster -d jobblaster
    ```
 
 3. **Image not found**
+
    ```bash
    # Build images locally
    ./build-docker.sh
@@ -212,6 +226,7 @@ docker stats
 ## 🚀 Deployment
 
 ### Production Deployment
+
 ```bash
 # Build and tag for production
 ./build-docker.sh v1.0.0
@@ -225,6 +240,7 @@ docker-compose up -d
 ```
 
 ### Registry Push
+
 ```bash
 # Tag for registry
 docker tag jobblaster:latest your-registry.com/jobblaster:latest
@@ -243,6 +259,7 @@ docker push your-registry.com/jobblaster:latest
 ## 🔄 Updates
 
 To update the application:
+
 1. Pull the latest code
 2. Rebuild images: `./build-docker.sh`
 3. Restart containers: `./run-docker.sh`
