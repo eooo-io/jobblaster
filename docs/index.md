@@ -49,8 +49,9 @@ features:
       applications
 ---
 
-<div class="custom-layout">
-  ## Why JobBlaster?
+<div class="vp-doc">
+
+## Why JobBlaster?
 
 JobBlaster is an open-source platform designed to streamline your job
 application process. With AI-powered features and a user-friendly interface, it
