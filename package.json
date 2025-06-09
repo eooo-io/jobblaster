@@ -17,7 +17,10 @@
     "start": "NODE_ENV=production node dist/server/index.js",
     "test": "vitest",
     "check": "tsc",
-    "db:push": "drizzle-kit push"
+    "db:push": "drizzle-kit push",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
@@ -144,7 +147,8 @@
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
-    "vite": "^5.4.19"
+    "vite": "^5.4.19",
+    "vitepress": "^1.6.3"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"

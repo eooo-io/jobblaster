@@ -1,0 +1,6 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+All development happens in Docker containers using docker-compose. Docker build should always be multi-arch amd64 and arm64. All development command e.g. npm, npx, yarn, composer, uv, uvx should be run in the containers.
