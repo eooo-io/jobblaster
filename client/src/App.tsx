@@ -1,21 +1,22 @@
-import { Switch, Route, useLocation } from "wouter";
-import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { Route, Switch, useLocation } from "wouter";
+import { queryClient } from "./lib/queryClient";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { useAuth } from "@/hooks/useAuth";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import Dashboard from "@/pages/dashboard";
-import Login from "@/pages/login";
-import Profile from "@/pages/profile";
-import Connectors from "@/pages/connectors";
-import Templates from "@/pages/templates";
-import AssignedTemplates from "@/pages/assigned-templates";
-import ExternalLogs from "@/pages/external-logs";
-import CoverLetters from "@/pages/cover-letters";
+import { useAuth } from "@/hooks/useAuth";
 import ApplicationHistory from "@/pages/application-history";
 import Applications from "@/pages/applications";
+import AssignedTemplates from "@/pages/assigned-templates";
+import Connectors from "@/pages/connectors";
+import CoverLetters from "@/pages/cover-letters";
+import Dashboard from "@/pages/dashboard";
+import ExternalLogs from "@/pages/external-logs";
+import Login from "@/pages/login";
 import NotFound from "@/pages/not-found";
+import Profile from "@/pages/profile";
+import Templates from "@/pages/templates";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -33,10 +34,14 @@ function Router() {
   }
 
   if (!isAuthenticated) {
-    return <Login onLoginSuccess={() => {
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
-      setLocation('/');
-    }} />;
+    return (
+      <Login
+        onLoginSuccess={() => {
+          queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+          setLocation("/");
+        }}
+      />
+    );
   }
 
   return (
@@ -58,11 +63,13 @@ function Router() {
 function App() {
   return (
     <ThemeProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Router />
-        </TooltipProvider>
-      </QueryClientProvider>
+      <LanguageProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <Router />
+          </TooltipProvider>
+        </QueryClientProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }

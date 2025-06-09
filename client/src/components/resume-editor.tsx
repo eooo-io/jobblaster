@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -18,6 +19,7 @@ interface ResumeEditorProps {
 }
 
 export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeEditorProps) {
+  const { getUIText } = useLanguage();
   const [jsonContent, setJsonContent] = useState<any>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [newName, setNewName] = useState("");

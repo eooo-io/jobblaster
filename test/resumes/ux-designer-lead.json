@@ -2,7 +2,7 @@
   "basics": {
     "name": "Sarah Martinez",
     "label": "Lead UX Designer",
-    "image": "",
+    "image": "https://example.com/photos/smartinez.jpg",
     "email": "sarah.martinez@example.com",
     "phone": "(555) 234-5678",
     "url": "https://sarahmartinez.design",
@@ -19,6 +19,11 @@
         "network": "LinkedIn",
         "username": "sarahmartinez",
         "url": "https://linkedin.com/in/sarahmartinez"
+      },
+      {
+        "network": "GitHub",
+        "username": "smartinez-ux",
+        "url": "https://github.com/smartinez-ux"
       },
       {
         "network": "Dribbble",

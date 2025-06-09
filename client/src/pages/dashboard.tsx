@@ -1,6 +1,7 @@
 import CoverLetterGenerator from "@/components/cover-letter-generator";
 import JobAnalyzer from "@/components/job-analyzer";
 import JobSearch from "@/components/job-search";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import ResumeEditor from "@/components/resume-editor";
 import ResumePreview from "@/components/resume-preview";
 import Sidebar from "@/components/sidebar";
@@ -12,6 +13,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import type { JobPosting, Resume } from "@shared/schema";
@@ -19,12 +28,24 @@ import { Bell, Printer } from "lucide-react";
 import { useState } from "react";
 
 export default function Dashboard() {
+  const { getUIText } = useLanguage();
+  const { toast } = useToast();
+  const { user } = useAuth();
+  const [showPrintPreview, setShowPrintPreview] = useState(false);
   const [selectedResume, setSelectedResume] = useState<Resume | null>(null);
   const [selectedJob, setSelectedJob] = useState<JobPosting | null>(null);
   const [selectedTheme, setSelectedTheme] = useState<string>("modern");
-  const [showPrintPreview, setShowPrintPreview] = useState(false);
-  const { toast } = useToast();
-  const { user } = useAuth();
+  const [paperFormat, setPaperFormat] = useState<string>("a4");
+  const [resumeLanguage, setResumeLanguage] = useState<string>("en");
+
+  const resumeLanguages = [
+    { code: "en", name: "English", nativeName: "English" },
+    { code: "es", name: "Spanish", nativeName: "Español" },
+    { code: "fr", name: "French", nativeName: "Français" },
+    { code: "de", name: "German", nativeName: "Deutsch" },
+    { code: "it", name: "Italian", nativeName: "Italiano" },
+    { code: "pt", name: "Portuguese", nativeName: "Português" },
+  ];
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
@@ -38,87 +59,74 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <h2 className="text-lg font-bold text-slate-900 dark:text-white truncate">
-                  Resume Builder
+                  {getUIText("resumeBuilder")}
                 </h2>
-                <p className="text-xs text-slate-600 dark:text-gray-300">Build & match resumes</p>
+                <p className="text-xs text-slate-600 dark:text-gray-300">
+                  {getUIText("buildAndMatchResumes")}
+                </p>
               </div>
               <Button variant="ghost" size="sm">
                 <Bell className="w-4 h-4" />
               </Button>
-            </div>
-
-            <div className="flex items-center justify-between space-x-2">
-              {/* Theme Selector - Mobile */}
-              <div className="flex items-center space-x-2 flex-1">
-                <label className="text-xs font-medium text-slate-700 dark:text-gray-300 whitespace-nowrap">
-                  Theme:
-                </label>
-                <select
-                  value={selectedTheme}
-                  onChange={(e) => setSelectedTheme(e.target.value)}
-                  className="flex-1 px-2 py-1 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white text-xs"
-                >
-                  <option value="modern">Modern</option>
-                  <option value="tech1">Tech1</option>
-                  <option value="tech2">Tech2</option>
-                  <option value="paper-plus-plus">Paper++</option>
-                  <option value="lucide">Lucide</option>
-                  <option value="clean-de">Clean-DE</option>
-                  <option value="debug">Debug</option>
-                </select>
-              </div>
-
-              <Button
-                size="sm"
-                className="bg-blue-600 hover:bg-blue-700 text-xs px-3"
-                onClick={() => {
-                  if (selectedResume) {
-                    setShowPrintPreview(true);
-                  } else {
-                    toast({
-                      title: "No Resume Selected",
-                      description: "Please select a resume first to preview!",
-                      variant: "destructive",
-                    });
-                  }
-                }}
-              >
-                <Printer className="w-3 h-3 mr-1" />
-                Print Preview
-              </Button>
+              <LanguageSwitcher />
             </div>
           </div>
 
           {/* Desktop Layout */}
           <div className="hidden lg:flex items-center justify-between">
-            <div>
+            <div className="flex-1 min-w-0">
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-                Resume Builder & Job Matcher
+                {getUIText("resumeBuilder")}
               </h2>
               <p className="text-base text-slate-600 dark:text-gray-300">
-                Upload your resume and find the perfect job match
+                {getUIText("findPerfectMatch")}
               </p>
             </div>
+
             <div className="flex items-center space-x-4">
-              {/* Theme Selector - Desktop */}
-              <div className="flex items-center space-x-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-gray-300">
-                  Theme:
-                </label>
-                <select
-                  value={selectedTheme}
-                  onChange={(e) => setSelectedTheme(e.target.value)}
-                  className="px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-slate-900 dark:text-white text-sm"
-                >
-                  <option value="modern">Modern</option>
-                  <option value="tech1">Tech1</option>
-                  <option value="tech2">Tech2</option>
-                  <option value="paper-plus-plus">Paper++</option>
-                  <option value="lucide">Lucide</option>
-                  <option value="clean-de">Clean-DE</option>
-                  <option value="debug">Debug</option>
-                </select>
-              </div>
+              {/* Theme Selector */}
+              <Select value={selectedTheme} onValueChange={setSelectedTheme}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Select Theme" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="modern">Modern</SelectItem>
+                  <SelectItem value="classic">Classic</SelectItem>
+                  <SelectItem value="creative">Creative</SelectItem>
+                  <SelectItem value="formal">Formal</SelectItem>
+                  <SelectItem value="paper++">Paper++</SelectItem>
+                  <SelectItem value="lucide">Lucide</SelectItem>
+                  <SelectItem value="clean-de">Clean-DE</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Resume Language Selector */}
+              <Select value={resumeLanguage} onValueChange={setResumeLanguage}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder={getUIText("selectResumeLanguage")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {resumeLanguages.map((lang) => (
+                    <SelectItem key={lang.code} value={lang.code}>
+                      <span className="flex items-center gap-2">
+                        <span>{lang.name}</span>
+                        <span className="text-gray-500 text-sm">({lang.nativeName})</span>
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Paper Format Selector */}
+              <Select value={paperFormat} onValueChange={setPaperFormat}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder={getUIText("selectPaperFormat")} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="a4">A4 (210mm × 297mm)</SelectItem>
+                  <SelectItem value="legal">US Legal (8.5" × 14")</SelectItem>
+                </SelectContent>
+              </Select>
 
               <Button
                 className="bg-blue-600 hover:bg-blue-700"
@@ -127,15 +135,15 @@ export default function Dashboard() {
                     setShowPrintPreview(true);
                   } else {
                     toast({
-                      title: "No Resume Selected",
-                      description: "Please select a resume first to preview!",
+                      title: getUIText("noResumeSelected"),
+                      description: getUIText("pleaseSelectResume"),
                       variant: "destructive",
                     });
                   }
                 }}
               >
                 <Printer className="w-4 h-4 mr-2" />
-                Print Preview
+                {getUIText("printPreview")}
               </Button>
               <Button variant="ghost" size="sm">
                 <Bell className="w-4 h-4" />
@@ -155,7 +163,7 @@ export default function Dashboard() {
             {/* Right Column - Job Search and Analysis - 1/3 width */}
             <div className="min-h-0 overflow-hidden flex flex-col gap-4 lg:gap-6">
               <div className="flex-none">
-                <JobSearch />
+                <JobSearch onJobSelect={setSelectedJob} />
               </div>
               <div className="flex-1">
                 <JobAnalyzer
@@ -175,10 +183,10 @@ export default function Dashboard() {
             <div className="max-w-4xl mx-auto">
               <div className="mb-4 lg:mb-6">
                 <h2 className="text-xl lg:text-2xl font-bold text-slate-900 dark:text-white">
-                  Resume Preview
+                  {getUIText("printPreview")}
                 </h2>
                 <p className="text-sm lg:text-base text-slate-600 dark:text-gray-300">
-                  See how your resume looks with the selected theme
+                  {getUIText("findPerfectMatch")}
                 </p>
               </div>
 
@@ -189,7 +197,10 @@ export default function Dashboard() {
                     key={selectedResume?.id || "no-resume"}
                     resume={selectedResume}
                     theme={selectedTheme}
+                    showDownloadButton={false}
                     user={user}
+                    outputLanguage={resumeLanguage}
+                    paperFormat={paperFormat}
                   />
                 </div>
               </div>
@@ -211,13 +222,44 @@ export default function Dashboard() {
       <Dialog open={showPrintPreview} onOpenChange={setShowPrintPreview}>
         <DialogContent className="max-w-none w-screen h-screen p-0 m-0 bg-gray-100 dark:bg-gray-900">
           <DialogHeader>
-            <DialogTitle>
-              Print Preview - {selectedTheme === "clean-de" ? "A4 Format" : "US Legal Format"}
-            </DialogTitle>
-            <DialogDescription>
-              {selectedResume?.name || "Resume"} •{" "}
-              {selectedTheme === "clean-de" ? "210mm × 297mm" : '8.5" × 14"'} • Ready to print
-            </DialogDescription>
+            <div className="flex flex-col items-center space-y-4">
+              <div className="text-center">
+                <DialogTitle>{getUIText("printPreview")}</DialogTitle>
+                <DialogDescription>
+                  {selectedResume?.name || "Resume"} • {getUIText("readyToPrint")}
+                </DialogDescription>
+              </div>
+
+              <div className="flex items-center gap-4">
+                {/* Resume Language Selector */}
+                <Select value={resumeLanguage} onValueChange={setResumeLanguage}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={getUIText("selectResumeLanguage")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {resumeLanguages.map((lang) => (
+                      <SelectItem key={lang.code} value={lang.code}>
+                        <span className="flex items-center gap-2">
+                          <span>{lang.name}</span>
+                          <span className="text-gray-500 text-sm">({lang.nativeName})</span>
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {/* Paper Format Selector */}
+                <Select value={paperFormat} onValueChange={setPaperFormat}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={getUIText("selectPaperFormat")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="a4">A4 (210mm × 297mm)</SelectItem>
+                    <SelectItem value="legal">US Legal (8.5" × 14")</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
           </DialogHeader>
 
           <div className="flex flex-col h-full">
@@ -227,8 +269,8 @@ export default function Dashboard() {
               <div
                 className="bg-white shadow-xl transform origin-top scale-50 sm:scale-75 md:scale-90 lg:scale-100 mx-auto"
                 style={{
-                  width: selectedTheme === "clean-de" ? "210mm" : "8.5in",
-                  minHeight: selectedTheme === "clean-de" ? "297mm" : "14in",
+                  width: paperFormat === "a4" ? "210mm" : "8.5in",
+                  minHeight: paperFormat === "a4" ? "297mm" : "14in",
                   marginBottom: "40px",
                   padding: "0.5in",
                   fontSize: "10pt",
@@ -261,6 +303,8 @@ export default function Dashboard() {
                     forceLightMode={true}
                     showDownloadButton={false}
                     user={user}
+                    outputLanguage={resumeLanguage}
+                    paperFormat={paperFormat}
                   />
                 </div>
               </div>
@@ -270,7 +314,7 @@ export default function Dashboard() {
             <div className="flex flex-col sm:flex-row items-center justify-between p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 gap-3">
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 <span>
-                  📄 {selectedTheme === "clean-de" ? "A4 (210mm × 297mm)" : 'US Legal (8.5" × 14")'}
+                  📄 {paperFormat === "a4" ? "A4 (210mm × 297mm)" : 'US Legal (8.5" × 14")'}
                 </span>
                 <span>
                   🎨 {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)} Theme

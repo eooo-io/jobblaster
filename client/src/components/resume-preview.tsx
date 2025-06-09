@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { tokenMap } from "@/lib/i18n/language-manager";
 import type { JSONResumeSchema } from "@/lib/types";
+import { LanguageCode, ResumeTokens } from "@/lib/types/language";
 import type { Resume, User } from "@shared/schema";
-import { Download, Mail, MapPin, Phone } from "lucide-react";
+import { Download } from "lucide-react";
 import React from "react";
 
 interface ResumePreviewProps {
@@ -9,6 +12,9 @@ interface ResumePreviewProps {
   theme?: string;
   showDownloadButton?: boolean;
   user?: User | null;
+  forceLightMode?: boolean;
+  outputLanguage?: string;
+  paperFormat?: string;
 }
 
 declare global {
@@ -35,12 +41,30 @@ export default function ResumePreview({
   theme = "modern",
   showDownloadButton = true,
   user,
+  forceLightMode = false,
+  outputLanguage = "en",
+  paperFormat = "a4",
 }: ResumePreviewProps) {
+  const { getUIText, getToken } = useLanguage();
+
   if (!resume?.jsonData) {
-    return null;
+    return (
+      <div className="lg:col-span-1">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-slate-900">{getUIText("resumeBuilder")}</h3>
+        </div>
+        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 h-96 overflow-auto">
+          <div className="flex items-center justify-center h-full text-slate-500">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-slate-200 rounded-lg mx-auto mb-2"></div>
+              <p className="text-sm">{getUIText("pleaseSelectResume")}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
-  const resumeData = resume.jsonData as JSONResumeSchema;
   const {
     basics = {},
     work = [],
@@ -48,88 +72,19 @@ export default function ResumePreview({
     skills = [],
     languages = [],
     projects = [],
-  } = resumeData;
+    awards = [],
+    certificates = [],
+    publications = [],
+    interests = [],
+    references = [],
+  } = resume.jsonData as JSONResumeSchema;
 
-  // Helper function to get the appropriate icon component for social profiles
-  const getProfileIcon = (network: string | undefined) => {
-    const networkLower = network?.toLowerCase() || "link";
-    switch (networkLower) {
-      case "github":
-        return <i className="fab fa-github text-gray-600 mr-2 w-4 h-4" />;
-      case "linkedin":
-        return <i className="fab fa-linkedin text-gray-600 mr-2 w-4 h-4" />;
-      case "twitter":
-        return <i className="fab fa-twitter text-gray-600 mr-2 w-4 h-4" />;
-      case "facebook":
-        return <i className="fab fa-facebook text-gray-600 mr-2 w-4 h-4" />;
-      case "instagram":
-        return <i className="fab fa-instagram text-gray-600 mr-2 w-4 h-4" />;
-      case "stackoverflow":
-        return <i className="fab fa-stack-overflow text-gray-600 mr-2 w-4 h-4" />;
-      case "medium":
-        return <i className="fab fa-medium text-gray-600 mr-2 w-4 h-4" />;
-      case "behance":
-        return <i className="fab fa-behance text-gray-600 mr-2 w-4 h-4" />;
-      case "dribbble":
-        return <i className="fab fa-dribbble text-gray-600 mr-2 w-4 h-4" />;
-      case "gitlab":
-        return <i className="fab fa-gitlab text-gray-600 mr-2 w-4 h-4" />;
-      case "bitbucket":
-        return <i className="fab fa-bitbucket text-gray-600 mr-2 w-4 h-4" />;
-      default:
-        return <i className="fas fa-link text-gray-600 mr-2 w-4 h-4" />;
-    }
+  // Get the resume tokens for the selected output language
+  const getResumeToken = (key: keyof ResumeTokens): string => {
+    const tokens = tokenMap[outputLanguage as LanguageCode] || tokenMap.en;
+    return tokens[key];
   };
 
-  // Format date helper
-  const formatDate = (dateStr: string | undefined): string => {
-    if (!dateStr) return "";
-
-    // Handle YYYY-MM format (e.g., "2020-11" -> "Nov 2020")
-    if (dateStr.match(/^\d{4}-\d{2}$/)) {
-      const [year, month] = dateStr.split("-");
-      const monthNames = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      const monthIndex = parseInt(month, 10) - 1;
-      return `${monthNames[monthIndex]} ${year}`;
-    }
-
-    // Handle other date formats
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) {
-      return dateStr; // Return as-is if not a valid date
-    }
-
-    const monthNames = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    return `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-  };
-
-  // Handle PDF download
   const handleDownloadPDF = () => {
     if (!resume?.jsonData) return;
 
@@ -175,11 +130,11 @@ export default function ResumePreview({
               }
               @page {
                 margin: 0.5in;
-                size: A4;
+                size: ${paperFormat === "a4" ? "A4" : "legal"};
               }
               .resume-content {
-                width: 210mm;
-                min-height: 297mm;
+                width: ${paperFormat === "a4" ? "210mm" : "8.5in"};
+                min-height: ${paperFormat === "a4" ? "297mm" : "14in"};
                 max-width: none !important;
                 margin: 0 auto !important;
                 box-shadow: none !important;
@@ -204,10 +159,10 @@ export default function ResumePreview({
               line-height: 1.4;
             }
 
-            /* A4 dimensions for preview */
+            /* Paper dimensions for preview */
             .resume-content {
-              width: 210mm;
-              min-height: 297mm;
+              width: ${paperFormat === "a4" ? "210mm" : "8.5in"};
+              min-height: ${paperFormat === "a4" ? "297mm" : "14in"};
               margin: 0 auto !important;
               background: white;
               position: relative;
@@ -232,6 +187,43 @@ export default function ResumePreview({
     printWindow.document.write(pdfContent);
     printWindow.document.close();
   };
+
+  const formatDate = (dateStr?: string) => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(undefined, { month: "short", year: "numeric" });
+  };
+
+  // Helper function to get the appropriate icon component for social profiles
+  function getProfileIcon(network: string | undefined) {
+    const networkLower = network?.toLowerCase() || "link";
+    switch (networkLower) {
+      case "github":
+        return <i className="fab fa-github text-gray-600 mr-2 w-4 h-4" />;
+      case "linkedin":
+        return <i className="fab fa-linkedin text-gray-600 mr-2 w-4 h-4" />;
+      case "twitter":
+        return <i className="fab fa-twitter text-gray-600 mr-2 w-4 h-4" />;
+      case "facebook":
+        return <i className="fab fa-facebook text-gray-600 mr-2 w-4 h-4" />;
+      case "instagram":
+        return <i className="fab fa-instagram text-gray-600 mr-2 w-4 h-4" />;
+      case "stackoverflow":
+        return <i className="fab fa-stack-overflow text-gray-600 mr-2 w-4 h-4" />;
+      case "medium":
+        return <i className="fab fa-medium text-gray-600 mr-2 w-4 h-4" />;
+      case "behance":
+        return <i className="fab fa-behance text-gray-600 mr-2 w-4 h-4" />;
+      case "dribbble":
+        return <i className="fab fa-dribbble text-gray-600 mr-2 w-4 h-4" />;
+      case "gitlab":
+        return <i className="fab fa-gitlab text-gray-600 mr-2 w-4 h-4" />;
+      case "bitbucket":
+        return <i className="fab fa-bitbucket text-gray-600 mr-2 w-4 h-4" />;
+      default:
+        return <i className="fas fa-link text-gray-600 mr-2 w-4 h-4" />;
+    }
+  }
 
   // Modern Theme
   if (theme === "modern") {
@@ -268,7 +260,7 @@ export default function ResumePreview({
                   <div className="mt-4 flex flex-wrap gap-4">
                     {basics.email && (
                       <div className="flex items-center text-gray-600">
-                        <Mail className="h-4 w-4 mr-2" />
+                        <i className="fas fa-envelope text-gray-600 mr-2 w-4 h-4" />
                         <a href={`mailto:${basics.email}`} className="hover:text-blue-600">
                           {basics.email}
                         </a>
@@ -276,7 +268,7 @@ export default function ResumePreview({
                     )}
                     {basics.phone && (
                       <div className="flex items-center text-gray-600">
-                        <Phone className="h-4 w-4 mr-2" />
+                        <i className="fas fa-phone text-gray-600 mr-2 w-4 h-4" />
                         <a href={`tel:${basics.phone}`} className="hover:text-blue-600">
                           {basics.phone}
                         </a>
@@ -284,7 +276,7 @@ export default function ResumePreview({
                     )}
                     {basics.location && basics.location.city && (
                       <div className="flex items-center text-gray-600">
-                        <MapPin className="h-4 w-4 mr-2" />
+                        <i className="fas fa-map-marker-alt text-gray-600 mr-2 w-4 h-4" />
                         <span>
                           {basics.location.city}
                           {basics.location.region && `, ${basics.location.region}`}
@@ -296,18 +288,21 @@ export default function ResumePreview({
                   {/* Social Profiles */}
                   {basics.profiles && basics.profiles.length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-4">
-                      {basics.profiles.map((profile, index) => (
-                        <a
-                          key={index}
-                          href={profile.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center text-gray-600 hover:text-blue-600"
-                        >
-                          {getProfileIcon(profile.network)}
-                          <span>{profile.username}</span>
-                        </a>
-                      ))}
+                      {basics.profiles.map((profile: any, index: number) => {
+                        const isGithub = profile.network?.toLowerCase() === "github";
+                        return (
+                          <a
+                            key={index}
+                            href={profile.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`flex items-center ${isGithub ? "text-blue-600 hover:text-blue-800" : "text-gray-600 hover:text-gray-800"}`}
+                          >
+                            {getProfileIcon(profile.network)}
+                            <span className="ml-1">{profile.username}</span>
+                          </a>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -476,7 +471,7 @@ export default function ResumePreview({
                 <div className="flex flex-wrap gap-4 text-sm">
                   {basics.email && (
                     <div className="flex items-center">
-                      <i className="fas fa-envelope mr-2"></i>
+                      <i className="fas fa-envelope w-4 h-4 mr-2" />
                       <a
                         href={`mailto:${basics.email}`}
                         className="text-blue-600 hover:text-blue-800"
@@ -487,13 +482,13 @@ export default function ResumePreview({
                   )}
                   {basics.phone && (
                     <div className="flex items-center">
-                      <i className="fas fa-phone mr-2"></i>
+                      <i className="fas fa-phone w-4 h-4 mr-2" />
                       <span>{basics.phone}</span>
                     </div>
                   )}
                   {basics.url && (
                     <div className="flex items-center">
-                      <i className="fas fa-globe mr-2"></i>
+                      <i className="fas fa-link w-4 h-4 mr-2" />
                       <a
                         href={basics.url}
                         target="_blank"
@@ -518,18 +513,21 @@ export default function ResumePreview({
                 {/* Profiles */}
                 {basics.profiles && basics.profiles.length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-4">
-                    {basics.profiles.map((profile: any, index: number) => (
-                      <a
-                        key={index}
-                        href={profile.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center text-sm text-blue-600 hover:text-blue-800"
-                      >
-                        {getProfileIcon(profile.network)}
-                        {profile.username || profile.url}
-                      </a>
-                    ))}
+                    {basics.profiles.map((profile: any, index: number) => {
+                      const isGithub = profile.network?.toLowerCase() === "github";
+                      return (
+                        <a
+                          key={index}
+                          href={profile.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center ${isGithub ? "text-blue-600 hover:text-blue-800" : "text-gray-600 hover:text-gray-800"}`}
+                        >
+                          {getProfileIcon(profile.network)}
+                          <span className="ml-1">{profile.username}</span>
+                        </a>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -714,15 +712,22 @@ export default function ResumePreview({
                 {basics.label && <p className="text-xl text-gray-600">{basics.label}</p>}
 
                 {/* Contact Info */}
-                <div className="mt-4 flex justify-center gap-4 text-sm text-gray-600">
+                <div className="mt-4 flex justify-center items-center gap-4 text-sm text-gray-600">
                   {basics.email && (
                     <a href={`mailto:${basics.email}`} className="hover:text-blue-600">
+                      <i className="fas fa-envelope w-4 h-4 inline-block mr-1" />
                       {basics.email}
                     </a>
                   )}
-                  {basics.phone && <span>{basics.phone}</span>}
+                  {basics.phone && (
+                    <span>
+                      <i className="fas fa-phone w-4 h-4 inline-block mr-1" />
+                      {basics.phone}
+                    </span>
+                  )}
                   {basics.location && basics.location.city && (
                     <span>
+                      <i className="fas fa-map-marker-alt w-4 h-4 inline-block mr-1" />
                       {basics.location.city}
                       {basics.location.region && `, ${basics.location.region}`}
                     </span>
@@ -731,19 +736,22 @@ export default function ResumePreview({
 
                 {/* Social Profiles */}
                 {basics.profiles && basics.profiles.length > 0 && (
-                  <div className="text-xs flex flex-wrap justify-center gap-x-2">
-                    {basics.profiles.map((profile: any, index: number) => (
-                      <a
-                        key={index}
-                        href={profile.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-700"
-                      >
-                        {getProfileIcon(profile.network)}
-                        {profile.username}
-                      </a>
-                    ))}
+                  <div className="mt-4 flex flex-wrap justify-center gap-4">
+                    {basics.profiles.map((profile: any, index: number) => {
+                      const isGithub = profile.network?.toLowerCase() === "github";
+                      return (
+                        <a
+                          key={index}
+                          href={profile.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center ${isGithub ? "text-blue-600 hover:text-blue-800" : "text-gray-600 hover:text-gray-800"}`}
+                        >
+                          {getProfileIcon(profile.network)}
+                          <span className="ml-1">{profile.username}</span>
+                        </a>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -775,7 +783,10 @@ export default function ResumePreview({
                       {job.highlights && job.highlights.length > 0 && (
                         <ul className="list-disc list-inside space-y-1 text-gray-700">
                           {job.highlights.map((highlight: string, idx: number) => (
-                            <li key={idx}>{highlight}</li>
+                            <li key={idx} className="text-gray-700 flex items-start">
+                              <span className="text-gray-400 mr-2">•</span>
+                              <span>{highlight}</span>
+                            </li>
                           ))}
                         </ul>
                       )}
@@ -844,7 +855,7 @@ export default function ResumePreview({
               {/* Projects */}
               {projects.length > 0 && (
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-4">Projects</h2>
+                  <h2 className="text-xl font-bold mb-4 text-gray-900">Projects</h2>
                   {projects.map((project: any, index: number) => (
                     <div key={index} className="mb-6 last:mb-0">
                       <div className="flex justify-between items-start mb-2">
@@ -869,9 +880,12 @@ export default function ResumePreview({
                         <p className="text-gray-700 mb-2">{project.description}</p>
                       )}
                       {project.highlights && project.highlights.length > 0 && (
-                        <ul className="list-disc list-inside space-y-1 text-gray-700">
+                        <ul className="space-y-2">
                           {project.highlights.map((highlight: string, idx: number) => (
-                            <li key={idx}>{highlight}</li>
+                            <li key={idx} className="text-gray-700 flex items-start">
+                              <span className="text-gray-400 mr-2">•</span>
+                              <span>{highlight}</span>
+                            </li>
                           ))}
                         </ul>
                       )}
@@ -908,71 +922,65 @@ export default function ResumePreview({
           <div className="flex justify-center">
             <div className="resume-content bg-white rounded shadow-sm p-8">
               {/* Header Section */}
-              <div className="bg-gray-100 border-b border-gray-200 py-8 mb-12">
-                <div className="flex items-center px-8 gap-8">
-                  {/* Left Side - Info */}
-                  <div className="flex-grow text-left">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-3">
-                      {basics.name || "Your Name"}
-                    </h1>
-                    {basics.label && (
-                      <p className="text-gray-600 font-medium mb-3">{basics.label}</p>
-                    )}
-
-                    {/* Contact Information */}
-                    <div className="text-xs text-gray-600 space-y-2">
-                      {basics.email && (
-                        <div className="flex items-center text-gray-600">
-                          <Mail className="h-4 w-4 mr-2" />
-                          <a href={`mailto:${basics.email}`} className="hover:text-blue-600">
-                            {basics.email}
-                          </a>
-                        </div>
-                      )}
-                      {basics.phone && (
-                        <div className="flex items-center text-gray-600">
-                          <Phone className="h-4 w-4 mr-2" />
-                          <a href={`tel:${basics.phone}`} className="hover:text-blue-600">
-                            {basics.phone}
-                          </a>
-                        </div>
-                      )}
-                      {basics.location && basics.location.city && (
-                        <div className="flex items-center text-gray-600">
-                          <MapPin className="h-4 w-4 mr-2" />
-                          <span>
-                            {basics.location.city}
-                            {basics.location.region && `, ${basics.location.region}`}
-                            {basics.location.countryCode && `, ${basics.location.countryCode}`}
-                          </span>
-                        </div>
-                      )}
+              <div className="text-center mb-8">
+                {/* Profile Picture */}
+                {user?.profilePicture && (
+                  <div className="mb-4 flex justify-center">
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-200">
+                      <img
+                        src={user.profilePicture}
+                        alt={`${basics.name}'s profile`}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </div>
+                )}
+                <h1 className="text-2xl font-bold text-gray-900 mb-2">{basics.name}</h1>
+                {basics.label && <p className="text-lg text-gray-600 mb-2">{basics.label}</p>}
 
-                  {/* Right Side - Profile Picture */}
-                  <div className="flex-shrink-0">
-                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                      {user?.profilePicture ? (
-                        <img
-                          src={user.profilePicture}
-                          alt={basics.name || "Profile"}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-600 text-2xl font-bold">
-                          {basics.name
-                            ? basics.name
-                                .split(" ")
-                                .map((n) => n[0])
-                                .join("")
-                                .toUpperCase()
-                            : "U"}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                {/* Contact Info */}
+                <div className="flex justify-center items-center gap-4 text-sm text-gray-600">
+                  {basics.email && (
+                    <a href={`mailto:${basics.email}`} className="hover:text-blue-600">
+                      <i className="fas fa-envelope w-4 h-4 inline-block mr-1" />
+                      {basics.email}
+                    </a>
+                  )}
+                  {basics.phone && (
+                    <span>
+                      <i className="fas fa-phone w-4 h-4 inline-block mr-1" />
+                      {basics.phone}
+                    </span>
+                  )}
+                  {basics.location && basics.location.city && (
+                    <span>
+                      <i className="fas fa-map-marker-alt w-4 h-4 inline-block mr-1" />
+                      {basics.location.city}
+                      {basics.location.region && `, ${basics.location.region}`}
+                    </span>
+                  )}
                 </div>
+
+                {/* Social Profiles */}
+                {basics.profiles && basics.profiles.length > 0 && (
+                  <div className="mt-4 flex flex-wrap justify-center gap-4">
+                    {basics.profiles.map((profile: any, index: number) => {
+                      const isGithub = profile.network?.toLowerCase() === "github";
+                      return (
+                        <a
+                          key={index}
+                          href={profile.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center ${isGithub ? "text-blue-600 hover:text-blue-800" : "text-gray-600 hover:text-gray-800"}`}
+                        >
+                          {getProfileIcon(profile.network)}
+                          <span className="ml-1">{profile.username}</span>
+                        </a>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Summary */}
@@ -1188,18 +1196,21 @@ export default function ResumePreview({
                 {/* Social Profiles */}
                 {basics.profiles && basics.profiles.length > 0 && (
                   <div className="text-xs flex flex-wrap justify-center gap-x-2">
-                    {basics.profiles.map((profile: any, index: number) => (
-                      <a
-                        key={index}
-                        href={profile.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-800"
-                      >
-                        {getProfileIcon(profile.network)}
-                        <span>{profile.username}</span>
-                      </a>
-                    ))}
+                    {basics.profiles.map((profile: any, index: number) => {
+                      const isGithub = profile.network?.toLowerCase() === "github";
+                      return (
+                        <a
+                          key={index}
+                          href={profile.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`flex items-center ${isGithub ? "text-blue-600 hover:text-blue-800" : "text-gray-600 hover:text-gray-800"}`}
+                        >
+                          {getProfileIcon(profile.network)}
+                          <span>{profile.username}</span>
+                        </a>
+                      );
+                    })}
                   </div>
                 )}
               </div>
@@ -1263,15 +1274,15 @@ export default function ResumePreview({
                             {edu.studyType} {edu.area}
                           </h3>
                           <p className="text-gray-600 text-xs">{edu.institution}</p>
-                          {edu.score && <p className="text-gray-600 text-xs">GPA: {edu.score}</p>}
                         </div>
-                        <span className="text-xs text-gray-600">
+                        <span className="text-sm text-gray-600">
                           {formatDate(edu.startDate)}
                           {edu.endDate ? ` - ${formatDate(edu.endDate)}` : ""}
                         </span>
                       </div>
+                      {edu.score && <p className="text-gray-700">GPA: {edu.score}</p>}
                       {edu.courses && edu.courses.length > 0 && (
-                        <p className="text-xs text-gray-700 mt-1">
+                        <p className="text-gray-700 mt-1">
                           Relevant coursework: {edu.courses.slice(0, 3).join(", ")}
                         </p>
                       )}
@@ -1288,7 +1299,7 @@ export default function ResumePreview({
                   </h2>
                   <div className="grid grid-cols-2 gap-2">
                     {skills.map((skill: any, index: number) => (
-                      <div key={index} className="bg-gray-50 rounded-md p-2 border border-gray-200">
+                      <div key={index} className="bg-gray-50 rounded p-2 border border-gray-200">
                         <div className="font-medium text-gray-900 text-sm">
                           {typeof skill === "string" ? skill : skill.name}
                         </div>
@@ -1475,12 +1486,19 @@ export default function ResumePreview({
               <div className="mt-4 flex justify-center gap-4 text-sm text-gray-600">
                 {basics.email && (
                   <a href={`mailto:${basics.email}`} className="hover:text-blue-600">
+                    <i className="fas fa-envelope w-4 h-4 inline-block mr-1" />
                     {basics.email}
                   </a>
                 )}
-                {basics.phone && <span>{basics.phone}</span>}
+                {basics.phone && (
+                  <span>
+                    <i className="fas fa-phone w-4 h-4 inline-block mr-1" />
+                    {basics.phone}
+                  </span>
+                )}
                 {basics.location && basics.location.city && (
                   <span>
+                    <i className="fas fa-map-marker-alt w-4 h-4 inline-block mr-1" />
                     {basics.location.city}
                     {basics.location.region && `, ${basics.location.region}`}
                   </span>
@@ -1509,6 +1527,9 @@ export default function ResumePreview({
             {/* Summary */}
             {basics.summary && (
               <div className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">
+                  {getResumeToken("summary")}
+                </h2>
                 <p className="text-gray-700 leading-relaxed">{basics.summary}</p>
               </div>
             )}
@@ -1516,17 +1537,17 @@ export default function ResumePreview({
             {/* Work Experience */}
             {work.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Experience</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-4">{getResumeToken("work")}</h2>
                 {work.map((job: any, index: number) => (
-                  <div key={index} className="mb-6 last:mb-0">
+                  <div key={index} className="mb-4 last:mb-0">
                     <div className="flex justify-between items-start mb-2">
                       <div>
                         <h3 className="text-lg font-semibold text-gray-900">{job.position}</h3>
                         <p className="text-gray-600">{job.name || job.company}</p>
                       </div>
                       <span className="text-sm text-gray-600">
-                        {formatDate(job.startDate)}
-                        {job.endDate ? ` - ${formatDate(job.endDate)}` : " - Present"}
+                        {formatDate(job.startDate)} -{" "}
+                        {job.endDate ? formatDate(job.endDate) : getResumeToken("present")}
                       </span>
                     </div>
                     {job.summary && <p className="text-gray-700 mb-2">{job.summary}</p>}
@@ -1545,7 +1566,9 @@ export default function ResumePreview({
             {/* Education */}
             {education.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Education</h2>
+                <h2 className="text-xl font-bold text-gray-900 mb-4">
+                  {getResumeToken("education")}
+                </h2>
                 {education.map((edu: any, index: number) => (
                   <div key={index} className="mb-4 last:mb-0">
                     <div className="flex justify-between items-start mb-2">
@@ -1556,14 +1579,17 @@ export default function ResumePreview({
                         <p className="text-gray-600">{edu.institution}</p>
                       </div>
                       <span className="text-sm text-gray-600">
-                        {formatDate(edu.startDate)}
-                        {edu.endDate ? ` - ${formatDate(edu.endDate)}` : ""}
+                        {formatDate(edu.startDate)} - {edu.endDate ? formatDate(edu.endDate) : ""}
                       </span>
                     </div>
-                    {edu.score && <p className="text-gray-700">GPA: {edu.score}</p>}
+                    {edu.score && (
+                      <p className="text-gray-700">
+                        {getResumeToken("score")}: {edu.score}
+                      </p>
+                    )}
                     {edu.courses && edu.courses.length > 0 && (
                       <p className="text-gray-700 mt-1">
-                        Relevant coursework: {edu.courses.join(", ")}
+                        {getResumeToken("courses")}: {edu.courses.join(", ")}
                       </p>
                     )}
                   </div>
@@ -1573,16 +1599,16 @@ export default function ResumePreview({
 
             {/* Skills */}
             {skills.length > 0 && (
-              <div>
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Skills</h2>
+              <div className="mb-8">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">{getResumeToken("skills")}</h2>
                 <div className="grid grid-cols-2 gap-4">
                   {skills.map((skill: any, index: number) => (
-                    <div key={index} className="bg-gray-50 rounded p-3 border border-gray-200">
-                      <h3 className="font-semibold text-gray-900">
+                    <div key={index} className="bg-gray-50 rounded p-4 border border-gray-200">
+                      <h3 className="font-semibold text-gray-900 mb-2">
                         {typeof skill === "string" ? skill : skill.name}
                       </h3>
                       {skill.keywords && (
-                        <div className="flex flex-wrap gap-2 mt-2">
+                        <div className="flex flex-wrap gap-2">
                           {skill.keywords.map((keyword: string, idx: number) => (
                             <span
                               key={idx}

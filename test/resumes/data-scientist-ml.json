@@ -1,24 +1,24 @@
 {
   "basics": {
-    "name": "Dr. James Wilson",
+    "name": "James Wilson",
     "label": "Machine Learning Scientist",
-    "image": "",
+    "image": "https://example.com/photos/jwilson.jpg",
     "email": "james.wilson@example.com",
-    "phone": "(555) 345-6789",
-    "url": "https://jameswilson.ai",
-    "summary": "Machine Learning Scientist with PhD in Computer Science and 6+ years of experience in developing and deploying ML models at scale. Expertise in deep learning, natural language processing, and computer vision. Published researcher with multiple papers in top-tier conferences.",
+    "phone": "(555) 123-4567",
+    "url": "https://jwilson-ml.dev",
+    "summary": "Senior Machine Learning Scientist with expertise in deep learning, NLP, and computer vision. Published researcher with proven track record of developing innovative AI solutions. Passionate about pushing the boundaries of machine learning applications in real-world scenarios.",
     "location": {
-      "address": "789 AI Boulevard",
-      "postalCode": "94043",
-      "city": "Mountain View",
+      "address": "123 Tech Avenue",
+      "postalCode": "02142",
+      "city": "Cambridge",
       "countryCode": "US",
-      "region": "California"
+      "region": "Massachusetts"
     },
     "profiles": [
       {
         "network": "LinkedIn",
-        "username": "jameswilsonai",
-        "url": "https://linkedin.com/in/jameswilsonai"
+        "username": "jameswilson-ml",
+        "url": "https://linkedin.com/in/jameswilson-ml"
       },
       {
         "network": "GitHub",
@@ -26,11 +26,12 @@
         "url": "https://github.com/jwilson-ml"
       },
       {
-        "network": "Medium",
-        "username": "jameswilson_ai",
-        "url": "https://medium.com/@jameswilson_ai"
+        "network": "Google Scholar",
+        "username": "James Wilson",
+        "url": "https://scholar.google.com/citations?user=jwilson"
       }
-    ]
+    ],
+    "dateOfBirth": "1990-07-22"
   },
   "work": [
     {
@@ -45,7 +46,8 @@
         "Led team of 4 researchers in computer vision project for autonomous systems",
         "Published 3 papers in NeurIPS and ICML",
         "Reduced model training time by 60% through distributed computing optimization"
-      ]
+      ],
+      "location": "Cambridge, MA"
     },
     {
       "name": "TechGiant Corp",
@@ -58,7 +60,8 @@
         "Built recommendation engine serving 50M+ users",
         "Improved click-through rate by 40% using deep learning models",
         "Implemented A/B testing framework for model deployment"
-      ]
+      ],
+      "location": "Mountain View, CA"
     },
     {
       "name": "DataTech Solutions",
@@ -71,12 +74,29 @@
         "Developed customer churn prediction model with 85% accuracy",
         "Created automated anomaly detection system",
         "Reduced false positives in fraud detection by 30%"
+      ],
+      "location": "Boston, MA"
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "AI for Good Foundation",
+      "position": "ML Research Advisor",
+      "url": "https://aiforgood.org",
+      "startDate": "2019-01",
+      "endDate": "",
+      "summary": "Providing ML expertise for humanitarian projects",
+      "highlights": [
+        "Developed ML models for disaster response",
+        "Mentored student researchers",
+        "Contributed to open-source ML tools"
       ]
     }
   ],
   "education": [
     {
       "institution": "Massachusetts Institute of Technology",
+      "url": "https://mit.edu",
       "area": "Computer Science",
       "studyType": "PhD",
       "startDate": "2012-09",
@@ -86,12 +106,57 @@
     },
     {
       "institution": "University of Michigan",
+      "url": "https://umich.edu",
       "area": "Computer Science and Mathematics",
       "studyType": "Bachelor of Science",
       "startDate": "2008-09",
       "endDate": "2012-05",
       "score": "3.95",
       "courses": ["Machine Learning", "Artificial Intelligence", "Advanced Mathematics"]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Best Paper Award",
+      "date": "2022",
+      "awarder": "NeurIPS",
+      "summary": "Awarded for groundbreaking research in efficient transformer architectures"
+    },
+    {
+      "title": "Outstanding Research Contribution",
+      "date": "2021",
+      "awarder": "AI Research Labs",
+      "summary": "Recognition for exceptional research impact and innovation"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Deep Learning Specialization",
+      "date": "2019-12",
+      "issuer": "Coursera",
+      "url": "https://coursera.org/verify/deeplearning"
+    },
+    {
+      "name": "Advanced ML on Google Cloud",
+      "date": "2020-03",
+      "issuer": "Google Cloud",
+      "url": "https://google.com/certification/ml"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Efficient Transformer Models for NLP",
+      "publisher": "NeurIPS 2022",
+      "releaseDate": "2022-12",
+      "url": "https://neurips.cc/2022/efficient-transformers",
+      "summary": "Novel approach to reduce transformer model complexity while maintaining accuracy"
+    },
+    {
+      "name": "Advanced Techniques in Computer Vision",
+      "publisher": "ICML 2021",
+      "releaseDate": "2021-07",
+      "url": "https://icml.cc/2021/papers/vision",
+      "summary": "New architecture for real-time object detection in autonomous systems"
     }
   ],
   "skills": [
@@ -121,29 +186,59 @@
       "fluency": "Professional working proficiency"
     }
   ],
-  "publications": [
+  "interests": [
     {
-      "name": "Efficient Transformer Models for NLP",
-      "publisher": "NeurIPS 2022",
-      "releaseDate": "2022-12",
-      "url": "https://neurips.cc/2022/efficient-transformers",
-      "summary": "Novel approach to reduce transformer model complexity while maintaining accuracy"
+      "name": "AI Research",
+      "keywords": ["Neural Architecture Search", "Few-shot Learning", "Transformers"]
     },
     {
-      "name": "Advanced Techniques in Computer Vision",
-      "publisher": "ICML 2021",
-      "releaseDate": "2021-07",
-      "url": "https://icml.cc/2021/papers/vision",
-      "summary": "New architecture for real-time object detection in autonomous systems"
+      "name": "Quantum Computing",
+      "keywords": ["Quantum ML", "Quantum Algorithms", "Quantum Information"]
+    },
+    {
+      "name": "Scientific Writing",
+      "keywords": ["Research Papers", "Technical Documentation", "Blog Posts"]
+    }
+  ],
+  "references": [
+    {
+      "name": "Dr. Sarah Chen",
+      "reference": "James is an exceptional researcher and ML practitioner. His work on efficient transformers has significantly advanced the field.",
+      "position": "Research Director, AI Research Labs"
     }
   ],
   "projects": [
     {
-      "name": "AutoML Platform",
-      "description": "Open-source automated machine learning platform",
-      "highlights": ["10,000+ GitHub stars", "Used by 100+ companies", "Featured in Google AI Blog"],
-      "keywords": ["AutoML", "Python", "Deep Learning"],
-      "url": "https://github.com/jwilson-ml/automl"
+      "name": "Efficient-Transformers",
+      "description": "Novel transformer architecture for efficient NLP",
+      "highlights": [
+        "25% reduction in computational complexity",
+        "Maintained 99% accuracy on benchmark tasks",
+        "1000+ GitHub stars"
+      ],
+      "keywords": ["NLP", "Transformers", "PyTorch"],
+      "startDate": "2021-06",
+      "endDate": "2022-12",
+      "url": "https://github.com/jwilson-ml/efficient-transformers",
+      "roles": ["Lead Researcher", "Developer"],
+      "entity": "AI Research Labs",
+      "type": "research"
+    },
+    {
+      "name": "AutoML Vision",
+      "description": "Automated computer vision model architecture search",
+      "highlights": [
+        "40% improvement in training efficiency",
+        "Automated hyperparameter optimization",
+        "Deployed in production at 3 companies"
+      ],
+      "keywords": ["Computer Vision", "AutoML", "Deep Learning"],
+      "startDate": "2020-01",
+      "endDate": "2021-05",
+      "url": "https://github.com/jwilson-ml/automl-vision",
+      "roles": ["Research Lead", "System Architect"],
+      "entity": "AI Research Labs",
+      "type": "research"
     }
   ]
 }

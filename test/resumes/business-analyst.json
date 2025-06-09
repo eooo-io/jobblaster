@@ -2,13 +2,13 @@
   "basics": {
     "name": "Amanda Wilson",
     "label": "Senior Business Analyst",
-    "image": "",
+    "image": "https://example.com/photos/awilson.jpg",
     "email": "amanda.wilson@example.com",
-    "phone": "(555) 456-7890",
-    "url": "https://amandawilson.com",
-    "summary": "Strategic Business Analyst with 7+ years of experience in requirements gathering, process improvement, and data analysis. Expertise in translating business needs into technical requirements and driving process optimization initiatives. Strong background in stakeholder management and project delivery.",
+    "phone": "(555) 987-6543",
+    "url": "https://awilson-ba.com",
+    "summary": "Senior Business Analyst with 8+ years of experience bridging the gap between business needs and technical solutions. Expert in requirements gathering, process optimization, and stakeholder management. Strong track record of delivering successful digital transformation projects across multiple industries.",
     "location": {
-      "address": "234 Business Circle",
+      "address": "456 Business Park Drive",
       "postalCode": "60601",
       "city": "Chicago",
       "countryCode": "US",
@@ -17,61 +17,86 @@
     "profiles": [
       {
         "network": "LinkedIn",
-        "username": "amandawilson",
-        "url": "https://linkedin.com/in/amandawilson"
+        "username": "awilson-ba",
+        "url": "https://linkedin.com/in/awilson-ba"
       },
       {
-        "network": "Twitter",
-        "username": "amanda_analyst",
-        "url": "https://twitter.com/amanda_analyst"
+        "network": "GitHub",
+        "username": "awilson-ba",
+        "url": "https://github.com/awilson-ba"
+      },
+      {
+        "network": "Medium",
+        "username": "awilson_ba",
+        "url": "https://medium.com/@awilson_ba"
       }
-    ]
+    ],
+    "dateOfBirth": "1988-09-15"
   },
   "work": [
     {
       "name": "Enterprise Solutions Inc",
       "position": "Senior Business Analyst",
       "url": "https://enterprisesolutions.com",
-      "startDate": "2020-03",
+      "startDate": "2019-03",
       "endDate": "",
-      "summary": "Leading business analysis for enterprise software implementations",
+      "summary": "Lead business analyst for digital transformation initiatives",
       "highlights": [
-        "Led requirements gathering and analysis for $10M digital transformation project",
-        "Reduced process inefficiencies saving $2M annually through workflow optimization",
-        "Managed stakeholder relationships across 5 departments and 3 vendor teams",
-        "Developed KPI dashboard improving executive decision-making efficiency by 40%"
-      ]
+        "Led requirements gathering and process mapping for $5M ERP implementation",
+        "Reduced process inefficiencies by 40% through system optimization",
+        "Managed stakeholder relationships across 6 departments",
+        "Mentored 3 junior business analysts"
+      ],
+      "location": "Chicago, IL"
     },
     {
-      "name": "Tech Consulting Group",
+      "name": "Global Consulting Group",
       "position": "Business Analyst",
-      "url": "https://techconsulting.com",
-      "startDate": "2017-06",
-      "endDate": "2020-02",
-      "summary": "Provided business analysis for technology implementations",
+      "url": "https://globalconsulting.com",
+      "startDate": "2016-06",
+      "endDate": "2019-02",
+      "summary": "Business analysis for client projects",
       "highlights": [
-        "Conducted requirements analysis for 15+ client projects",
-        "Improved project delivery efficiency by 30% through standardized templates",
-        "Created process documentation reducing training time by 50%"
-      ]
+        "Conducted business process analysis for 10+ Fortune 500 clients",
+        "Developed requirements documentation for CRM implementation",
+        "Facilitated workshops with stakeholders to gather requirements"
+      ],
+      "location": "Chicago, IL"
     },
     {
-      "name": "Financial Services Corp",
+      "name": "Tech Innovations Ltd",
       "position": "Junior Business Analyst",
-      "url": "https://finservices.com",
-      "startDate": "2015-08",
-      "endDate": "2017-05",
-      "summary": "Supported business process improvement initiatives",
+      "url": "https://techinnovations.com",
+      "startDate": "2014-08",
+      "endDate": "2016-05",
+      "summary": "Entry-level business analysis role",
       "highlights": [
-        "Analyzed business processes identifying $500K in potential savings",
-        "Assisted in requirements gathering for system upgrade",
-        "Created monthly performance reports for executive team"
+        "Assisted in requirements gathering and documentation",
+        "Created process flow diagrams and user stories",
+        "Supported user acceptance testing"
+      ],
+      "location": "Chicago, IL"
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Chicago Tech Mentors",
+      "position": "Business Analysis Mentor",
+      "url": "https://chicagotechmentors.org",
+      "startDate": "2018-01",
+      "endDate": "",
+      "summary": "Mentoring aspiring business analysts",
+      "highlights": [
+        "Mentored 10+ aspiring business analysts",
+        "Conducted monthly workshops on business analysis",
+        "Created training materials for new analysts"
       ]
     }
   ],
   "education": [
     {
       "institution": "University of Illinois",
+      "url": "https://illinois.edu",
       "area": "Business Administration",
       "studyType": "Master of Business Administration",
       "startDate": "2013-09",
@@ -81,12 +106,63 @@
     },
     {
       "institution": "Northwestern University",
+      "url": "https://northwestern.edu",
       "area": "Economics",
       "studyType": "Bachelor of Science",
       "startDate": "2009-09",
       "endDate": "2013-05",
       "score": "3.7",
       "courses": ["Statistics", "Business Strategy", "Financial Analysis"]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Business Analyst of the Year",
+      "date": "2022",
+      "awarder": "Enterprise Solutions Inc",
+      "summary": "Awarded for outstanding contributions to digital transformation initiatives"
+    },
+    {
+      "title": "Process Excellence Award",
+      "date": "2021",
+      "awarder": "Chicago Business Analysts Association",
+      "summary": "Recognition for innovative process improvement methodologies"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Certified Business Analysis Professional (CBAP)",
+      "date": "2020-06",
+      "issuer": "International Institute of Business Analysis",
+      "url": "https://iiba.org/certifications/cbap"
+    },
+    {
+      "name": "Professional Scrum Product Owner",
+      "date": "2019-03",
+      "issuer": "Scrum.org",
+      "url": "https://scrum.org/certificates/pspo"
+    },
+    {
+      "name": "Six Sigma Green Belt",
+      "date": "2018-09",
+      "issuer": "ASQ",
+      "url": "https://asq.org/cert/six-sigma-green-belt"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Digital Transformation: A Business Analyst's Perspective",
+      "publisher": "Business Analysis Times",
+      "releaseDate": "2022-08",
+      "url": "https://batimes.com/articles/digital-transformation",
+      "summary": "Comprehensive guide to managing digital transformation projects from a BA perspective"
+    },
+    {
+      "name": "Requirements Engineering in Agile Projects",
+      "publisher": "Medium",
+      "releaseDate": "2021-11",
+      "url": "https://medium.com/@awilson_ba/requirements-engineering",
+      "summary": "Best practices for requirements gathering in agile environments"
     }
   ],
   "skills": [
@@ -122,43 +198,59 @@
       "fluency": "Professional working proficiency"
     }
   ],
-  "projects": [
+  "interests": [
     {
-      "name": "Digital Transformation Initiative",
-      "description": "Led business analysis for company-wide digital transformation",
-      "highlights": [
-        "Reduced manual processes by 70%",
-        "Improved customer satisfaction by 45%",
-        "Delivered $2M in annual savings"
-      ],
-      "keywords": ["Digital Transformation", "Process Improvement", "Change Management"]
+      "name": "Digital Transformation",
+      "keywords": ["Process Automation", "Change Management", "Innovation"]
     },
     {
-      "name": "ERP Implementation",
-      "description": "Managed requirements for ERP system implementation",
-      "highlights": [
-        "Successfully mapped 100+ business processes",
-        "Reduced implementation time by 25%",
-        "Created comprehensive training materials"
-      ],
-      "keywords": ["ERP", "Requirements Analysis", "Process Mapping"]
+      "name": "Data Analytics",
+      "keywords": ["Business Intelligence", "Data Visualization", "Predictive Analytics"]
+    },
+    {
+      "name": "Agile Methodologies",
+      "keywords": ["Scrum", "Kanban", "Lean"]
     }
   ],
-  "certificates": [
+  "references": [
     {
-      "name": "Certified Business Analysis Professional (CBAP)",
-      "issuer": "International Institute of Business Analysis",
-      "date": "2019-06"
+      "name": "Michael Thompson",
+      "reference": "Amanda is an exceptional business analyst who consistently delivers value through her thorough analysis and clear communication. Her ability to bridge technical and business perspectives is outstanding.",
+      "position": "Director of Digital Transformation, Enterprise Solutions Inc"
+    }
+  ],
+  "projects": [
+    {
+      "name": "ERP Implementation",
+      "description": "Led business analysis for enterprise-wide ERP implementation",
+      "highlights": [
+        "Reduced process time by 40%",
+        "Saved $2M in operational costs",
+        "Successfully integrated 6 departments"
+      ],
+      "keywords": ["ERP", "Process Optimization", "Change Management"],
+      "startDate": "2021-01",
+      "endDate": "2022-06",
+      "url": "https://enterprisesolutions.com/case-studies/erp",
+      "roles": ["Lead Business Analyst", "Process Owner"],
+      "entity": "Enterprise Solutions Inc",
+      "type": "enterprise"
     },
     {
-      "name": "Project Management Professional (PMP)",
-      "issuer": "Project Management Institute",
-      "date": "2018-03"
-    },
-    {
-      "name": "Agile Certified Practitioner",
-      "issuer": "Project Management Institute",
-      "date": "2017-09"
+      "name": "CRM Transformation",
+      "description": "Managed requirements for CRM system upgrade",
+      "highlights": [
+        "Improved customer satisfaction by 35%",
+        "Streamlined sales processes",
+        "Integrated with 5 external systems"
+      ],
+      "keywords": ["CRM", "Requirements Engineering", "Integration"],
+      "startDate": "2020-03",
+      "endDate": "2020-12",
+      "url": "https://enterprisesolutions.com/case-studies/crm",
+      "roles": ["Business Analyst", "Stakeholder Liaison"],
+      "entity": "Enterprise Solutions Inc",
+      "type": "enterprise"
     }
   ]
 }

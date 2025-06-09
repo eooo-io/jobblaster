@@ -2,7 +2,7 @@
   "basics": {
     "name": "Olivia Chen",
     "label": "UI Developer",
-    "image": "",
+    "image": "https://example.com/photos/olivia.jpg",
     "email": "olivia.chen@example.com",
     "phone": "(555) 234-5678",
     "url": "https://oliviachen.design",
@@ -30,7 +30,8 @@
         "username": "oliviachen",
         "url": "https://dribbble.com/oliviachen"
       }
-    ]
+    ],
+    "dateOfBirth": "1995-03-15"
   },
   "work": [
     {
@@ -45,7 +46,8 @@
         "Reduced design implementation time by 60% through reusable components",
         "Improved accessibility compliance to WCAG 2.1 AA standards",
         "Mentored 3 junior developers in UI development best practices"
-      ]
+      ],
+      "location": "San Francisco, CA"
     },
     {
       "name": "Creative Tech Agency",
@@ -58,7 +60,8 @@
         "Built responsive interfaces for 20+ client websites",
         "Implemented complex animations improving user engagement by 40%",
         "Created mobile-first design system reducing development time by 50%"
-      ]
+      ],
+      "location": "San Francisco, CA"
     },
     {
       "name": "WebDesign Studio",
@@ -71,18 +74,66 @@
         "Developed responsive layouts for e-commerce websites",
         "Improved site performance scores by 30%",
         "Implemented A/B testing framework for UI components"
+      ],
+      "location": "San Francisco, CA"
+    }
+  ],
+  "volunteer": [
+    {
+      "organization": "Code for San Francisco",
+      "position": "UI Developer",
+      "url": "https://codeforsanfrancisco.org",
+      "startDate": "2019-01",
+      "endDate": "",
+      "summary": "Volunteer UI developer for civic tech projects",
+      "highlights": [
+        "Developed accessible interfaces for community projects",
+        "Mentored new volunteers in frontend development",
+        "Contributed to design system documentation"
       ]
     }
   ],
   "education": [
     {
       "institution": "Academy of Art University",
+      "url": "https://www.academyart.edu",
       "area": "Web Design & New Media",
       "studyType": "Bachelor of Fine Arts",
       "startDate": "2013-09",
       "endDate": "2017-05",
       "score": "3.9",
       "courses": ["User Interface Design", "Web Development", "Typography", "Interactive Design"]
+    }
+  ],
+  "awards": [
+    {
+      "title": "Outstanding UI Developer of the Year",
+      "date": "2022",
+      "awarder": "Design Systems Co",
+      "summary": "Awarded for exceptional contributions to the company's design system"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Advanced CSS and Sass",
+      "date": "2021-03",
+      "issuer": "Udemy",
+      "url": "https://udemy.com/certificate/advanced-css"
+    },
+    {
+      "name": "Web Animation",
+      "date": "2020-08",
+      "issuer": "Frontend Masters",
+      "url": "https://frontendmasters.com/certificate/web-animation"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Building Scalable Design Systems",
+      "publisher": "Medium",
+      "releaseDate": "2022-06",
+      "url": "https://medium.com/@oliviachen/building-scalable-design-systems",
+      "summary": "A comprehensive guide to building and maintaining design systems at scale"
     }
   ],
   "skills": [
@@ -112,13 +163,39 @@
       "fluency": "Native speaker"
     }
   ],
+  "interests": [
+    {
+      "name": "Design Systems",
+      "keywords": ["Component Libraries", "Pattern Design", "Documentation"]
+    },
+    {
+      "name": "Web Animation",
+      "keywords": ["Motion Design", "Micro-interactions", "CSS Animation"]
+    },
+    {
+      "name": "Accessibility",
+      "keywords": ["WCAG", "Screen Readers", "Inclusive Design"]
+    }
+  ],
+  "references": [
+    {
+      "name": "Sarah Johnson",
+      "reference": "Olivia is an exceptional UI developer who consistently delivers high-quality work. Her attention to detail and commitment to accessibility make her an invaluable team member.",
+      "position": "Design Director, Design Systems Co"
+    }
+  ],
   "projects": [
     {
       "name": "Component Library",
       "description": "Built comprehensive UI component library",
       "highlights": ["50+ reusable components", "98% test coverage", "Used by 1000+ developers"],
       "keywords": ["React", "TypeScript", "Storybook"],
-      "url": "https://github.com/olivia-ui/component-library"
+      "startDate": "2021-03",
+      "endDate": "2022-12",
+      "url": "https://github.com/olivia-ui/component-library",
+      "roles": ["Lead Developer", "Designer"],
+      "entity": "Design Systems Co",
+      "type": "company"
     },
     {
       "name": "Animation System",
@@ -129,19 +206,12 @@
         "Built visual animation editor"
       ],
       "keywords": ["Framer Motion", "CSS Animations", "JavaScript"],
-      "url": "https://github.com/olivia-ui/animation-system"
-    }
-  ],
-  "certificates": [
-    {
-      "name": "Advanced CSS and Sass",
-      "issuer": "Udemy",
-      "date": "2021-03"
-    },
-    {
-      "name": "Web Animation",
-      "issuer": "Frontend Masters",
-      "date": "2020-08"
+      "startDate": "2022-01",
+      "endDate": "2022-06",
+      "url": "https://github.com/olivia-ui/animation-system",
+      "roles": ["Developer", "Animation Designer"],
+      "entity": "Design Systems Co",
+      "type": "company"
     }
   ]
 }

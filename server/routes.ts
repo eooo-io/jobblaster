@@ -1,37 +1,40 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { 
-  insertResumeSchema, insertJobPostingSchema, insertMatchScoreSchema, 
-  insertCoverLetterSchema, insertApplicationSchema, insertUserSchema,
-  applications, applicationNotes, insertApplicationNoteSchema
+import {
+  applicationNotes,
+  applications,
+  insertApplicationNoteSchema,
+  insertApplicationSchema,
+  insertJobPostingSchema,
+  insertUserSchema,
 } from "@shared/schema";
-import { db, pool } from "./db";
 import { eq } from "drizzle-orm";
-import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from "./openai";
-import { setupAuth, hashPassword, verifyPassword, requireAuth, getCurrentUserId } from "./auth";
-import { logApiCall } from "./api-logger";
-import { setupResumeRoutes } from "./resume-routes";
-import { applicationService } from "./application-service";
-import multer from "multer";
+import type { Express, Request, Response } from "express";
+import { createServer, type Server } from "http";
 import JSZip from "jszip";
+import multer from "multer";
+import { logApiCall } from "./api-logger";
+import { applicationService } from "./application-service";
+import { getCurrentUserId, hashPassword, requireAuth, setupAuth, verifyPassword } from "./auth";
+import { db } from "./db";
+import { analyzeJobDescription, calculateMatchScore, generateCoverLetter } from "./openai";
+import { setupResumeRoutes } from "./resume-routes";
+import { storage } from "./storage";
 
 const upload = multer({ storage: multer.memoryStorage() });
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint for Docker
   app.get("/api/health", (req, res) => {
-    res.status(200).json({ 
-      status: "healthy", 
+    res.status(200).json({
+      status: "healthy",
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
-      environment: process.env.NODE_ENV || "development"
+      environment: process.env.NODE_ENV || "development",
     });
   });
 
   // Setup authentication middleware
   setupAuth(app);
-  
+
   // Setup the new resume routes
   setupResumeRoutes(app);
 
@@ -39,7 +42,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/register", async (req, res) => {
     try {
       const { username, password, email } = req.body;
-      
+
       if (!username || !password) {
         return res.status(400).json({ message: "Username and password are required" });
       }
@@ -55,16 +58,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userData = insertUserSchema.parse({
         username,
         password: hashedPassword,
-        email: email || undefined
+        email: email || undefined,
       });
-      
+
       const user = await storage.createUser(userData);
-      
-      res.json({ 
-        id: user.id, 
-        username: user.username, 
+
+      res.json({
+        id: user.id,
+        username: user.username,
         email: user.email,
-        message: "Account created successfully" 
+        message: "Account created successfully",
       });
     } catch (error) {
       console.error("Registration error:", error);
@@ -75,7 +78,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/auth/login", async (req, res) => {
     try {
       const { username, password } = req.body;
-      
+
       if (!username || !password) {
         return res.status(400).json({ message: "Username and password are required" });
       }
@@ -95,11 +98,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       req.session.userId = user.id;
       req.session.username = user.username;
 
-      res.json({ 
-        id: user.id, 
-        username: user.username, 
+      res.json({
+        id: user.id,
+        username: user.username,
         email: user.email,
-        message: "Login successful" 
+        message: "Login successful",
       });
     } catch (error) {
       console.error("Login error:", error);
@@ -122,12 +125,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!userId) {
         return res.status(401).json({ message: "Not authenticated" });
       }
-      
+
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       res.json({
         id: user.id,
         username: user.username,
@@ -135,7 +138,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         profilePicture: user.profilePicture,
         openaiApiKey: user.openaiApiKey,
         adzunaAppId: user.adzunaAppId,
-        adzunaApiKey: user.adzunaApiKey
+        adzunaApiKey: user.adzunaApiKey,
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch user" });
@@ -143,35 +146,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Profile picture upload
-  app.post("/api/upload-profile-picture", requireAuth, upload.single("profilePicture"), async (req: any, res: Response) => {
-    try {
-      const userId = getCurrentUserId(req);
-      if (!userId) {
-        return res.status(401).json({ message: "Authentication required" });
-      }
+  app.post(
+    "/api/upload-profile-picture",
+    requireAuth,
+    upload.single("profilePicture"),
+    async (req: any, res: Response) => {
+      try {
+        const userId = getCurrentUserId(req);
+        if (!userId) {
+          return res.status(401).json({ message: "Authentication required" });
+        }
 
-      if (!req.file) {
-        return res.status(400).json({ message: "No file uploaded" });
-      }
+        if (!req.file) {
+          return res.status(400).json({ message: "No file uploaded" });
+        }
 
-      // Convert to base64 for storage
-      const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
-      
-      const updatedUser = await storage.updateUser(userId, { profilePicture: base64Image });
-      
-      if (!updatedUser) {
-        return res.status(404).json({ message: "User not found" });
-      }
+        // Convert to base64 for storage
+        const base64Image = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
 
-      res.json({ 
-        message: "Profile picture updated successfully",
-        profilePicture: base64Image
-      });
-    } catch (error) {
-      console.error("Error uploading profile picture:", error);
-      res.status(500).json({ message: "Failed to upload profile picture" });
+        const updatedUser = await storage.updateUser(userId, { profilePicture: base64Image });
+
+        if (!updatedUser) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({
+          message: "Profile picture updated successfully",
+          profilePicture: base64Image,
+        });
+      } catch (error) {
+        console.error("Error uploading profile picture:", error);
+        res.status(500).json({ message: "Failed to upload profile picture" });
+      }
     }
-  });
+  );
 
   // Update profile settings
   app.put("/api/update-profile", requireAuth, async (req, res) => {
@@ -182,9 +190,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { openaiApiKey, adzunaAppId, adzunaApiKey, appId, apiKey } = req.body;
-      
-      console.log('Update profile request body:', req.body);
-      
+
+      console.log("Update profile request body:", req.body);
+
       const updateData: any = {};
       if (openaiApiKey !== undefined) updateData.openaiApiKey = openaiApiKey;
       if (adzunaAppId !== undefined) updateData.adzunaAppId = adzunaAppId;
@@ -192,15 +200,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Also check for the other possible field names from frontend
       if (appId !== undefined) updateData.adzunaAppId = appId;
       if (apiKey !== undefined) updateData.adzunaApiKey = apiKey;
-      
-      console.log('Update data to be sent to storage:', updateData);
-      
+
+      console.log("Update data to be sent to storage:", updateData);
+
       const updatedUser = await storage.updateUser(userId, updateData);
-      console.log('User updated successfully, updatedUser:', !!updatedUser);
-      console.log('Now testing APIs...');
-      
+      console.log("User updated successfully, updatedUser:", !!updatedUser);
+      console.log("Now testing APIs...");
+
       if (!updatedUser) {
-        console.log('UpdateUser returned null - user not found');
+        console.log("UpdateUser returned null - user not found");
         return res.status(404).json({ message: "User not found" });
       }
 
@@ -214,16 +222,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const testUrl = `https://api.adzuna.com/v1/api/jobs/us/search/1?app_id=${updateData.adzunaAppId}&app_key=${updateData.adzunaApiKey}&results_per_page=1&what=test`;
           const testResponse = await fetch(testUrl);
           const testData = await testResponse.json();
-          
+
           if (testResponse.ok) {
             adzunaTestResult = { success: true, message: "Connection successful" };
           } else {
             adzunaTestResult = { success: false, error: testData };
           }
         } catch (error) {
-          adzunaTestResult = { 
-            success: false, 
-            error: { message: "Network error", details: error.message } 
+          adzunaTestResult = {
+            success: false,
+            error: { message: "Network error", details: error.message },
           };
         }
       }
@@ -233,16 +241,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (updateData.openaiApiKey) {
         try {
           console.log("Testing OpenAI API key...");
-          const testResponse = await fetch('https://api.openai.com/v1/models', {
-            method: 'GET',
+          const testResponse = await fetch("https://api.openai.com/v1/models", {
+            method: "GET",
             headers: {
-              'Authorization': `Bearer ${updateData.openaiApiKey}`,
-              'Content-Type': 'application/json'
-            }
+              Authorization: `Bearer ${updateData.openaiApiKey}`,
+              "Content-Type": "application/json",
+            },
           });
-          
+
           console.log("OpenAI API response status:", testResponse.status);
-          
+
           if (testResponse.ok) {
             openaiTestResult = { success: true, message: "API key verified successfully" };
             console.log("OpenAI API test successful");
@@ -252,24 +260,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
             console.log("OpenAI API test failed:", errorData);
           }
         } catch (error) {
-          openaiTestResult = { 
-            success: false, 
-            error: { message: "Network error", details: error.message } 
+          openaiTestResult = {
+            success: false,
+            error: { message: "Network error", details: error.message },
           };
           console.log("OpenAI API test network error:", error);
         }
       }
-      
-      console.log("Final response data:", { 
-        adzunaTest: adzunaTestResult, 
-        openaiTest: openaiTestResult 
+
+      console.log("Final response data:", {
+        adzunaTest: adzunaTestResult,
+        openaiTest: openaiTestResult,
       });
 
-      res.json({ 
+      res.json({
         message: "Profile updated successfully",
         openaiApiKey: updatedUser.openaiApiKey,
         adzunaTest: adzunaTestResult,
-        openaiTest: openaiTestResult
+        openaiTest: openaiTestResult,
       });
     } catch (error) {
       console.error("Error updating profile:", error);
@@ -293,7 +301,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const jobData = insertJobPostingSchema.parse({
         ...req.body,
-        userId: mockUserId
+        userId: mockUserId,
       });
       const job = await storage.createJobPosting(jobData);
       res.json(job);
@@ -338,27 +346,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Match Scoring
-  app.post("/api/match-score", async (req, res) => {
+  app.post("/api/match-score", requireAuth, async (req: Request, res: Response) => {
     try {
-      const { resumeId, jobId } = req.body;
-      
-      const resume = await storage.getResume(resumeId);
-      const job = await storage.getJobPosting(jobId);
-      
-      if (!resume || !job) {
-        return res.status(404).json({ message: "Resume or job posting not found" });
+      const userId = getCurrentUserId(req);
+      if (!userId) return res.status(401).json({ message: "Authentication required" });
+
+      const { jobId, resumeId } = req.body;
+      if (!jobId || !resumeId) {
+        return res.status(400).json({ message: "Job ID and Resume ID are required" });
       }
 
-      const matchScore = await calculateMatchScore(resume, job);
-      
-      const savedScore = await storage.createMatchScore({
-        resumeId,
-        jobId,
-        ...matchScore
-      });
+      // Get the job and resume from storage
+      const job = await storage.getJobPosting(jobId);
+      const resume = await storage.getResume(resumeId);
 
-      res.json(savedScore);
+      if (!job || !resume) {
+        return res.status(404).json({ message: "Job or Resume not found" });
+      }
+
+      // Calculate match scores
+      const scores = await calculateMatchScore(job, resume);
+
+      res.json({
+        skillMatch: scores.technicalScore,
+        experienceMatch: scores.experienceScore,
+        overallMatch: scores.overallScore,
+      });
     } catch (error) {
+      console.error(
+        "Match score calculation error:",
+        error instanceof Error ? error.message : error
+      );
       res.status(500).json({ message: "Failed to calculate match score" });
     }
   });
@@ -367,12 +385,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const resumeId = parseInt(req.params.resumeId);
       const jobId = parseInt(req.params.jobId);
-      
+
       const matchScore = await storage.getMatchScore(resumeId, jobId);
       if (!matchScore) {
         return res.status(404).json({ message: "Match score not found" });
       }
-      
+
       res.json(matchScore);
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch match score" });
@@ -383,22 +401,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/cover-letters", async (req, res) => {
     try {
       const { resumeId, jobId, tone, focus } = req.body;
-      
+
       const resume = await storage.getResume(resumeId);
       const job = await storage.getJobPosting(jobId);
-      
+
       if (!resume || !job) {
         return res.status(404).json({ message: "Resume or job posting not found" });
       }
 
       const content = await generateCoverLetter(resume, job, tone, focus);
-      
+
       const coverLetter = await storage.createCoverLetter({
         resumeId,
         jobId,
         content,
         tone,
-        focus
+        focus,
       });
 
       res.json(coverLetter);
@@ -411,7 +429,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const resumeId = parseInt(req.params.resumeId);
       const jobId = parseInt(req.params.jobId);
-      
+
       const coverLetters = await storage.getCoverLettersByResumeAndJob(resumeId, jobId);
       res.json(coverLetters);
     } catch (error) {
@@ -423,26 +441,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/export-package", async (req, res) => {
     try {
       const { resumeId, jobId, coverLetterId } = req.body;
-      
+
       const resume = await storage.getResume(resumeId);
       const job = await storage.getJobPosting(jobId);
       const coverLetter = await storage.getCoverLetter(coverLetterId);
-      
+
       if (!resume || !job || !coverLetter) {
         return res.status(404).json({ message: "Required documents not found" });
       }
 
       const zip = new JSZip();
-      
+
       // Add resume JSON
       zip.file("resume.json", JSON.stringify(resume.jsonData, null, 2));
-      
+
       // Add cover letter
       zip.file("cover-letter.txt", coverLetter.content);
-      
+
       // Add job description
       zip.file("job-description.txt", job.description);
-      
+
       // Add match score if available
       const matchScore = await storage.getMatchScore(resumeId, jobId);
       if (matchScore) {
@@ -454,21 +472,22 @@ Soft Skills: ${matchScore.softSkillsScore}%
 Location Match: ${matchScore.locationScore}%
 
 Recommendations:
-${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
+${matchScore.recommendations?.join("\n") || "No recommendations available"}`;
         zip.file("match-score-report.txt", scoreReport);
       }
 
       const zipBuffer = await zip.generateAsync({ type: "nodebuffer" });
-      
+
       res.setHeader("Content-Type", "application/zip");
-      res.setHeader("Content-Disposition", `attachment; filename="application-package-${job.company}-${job.title}.zip"`);
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="application-package-${job.company}-${job.title}.zip"`
+      );
       res.send(zipBuffer);
     } catch (error) {
       res.status(500).json({ message: "Failed to create export package" });
     }
   });
-
-
 
   // Applications CRUD
   app.get("/api/applications", async (req, res) => {
@@ -496,11 +515,11 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     try {
       const id = parseInt(req.params.id);
       const application = await applicationService.getById(id);
-      
+
       if (!application) {
         return res.status(404).json({ message: "Application not found" });
       }
-      
+
       res.json(application);
     } catch (error) {
       console.error("Error fetching application:", error);
@@ -513,11 +532,11 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
       const id = parseInt(req.params.id);
       const updateData = insertApplicationSchema.parse(req.body);
       const updatedApplication = await applicationService.update(id, updateData);
-      
+
       if (!updatedApplication) {
         return res.status(404).json({ message: "Application not found" });
       }
-      
+
       res.json(updatedApplication);
     } catch (error) {
       console.error("Error updating application:", error);
@@ -529,11 +548,11 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     try {
       const id = parseInt(req.params.id);
       const deleted = await applicationService.delete(id);
-      
+
       if (!deleted) {
         return res.status(404).json({ message: "Application not found" });
       }
-      
+
       res.status(204).send();
     } catch (error) {
       console.error("Error deleting application:", error);
@@ -560,20 +579,20 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
         salary_min: req.query.salary_min ? parseInt(req.query.salary_min as string) : undefined,
         salary_max: req.query.salary_max ? parseInt(req.query.salary_max as string) : undefined,
         page: req.query.page ? parseInt(req.query.page as string) : 1,
-        per_page: 20
+        per_page: 20,
       };
 
       const { results, errors } = await connectorManager.searchJobs(searchParams);
-      
+
       if (results.length === 0 && errors.length > 0) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           message: "No job connectors are configured or all searches failed",
-          errors 
+          errors,
         });
       }
 
       // Combine results from all connectors
-      const combinedJobs = results.flatMap(result => result.jobs);
+      const combinedJobs = results.flatMap((result) => result.jobs);
       const totalResults = results.reduce((sum, result) => sum + result.total_results, 0);
 
       res.json({
@@ -581,10 +600,9 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
         total_results: totalResults,
         page: searchParams.page,
         per_page: searchParams.per_page,
-        has_more: results.some(result => result.has_more),
-        connector_errors: errors
+        has_more: results.some((result) => result.has_more),
+        connector_errors: errors,
       });
-
     } catch (error) {
       console.error("Job search error:", error);
       res.status(500).json({ message: "Failed to search jobs" });
@@ -607,9 +625,8 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
       res.json({
         available: connectorManager.getAvailableConnectors(),
-        configured: connectorManager.getConfiguredConnectors()
+        configured: connectorManager.getConfiguredConnectors(),
       });
-
     } catch (error) {
       console.error("Connector list error:", error);
       res.status(500).json({ message: "Failed to get connectors" });
@@ -632,7 +649,6 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
       if (!updatedUser) return res.status(404).json({ message: "User not found" });
 
       res.json({ message: "Connector credentials updated successfully" });
-
     } catch (error) {
       console.error("Connector update error:", error);
       res.status(500).json({ message: "Failed to update connector credentials" });
@@ -649,7 +665,7 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
       const limit = parseInt(req.query.limit as string) || 100;
       const logs = await storage.getExternalLogs(userId, limit);
-      
+
       res.json(logs);
     } catch (error) {
       console.error("Error fetching external logs:", error);
@@ -681,13 +697,13 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
       }
 
       const { content, tone, focus, resumeId, jobId } = req.body;
-      
+
       const coverLetter = await storage.createCoverLetter({
         content,
         tone,
         focus,
         resumeId,
-        jobId
+        jobId,
       });
 
       res.status(201).json(coverLetter);
@@ -717,7 +733,7 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
       const applicationData = {
         ...req.body,
-        userId
+        userId,
       };
 
       const application = await storage.createApplication(applicationData);
@@ -737,7 +753,7 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
       const applicationId = parseInt(req.params.id);
       const application = await storage.getApplication(applicationId);
-      
+
       if (!application || application.userId !== userId) {
         return res.status(404).json({ message: "Application not found" });
       }
@@ -745,32 +761,40 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
       // Get related data
       const resume = application.resumeId ? await storage.getResume(application.resumeId) : null;
       const jobPosting = application.jobId ? await storage.getJobPosting(application.jobId) : null;
-      const coverLetter = application.coverLetterId ? await storage.getCoverLetter(application.coverLetterId) : null;
+      const coverLetter = application.coverLetterId
+        ? await storage.getCoverLetter(application.coverLetterId)
+        : null;
 
       const packageData = {
         application,
-        resume: resume ? {
-          name: resume.name,
-          jsonData: resume.jsonData,
-          theme: resume.theme
-        } : null,
-        jobPosting: jobPosting ? {
-          title: jobPosting.title,
-          company: jobPosting.company,
-          description: jobPosting.description
-        } : null,
-        coverLetter: coverLetter ? {
-          content: coverLetter.content,
-          tone: coverLetter.tone,
-          focus: coverLetter.focus
-        } : null,
-        exportDate: new Date().toISOString()
+        resume: resume
+          ? {
+              name: resume.name,
+              jsonData: resume.jsonData,
+              theme: resume.theme,
+            }
+          : null,
+        jobPosting: jobPosting
+          ? {
+              title: jobPosting.title,
+              company: jobPosting.company,
+              description: jobPosting.description,
+            }
+          : null,
+        coverLetter: coverLetter
+          ? {
+              content: coverLetter.content,
+              tone: coverLetter.tone,
+              focus: coverLetter.focus,
+            }
+          : null,
+        exportDate: new Date().toISOString(),
       };
 
       res.json({
         packageData,
         jobTitle: jobPosting?.title || "Unknown Position",
-        company: jobPosting?.company || "Unknown Company"
+        company: jobPosting?.company || "Unknown Company",
       });
     } catch (error) {
       console.error("Error exporting application package:", error);
@@ -787,7 +811,7 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
       const applicationId = parseInt(req.params.id);
       const application = await storage.getApplication(applicationId);
-      
+
       if (!application || application.userId !== userId) {
         return res.status(404).json({ message: "Application not found" });
       }
@@ -805,7 +829,10 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
   app.get("/api/applications/:id/notes", requireAuth, async (req, res) => {
     try {
       const applicationId = parseInt(req.params.id);
-      const notes = await db.select().from(applicationNotes).where(eq(applicationNotes.applicationId, applicationId));
+      const notes = await db
+        .select()
+        .from(applicationNotes)
+        .where(eq(applicationNotes.applicationId, applicationId));
       res.json(notes);
     } catch (error) {
       console.error("Database error:", error);
@@ -818,9 +845,9 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
       const applicationId = parseInt(req.params.id);
       const validatedData = insertApplicationNoteSchema.parse({
         ...req.body,
-        applicationId
+        applicationId,
       });
-      
+
       const result = await db.insert(applicationNotes).values(validatedData).returning();
       res.status(201).json(result[0]);
     } catch (error) {
@@ -833,16 +860,17 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     try {
       const id = parseInt(req.params.id);
       const validatedData = insertApplicationNoteSchema.partial().parse(req.body);
-      
-      const result = await db.update(applicationNotes)
+
+      const result = await db
+        .update(applicationNotes)
         .set({ ...validatedData, updatedAt: new Date() })
         .where(eq(applicationNotes.id, id))
         .returning();
-      
+
       if (result.length === 0) {
         return res.status(404).json({ message: "Note not found" });
       }
-      
+
       res.json(result[0]);
     } catch (error) {
       console.error("Database error:", error);
@@ -853,12 +881,15 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
   app.delete("/api/notes/:id", requireAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const result = await db.delete(applicationNotes).where(eq(applicationNotes.id, id)).returning();
-      
+      const result = await db
+        .delete(applicationNotes)
+        .where(eq(applicationNotes.id, id))
+        .returning();
+
       if (result.length === 0) {
         return res.status(404).json({ message: "Note not found" });
       }
-      
+
       res.json({ message: "Note deleted successfully" });
     } catch (error) {
       console.error("Database error:", error);
@@ -902,11 +933,11 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     try {
       const id = parseInt(req.params.id);
       const template = await storage.updateAiTemplate(id, req.body);
-      
+
       if (!template) {
         return res.status(404).json({ message: "Template not found" });
       }
-      
+
       res.json(template);
     } catch (error) {
       console.error("Error updating template:", error);
@@ -918,11 +949,11 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
     try {
       const id = parseInt(req.params.id);
       const success = await storage.deleteAiTemplate(id);
-      
+
       if (!success) {
         return res.status(404).json({ message: "Template not found" });
       }
-      
+
       res.json({ message: "Template deleted successfully" });
     } catch (error) {
       console.error("Error deleting template:", error);
@@ -974,48 +1005,97 @@ ${matchScore.recommendations?.join('\n') || 'No recommendations available'}`;
 
       // Test OpenAI API call
       try {
-        await logApiCall({
-          service: 'OpenAI',
-          endpoint: '/chat/completions',
-          method: 'POST',
-          requestData: { 
-            model: 'gpt-4o',
-            messages: [{ role: 'user', content: 'Test API logging' }],
-            max_tokens: 10
+        await logApiCall(
+          {
+            service: "OpenAI",
+            endpoint: "/chat/completions",
+            method: "POST",
+            requestData: {
+              model: "gpt-4o",
+              messages: [{ role: "user", content: "Test API logging" }],
+              max_tokens: 10,
+            },
+            userId,
           },
-          userId
-        }, async () => {
-          // Simulate OpenAI response for demo
-          throw new Error('Please configure your OpenAI API key in your profile settings to test this service');
-        });
+          async () => {
+            // Simulate OpenAI response for demo
+            throw new Error(
+              "Please configure your OpenAI API key in your profile settings to test this service"
+            );
+          }
+        );
       } catch (error) {
-        results.push({ service: 'OpenAI', status: 'logged', note: 'API call logged (requires valid API key)' });
+        results.push({
+          service: "OpenAI",
+          status: "logged",
+          note: "API call logged (requires valid API key)",
+        });
       }
 
       // Test Adzuna API call
       try {
-        await logApiCall({
-          service: 'Adzuna',
-          endpoint: '/jobs/search',
-          method: 'GET',
-          requestData: { query: 'software developer', location: 'london' },
-          userId
-        }, async () => {
-          // Simulate Adzuna response for demo
-          throw new Error('Please configure your Adzuna credentials in your profile settings to test this service');
-        });
+        await logApiCall(
+          {
+            service: "Adzuna",
+            endpoint: "/jobs/search",
+            method: "GET",
+            requestData: { query: "software developer", location: "london" },
+            userId,
+          },
+          async () => {
+            // Simulate Adzuna response for demo
+            throw new Error(
+              "Please configure your Adzuna credentials in your profile settings to test this service"
+            );
+          }
+        );
       } catch (error) {
-        results.push({ service: 'Adzuna', status: 'logged', note: 'API call logged (requires valid credentials)' });
+        results.push({
+          service: "Adzuna",
+          status: "logged",
+          note: "API call logged (requires valid credentials)",
+        });
       }
 
-      res.json({ 
-        message: 'API logging test completed', 
+      res.json({
+        message: "API logging test completed",
         results,
-        note: 'Check the External API Logs page to see the logged calls'
+        note: "Check the External API Logs page to see the logged calls",
       });
     } catch (error) {
       console.error("Error testing API logging:", error);
       res.status(500).json({ message: "Failed to test API logging" });
+    }
+  });
+
+  // Import job from search results
+  app.post("/api/jobs/import", requireAuth, async (req: Request, res: Response) => {
+    try {
+      const userId = getCurrentUserId(req);
+      if (!userId) return res.status(401).json({ message: "Authentication required" });
+
+      const jobData = req.body;
+
+      // Analyze the job description to extract structured data
+      const analysis = await analyzeJobDescription(jobData.description, userId);
+
+      // Create the job posting
+      const job = await storage.createJobPosting({
+        userId,
+        title: jobData.title,
+        company: jobData.company,
+        description: jobData.description,
+        location: jobData.location,
+        techStack: analysis.techStack,
+        softSkills: analysis.softSkills,
+        experienceYears: analysis.experienceYears,
+        employmentType: analysis.employmentType,
+      });
+
+      res.json(job);
+    } catch (error) {
+      console.error("Job import error:", error instanceof Error ? error.message : error);
+      res.status(500).json({ message: "Failed to import job" });
     }
   });
 
