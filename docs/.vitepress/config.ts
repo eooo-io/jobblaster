@@ -5,8 +5,27 @@ export default defineConfig({
   title: "JobBlaster",
   description:
     "An Open-Source Resume/CV builder with AI assisted job matching, scoring and custom resume+cover letter creations.",
-  base: "/",
+  base: "/jobblaster/",
   ignoreDeadLinks: true,
+  head: [
+    [
+      "link",
+      {
+        rel: "stylesheet",
+        href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css",
+      },
+    ],
+    [
+      "style",
+      {},
+      `
+      .feature-icon {
+        font-size: 24px;
+        color: var(--vp-c-text-1);
+      }
+    `,
+    ],
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -72,7 +91,7 @@ export default defineConfig({
 
     footer: {
       message: "Released under the MIT License.",
-      copyright: "Copyright © 2024-present JobBlaster",
+      copyright: "Copyright © 2024-present eooo.io :: JobBlaster",
     },
   },
 });
