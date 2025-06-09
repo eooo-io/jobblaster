@@ -1,0 +1,146 @@
+{
+  "basics": {
+    "name": "Jordan Lee",
+    "label": "Junior Frontend Developer",
+    "image": "",
+    "email": "jordan.lee@example.com",
+    "phone": "(555) 678-9012",
+    "url": "https://jordanlee.dev",
+    "summary": "Enthusiastic Frontend Developer with 1+ year of experience building responsive web applications. Strong foundation in modern JavaScript frameworks and UI/UX principles. Passionate about creating clean, efficient code and learning new technologies.",
+    "location": {
+      "address": "567 Tech Street",
+      "postalCode": "78701",
+      "city": "Austin",
+      "countryCode": "US",
+      "region": "Texas"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "jordanlee",
+        "url": "https://linkedin.com/in/jordanlee"
+      },
+      {
+        "network": "GitHub",
+        "username": "jordanlee-dev",
+        "url": "https://github.com/jordanlee-dev"
+      },
+      {
+        "network": "CodePen",
+        "username": "jordanlee",
+        "url": "https://codepen.io/jordanlee"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "WebTech Solutions",
+      "position": "Junior Frontend Developer",
+      "url": "https://webtech.com",
+      "startDate": "2022-06",
+      "endDate": "",
+      "summary": "Developing responsive web applications using React",
+      "highlights": [
+        "Implemented responsive UI components used across 5 client projects",
+        "Reduced page load time by 30% through code optimization",
+        "Collaborated with UX team to improve user interface designs",
+        "Participated in code reviews and contributed to team documentation"
+      ]
+    },
+    {
+      "name": "Digital Agency X",
+      "position": "Web Development Intern",
+      "url": "https://digitalagencyx.com",
+      "startDate": "2022-01",
+      "endDate": "2022-05",
+      "summary": "Assisted in frontend development projects",
+      "highlights": [
+        "Developed and maintained client websites using HTML, CSS, and JavaScript",
+        "Created responsive email templates improving click-through rates by 25%",
+        "Assisted in migration of legacy websites to modern frameworks"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Texas at Austin",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2018-09",
+      "endDate": "2022-05",
+      "score": "3.7",
+      "courses": ["Web Development", "User Interface Design", "Data Structures", "Algorithms"]
+    },
+    {
+      "institution": "Fullstack Academy",
+      "area": "Web Development",
+      "studyType": "Certificate",
+      "startDate": "2021-06",
+      "endDate": "2021-08",
+      "courses": ["Frontend Development", "React", "Node.js"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend Development",
+      "level": "Intermediate",
+      "keywords": ["HTML5", "CSS3", "JavaScript", "React", "TypeScript"]
+    },
+    {
+      "name": "UI Development",
+      "level": "Intermediate",
+      "keywords": ["Responsive Design", "Sass", "Tailwind CSS", "Material-UI", "Bootstrap"]
+    },
+    {
+      "name": "Tools & Workflow",
+      "level": "Intermediate",
+      "keywords": ["Git", "npm", "Webpack", "VS Code", "Chrome DevTools"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Korean",
+      "fluency": "Conversational"
+    }
+  ],
+  "projects": [
+    {
+      "name": "TaskFlow",
+      "description": "A React-based task management application",
+      "highlights": [
+        "Built using React, TypeScript, and Tailwind CSS",
+        "Implemented drag-and-drop functionality",
+        "Featured on React Weekly newsletter"
+      ],
+      "keywords": ["React", "TypeScript", "Frontend"],
+      "url": "https://github.com/jordanlee-dev/taskflow"
+    },
+    {
+      "name": "Weather Dashboard",
+      "description": "Weather application using OpenWeather API",
+      "highlights": [
+        "Created responsive design with CSS Grid",
+        "Integrated third-party weather API",
+        "Implemented geolocation features"
+      ],
+      "keywords": ["JavaScript", "API Integration", "CSS Grid"],
+      "url": "https://github.com/jordanlee-dev/weather-dashboard"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "React Development",
+      "issuer": "Fullstack Academy",
+      "date": "2021-08"
+    },
+    {
+      "name": "Responsive Web Design",
+      "issuer": "freeCodeCamp",
+      "date": "2021-03"
+    }
+  ]
+}

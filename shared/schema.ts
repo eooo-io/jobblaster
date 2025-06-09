@@ -1,4 +1,14 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, index, real, unique } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  jsonb,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -10,7 +20,7 @@ export const sessions = pgTable(
     sess: jsonb("sess").notNull(),
     expire: timestamp("expire").notNull(),
   },
-  (table) => [index("IDX_session_expire").on(table.expire)],
+  (table) => [index("IDX_session_expire").on(table.expire)]
 );
 
 export const users = pgTable("users", {
@@ -19,13 +29,14 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   email: text("email"),
   profilePicture: text("profile_picture"), // URL or base64 encoded image
+  dateOfBirth: text("date_of_birth").default(""), // Date of birth for German resume format
   openaiApiKey: text("openai_api_key"), // User's personal OpenAI API key
   // Job Connector API Keys
   adzunaAppId: text("adzuna_app_id"), // Adzuna App ID
   adzunaApiKey: text("adzuna_api_key"), // Adzuna API Key
   // Future connector configurations
   indeedApiKey: text("indeed_api_key"),
-  glassdoorApiKey: text("glassdoor_api_key"), 
+  glassdoorApiKey: text("glassdoor_api_key"),
   linkedinApiKey: text("linkedin_api_key"),
   // User roles and permissions
   isAdmin: boolean("is_admin").default(false),
@@ -95,18 +106,20 @@ export const applications = pgTable("applications", {
 
 export const applicationNotes = pgTable("application_notes", {
   id: serial("id").primaryKey(),
-  applicationId: integer("application_id").notNull().references(() => applications.id),
+  applicationId: integer("application_id")
+    .notNull()
+    .references(() => applications.id),
   content: text("content").notNull(),
   noteType: varchar("note_type", { length: 50 }).default("general"), // general, interview, follow_up, rejection, etc.
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-
-
 export const externalLogs = pgTable("external_logs", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id),
   service: varchar("service", { length: 50 }).notNull(), // openai, adzuna, etc.
   endpoint: varchar("endpoint", { length: 255 }).notNull(),
   method: varchar("method", { length: 10 }).notNull(), // GET, POST, etc.
@@ -121,7 +134,9 @@ export const externalLogs = pgTable("external_logs", {
 
 export const aiTemplates = pgTable("ai_templates", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id),
   name: varchar("name", { length: 100 }).notNull(),
   description: varchar("description", { length: 500 }),
   provider: varchar("provider", { length: 50 }).notNull(), // openai, anthropic, xai, etc.
@@ -140,7 +155,9 @@ export const aiTemplates = pgTable("ai_templates", {
 
 export const templateAssignments = pgTable("template_assignments", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").notNull().references(() => users.id),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id),
   category: varchar("category", { length: 50 }).notNull(), // job_analysis, resume_analysis, cover_letter, match_scoring, general
   templateId: integer("template_id").references(() => aiTemplates.id),
   createdAt: timestamp("created_at").defaultNow(),
@@ -184,8 +201,6 @@ export const insertApplicationNoteSchema = createInsertSchema(applicationNotes).
   createdAt: true,
   updatedAt: true,
 });
-
-
 
 export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
   id: true,

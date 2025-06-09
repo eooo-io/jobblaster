@@ -1,0 +1,164 @@
+{
+  "basics": {
+    "name": "Amanda Wilson",
+    "label": "Senior Business Analyst",
+    "image": "",
+    "email": "amanda.wilson@example.com",
+    "phone": "(555) 456-7890",
+    "url": "https://amandawilson.com",
+    "summary": "Strategic Business Analyst with 7+ years of experience in requirements gathering, process improvement, and data analysis. Expertise in translating business needs into technical requirements and driving process optimization initiatives. Strong background in stakeholder management and project delivery.",
+    "location": {
+      "address": "234 Business Circle",
+      "postalCode": "60601",
+      "city": "Chicago",
+      "countryCode": "US",
+      "region": "Illinois"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "amandawilson",
+        "url": "https://linkedin.com/in/amandawilson"
+      },
+      {
+        "network": "Twitter",
+        "username": "amanda_analyst",
+        "url": "https://twitter.com/amanda_analyst"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Enterprise Solutions Inc",
+      "position": "Senior Business Analyst",
+      "url": "https://enterprisesolutions.com",
+      "startDate": "2020-03",
+      "endDate": "",
+      "summary": "Leading business analysis for enterprise software implementations",
+      "highlights": [
+        "Led requirements gathering and analysis for $10M digital transformation project",
+        "Reduced process inefficiencies saving $2M annually through workflow optimization",
+        "Managed stakeholder relationships across 5 departments and 3 vendor teams",
+        "Developed KPI dashboard improving executive decision-making efficiency by 40%"
+      ]
+    },
+    {
+      "name": "Tech Consulting Group",
+      "position": "Business Analyst",
+      "url": "https://techconsulting.com",
+      "startDate": "2017-06",
+      "endDate": "2020-02",
+      "summary": "Provided business analysis for technology implementations",
+      "highlights": [
+        "Conducted requirements analysis for 15+ client projects",
+        "Improved project delivery efficiency by 30% through standardized templates",
+        "Created process documentation reducing training time by 50%"
+      ]
+    },
+    {
+      "name": "Financial Services Corp",
+      "position": "Junior Business Analyst",
+      "url": "https://finservices.com",
+      "startDate": "2015-08",
+      "endDate": "2017-05",
+      "summary": "Supported business process improvement initiatives",
+      "highlights": [
+        "Analyzed business processes identifying $500K in potential savings",
+        "Assisted in requirements gathering for system upgrade",
+        "Created monthly performance reports for executive team"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Illinois",
+      "area": "Business Administration",
+      "studyType": "Master of Business Administration",
+      "startDate": "2013-09",
+      "endDate": "2015-05",
+      "score": "3.8",
+      "courses": ["Business Analysis", "Project Management", "Data Analytics", "Change Management"]
+    },
+    {
+      "institution": "Northwestern University",
+      "area": "Economics",
+      "studyType": "Bachelor of Science",
+      "startDate": "2009-09",
+      "endDate": "2013-05",
+      "score": "3.7",
+      "courses": ["Statistics", "Business Strategy", "Financial Analysis"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Business Analysis",
+      "level": "Master",
+      "keywords": [
+        "Requirements Gathering",
+        "Process Mapping",
+        "Gap Analysis",
+        "Use Case Development",
+        "Business Process Modeling"
+      ]
+    },
+    {
+      "name": "Tools & Software",
+      "level": "Advanced",
+      "keywords": ["JIRA", "Confluence", "Visio", "SQL", "Tableau"]
+    },
+    {
+      "name": "Project Management",
+      "level": "Advanced",
+      "keywords": ["Agile", "Scrum", "Stakeholder Management", "Risk Analysis", "Change Management"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "French",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Digital Transformation Initiative",
+      "description": "Led business analysis for company-wide digital transformation",
+      "highlights": [
+        "Reduced manual processes by 70%",
+        "Improved customer satisfaction by 45%",
+        "Delivered $2M in annual savings"
+      ],
+      "keywords": ["Digital Transformation", "Process Improvement", "Change Management"]
+    },
+    {
+      "name": "ERP Implementation",
+      "description": "Managed requirements for ERP system implementation",
+      "highlights": [
+        "Successfully mapped 100+ business processes",
+        "Reduced implementation time by 25%",
+        "Created comprehensive training materials"
+      ],
+      "keywords": ["ERP", "Requirements Analysis", "Process Mapping"]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Certified Business Analysis Professional (CBAP)",
+      "issuer": "International Institute of Business Analysis",
+      "date": "2019-06"
+    },
+    {
+      "name": "Project Management Professional (PMP)",
+      "issuer": "Project Management Institute",
+      "date": "2018-03"
+    },
+    {
+      "name": "Agile Certified Practitioner",
+      "issuer": "Project Management Institute",
+      "date": "2017-09"
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "basics": {
+    "name": "David Rodriguez",
+    "label": "Enterprise Sales Executive",
+    "image": "",
+    "email": "david.rodriguez@example.com",
+    "phone": "(555) 890-1234",
+    "url": "https://davidrodriguez.sales",
+    "summary": "Results-driven Enterprise Sales Executive with 10+ years of experience in B2B software sales. Consistent record of exceeding quotas and building long-term client relationships. Expertise in enterprise software, SaaS, and cloud solutions sales with a focus on financial services and healthcare sectors.",
+    "location": {
+      "address": "123 Sales Drive",
+      "postalCode": "10017",
+      "city": "New York",
+      "countryCode": "US",
+      "region": "New York"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "davidrodriguez",
+        "url": "https://linkedin.com/in/davidrodriguez"
+      },
+      {
+        "network": "Twitter",
+        "username": "david_sales",
+        "url": "https://twitter.com/david_sales"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Enterprise Solutions Inc",
+      "position": "Senior Enterprise Sales Executive",
+      "url": "https://enterprisesolutions.com",
+      "startDate": "2019-03",
+      "endDate": "",
+      "summary": "Leading enterprise software sales team for Fortune 500 clients",
+      "highlights": [
+        "Exceeded annual quota by 145% generating $12M in new business revenue",
+        "Built and maintained relationships with C-level executives at Fortune 500 companies",
+        "Led team of 5 sales representatives achieving 130% of team quota",
+        "Developed and implemented new sales methodology increasing win rate by 35%"
+      ]
+    },
+    {
+      "name": "CloudTech Sales",
+      "position": "Regional Sales Manager",
+      "url": "https://cloudtechsales.com",
+      "startDate": "2016-06",
+      "endDate": "2019-02",
+      "summary": "Managed regional sales team for cloud solutions",
+      "highlights": [
+        "Grew regional revenue from $5M to $15M in 2 years",
+        "Developed new market penetration strategy for financial services sector",
+        "Built and trained high-performing sales team of 8 representatives"
+      ]
+    },
+    {
+      "name": "SaaS Solutions Corp",
+      "position": "Account Executive",
+      "url": "https://saassolutions.com",
+      "startDate": "2013-04",
+      "endDate": "2016-05",
+      "summary": "Enterprise software sales to mid-market companies",
+      "highlights": [
+        "Consistently achieved 120%+ of quarterly sales quota",
+        "Developed new vertical market generating $2M in first year",
+        "Reduced average sales cycle from 9 to 6 months"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "New York University",
+      "area": "Business Administration",
+      "studyType": "Bachelor of Science",
+      "startDate": "2009-09",
+      "endDate": "2013-05",
+      "score": "3.7",
+      "courses": ["Sales Management", "Marketing Strategy", "Business Negotiations", "Financial Analysis"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Sales Skills",
+      "level": "Master",
+      "keywords": [
+        "Enterprise Sales",
+        "Solution Selling",
+        "Contract Negotiation",
+        "Pipeline Management",
+        "Account Planning"
+      ]
+    },
+    {
+      "name": "Business Development",
+      "level": "Master",
+      "keywords": [
+        "Strategic Planning",
+        "Market Analysis",
+        "Territory Management",
+        "Relationship Building",
+        "Sales Strategy"
+      ]
+    },
+    {
+      "name": "Technical Knowledge",
+      "level": "Advanced",
+      "keywords": ["SaaS", "Cloud Computing", "Enterprise Software", "CRM Systems", "Sales Analytics"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Native speaker"
+    }
+  ],
+  "awards": [
+    {
+      "title": "Top Sales Executive of the Year",
+      "date": "2022",
+      "awarder": "Enterprise Solutions Inc",
+      "summary": "Achieved highest sales revenue in company history"
+    },
+    {
+      "title": "President's Club",
+      "date": "2021",
+      "awarder": "Enterprise Solutions Inc",
+      "summary": "Top 5% of global sales force"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Strategic Selling",
+      "issuer": "Miller Heiman Group",
+      "date": "2020-06"
+    },
+    {
+      "name": "Enterprise Sales Management",
+      "issuer": "Sales Executive Council",
+      "date": "2019-03"
+    }
+  ],
+  "references": [
+    {
+      "name": "John Smith",
+      "reference": "David is an exceptional sales leader who consistently delivers results while maintaining the highest level of integrity and professionalism.",
+      "position": "VP of Sales, Enterprise Solutions Inc"
+    }
+  ]
+}

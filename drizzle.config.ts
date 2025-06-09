@@ -3,11 +3,14 @@ import type { Config } from "drizzle-kit";
 export default {
   schema: "./shared/schema.ts",
   out: "./drizzle",
-  driver: "pg",
+  dialect: "postgresql",
   dbCredentials: {
-    connectionString:
-      process.env.DATABASE_URL ||
-      "postgresql://jobblaster:jobblaster_password@localhost:5432/jobblaster",
+    host: "postgres",
+    port: 5432,
+    user: "jobblaster",
+    password: "jobblaster_password",
+    database: "jobblaster",
+    ssl: false,
   },
   verbose: true,
   strict: true,

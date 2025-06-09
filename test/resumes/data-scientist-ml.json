@@ -1,0 +1,149 @@
+{
+  "basics": {
+    "name": "Dr. James Wilson",
+    "label": "Machine Learning Scientist",
+    "image": "",
+    "email": "james.wilson@example.com",
+    "phone": "(555) 345-6789",
+    "url": "https://jameswilson.ai",
+    "summary": "Machine Learning Scientist with PhD in Computer Science and 6+ years of experience in developing and deploying ML models at scale. Expertise in deep learning, natural language processing, and computer vision. Published researcher with multiple papers in top-tier conferences.",
+    "location": {
+      "address": "789 AI Boulevard",
+      "postalCode": "94043",
+      "city": "Mountain View",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "jameswilsonai",
+        "url": "https://linkedin.com/in/jameswilsonai"
+      },
+      {
+        "network": "GitHub",
+        "username": "jwilson-ml",
+        "url": "https://github.com/jwilson-ml"
+      },
+      {
+        "network": "Medium",
+        "username": "jameswilson_ai",
+        "url": "https://medium.com/@jameswilson_ai"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "AI Research Labs",
+      "position": "Senior Machine Learning Scientist",
+      "url": "https://airesearchlabs.com",
+      "startDate": "2020-06",
+      "endDate": "",
+      "summary": "Leading research in deep learning and NLP applications",
+      "highlights": [
+        "Developed transformer-based model improving text classification accuracy by 25%",
+        "Led team of 4 researchers in computer vision project for autonomous systems",
+        "Published 3 papers in NeurIPS and ICML",
+        "Reduced model training time by 60% through distributed computing optimization"
+      ]
+    },
+    {
+      "name": "TechGiant Corp",
+      "position": "Machine Learning Engineer",
+      "url": "https://techgiant.com",
+      "startDate": "2017-08",
+      "endDate": "2020-05",
+      "summary": "Developed ML models for recommendation systems",
+      "highlights": [
+        "Built recommendation engine serving 50M+ users",
+        "Improved click-through rate by 40% using deep learning models",
+        "Implemented A/B testing framework for model deployment"
+      ]
+    },
+    {
+      "name": "DataTech Solutions",
+      "position": "Data Scientist",
+      "url": "https://datatech.com",
+      "startDate": "2015-09",
+      "endDate": "2017-07",
+      "summary": "Applied ML to solve business problems",
+      "highlights": [
+        "Developed customer churn prediction model with 85% accuracy",
+        "Created automated anomaly detection system",
+        "Reduced false positives in fraud detection by 30%"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Massachusetts Institute of Technology",
+      "area": "Computer Science",
+      "studyType": "PhD",
+      "startDate": "2012-09",
+      "endDate": "2015-08",
+      "score": "4.0",
+      "courses": ["Deep Learning", "Natural Language Processing", "Computer Vision", "Statistical Learning"]
+    },
+    {
+      "institution": "University of Michigan",
+      "area": "Computer Science and Mathematics",
+      "studyType": "Bachelor of Science",
+      "startDate": "2008-09",
+      "endDate": "2012-05",
+      "score": "3.95",
+      "courses": ["Machine Learning", "Artificial Intelligence", "Advanced Mathematics"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Machine Learning",
+      "level": "Master",
+      "keywords": ["Deep Learning", "Neural Networks", "NLP", "Computer Vision", "Reinforcement Learning"]
+    },
+    {
+      "name": "Programming",
+      "level": "Master",
+      "keywords": ["Python", "PyTorch", "TensorFlow", "Scikit-learn", "CUDA"]
+    },
+    {
+      "name": "Data & Tools",
+      "level": "Master",
+      "keywords": ["SQL", "Spark", "Kubernetes", "Docker", "AWS"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "French",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Efficient Transformer Models for NLP",
+      "publisher": "NeurIPS 2022",
+      "releaseDate": "2022-12",
+      "url": "https://neurips.cc/2022/efficient-transformers",
+      "summary": "Novel approach to reduce transformer model complexity while maintaining accuracy"
+    },
+    {
+      "name": "Advanced Techniques in Computer Vision",
+      "publisher": "ICML 2021",
+      "releaseDate": "2021-07",
+      "url": "https://icml.cc/2021/papers/vision",
+      "summary": "New architecture for real-time object detection in autonomous systems"
+    }
+  ],
+  "projects": [
+    {
+      "name": "AutoML Platform",
+      "description": "Open-source automated machine learning platform",
+      "highlights": ["10,000+ GitHub stars", "Used by 100+ companies", "Featured in Google AI Blog"],
+      "keywords": ["AutoML", "Python", "Deep Learning"],
+      "url": "https://github.com/jwilson-ml/automl"
+    }
+  ]
+}

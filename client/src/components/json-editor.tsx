@@ -1,101 +1,156 @@
 import { useToast } from "@/hooks/use-toast";
-import { useEffect, useRef, useState } from "react";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import JsonView from "react18-json-view";
+import "react18-json-view/src/dark.css";
+import "react18-json-view/src/style.css";
 
 interface JsonEditorProps {
   value: any;
   onChange: (value: any) => void;
   height?: string;
+  onValidate?: (isValid: boolean) => void;
 }
 
-export default function JsonEditor({ value, onChange, height = "300px" }: JsonEditorProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+export default function JsonEditor({
+  value,
+  onChange,
+  height = "300px",
+  onValidate,
+}: JsonEditorProps) {
   const { toast } = useToast();
-  const [textValue, setTextValue] = useState("");
+  const { theme } = useTheme();
   const [lastValidValue, setLastValidValue] = useState<any>(null);
+  const [isValid, setIsValid] = useState<boolean>(true);
 
-  // Update text value when the value prop changes and it's different from our last valid value
+  // Update when value prop changes and it's different from our last valid value
   useEffect(() => {
     if (JSON.stringify(value) !== JSON.stringify(lastValidValue)) {
-      const formattedValue = value ? JSON.stringify(value, null, 2) : "";
-      setTextValue(formattedValue);
       setLastValidValue(value);
+      validateJson(value);
     }
   }, [value]);
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const text = event.target.value;
-    setTextValue(text);
-
+  const validateJson = (json: any) => {
     try {
-      const parsed = JSON.parse(text);
-      setLastValidValue(parsed);
-      onChange(parsed);
+      // Basic JSON validation
+      const parsedJson = typeof json === "string" ? JSON.parse(json) : json;
+
+      // Check for basic JSON Resume schema structure
+      const hasBasics = parsedJson.basics && typeof parsedJson.basics === "object";
+      const hasWork = Array.isArray(parsedJson.work);
+      const hasSkills = Array.isArray(parsedJson.skills);
+
+      const isValidSchema = hasBasics || hasWork || hasSkills;
+      setIsValid(isValidSchema);
+      onValidate?.(isValidSchema);
+
+      if (!isValidSchema) {
+        toast({
+          title: "Invalid Resume Format",
+          description:
+            "Please ensure your JSON follows the JSON Resume Schema format with at least basics, work, or skills sections.",
+          variant: "destructive",
+        });
+      }
+
+      return isValidSchema;
     } catch (error) {
-      // Don't update the value if JSON is invalid
-      // The user might be in the middle of editing
+      setIsValid(false);
+      onValidate?.(false);
+      toast({
+        title: "Invalid JSON",
+        description: "Please check your JSON syntax and try again.",
+        variant: "destructive",
+      });
+      return false;
     }
   };
 
-  const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
-    const text = event.target.value;
-
+  const handleEdit = (params: { newValue: any; oldValue: any }) => {
     try {
-      const parsed = JSON.parse(text);
-      setLastValidValue(parsed);
-      onChange(parsed);
+      const updated = params.newValue;
+      if (validateJson(updated)) {
+        setLastValidValue(updated);
+        onChange(updated);
+      }
     } catch (error) {
       toast({
         title: "Invalid JSON",
         description: "Please check your JSON syntax and try again.",
         variant: "destructive",
       });
-      // Reset to last valid value
-      if (lastValidValue) {
-        const formattedValue = JSON.stringify(lastValidValue, null, 2);
-        setTextValue(formattedValue);
+    }
+  };
+
+  const handleAdd = (params: { indexOrName: string | number }) => {
+    try {
+      const updated = { ...value };
+      if (validateJson(updated)) {
+        setLastValidValue(updated);
+        onChange(updated);
       }
+    } catch (error) {
+      toast({
+        title: "Invalid JSON",
+        description: "Please check your JSON syntax and try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDelete = (params: { value: any }) => {
+    try {
+      const updated = { ...value };
+      delete updated[params.value];
+      if (validateJson(updated)) {
+        setLastValidValue(updated);
+        onChange(updated);
+      }
+    } catch (error) {
+      toast({
+        title: "Invalid JSON",
+        description: "Please check your JSON syntax and try again.",
+        variant: "destructive",
+      });
     }
   };
 
   return (
-    <div className="w-full">
-      <textarea
-        ref={textareaRef}
-        className="w-full p-4 border border-slate-200 dark:border-gray-600 rounded-lg font-mono text-sm resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-slate-900 dark:text-gray-100 placeholder:text-slate-400 dark:placeholder:text-gray-500"
+    <div className="w-full flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <div className={`h-2 w-2 rounded-full ${isValid ? "bg-green-500" : "bg-red-500"}`} />
+        <span className="text-xs text-slate-600 dark:text-gray-400">
+          {isValid ? "Valid JSON Resume format" : "Invalid JSON Resume format"}
+        </span>
+      </div>
+      <div
+        className="w-full overflow-auto rounded-lg border border-slate-200 dark:border-gray-600"
         style={{ height }}
-        value={textValue}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        placeholder={`{
-  "basics": {
-    "name": "John Doe",
-    "label": "Software Engineer",
-    "email": "john@example.com",
-    "phone": "+1-555-0123",
-    "location": {
-      "city": "San Francisco",
-      "region": "CA"
-    }
-  },
-  "work": [
-    {
-      "company": "Tech Corp",
-      "position": "Senior Developer",
-      "startDate": "2022-01-01",
-      "highlights": [
-        "Led team of 5 developers",
-        "Increased performance by 40%"
-      ]
-    }
-  ],
-  "skills": [
-    {
-      "name": "Web Development",
-      "keywords": ["JavaScript", "React", "Node.js"]
-    }
-  ]
-}`}
-      />
+      >
+        <JsonView
+          src={value || {}}
+          dark={theme === "dark"}
+          editable={{
+            edit: true,
+            add: true,
+            delete: true,
+          }}
+          onEdit={handleEdit}
+          onAdd={handleAdd}
+          onDelete={handleDelete}
+          style={{
+            padding: "1rem",
+            borderRadius: "0.5rem",
+            backgroundColor: theme === "dark" ? "#1a1a1a" : "transparent",
+          }}
+          displayDataTypes={false}
+          enableClipboard={true}
+          displayObjectSize={true}
+          collapsed={false}
+          theme={theme === "dark" ? "vscode" : "default"}
+        />
+      </div>
     </div>
   );
 }

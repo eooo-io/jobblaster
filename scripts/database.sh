@@ -51,19 +51,20 @@ show_help() {
     echo "  restore           Restore database from backup"
     echo "  status            Show database connection status"
     echo "  psql              Open PostgreSQL command line"
+    echo "  create-admin      Create an admin user"
     echo "  help              Show this help message"
     echo ""
     echo "Examples:"
     echo "  ./scripts/database.sh migrate"
     echo "  ./scripts/database.sh seed"
-    echo "  ./scripts/database.sh backup"
+    echo "  ./scripts/database.sh create-admin"
 }
 
 # Migrate database
 run_migrate() {
     print_info "Pushing schema changes to database..."
     check_database_url
-    
+
     if npm run db:push; then
         print_status "Database migration completed successfully!"
     else
@@ -76,17 +77,17 @@ run_migrate() {
 run_reset() {
     print_warning "This will DROP ALL TABLES in your database!"
     read -p "Are you sure you want to continue? (yes/no): " confirm
-    
+
     if [ "$confirm" = "yes" ]; then
         print_info "Resetting database..."
         check_database_url
-        
+
         # Drop all tables
         npx drizzle-kit drop --force
-        
+
         # Push schema again
         npm run db:push
-        
+
         print_status "Database reset completed!"
     else
         print_info "Database reset cancelled"
@@ -97,10 +98,10 @@ run_reset() {
 run_seed() {
     print_info "Seeding database with sample data..."
     check_database_url
-    
+
     # First ensure schema is up to date
     npm run db:push
-    
+
     # Create seed script if it doesn't exist
     if [ ! -f "scripts/seed-data.ts" ]; then
         print_info "Creating seed data script..."
@@ -111,7 +112,7 @@ import { hashPassword } from '../server/auth.js';
 
 async function seedDatabase() {
   console.log('🌱 Seeding database...');
-  
+
   try {
     // Create a demo user
     const hashedPassword = await hashPassword('demo123');
@@ -120,9 +121,9 @@ async function seedDatabase() {
       password: hashedPassword,
       email: 'demo@example.com'
     }).returning();
-    
+
     console.log('✅ Created demo user');
-    
+
     // Create sample resume
     const sampleResume = {
       basics: {
@@ -218,7 +219,7 @@ async function seedDatabase() {
         }
       ]
     };
-    
+
     await db.insert(resumes).values({
       name: 'John Doe - Software Developer',
       userId: user.id,
@@ -227,14 +228,14 @@ async function seedDatabase() {
       isDefault: true,
       filename: 'john-doe-resume.json'
     });
-    
+
     console.log('✅ Created sample resume');
     console.log('🎉 Database seeding completed!');
     console.log('');
     console.log('Demo credentials:');
     console.log('Username: demo');
     console.log('Password: demo123');
-    
+
   } catch (error) {
     console.error('❌ Seeding failed:', error);
     process.exit(1);
@@ -244,7 +245,7 @@ async function seedDatabase() {
 seedDatabase();
 EOF
     fi
-    
+
     # Run the seed script
     if npx tsx scripts/seed-data.ts; then
         print_status "Database seeding completed!"
@@ -258,13 +259,13 @@ EOF
 run_backup() {
     print_info "Creating database backup..."
     check_database_url
-    
+
     # Create backups directory
     mkdir -p backups
-    
+
     # Generate backup filename with timestamp
     BACKUP_FILE="backups/jobblaster_$(date +%Y%m%d_%H%M%S).sql"
-    
+
     # Create backup
     if pg_dump "$DATABASE_URL" > "$BACKUP_FILE"; then
         print_status "Backup created: $BACKUP_FILE"
@@ -281,22 +282,22 @@ run_restore() {
         print_error "No backup files found in backups/ directory"
         exit 1
     }
-    
+
     echo ""
     read -p "Enter backup filename (from backups/ directory): " backup_file
-    
+
     if [ ! -f "backups/$backup_file" ]; then
         print_error "Backup file not found: backups/$backup_file"
         exit 1
     fi
-    
+
     print_warning "This will REPLACE ALL DATA in your database!"
     read -p "Are you sure you want to continue? (yes/no): " confirm
-    
+
     if [ "$confirm" = "yes" ]; then
         print_info "Restoring database from $backup_file..."
         check_database_url
-        
+
         if psql "$DATABASE_URL" < "backups/$backup_file"; then
             print_status "Database restored successfully!"
         else
@@ -312,15 +313,15 @@ run_restore() {
 run_status() {
     print_info "Checking database connection..."
     check_database_url
-    
+
     if psql "$DATABASE_URL" -c "SELECT version();" > /dev/null 2>&1; then
         print_status "Database connection successful!"
-        
+
         # Show basic info
         echo ""
         echo "Database Info:"
         psql "$DATABASE_URL" -c "SELECT version();" -t | head -1
-        
+
         echo ""
         echo "Tables:"
         psql "$DATABASE_URL" -c "\dt" -t 2>/dev/null || echo "No tables found"
@@ -335,13 +336,25 @@ run_status() {
 run_psql() {
     print_info "Opening PostgreSQL command line..."
     check_database_url
-    
+
     echo "Type \q to quit"
     psql "$DATABASE_URL"
 }
 
-# Main command handler
-case "${1:-help}" in
+# Create admin user
+run_create_admin() {
+    print_info "Creating admin user..."
+    check_database_url
+
+    # First ensure schema is up to date
+    npm run db:push
+
+    # Run the create-admin script
+    npx tsx scripts/create-admin.ts
+}
+
+# Main script
+case "$1" in
     "migrate")
         run_migrate
         ;;
@@ -363,7 +376,15 @@ case "${1:-help}" in
     "psql")
         run_psql
         ;;
-    "help"|*)
+    "create-admin")
+        run_create_admin
+        ;;
+    "help"|"")
         show_help
+        ;;
+    *)
+        print_error "Unknown command: $1"
+        show_help
+        exit 1
         ;;
 esac

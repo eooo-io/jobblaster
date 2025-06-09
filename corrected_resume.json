@@ -58,10 +58,7 @@
       "startDate": "2014-01",
       "endDate": "2015-05",
       "summary": "Modernized internal tooling and maintained infrastructure.",
-      "highlights": [
-        "Refactored code to object-oriented PHP",
-        "Maintained 99.9% infrastructure uptime"
-      ]
+      "highlights": ["Refactored code to object-oriented PHP", "Maintained 99.9% infrastructure uptime"]
     },
     {
       "name": "IHG (Atlanta, GA)",
@@ -69,10 +66,7 @@
       "startDate": "2009-02",
       "endDate": "2010-01",
       "summary": "Worked on QA automation and backend development for global hospitality systems.",
-      "highlights": [
-        "Automated regression testing pipelines",
-        "Collaborated with devs on backend fixes and features"
-      ]
+      "highlights": ["Automated regression testing pipelines", "Collaborated with devs on backend fixes and features"]
     },
     {
       "name": "ChannelAdvisor (Atlanta, GA)",
@@ -103,10 +97,7 @@
       "startDate": "2002-02",
       "endDate": "2004-11",
       "summary": "Led QA for media and ad tech software systems.",
-      "highlights": [
-        "Established code driven automation practices",
-        "Worked on distributed QA across teams"
-      ]
+      "highlights": ["Established code driven automation practices", "Worked on distributed QA across teams"]
     },
     {
       "name": "CNN (Atlanta, GA)",
@@ -143,11 +134,7 @@
       "studyType": "Continued Learning Courses",
       "startDate": "1999-01",
       "endDate": "2000-01",
-      "courses": [
-        "C Programming",
-        "Perl Programming",
-        "Unix System Administration"
-      ]
+      "courses": ["C Programming", "Perl Programming", "Unix System Administration"]
     },
     {
       "institution": "Georgia State University",
@@ -161,14 +148,7 @@
   "skills": [
     {
       "name": "Programming",
-      "keywords": [
-        "PHP (object-oriented)",
-        "Python",
-        "JavaScript",
-        "TypeScript",
-        "C",
-        "Shell"
-      ]
+      "keywords": ["PHP (object-oriented)", "Python", "JavaScript", "TypeScript", "C", "Shell"]
     },
     {
       "name": "DevOps & Infrastructure",
@@ -188,62 +168,27 @@
     },
     {
       "name": "Architecture",
-      "keywords": [
-        "Modular Monolith",
-        "Microservices",
-        "Event-Driven",
-        "API-First"
-      ]
+      "keywords": ["Modular Monolith", "Microservices", "Event-Driven", "API-First"]
     },
     {
       "name": "Testing",
-      "keywords": [
-        "TDD",
-        "PHPUnit",
-        "Pest",
-        "Jest",
-        "Selenium",
-        "Cypress",
-        "Nightwatch"
-      ]
+      "keywords": ["TDD", "PHPUnit", "Pest", "Jest", "Selenium", "Cypress", "Nightwatch"]
     },
     {
       "name": "CI/CD",
-      "keywords": [
-        "GitLab CI/CD",
-        "GitHub Actions",
-        "ArgonCD"
-      ]
+      "keywords": ["GitLab CI/CD", "GitHub Actions", "ArgonCD"]
     },
     {
       "name": "Observability",
-      "keywords": [
-        "ELK Stack",
-        "Grafana",
-        "Prometheus",
-        "Sentry"
-      ]
+      "keywords": ["ELK Stack", "Grafana", "Prometheus", "Sentry"]
     },
     {
       "name": "Security & Privacy",
-      "keywords": [
-        "GDPR",
-        "PCI DSS",
-        "HIPAA",
-        "SOC2",
-        "OWASP"
-      ]
+      "keywords": ["GDPR", "PCI DSS", "HIPAA", "SOC2", "OWASP"]
     },
     {
       "name": "Additional",
-      "keywords": [
-        "Leadership",
-        "Mentoring",
-        "Project Management",
-        "Agile",
-        "Scrum",
-        "Technical Writing"
-      ]
+      "keywords": ["Leadership", "Mentoring", "Project Management", "Agile", "Scrum", "Technical Writing"]
     }
   ],
   "languages": [

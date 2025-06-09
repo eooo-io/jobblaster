@@ -1,34 +1,29 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import type { User } from "@shared/schema";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-
-interface User {
-  id: number;
-  username: string;
-  email: string | null;
-  profilePicture: string | null;
-  openaiApiKey: string | null;
-  adzunaAppId: string | null;
-  adzunaApiKey: string | null;
-}
 
 export function useAuth() {
   const [, setLocation] = useLocation();
-  
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: ['/api/auth/user'],
+
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["/api/auth/user"],
     retry: false,
   });
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const response = await apiRequest('POST', '/api/auth/logout', {});
+      const response = await apiRequest("POST", "/api/auth/logout", {});
       return response.json();
     },
     onSuccess: () => {
       queryClient.clear(); // Clear all cached data
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
-      setLocation('/login'); // Redirect to login page
+      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      setLocation("/login"); // Redirect to login page
     },
   });
 

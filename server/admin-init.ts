@@ -1,5 +1,6 @@
-import { storage } from "./storage.js";
 import { hashPassword } from "./auth.js";
+import { seedTestResumes } from "./seed-resumes.js";
+import { storage } from "./storage.js";
 
 /**
  * Initialize admin user from environment variables
@@ -19,79 +20,84 @@ export async function initializeAdminUser(): Promise<void> {
   try {
     // Check if admin user already exists
     const existingUser = await storage.getUserByUsername(adminUsername);
-    
-    if (existingUser) {
-      console.log(`✅ Admin user '${adminUsername}' already exists`);
-      return;
-    }
 
-    // Create admin user
-    console.log(`🔧 Creating admin user '${adminUsername}'...`);
-    
-    const hashedPassword = await hashPassword(adminPassword);
-    
-    const adminUser = await storage.createUser({
-      username: adminUsername,
-      password: hashedPassword,
-      email: adminEmail || `${adminUsername}@example.com`,
-      profilePicture: null,
-      openaiApiKey: null,
-      adzunaAppId: null,
-      adzunaApiKey: null,
-      indeedApiKey: null,
-      glassdoorApiKey: null,
-      linkedinApiKey: null,
-      isAdmin: true
-    });
+    let adminUser = existingUser;
 
-    console.log(`🎉 Admin user created successfully!`);
-    console.log(`   Username: ${adminUser.username}`);
-    console.log(`   Email: ${adminUser.email}`);
-    console.log(`   ID: ${adminUser.id}`);
-    
-    // Create a default sample resume for the admin user
-    try {
-      const sampleResume = {
-        basics: {
-          name: adminUser.username,
-          label: "System Administrator",
-          email: adminUser.email,
-          summary: "Default admin user for JobBlaster application management",
-          location: {
-            city: "Admin City",
-            countryCode: "US"
-          }
-        },
-        work: [
-          {
-            company: "JobBlaster",
-            position: "Administrator",
-            startDate: new Date().toISOString().split('T')[0],
-            summary: "Managing JobBlaster application and user accounts"
-          }
-        ],
-        skills: [
-          {
-            name: "Administration",
-            keywords: ["User Management", "System Administration", "JobBlaster"]
-          }
-        ]
-      };
+    if (!existingUser) {
+      // Create admin user
+      console.log(`🔧 Creating admin user '${adminUsername}'...`);
 
-      await storage.createResume({
-        name: "Admin Sample Resume",
-        userId: adminUser.id,
-        jsonData: sampleResume,
-        theme: "modern",
-        isDefault: true,
-        filename: "admin-sample.json"
+      const hashedPassword = await hashPassword(adminPassword);
+
+      adminUser = await storage.createUser({
+        username: adminUsername,
+        password: hashedPassword,
+        email: adminEmail || `${adminUsername}@example.com`,
+        profilePicture: null,
+        openaiApiKey: null,
+        adzunaAppId: null,
+        adzunaApiKey: null,
+        indeedApiKey: null,
+        glassdoorApiKey: null,
+        linkedinApiKey: null,
+        isAdmin: true,
       });
 
-      console.log("📄 Created sample resume for admin user");
-    } catch (resumeError) {
-      console.warn("⚠️  Could not create sample resume for admin user:", resumeError);
+      console.log(`🎉 Admin user created successfully!`);
+      console.log(`   Username: ${adminUser.username}`);
+      console.log(`   Email: ${adminUser.email}`);
+      console.log(`   ID: ${adminUser.id}`);
+
+      // Create a default sample resume for the admin user
+      try {
+        const sampleResume = {
+          basics: {
+            name: adminUser.username,
+            label: "System Administrator",
+            email: adminUser.email,
+            summary: "Default admin user for JobBlaster application management",
+            location: {
+              city: "Admin City",
+              countryCode: "US",
+            },
+          },
+          work: [
+            {
+              company: "JobBlaster",
+              position: "Administrator",
+              startDate: new Date().toISOString().split("T")[0],
+              summary: "Managing JobBlaster application and user accounts",
+            },
+          ],
+          skills: [
+            {
+              name: "Administration",
+              keywords: ["User Management", "System Administration", "JobBlaster"],
+            },
+          ],
+        };
+
+        await storage.createResume({
+          name: "Admin Sample Resume",
+          userId: adminUser.id,
+          jsonData: sampleResume,
+          theme: "modern",
+          isDefault: true,
+          filename: "admin-sample.json",
+        });
+
+        console.log("📄 Created sample resume for admin user");
+      } catch (resumeError) {
+        console.warn("⚠️  Could not create sample resume for admin user:", resumeError);
+      }
+    } else {
+      console.log(`✅ Admin user '${adminUsername}' already exists`);
     }
 
+    // Seed test resumes for the admin user
+    if (adminUser) {
+      await seedTestResumes(adminUser.id);
+    }
   } catch (error) {
     console.error("❌ Failed to create admin user:", error);
     throw error;
@@ -107,7 +113,7 @@ export async function hasAdminUsers(): Promise<boolean> {
     // For now, we'll just check if any users exist
     const adminUsername = process.env.ADMIN_USERNAME;
     if (!adminUsername) return false;
-    
+
     const user = await storage.getUserByUsername(adminUsername);
     return !!user;
   } catch (error) {
@@ -124,12 +130,14 @@ export function displayAdminInfo(): void {
   const adminPassword = process.env.ADMIN_PASSWORD;
 
   if (!adminUsername || !adminPassword) {
-    console.log("💡 Tip: Set ADMIN_USERNAME and ADMIN_PASSWORD in your .env file to auto-create an admin user");
+    console.log(
+      "💡 Tip: Set ADMIN_USERNAME and ADMIN_PASSWORD in your .env file to auto-create an admin user"
+    );
     return;
   }
 
   console.log("🔐 Admin credentials configured:");
   console.log(`   Username: ${adminUsername}`);
-  console.log(`   Password: ${'*'.repeat(adminPassword.length)}`);
+  console.log(`   Password: ${"*".repeat(adminPassword.length)}`);
   console.log("   Use these credentials to log in at /login");
 }

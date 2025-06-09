@@ -14,11 +14,12 @@ export interface JSONResumeSchema {
       countryCode?: string;
       region?: string;
     };
-    profiles?: Array<{
+    profiles?: {
       network?: string;
       username?: string;
       url?: string;
-    }>;
+    }[];
+    dateOfBirth?: string;
   };
   work?: Array<{
     name?: string;
@@ -29,6 +30,7 @@ export interface JSONResumeSchema {
     endDate?: string;
     summary?: string;
     highlights?: string[];
+    location?: string;
   }>;
   volunteer?: Array<{
     organization?: string;

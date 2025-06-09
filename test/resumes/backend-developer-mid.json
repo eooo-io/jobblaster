@@ -1,0 +1,143 @@
+{
+  "basics": {
+    "name": "Marcus Kim",
+    "label": "Backend Software Engineer",
+    "image": "",
+    "email": "marcus.kim@example.com",
+    "phone": "(555) 012-3456",
+    "url": "https://marcuskim.dev",
+    "summary": "Backend Software Engineer with 4 years of experience developing scalable web services and APIs. Expertise in Node.js, Python, and microservices architecture. Strong focus on writing clean, maintainable code and implementing efficient database solutions.",
+    "location": {
+      "address": "789 Developer Lane",
+      "postalCode": "94103",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "marcuskim",
+        "url": "https://linkedin.com/in/marcuskim"
+      },
+      {
+        "network": "GitHub",
+        "username": "mkimdev",
+        "url": "https://github.com/mkimdev"
+      },
+      {
+        "network": "Stack Overflow",
+        "username": "marcus-kim",
+        "url": "https://stackoverflow.com/users/marcus-kim"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "TechStart Solutions",
+      "position": "Backend Engineer",
+      "url": "https://techstart.io",
+      "startDate": "2021-03",
+      "endDate": "",
+      "summary": "Developing microservices and APIs for SaaS platform",
+      "highlights": [
+        "Architected and implemented RESTful APIs serving 100K+ daily requests",
+        "Reduced API response time by 40% through query optimization",
+        "Implemented message queue system improving system reliability",
+        "Developed automated testing suite achieving 90% code coverage"
+      ]
+    },
+    {
+      "name": "DataFlow Systems",
+      "position": "Software Developer",
+      "url": "https://dataflow.com",
+      "startDate": "2019-06",
+      "endDate": "2021-02",
+      "summary": "Full-stack development with focus on backend services",
+      "highlights": [
+        "Built scalable data processing pipeline handling 1M+ daily records",
+        "Implemented OAuth2 authentication system",
+        "Reduced database query time by 50% through indexing optimization"
+      ]
+    },
+    {
+      "name": "WebDev Corp",
+      "position": "Junior Developer",
+      "url": "https://webdev.com",
+      "startDate": "2018-08",
+      "endDate": "2019-05",
+      "summary": "Full-stack web development",
+      "highlights": [
+        "Developed and maintained REST APIs for web applications",
+        "Implemented automated deployment pipeline",
+        "Contributed to internal developer tools"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of California, Berkeley",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2014-09",
+      "endDate": "2018-05",
+      "score": "3.7",
+      "courses": ["Data Structures", "Algorithms", "Database Systems", "Web Architecture"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Advanced",
+      "keywords": ["Node.js", "Python", "TypeScript", "Go", "SQL"]
+    },
+    {
+      "name": "Backend Technologies",
+      "level": "Advanced",
+      "keywords": ["Express.js", "Django", "FastAPI", "GraphQL", "REST APIs"]
+    },
+    {
+      "name": "Databases & Tools",
+      "level": "Advanced",
+      "keywords": ["PostgreSQL", "MongoDB", "Redis", "Docker", "Kubernetes"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Korean",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "API Gateway Service",
+      "description": "Developed high-performance API gateway for microservices",
+      "highlights": ["Handles 1M+ daily requests", "Implemented rate limiting and caching", "Reduced latency by 60%"],
+      "keywords": ["Node.js", "Redis", "API Gateway"],
+      "url": "https://github.com/mkimdev/api-gateway"
+    },
+    {
+      "name": "Data Processing Pipeline",
+      "description": "Built scalable data processing system",
+      "highlights": ["Processes 100GB+ data daily", "Implemented error recovery", "Used by 5 internal teams"],
+      "keywords": ["Python", "Apache Kafka", "ETL"],
+      "url": "https://github.com/mkimdev/data-pipeline"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Developer",
+      "issuer": "Amazon Web Services",
+      "date": "2022-01"
+    },
+    {
+      "name": "MongoDB Professional Developer",
+      "issuer": "MongoDB University",
+      "date": "2021-06"
+    }
+  ]
+}

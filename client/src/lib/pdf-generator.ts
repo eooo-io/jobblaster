@@ -1,29 +1,31 @@
-import { useToast } from "@/hooks/use-toast";
 import type { JSONResumeSchema } from "./types";
 
-export async function generatePDF(resumeData: JSONResumeSchema, theme: string = "modern") {
+export async function generatePDF(
+  resumeData: JSONResumeSchema,
+  theme: string = "modern",
+  filename: string = "resume"
+) {
   try {
     // In a real implementation, this would use a library like jsPDF or Puppeteer
     // For now, we'll create a simple HTML representation and trigger print
-    
-    const printWindow = window.open('', '_blank');
+
+    const printWindow = window.open("", "_blank");
     if (!printWindow) {
-      throw new Error('Failed to open print window');
+      throw new Error("Failed to open print window");
     }
 
     const html = generateResumeHTML(resumeData, theme);
-    
+
     printWindow.document.write(html);
     printWindow.document.close();
-    
+
     // Wait for content to load, then print
     printWindow.onload = () => {
       printWindow.print();
       printWindow.close();
     };
-    
   } catch (error) {
-    console.error('PDF generation failed:', error);
+    console.error("PDF generation failed:", error);
     throw error;
   }
 }
@@ -41,7 +43,7 @@ function generateResumeHTML(resumeData: JSONResumeSchema, theme: string): string
     <html>
     <head>
       <meta charset="UTF-8">
-      <title>${basics.name || 'Resume'}</title>
+      <title>${basics.name || "Resume"}</title>
       <style>
         ${themeStyles}
         @media print {
@@ -53,61 +55,87 @@ function generateResumeHTML(resumeData: JSONResumeSchema, theme: string): string
     <body>
       <div class="resume">
         <header class="header">
-          <h1 class="name">${basics.name || 'Your Name'}</h1>
-          <p class="title">${basics.label || basics.summary || 'Professional Title'}</p>
+          <h1 class="name">${basics.name || "Your Name"}</h1>
+          <p class="title">${basics.label || basics.summary || "Professional Title"}</p>
           <div class="contact">
-            ${basics.email ? `<span>${basics.email}</span>` : ''}
-            ${basics.phone ? `<span>${basics.phone}</span>` : ''}
-            ${basics.location?.city ? `<span>${basics.location.city}${basics.location.region ? `, ${basics.location.region}` : ''}</span>` : ''}
+            ${basics.email ? `<span>${basics.email}</span>` : ""}
+            ${basics.phone ? `<span>${basics.phone}</span>` : ""}
+            ${basics.location?.city ? `<span>${basics.location.city}${basics.location.region ? `, ${basics.location.region}` : ""}</span>` : ""}
           </div>
         </header>
 
-        ${work.length > 0 ? `
+        ${
+          work.length > 0
+            ? `
         <section class="section">
           <h2 class="section-title">Experience</h2>
-          ${work.map(job => `
+          ${work
+            .map(
+              (job) => `
             <div class="item">
-              <h3 class="item-title">${job.position || 'Position'}</h3>
-              <p class="item-subtitle">${job.name || job.company || 'Company'} • ${formatDate(job.startDate)}${job.endDate ? ` - ${formatDate(job.endDate)}` : ' - Present'}</p>
-              ${job.highlights ? `
+              <h3 class="item-title">${job.position || "Position"}</h3>
+              <p class="item-subtitle">${job.name || job.company || "Company"} • ${formatDate(job.startDate)}${job.endDate ? ` - ${formatDate(job.endDate)}` : " - Present"}</p>
+              ${
+                job.highlights
+                  ? `
                 <ul class="highlights">
-                  ${job.highlights.map(highlight => `<li>${highlight}</li>`).join('')}
+                  ${job.highlights.map((highlight) => `<li>${highlight}</li>`).join("")}
                 </ul>
-              ` : ''}
+              `
+                  : ""
+              }
             </div>
-          `).join('')}
+          `
+            )
+            .join("")}
         </section>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${education.length > 0 ? `
+        ${
+          education.length > 0
+            ? `
         <section class="section">
           <h2 class="section-title">Education</h2>
-          ${education.map(edu => `
+          ${education
+            .map(
+              (edu) => `
             <div class="item">
-              <h3 class="item-title">${edu.studyType || 'Degree'}${edu.area ? ` in ${edu.area}` : ''}</h3>
-              <p class="item-subtitle">${edu.institution || 'Institution'}${edu.endDate ? ` • ${formatDate(edu.endDate)}` : ''}</p>
+              <h3 class="item-title">${edu.studyType || "Degree"}${edu.area ? ` in ${edu.area}` : ""}</h3>
+              <p class="item-subtitle">${edu.institution || "Institution"}${edu.endDate ? ` • ${formatDate(edu.endDate)}` : ""}</p>
             </div>
-          `).join('')}
+          `
+            )
+            .join("")}
         </section>
-        ` : ''}
+        `
+            : ""
+        }
 
-        ${skills.length > 0 ? `
+        ${
+          skills.length > 0
+            ? `
         <section class="section">
           <h2 class="section-title">Skills</h2>
           <div class="skills">
-            ${skills.map(skill => {
-              const skillName = typeof skill === 'string' ? skill : skill.name;
-              const keywords = typeof skill === 'object' && skill.keywords ? skill.keywords : [];
-              return `
+            ${skills
+              .map((skill) => {
+                const skillName = typeof skill === "string" ? skill : skill.name;
+                const keywords = typeof skill === "object" && skill.keywords ? skill.keywords : [];
+                return `
                 <div class="skill-group">
                   <strong>${skillName}</strong>
-                  ${keywords.length > 0 ? `<span class="keywords">${keywords.join(', ')}</span>` : ''}
+                  ${keywords.length > 0 ? `<span class="keywords">${keywords.join(", ")}</span>` : ""}
                 </div>
               `;
-            }).join('')}
+              })
+              .join("")}
           </div>
         </section>
-        ` : ''}
+        `
+            : ""
+        }
       </div>
     </body>
     </html>
@@ -115,30 +143,30 @@ function generateResumeHTML(resumeData: JSONResumeSchema, theme: string): string
 }
 
 function formatDate(dateStr: string | undefined): string {
-  if (!dateStr) return '';
+  if (!dateStr) return "";
   const date = new Date(dateStr);
   return date.getFullYear().toString();
 }
 
 function getSkillPercentage(level: string): number {
   const levelMap: { [key: string]: number } = {
-    'beginner': 30,
-    'intermediate': 60,
-    'advanced': 80,
-    'expert': 95,
-    'master': 100
+    beginner: 30,
+    intermediate: 60,
+    advanced: 80,
+    expert: 95,
+    master: 100,
   };
   return levelMap[level.toLowerCase()] || 80;
 }
 
 function getFluencyPercentage(fluency: string): number {
   const fluencyMap: { [key: string]: number } = {
-    'elementary': 40,
-    'limited': 50,
-    'professional': 80,
-    'full professional': 90,
-    'native': 100,
-    'bilingual': 100
+    elementary: 40,
+    limited: 50,
+    professional: 80,
+    "full professional": 90,
+    native: 100,
+    bilingual: 100,
   };
   return fluencyMap[fluency.toLowerCase()] || 80;
 }
@@ -379,7 +407,7 @@ function getThemeStyles(theme: string): string {
       }
     `;
   }
-  
+
   const baseStyles = `
     body {
       font-family: 'Arial', sans-serif;
@@ -513,8 +541,11 @@ function getThemeStyles(theme: string): string {
       body {
         font-family: 'Times New Roman', serif;
       }
-    `
+    `,
   };
 
-  return baseStyles + (themeSpecificStyles[theme as keyof typeof themeSpecificStyles] || themeSpecificStyles.modern);
+  return (
+    baseStyles +
+    (themeSpecificStyles[theme as keyof typeof themeSpecificStyles] || themeSpecificStyles.modern)
+  );
 }

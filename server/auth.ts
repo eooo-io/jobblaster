@@ -31,10 +31,10 @@ export function setupAuth(app: Express) {
       saveUninitialized: false,
       cookie: {
         httpOnly: true,
-        secure: false, // Allow non-HTTPS in development
+        secure: process.env.NODE_ENV === "production", // Only use secure in production
         sameSite: "lax",
         maxAge: sessionTtl,
-        domain: "localhost", // Allow sharing between ports
+        domain: process.env.NODE_ENV === "production" ? undefined : "localhost", // Only set domain in development
       },
       name: "jobblaster.sid", // Custom cookie name
     })

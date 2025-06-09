@@ -1,0 +1,165 @@
+{
+  "basics": {
+    "name": "Ryan Patel",
+    "label": "Senior Data Engineer",
+    "image": "",
+    "email": "ryan.patel@example.com",
+    "phone": "(555) 345-6789",
+    "url": "https://ryanpatel.tech",
+    "summary": "Experienced Data Engineer with 6+ years of expertise in building scalable data pipelines and analytics infrastructure. Strong background in big data technologies, cloud platforms, and data warehousing. Proven track record of implementing efficient ETL processes and optimizing data workflows.",
+    "location": {
+      "address": "789 Data Drive",
+      "postalCode": "95054",
+      "city": "Santa Clara",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "ryanpatel",
+        "url": "https://linkedin.com/in/ryanpatel"
+      },
+      {
+        "network": "GitHub",
+        "username": "rpatel-data",
+        "url": "https://github.com/rpatel-data"
+      },
+      {
+        "network": "Medium",
+        "username": "ryan_data",
+        "url": "https://medium.com/@ryan_data"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "DataScale Technologies",
+      "position": "Senior Data Engineer",
+      "url": "https://datascale.tech",
+      "startDate": "2020-06",
+      "endDate": "",
+      "summary": "Leading data infrastructure and pipeline development",
+      "highlights": [
+        "Architected and implemented data lake solution processing 5TB+ daily",
+        "Reduced ETL processing time by 70% through optimization",
+        "Led team of 4 data engineers in modernizing data infrastructure",
+        "Implemented real-time data processing reducing latency from hours to minutes"
+      ]
+    },
+    {
+      "name": "BigData Solutions",
+      "position": "Data Engineer",
+      "url": "https://bigdatasolutions.com",
+      "startDate": "2018-03",
+      "endDate": "2020-05",
+      "summary": "Developed and maintained data pipelines",
+      "highlights": [
+        "Built scalable ETL pipelines processing 100M+ records daily",
+        "Implemented data quality framework reducing errors by 80%",
+        "Designed and maintained data warehouse architecture"
+      ]
+    },
+    {
+      "name": "Analytics Corp",
+      "position": "Junior Data Engineer",
+      "url": "https://analyticscorp.com",
+      "startDate": "2016-08",
+      "endDate": "2018-02",
+      "summary": "Assisted in data pipeline development",
+      "highlights": [
+        "Developed automated data collection processes",
+        "Created data validation and cleaning procedures",
+        "Assisted in migration to cloud-based data warehouse"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Stanford University",
+      "area": "Computer Science",
+      "studyType": "Master of Science",
+      "startDate": "2014-09",
+      "endDate": "2016-06",
+      "score": "3.8",
+      "courses": ["Database Systems", "Distributed Systems", "Machine Learning", "Big Data Analytics"]
+    },
+    {
+      "institution": "University of California, Davis",
+      "area": "Computer Engineering",
+      "studyType": "Bachelor of Science",
+      "startDate": "2010-09",
+      "endDate": "2014-05",
+      "score": "3.7",
+      "courses": ["Data Structures", "Algorithms", "Database Design"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Data Technologies",
+      "level": "Master",
+      "keywords": ["Apache Spark", "Hadoop", "Kafka", "Airflow", "dbt"]
+    },
+    {
+      "name": "Programming",
+      "level": "Advanced",
+      "keywords": ["Python", "SQL", "Scala", "Java", "Shell Scripting"]
+    },
+    {
+      "name": "Cloud & Infrastructure",
+      "level": "Advanced",
+      "keywords": ["AWS", "Snowflake", "Databricks", "Docker", "Kubernetes"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Hindi",
+      "fluency": "Professional working proficiency"
+    },
+    {
+      "language": "Gujarati",
+      "fluency": "Native speaker"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Real-time Analytics Pipeline",
+      "description": "Built streaming analytics platform for real-time insights",
+      "highlights": [
+        "Processes 1M+ events per second",
+        "Reduced data latency from hours to seconds",
+        "Implemented fault-tolerant architecture"
+      ],
+      "keywords": ["Kafka", "Spark Streaming", "Real-time Analytics"],
+      "url": "https://github.com/rpatel-data/realtime-analytics"
+    },
+    {
+      "name": "Data Quality Framework",
+      "description": "Developed automated data quality monitoring system",
+      "highlights": ["Reduced data errors by 90%", "Automated quality checks", "Implemented alerting system"],
+      "keywords": ["Python", "Great Expectations", "Data Quality"],
+      "url": "https://github.com/rpatel-data/data-quality"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Certified Data Analytics",
+      "issuer": "Amazon Web Services",
+      "date": "2022-03"
+    },
+    {
+      "name": "Databricks Certified Developer",
+      "issuer": "Databricks",
+      "date": "2021-08"
+    },
+    {
+      "name": "Google Cloud Professional Data Engineer",
+      "issuer": "Google Cloud",
+      "date": "2021-02"
+    }
+  ]
+}

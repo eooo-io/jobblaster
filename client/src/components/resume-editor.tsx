@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,6 @@ interface ResumeEditorProps {
 }
 
 export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeEditorProps) {
-
   const [jsonContent, setJsonContent] = useState<any>(null);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [newName, setNewName] = useState("");
@@ -26,6 +25,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const [uploadedFilename, setUploadedFilename] = useState<string>("");
   const [forceCreateNew, setForceCreateNew] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isJsonValid, setIsJsonValid] = useState(true);
   const { toast } = useToast();
 
   // Auto-load selected resume into JSON editor
@@ -35,31 +35,26 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       if (!isEditing || selectedResume.id !== editingId) {
         setJsonContent(selectedResume.jsonData);
         setEditingId(selectedResume.id);
-        setIsEditing(false); // Reset editing state when loading new resume
       }
       setUploadedFilename(""); // Clear filename when switching resumes
       setForceCreateNew(false); // Reset force create flag when selecting existing resume
-    } else {
-      setJsonContent(null);
-      setEditingId(null);
-      setIsEditing(false);
     }
-  }, [selectedResume?.id, selectedResume?.jsonData]);
+  }, [selectedResume?.id, selectedResume?.jsonData, isEditing, editingId]);
 
   const { data: resumes, isLoading: resumesLoading } = useQuery({
-    queryKey: ['/api/resumes'],
+    queryKey: ["/api/resumes"],
   });
 
   const uploadMutation = useMutation({
     mutationFn: async (data: { name: string; jsonData: any; theme: string }) => {
-      const response = await apiRequest('POST', '/api/resumes', data);
+      const response = await apiRequest("POST", "/api/resumes", data);
       return await response.json();
     },
     onSuccess: (newResume) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/resumes"] });
       setJsonContent(newResume.jsonData);
       onResumeSelect(newResume);
-      setUploadedFilename('');
+      setUploadedFilename("");
       setForceCreateNew(false); // Reset the flag
       toast({
         title: "Resume created successfully",
@@ -78,7 +73,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   const updateMutation = useMutation({
     mutationFn: async (data: { id: number; jsonData: any; theme: string }) => {
       console.log("Starting update mutation for resume ID:", data.id);
-      const response = await apiRequest('PUT', `/api/resumes/${data.id}`, {
+      const response = await apiRequest("PUT", `/api/resumes/${data.id}`, {
         jsonData: data.jsonData,
         theme: data.theme,
       });
@@ -88,7 +83,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     },
     onSuccess: (updatedResume) => {
       console.log("Update mutation onSuccess called:", updatedResume);
-      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/resumes"] });
       setIsEditing(false); // Reset editing state after successful save
       // Update the selected resume with fresh data to trigger preview refresh
       onResumeSelect(updatedResume);
@@ -110,11 +105,11 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   // Rename mutation
   const renameMutation = useMutation({
     mutationFn: async ({ id, name }: { id: number; name: string }) => {
-      const response = await apiRequest('PATCH', `/api/resumes/${id}`, { name });
+      const response = await apiRequest("PATCH", `/api/resumes/${id}`, { name });
       return response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/resumes'] });
+      queryClient.invalidateQueries({ queryKey: ["/api/resumes"] });
       setEditingId(null);
       toast({
         title: "Resume renamed",
@@ -146,7 +141,8 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         setForceCreateNew(true);
 
         // Use filename (without extension) as the resume name, fallback to JSON name
-        const resumeName = file.name.replace(/\.json$/, '') || json.basics?.name || "Untitled Resume";
+        const resumeName =
+          file.name.replace(/\.json$/, "") || json.basics?.name || "Untitled Resume";
 
         // Create new resume immediately with upload mutation
         uploadMutation.mutate({
@@ -180,19 +176,18 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
       return;
     }
 
+    if (!isJsonValid) {
+      toast({
+        title: "Invalid JSON Format",
+        description: "Please fix the JSON format before saving.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       // Basic JSON validation
-      const parsedJson = typeof jsonContent === 'string' ? JSON.parse(jsonContent) : jsonContent;
-
-      // Check for basic JSON Resume schema structure
-      if (!parsedJson.basics && !parsedJson.work && !parsedJson.skills) {
-        toast({
-          title: "Invalid Resume Format",
-          description: "Please ensure your JSON follows the JSON Resume Schema format with at least basics, work, or skills sections.",
-          variant: "destructive",
-        });
-        return;
-      }
+      const parsedJson = typeof jsonContent === "string" ? JSON.parse(jsonContent) : jsonContent;
 
       // Only create new if explicitly forced or no resume selected
       if (forceCreateNew || !selectedResume) {
@@ -231,7 +226,18 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     }
 
     try {
-      await generatePDF(selectedResume.jsonData as any, selectedResume.theme);
+      // Use the resume name as the filename, fallback to a default name
+      const filename = selectedResume.name?.replace(/[^a-zA-Z0-9-_]/g, "_") || "resume";
+      await generatePDF(selectedResume.jsonData as any, selectedResume.theme, filename);
+
+      // Update the resume's lastExported timestamp
+      await apiRequest("PATCH", `/api/resumes/${selectedResume.id}`, {
+        lastExported: new Date().toISOString(),
+      });
+
+      // Invalidate the resumes query to refresh the list
+      queryClient.invalidateQueries({ queryKey: ["/api/resumes"] });
+
       toast({
         title: "PDF generated",
         description: "Your resume has been downloaded as a PDF.",
@@ -278,7 +284,7 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
     console.log("Creating new resume - clearing selection and setting force flag");
     // Clear current selection completely and force new creation
     onResumeSelect(null as any);
-    setUploadedFilename('');
+    setUploadedFilename("");
     setForceCreateNew(true);
 
     // Set up basic template structure
@@ -288,12 +294,12 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
         label: "",
         email: "",
         phone: "",
-        summary: ""
+        summary: "",
       },
       work: [],
       education: [],
       skills: [],
-      projects: []
+      projects: [],
     };
 
     setJsonContent(basicTemplate);
@@ -321,10 +327,13 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
   };
 
   return (
-    <Card className="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-600 flex flex-col h-full">
-      <CardHeader className="border-b border-slate-200 dark:border-gray-600">
+    <Card className="h-full flex flex-col">
+      <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-slate-900 dark:text-white">Resume Editor</CardTitle>
+          <div>
+            <CardTitle>Resume Editor</CardTitle>
+            <CardDescription>Edit your resume in JSON format</CardDescription>
+          </div>
           <Button
             variant="ghost"
             size="sm"
@@ -336,10 +345,9 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
           </Button>
         </div>
       </CardHeader>
-
-      <CardContent className="flex-1 flex flex-col p-0">
-        {/* Resume Selector with Accordions */}
-        <div className="p-3 lg:p-6 border-b border-slate-200 dark:border-gray-700">
+      <CardContent className="flex-1 flex flex-col min-h-0">
+        {/* Resume Selector */}
+        <div className="px-2 py-3 lg:px-4 lg:py-4 border-b border-slate-200 dark:border-gray-700">
           <ResumeSelector
             selectedResume={selectedResume}
             onResumeSelect={onResumeSelect}
@@ -347,16 +355,20 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
           />
         </div>
 
-        {/* Upload Section */}
-        <div className="p-3 lg:p-6 border-b border-slate-200 dark:border-gray-700">
+        {/* Upload and Save Section */}
+        <div className="px-2 py-3 lg:px-4 lg:py-4 border-b border-slate-200 dark:border-gray-700">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 lg:gap-4">
             {/* File Upload */}
             <div className="border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-lg p-3 lg:p-6 text-center hover:border-blue-600 transition-colors">
               <div className="w-8 h-8 lg:w-10 lg:h-10 bg-blue-600/10 rounded-lg flex items-center justify-center mx-auto mb-2 lg:mb-3">
                 <CloudUpload className="text-blue-600 text-sm lg:text-lg" />
               </div>
-              <h4 className="text-sm lg:text-base font-medium text-slate-900 dark:text-white mb-1 lg:mb-2">Upload File</h4>
-              <p className="text-xs lg:text-sm text-slate-600 dark:text-gray-300 mb-2 lg:mb-3">Drop your resume.json file here</p>
+              <h4 className="text-sm lg:text-base font-medium text-slate-900 dark:text-white mb-1 lg:mb-2">
+                Upload File
+              </h4>
+              <p className="text-xs lg:text-sm text-slate-600 dark:text-gray-300 mb-2 lg:mb-3">
+                Drop your resume.json file here
+              </p>
               <label htmlFor="resume-upload">
                 <Button className="bg-blue-600 hover:bg-blue-700" size="sm" asChild>
                   <span>Choose File</span>
@@ -371,7 +383,10 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               />
               {uploadedFilename && (
                 <div className="mt-2 text-xs text-slate-600 dark:text-gray-400">
-                  Uploaded: <span className="font-mono bg-slate-100 dark:bg-gray-700 px-1 rounded">{uploadedFilename}</span>
+                  Uploaded:{" "}
+                  <span className="font-mono bg-slate-100 dark:bg-gray-700 px-1 rounded">
+                    {uploadedFilename}
+                  </span>
                 </div>
               )}
             </div>
@@ -381,23 +396,38 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
               <div className="w-8 h-8 lg:w-10 lg:h-10 bg-green-600/10 rounded-lg flex items-center justify-center mx-auto mb-2 lg:mb-3">
                 <RefreshCw className="text-green-600 text-sm lg:text-lg" />
               </div>
-              <h4 className="text-sm lg:text-base font-medium text-slate-900 dark:text-white mb-1 lg:mb-2">Save Resume</h4>
-              <p className="text-xs lg:text-sm text-slate-600 dark:text-gray-300 mb-2 lg:mb-3">Validate and save your JSON</p>
+              <h4 className="text-sm lg:text-base font-medium text-slate-900 dark:text-white mb-1 lg:mb-2">
+                Save Resume
+              </h4>
+              <p className="text-xs lg:text-sm text-slate-600 dark:text-gray-300 mb-2 lg:mb-3">
+                Validate and save your JSON
+              </p>
               <Button
-                className="bg-green-600 hover:bg-green-700"
+                className={`${isJsonValid ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"}`}
                 size="sm"
-                disabled={!jsonContent || uploadMutation.isPending || updateMutation.isPending}
+                disabled={
+                  !jsonContent ||
+                  uploadMutation.isPending ||
+                  updateMutation.isPending ||
+                  !isJsonValid
+                }
                 onClick={handleValidateAndSave}
               >
-                {(uploadMutation.isPending || updateMutation.isPending) ? "Saving..." : "Save & Validate"}
+                {uploadMutation.isPending || updateMutation.isPending
+                  ? "Saving..."
+                  : isJsonValid
+                    ? "Save & Validate"
+                    : "Fix JSON Format"}
               </Button>
             </div>
           </div>
-          <p className="text-xs text-slate-500 dark:text-gray-400 mt-3 text-center">Supports JSON Resume Schema format</p>
+          <p className="text-xs text-slate-500 dark:text-gray-400 mt-3 text-center">
+            Supports JSON Resume Schema format
+          </p>
         </div>
 
         {/* JSON Editor Accordion */}
-        <div className="flex-1 p-3 lg:p-6 min-h-0">
+        <div className="flex-1 px-2 py-3 lg:px-4 lg:py-4 min-h-0">
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg">
             <button
               onClick={() => setJsonEditorOpen(!jsonEditorOpen)}
@@ -407,29 +437,68 @@ export default function ResumeEditor({ selectedResume, onResumeSelect }: ResumeE
                 <Code className="h-4 w-4" />
                 <span className="font-medium">JSON Editor</span>
               </div>
-              <ChevronDown className={`h-4 w-4 transition-transform ${jsonEditorOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                className={`h-4 w-4 transition-transform ${jsonEditorOpen ? "rotate-180" : ""}`}
+              />
             </button>
 
             {jsonEditorOpen && (
-              <div className="p-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="p-2 border-t border-gray-200 dark:border-gray-700">
                 <div className="h-full flex flex-col">
-                  <div className="flex items-center justify-between mb-2 lg:mb-4">
-                    <h4 className="font-medium text-slate-900 dark:text-white text-sm lg:text-base">Edit Resume JSON</h4>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-3">
+                      <h4 className="font-medium text-slate-900 dark:text-white text-sm lg:text-base">
+                        Edit Resume JSON
+                      </h4>
+                      <a
+                        href="https://jsonresume.org/schema/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1"
+                      >
+                        <span>Help</span>
+                        <svg
+                          className="h-3 w-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                          />
+                        </svg>
+                      </a>
+                    </div>
                     <Button
                       variant="ghost"
                       size="sm"
-                      disabled={!jsonContent || uploadMutation.isPending || updateMutation.isPending}
+                      disabled={
+                        !jsonContent ||
+                        uploadMutation.isPending ||
+                        updateMutation.isPending ||
+                        !isJsonValid
+                      }
                       onClick={handleValidateAndSave}
+                      className={isJsonValid ? undefined : "text-red-500"}
                     >
                       <RefreshCw className="w-4 h-4 mr-1" />
-                      {(uploadMutation.isPending || updateMutation.isPending) ? "Saving..." : "Validate & Save"}
+                      {uploadMutation.isPending || updateMutation.isPending
+                        ? "Saving..."
+                        : isJsonValid
+                          ? "Validate & Save"
+                          : "Fix Format"}
                     </Button>
                   </div>
                   <div className="flex-1 min-h-0">
                     <JsonEditor
                       value={jsonContent}
                       onChange={handleJsonChange}
-                      height="250px"
+                      height="650px"
+                      onValidate={setIsJsonValid}
                     />
                   </div>
                 </div>

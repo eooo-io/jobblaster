@@ -1,0 +1,137 @@
+{
+  "basics": {
+    "name": "Emily Zhang",
+    "label": "Technical Product Manager",
+    "image": "",
+    "email": "emily.zhang@example.com",
+    "phone": "(555) 456-7890",
+    "url": "https://emilyzhang.pm",
+    "summary": "Strategic Technical Product Manager with 7+ years of experience leading cross-functional teams in developing innovative software solutions. Strong background in agile methodologies and data-driven decision making. Track record of successful product launches generating over $50M in revenue.",
+    "location": {
+      "address": "101 Product Lane",
+      "postalCode": "98104",
+      "city": "Seattle",
+      "countryCode": "US",
+      "region": "Washington"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "emilyzhang",
+        "url": "https://linkedin.com/in/emilyzhang"
+      },
+      {
+        "network": "Twitter",
+        "username": "emilyz_product",
+        "url": "https://twitter.com/emilyz_product"
+      },
+      {
+        "network": "Medium",
+        "username": "emilyzhang_pm",
+        "url": "https://medium.com/@emilyzhang_pm"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "CloudTech Solutions",
+      "position": "Senior Technical Product Manager",
+      "url": "https://cloudtech.com",
+      "startDate": "2021-01",
+      "endDate": "",
+      "summary": "Leading product strategy for cloud infrastructure platform",
+      "highlights": [
+        "Led development of containerization platform used by 10,000+ developers",
+        "Increased platform adoption by 200% through strategic feature releases",
+        "Reduced customer onboarding time from 2 weeks to 2 days",
+        "Managed $15M annual product budget and team of 25"
+      ]
+    },
+    {
+      "name": "SoftwareX",
+      "position": "Product Manager",
+      "url": "https://softwarex.com",
+      "startDate": "2018-03",
+      "endDate": "2020-12",
+      "summary": "Managed developer tools product line",
+      "highlights": [
+        "Launched CI/CD platform generating $10M ARR in first year",
+        "Reduced development cycle time by 40% through process improvements",
+        "Led integration with 20+ third-party tools and services"
+      ]
+    },
+    {
+      "name": "TechStart Inc",
+      "position": "Associate Product Manager",
+      "url": "https://techstart.com",
+      "startDate": "2016-06",
+      "endDate": "2018-02",
+      "summary": "Product management for mobile applications",
+      "highlights": [
+        "Launched mobile app with 1M+ downloads in first month",
+        "Increased user retention by 45% through feature optimization",
+        "Implemented analytics framework for data-driven decisions"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Washington",
+      "area": "Computer Science",
+      "studyType": "Master of Science",
+      "startDate": "2014-09",
+      "endDate": "2016-05",
+      "score": "3.8",
+      "courses": ["Product Management", "Software Engineering", "Data Analytics", "UX Design"]
+    },
+    {
+      "institution": "University of California, San Diego",
+      "area": "Computer Engineering",
+      "studyType": "Bachelor of Science",
+      "startDate": "2010-09",
+      "endDate": "2014-05",
+      "score": "3.7",
+      "courses": ["Software Development", "Project Management", "Systems Design"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Product Management",
+      "level": "Master",
+      "keywords": ["Product Strategy", "Roadmap Planning", "Agile/Scrum", "User Stories", "Prioritization"]
+    },
+    {
+      "name": "Technical Skills",
+      "level": "Advanced",
+      "keywords": ["API Design", "SQL", "Git", "JIRA", "Confluence"]
+    },
+    {
+      "name": "Analytics",
+      "level": "Advanced",
+      "keywords": ["Product Analytics", "A/B Testing", "Data Visualization", "Market Research", "User Research"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Mandarin",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Developer Platform Redesign",
+      "description": "Complete overhaul of developer platform and documentation",
+      "highlights": [
+        "Increased developer satisfaction score from 7.2 to 9.1",
+        "Reduced support tickets by 60%",
+        "Won Best Developer Tool 2022"
+      ],
+      "keywords": ["Developer Experience", "Documentation", "API Design"],
+      "url": "https://cloudtech.com/platform"
+    }
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "basics": {
+    "name": "Olivia Chen",
+    "label": "UI Developer",
+    "image": "",
+    "email": "olivia.chen@example.com",
+    "phone": "(555) 234-5678",
+    "url": "https://oliviachen.design",
+    "summary": "Creative UI Developer with 5+ years of experience crafting beautiful and intuitive user interfaces. Expertise in modern frontend frameworks, responsive design, and animation. Passionate about creating accessible and performant web applications with pixel-perfect attention to detail.",
+    "location": {
+      "address": "567 Design Street",
+      "postalCode": "94105",
+      "city": "San Francisco",
+      "countryCode": "US",
+      "region": "California"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "oliviachen",
+        "url": "https://linkedin.com/in/oliviachen"
+      },
+      {
+        "network": "GitHub",
+        "username": "olivia-ui",
+        "url": "https://github.com/olivia-ui"
+      },
+      {
+        "network": "Dribbble",
+        "username": "oliviachen",
+        "url": "https://dribbble.com/oliviachen"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Design Systems Co",
+      "position": "Senior UI Developer",
+      "url": "https://designsystems.co",
+      "startDate": "2021-02",
+      "endDate": "",
+      "summary": "Leading UI development for enterprise design system",
+      "highlights": [
+        "Developed and maintained component library used by 100+ internal teams",
+        "Reduced design implementation time by 60% through reusable components",
+        "Improved accessibility compliance to WCAG 2.1 AA standards",
+        "Mentored 3 junior developers in UI development best practices"
+      ]
+    },
+    {
+      "name": "Creative Tech Agency",
+      "position": "UI Developer",
+      "url": "https://creativetech.com",
+      "startDate": "2018-06",
+      "endDate": "2021-01",
+      "summary": "Developed user interfaces for client projects",
+      "highlights": [
+        "Built responsive interfaces for 20+ client websites",
+        "Implemented complex animations improving user engagement by 40%",
+        "Created mobile-first design system reducing development time by 50%"
+      ]
+    },
+    {
+      "name": "WebDesign Studio",
+      "position": "Frontend Developer",
+      "url": "https://webdesignstudio.com",
+      "startDate": "2017-03",
+      "endDate": "2018-05",
+      "summary": "Frontend development for web applications",
+      "highlights": [
+        "Developed responsive layouts for e-commerce websites",
+        "Improved site performance scores by 30%",
+        "Implemented A/B testing framework for UI components"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Academy of Art University",
+      "area": "Web Design & New Media",
+      "studyType": "Bachelor of Fine Arts",
+      "startDate": "2013-09",
+      "endDate": "2017-05",
+      "score": "3.9",
+      "courses": ["User Interface Design", "Web Development", "Typography", "Interactive Design"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Frontend Development",
+      "level": "Master",
+      "keywords": ["HTML5", "CSS3", "JavaScript", "TypeScript", "React"]
+    },
+    {
+      "name": "UI Technologies",
+      "level": "Master",
+      "keywords": ["Styled Components", "Tailwind CSS", "Framer Motion", "CSS Grid", "Flexbox"]
+    },
+    {
+      "name": "Design Tools",
+      "level": "Advanced",
+      "keywords": ["Figma", "Sketch", "Adobe XD", "Storybook", "Zeplin"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Mandarin",
+      "fluency": "Native speaker"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Component Library",
+      "description": "Built comprehensive UI component library",
+      "highlights": ["50+ reusable components", "98% test coverage", "Used by 1000+ developers"],
+      "keywords": ["React", "TypeScript", "Storybook"],
+      "url": "https://github.com/olivia-ui/component-library"
+    },
+    {
+      "name": "Animation System",
+      "description": "Developed reusable animation library",
+      "highlights": [
+        "Reduced animation development time by 70%",
+        "Created custom easing functions",
+        "Built visual animation editor"
+      ],
+      "keywords": ["Framer Motion", "CSS Animations", "JavaScript"],
+      "url": "https://github.com/olivia-ui/animation-system"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Advanced CSS and Sass",
+      "issuer": "Udemy",
+      "date": "2021-03"
+    },
+    {
+      "name": "Web Animation",
+      "issuer": "Frontend Masters",
+      "date": "2020-08"
+    }
+  ]
+}

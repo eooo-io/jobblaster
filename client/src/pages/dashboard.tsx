@@ -13,6 +13,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import type { JobPosting, Resume } from "@shared/schema";
 import { Bell, Printer } from "lucide-react";
 import { useState } from "react";
@@ -23,6 +24,7 @@ export default function Dashboard() {
   const [selectedTheme, setSelectedTheme] = useState<string>("modern");
   const [showPrintPreview, setShowPrintPreview] = useState(false);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   return (
     <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
@@ -59,6 +61,9 @@ export default function Dashboard() {
                   <option value="modern">Modern</option>
                   <option value="tech1">Tech1</option>
                   <option value="tech2">Tech2</option>
+                  <option value="paper-plus-plus">Paper++</option>
+                  <option value="lucide">Lucide</option>
+                  <option value="clean-de">Clean-DE</option>
                   <option value="debug">Debug</option>
                 </select>
               </div>
@@ -108,6 +113,9 @@ export default function Dashboard() {
                   <option value="modern">Modern</option>
                   <option value="tech1">Tech1</option>
                   <option value="tech2">Tech2</option>
+                  <option value="paper-plus-plus">Paper++</option>
+                  <option value="lucide">Lucide</option>
+                  <option value="clean-de">Clean-DE</option>
                   <option value="debug">Debug</option>
                 </select>
               </div>
@@ -138,19 +146,24 @@ export default function Dashboard() {
 
         {/* Content Grid */}
         <div className="flex-1 overflow-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6 p-4 lg:p-6 min-h-0">
-            <div className="min-h-0 overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 p-4 lg:p-6 min-h-0">
+            {/* Resume Editor and JSON Editor - 2/3 width */}
+            <div className="lg:col-span-2 min-h-0 overflow-hidden">
               <ResumeEditor selectedResume={selectedResume} onResumeSelect={setSelectedResume} />
             </div>
-            <div className="min-h-0 overflow-hidden">
-              <JobAnalyzer
-                selectedJob={selectedJob}
-                onJobSelect={setSelectedJob}
-                selectedResume={selectedResume}
-              />
-            </div>
-            <div className="min-h-0 overflow-hidden xl:block lg:col-span-2 xl:col-span-1">
-              <JobSearch />
+
+            {/* Right Column - Job Search and Analysis - 1/3 width */}
+            <div className="min-h-0 overflow-hidden flex flex-col gap-4 lg:gap-6">
+              <div className="flex-none">
+                <JobSearch />
+              </div>
+              <div className="flex-1">
+                <JobAnalyzer
+                  selectedJob={selectedJob}
+                  onJobSelect={setSelectedJob}
+                  selectedResume={selectedResume}
+                />
+              </div>
             </div>
           </div>
 
@@ -176,6 +189,7 @@ export default function Dashboard() {
                     key={selectedResume?.id || "no-resume"}
                     resume={selectedResume}
                     theme={selectedTheme}
+                    user={user}
                   />
                 </div>
               </div>
@@ -196,35 +210,26 @@ export default function Dashboard() {
       {/* Print Preview Modal */}
       <Dialog open={showPrintPreview} onOpenChange={setShowPrintPreview}>
         <DialogContent className="max-w-none w-screen h-screen p-0 m-0 bg-gray-100 dark:bg-gray-900">
-          <DialogHeader className="sr-only">
-            <DialogTitle>Print Preview - US Legal Format</DialogTitle>
+          <DialogHeader>
+            <DialogTitle>
+              Print Preview - {selectedTheme === "clean-de" ? "A4 Format" : "US Legal Format"}
+            </DialogTitle>
             <DialogDescription>
-              Preview how your resume will look when printed on US Legal paper (8.5" × 14")
+              {selectedResume?.name || "Resume"} •{" "}
+              {selectedTheme === "clean-de" ? "210mm × 297mm" : '8.5" × 14"'} • Ready to print
             </DialogDescription>
           </DialogHeader>
 
           <div className="flex flex-col h-full">
-            {/* Modal Header */}
-            <div className="flex items-center justify-between p-3 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                  Print Preview - US Legal Format
-                </h2>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {selectedResume?.name || "Resume"} • 8.5" × 14" • Ready to print
-                </p>
-              </div>
-            </div>
-
             {/* Print Preview Content - Always Light Mode */}
             <div className="flex-1 overflow-auto bg-gray-100 p-2">
-              {/* US Legal Paper Size Container with Page Breaks */}
+              {/* Paper Size Container with Page Breaks */}
               <div
                 className="bg-white shadow-xl transform origin-top scale-50 sm:scale-75 md:scale-90 lg:scale-100 mx-auto"
                 style={{
-                  width: "8.5in",
-                  minHeight: "14in",
-                  marginBottom: "40px", // Extra space for mobile scaling
+                  width: selectedTheme === "clean-de" ? "210mm" : "8.5in",
+                  minHeight: selectedTheme === "clean-de" ? "297mm" : "14in",
+                  marginBottom: "40px",
                   padding: "0.5in",
                   fontSize: "10pt",
                   lineHeight: "1.3",
@@ -254,6 +259,8 @@ export default function Dashboard() {
                     resume={selectedResume}
                     theme={selectedTheme}
                     forceLightMode={true}
+                    showDownloadButton={false}
+                    user={user}
                   />
                 </div>
               </div>
@@ -262,7 +269,9 @@ export default function Dashboard() {
             {/* Print Actions Footer */}
             <div className="flex flex-col sm:flex-row items-center justify-between p-3 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 gap-3">
               <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                <span>📄 US Legal (8.5" × 14")</span>
+                <span>
+                  📄 {selectedTheme === "clean-de" ? "A4 (210mm × 297mm)" : 'US Legal (8.5" × 14")'}
+                </span>
                 <span>
                   🎨 {selectedTheme.charAt(0).toUpperCase() + selectedTheme.slice(1)} Theme
                 </span>

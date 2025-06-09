@@ -1,0 +1,155 @@
+{
+  "basics": {
+    "name": "Rachel Thompson",
+    "label": "Digital Marketing Manager",
+    "image": "",
+    "email": "rachel.thompson@example.com",
+    "phone": "(555) 567-8901",
+    "url": "https://rachelthompson.marketing",
+    "summary": "Results-driven Digital Marketing Manager with 8+ years of experience in developing and executing comprehensive marketing strategies. Proven track record of increasing brand visibility, driving user acquisition, and optimizing conversion rates. Expert in SEO, content marketing, and marketing analytics.",
+    "location": {
+      "address": "234 Marketing Drive",
+      "postalCode": "60601",
+      "city": "Chicago",
+      "countryCode": "US",
+      "region": "Illinois"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "rachelthompson",
+        "url": "https://linkedin.com/in/rachelthompson"
+      },
+      {
+        "network": "Twitter",
+        "username": "rachel_markets",
+        "url": "https://twitter.com/rachel_markets"
+      },
+      {
+        "network": "Instagram",
+        "username": "rachelthompson_marketing",
+        "url": "https://instagram.com/rachelthompson_marketing"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Digital Growth Agency",
+      "position": "Senior Digital Marketing Manager",
+      "url": "https://digitalgrowth.com",
+      "startDate": "2020-04",
+      "endDate": "",
+      "summary": "Leading digital marketing strategies for Fortune 500 clients",
+      "highlights": [
+        "Increased client ROI by average of 150% through optimized marketing campaigns",
+        "Managed $5M+ annual marketing budget across multiple channels",
+        "Led team of 8 marketing specialists and 3 content creators",
+        "Implemented attribution modeling increasing conversion accuracy by 40%"
+      ]
+    },
+    {
+      "name": "MarketBoost Inc",
+      "position": "Digital Marketing Manager",
+      "url": "https://marketboost.com",
+      "startDate": "2017-06",
+      "endDate": "2020-03",
+      "summary": "Managed B2B marketing campaigns and strategy",
+      "highlights": [
+        "Grew organic traffic by 200% through SEO and content optimization",
+        "Launched successful ABM program resulting in 45% increase in enterprise deals",
+        "Reduced customer acquisition cost by 35% through channel optimization"
+      ]
+    },
+    {
+      "name": "TechStart Marketing",
+      "position": "Marketing Specialist",
+      "url": "https://techstartmarketing.com",
+      "startDate": "2015-03",
+      "endDate": "2017-05",
+      "summary": "Executed digital marketing campaigns for tech startups",
+      "highlights": [
+        "Managed social media presence growing followers from 10K to 100K",
+        "Created content strategy increasing blog traffic by 300%",
+        "Implemented marketing automation reducing response time by 60%"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Northwestern University",
+      "area": "Marketing",
+      "studyType": "Master of Science",
+      "startDate": "2013-09",
+      "endDate": "2015-05",
+      "score": "3.9",
+      "courses": ["Digital Marketing Strategy", "Marketing Analytics", "Brand Management", "Consumer Behavior"]
+    },
+    {
+      "institution": "University of Illinois",
+      "area": "Business Administration",
+      "studyType": "Bachelor of Science",
+      "startDate": "2009-09",
+      "endDate": "2013-05",
+      "score": "3.7",
+      "courses": ["Marketing Fundamentals", "Business Strategy", "Market Research"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Digital Marketing",
+      "level": "Master",
+      "keywords": ["SEO/SEM", "Content Marketing", "Social Media Marketing", "Email Marketing", "Marketing Automation"]
+    },
+    {
+      "name": "Analytics",
+      "level": "Advanced",
+      "keywords": [
+        "Google Analytics",
+        "Marketing Attribution",
+        "A/B Testing",
+        "Data Visualization",
+        "Campaign Analysis"
+      ]
+    },
+    {
+      "name": "Tools & Platforms",
+      "level": "Advanced",
+      "keywords": ["HubSpot", "Salesforce", "Google Ads", "Facebook Ads", "Marketo"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Global Brand Expansion Campaign",
+      "description": "Led international market entry strategy for major tech client",
+      "highlights": [
+        "Achieved 200% ROI in first year",
+        "Expanded to 5 new markets",
+        "Won Marketing Excellence Award 2022"
+      ],
+      "keywords": ["International Marketing", "Brand Strategy", "Market Entry"],
+      "url": "https://digitalgrowth.com/case-studies/global-expansion"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Google Analytics Certification",
+      "issuer": "Google",
+      "date": "2022-01"
+    },
+    {
+      "name": "HubSpot Inbound Marketing",
+      "issuer": "HubSpot Academy",
+      "date": "2021-06"
+    }
+  ]
+}

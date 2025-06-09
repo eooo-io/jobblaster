@@ -1,0 +1,168 @@
+{
+  "basics": {
+    "name": "Daniel Morgan",
+    "label": "Senior Security Engineer",
+    "image": "",
+    "email": "daniel.morgan@example.com",
+    "phone": "(555) 567-8901",
+    "url": "https://danielmorgan.security",
+    "summary": "Experienced Security Engineer with 8+ years of expertise in information security, vulnerability assessment, and security architecture. Strong background in implementing security controls, conducting penetration testing, and developing security policies. Proven track record of protecting enterprise systems and data from cyber threats.",
+    "location": {
+      "address": "456 Security Lane",
+      "postalCode": "20170",
+      "city": "Herndon",
+      "countryCode": "US",
+      "region": "Virginia"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "danielmorgan",
+        "url": "https://linkedin.com/in/danielmorgan"
+      },
+      {
+        "network": "GitHub",
+        "username": "dmorgan-security",
+        "url": "https://github.com/dmorgan-security"
+      },
+      {
+        "network": "Twitter",
+        "username": "daniel_security",
+        "url": "https://twitter.com/daniel_security"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "CyberDefense Solutions",
+      "position": "Senior Security Engineer",
+      "url": "https://cyberdefense.com",
+      "startDate": "2020-01",
+      "endDate": "",
+      "summary": "Leading security engineering and architecture initiatives",
+      "highlights": [
+        "Architected and implemented zero-trust security framework reducing security incidents by 80%",
+        "Led team of 5 security engineers in implementing enterprise-wide security controls",
+        "Developed automated security testing framework reducing assessment time by 60%",
+        "Managed security incident response for Fortune 500 clients"
+      ]
+    },
+    {
+      "name": "SecureNet Technologies",
+      "position": "Security Engineer",
+      "url": "https://securenet.com",
+      "startDate": "2017-03",
+      "endDate": "2019-12",
+      "summary": "Implemented security solutions and conducted assessments",
+      "highlights": [
+        "Conducted 50+ penetration tests identifying critical vulnerabilities",
+        "Implemented SIEM solution improving threat detection by 70%",
+        "Developed security policies and procedures for SOC 2 compliance"
+      ]
+    },
+    {
+      "name": "TechSafe Corp",
+      "position": "Information Security Analyst",
+      "url": "https://techsafe.com",
+      "startDate": "2015-06",
+      "endDate": "2017-02",
+      "summary": "Performed security analysis and vulnerability assessments",
+      "highlights": [
+        "Performed vulnerability assessments and security audits",
+        "Implemented security monitoring tools and alerts",
+        "Assisted in incident response and forensics investigations"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Georgia Institute of Technology",
+      "area": "Cybersecurity",
+      "studyType": "Master of Science",
+      "startDate": "2013-09",
+      "endDate": "2015-05",
+      "score": "3.9",
+      "courses": ["Network Security", "Cryptography", "Security Architecture", "Digital Forensics"]
+    },
+    {
+      "institution": "Virginia Tech",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2009-09",
+      "endDate": "2013-05",
+      "score": "3.7",
+      "courses": ["Information Security", "Computer Networks", "Operating Systems"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Security Technologies",
+      "level": "Master",
+      "keywords": ["Penetration Testing", "SIEM", "IDS/IPS", "Firewall Management", "Vulnerability Assessment"]
+    },
+    {
+      "name": "Tools & Platforms",
+      "level": "Advanced",
+      "keywords": ["Nessus", "Metasploit", "Wireshark", "Burp Suite", "Splunk"]
+    },
+    {
+      "name": "Security Standards",
+      "level": "Advanced",
+      "keywords": ["ISO 27001", "NIST", "SOC 2", "PCI DSS", "HIPAA"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Russian",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Zero Trust Implementation",
+      "description": "Led enterprise-wide zero trust security implementation",
+      "highlights": ["Reduced security incidents by 80%", "Implemented microsegmentation", "Enhanced access controls"],
+      "keywords": ["Zero Trust", "Network Security", "Access Control"]
+    },
+    {
+      "name": "Security Automation Framework",
+      "description": "Developed automated security testing and response system",
+      "highlights": [
+        "Reduced response time by 70%",
+        "Automated 80% of security tests",
+        "Integrated with CI/CD pipeline"
+      ],
+      "keywords": ["Security Automation", "DevSecOps", "CI/CD Security"]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Certified Information Systems Security Professional (CISSP)",
+      "issuer": "ISC²",
+      "date": "2019-04"
+    },
+    {
+      "name": "Certified Ethical Hacker (CEH)",
+      "issuer": "EC-Council",
+      "date": "2018-06"
+    },
+    {
+      "name": "Offensive Security Certified Professional (OSCP)",
+      "issuer": "Offensive Security",
+      "date": "2017-08"
+    }
+  ],
+  "publications": [
+    {
+      "name": "Modern Zero Trust Architecture",
+      "publisher": "Security Weekly",
+      "releaseDate": "2022-03",
+      "url": "https://securityweekly.com/zerotrust",
+      "summary": "Comprehensive guide to implementing zero trust security architecture"
+    }
+  ]
+}

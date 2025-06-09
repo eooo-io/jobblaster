@@ -1,0 +1,136 @@
+{
+  "basics": {
+    "name": "Sarah Martinez",
+    "label": "Lead UX Designer",
+    "image": "",
+    "email": "sarah.martinez@example.com",
+    "phone": "(555) 234-5678",
+    "url": "https://sarahmartinez.design",
+    "summary": "Creative and user-focused Lead UX Designer with 8+ years of experience crafting intuitive digital experiences. Passionate about accessibility and inclusive design. Proven track record of leading design teams and delivering impactful solutions for enterprise clients.",
+    "location": {
+      "address": "456 Design Street",
+      "postalCode": "02210",
+      "city": "Boston",
+      "countryCode": "US",
+      "region": "Massachusetts"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "sarahmartinez",
+        "url": "https://linkedin.com/in/sarahmartinez"
+      },
+      {
+        "network": "Dribbble",
+        "username": "sarahm_design",
+        "url": "https://dribbble.com/sarahm_design"
+      },
+      {
+        "network": "Behance",
+        "username": "sarahmartinez",
+        "url": "https://behance.net/sarahmartinez"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "DesignFirst Agency",
+      "position": "Lead UX Designer",
+      "url": "https://designfirst.com",
+      "startDate": "2020-03",
+      "endDate": "",
+      "summary": "Leading UX design team for enterprise clients",
+      "highlights": [
+        "Lead a team of 6 designers across multiple high-profile projects",
+        "Increased client satisfaction scores by 35% through improved design processes",
+        "Implemented design system that reduced design time by 40%",
+        "Mentored junior designers and established design critique program"
+      ]
+    },
+    {
+      "name": "InnovateTech",
+      "position": "Senior UX Designer",
+      "url": "https://innovatetech.com",
+      "startDate": "2017-06",
+      "endDate": "2020-02",
+      "summary": "Led UX design for flagship product",
+      "highlights": [
+        "Redesigned core product interface resulting in 45% increase in user engagement",
+        "Established user research program and conducted over 200 user interviews",
+        "Created accessibility guidelines improving WCAG compliance"
+      ]
+    },
+    {
+      "name": "CreativeWorks Studio",
+      "position": "UX Designer",
+      "url": "https://creativeworks.com",
+      "startDate": "2015-01",
+      "endDate": "2017-05",
+      "summary": "Designed user experiences for mobile applications",
+      "highlights": [
+        "Designed interfaces for 15+ iOS and Android applications",
+        "Reduced user error rates by 60% through iterative design",
+        "Collaborated with development team to ensure design feasibility"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Rhode Island School of Design",
+      "area": "Graphic Design",
+      "studyType": "Bachelor of Fine Arts",
+      "startDate": "2011-09",
+      "endDate": "2015-05",
+      "score": "3.9",
+      "courses": ["User Interface Design", "Typography", "Interactive Design", "Design Theory"]
+    },
+    {
+      "institution": "General Assembly",
+      "area": "User Experience Design",
+      "studyType": "Certificate",
+      "startDate": "2015-01",
+      "endDate": "2015-03",
+      "courses": ["UX Research Methods", "Interaction Design", "Prototyping"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Design Tools",
+      "level": "Master",
+      "keywords": ["Figma", "Sketch", "Adobe XD", "InVision", "Principle"]
+    },
+    {
+      "name": "Research & Testing",
+      "level": "Master",
+      "keywords": ["User Research", "Usability Testing", "A/B Testing", "Analytics", "Heatmapping"]
+    },
+    {
+      "name": "Design Methods",
+      "level": "Master",
+      "keywords": ["Design Thinking", "Information Architecture", "Wireframing", "Prototyping", "Design Systems"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "HealthCare Portal Redesign",
+      "description": "Complete redesign of major healthcare provider's patient portal",
+      "highlights": [
+        "Increased patient engagement by 65%",
+        "Reduced support tickets by 40%",
+        "Won Healthcare UX Design Award 2022"
+      ],
+      "keywords": ["Healthcare", "Accessibility", "Mobile-first"],
+      "url": "https://sarahmartinez.design/healthcare-portal"
+    }
+  ]
+}

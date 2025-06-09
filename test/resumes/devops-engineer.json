@@ -1,0 +1,150 @@
+{
+  "basics": {
+    "name": "Michael O'Connor",
+    "label": "Senior DevOps Engineer",
+    "image": "",
+    "email": "michael.oconnor@example.com",
+    "phone": "(555) 789-0123",
+    "url": "https://michaeloconnor.tech",
+    "summary": "Experienced DevOps Engineer with 6+ years of expertise in cloud infrastructure, automation, and CI/CD pipelines. Strong background in containerization, infrastructure as code, and site reliability engineering. Proven track record of improving deployment efficiency and system reliability.",
+    "location": {
+      "address": "890 Cloud Avenue",
+      "postalCode": "98052",
+      "city": "Redmond",
+      "countryCode": "US",
+      "region": "Washington"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "michaeloconnor",
+        "url": "https://linkedin.com/in/michaeloconnor"
+      },
+      {
+        "network": "GitHub",
+        "username": "moconnor-devops",
+        "url": "https://github.com/moconnor-devops"
+      },
+      {
+        "network": "Stack Overflow",
+        "username": "moconnor",
+        "url": "https://stackoverflow.com/users/moconnor"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "CloudScale Technologies",
+      "position": "Senior DevOps Engineer",
+      "url": "https://cloudscale.tech",
+      "startDate": "2020-08",
+      "endDate": "",
+      "summary": "Leading DevOps practices and cloud infrastructure management",
+      "highlights": [
+        "Architected and implemented multi-region Kubernetes clusters supporting 1000+ microservices",
+        "Reduced deployment time by 75% through CI/CD pipeline optimization",
+        "Implemented infrastructure as code using Terraform reducing provisioning time by 90%",
+        "Achieved 99.99% uptime for critical production systems"
+      ]
+    },
+    {
+      "name": "TechOps Solutions",
+      "position": "DevOps Engineer",
+      "url": "https://techops.com",
+      "startDate": "2018-03",
+      "endDate": "2020-07",
+      "summary": "Managed cloud infrastructure and automation",
+      "highlights": [
+        "Migrated 50+ applications to containerized microservices architecture",
+        "Implemented automated disaster recovery reducing RTO from 4 hours to 30 minutes",
+        "Created monitoring and alerting system improving incident response time by 60%"
+      ]
+    },
+    {
+      "name": "DataSys Corp",
+      "position": "Systems Administrator",
+      "url": "https://datasys.com",
+      "startDate": "2016-06",
+      "endDate": "2018-02",
+      "summary": "Managed on-premise and cloud infrastructure",
+      "highlights": [
+        "Led migration from on-premise to AWS cloud infrastructure",
+        "Implemented configuration management using Ansible",
+        "Reduced system downtime by 70% through improved monitoring"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Washington",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2012-09",
+      "endDate": "2016-05",
+      "score": "3.8",
+      "courses": ["Distributed Systems", "Cloud Computing", "Network Security", "Systems Programming"]
+    }
+  ],
+  "skills": [
+    {
+      "name": "Cloud Platforms",
+      "level": "Master",
+      "keywords": ["AWS", "Google Cloud", "Azure", "OpenStack", "VMware"]
+    },
+    {
+      "name": "DevOps Tools",
+      "level": "Master",
+      "keywords": ["Kubernetes", "Docker", "Jenkins", "GitLab CI", "Terraform"]
+    },
+    {
+      "name": "Monitoring & Security",
+      "level": "Advanced",
+      "keywords": ["Prometheus", "Grafana", "ELK Stack", "Vault", "Security Automation"]
+    },
+    {
+      "name": "Programming",
+      "level": "Advanced",
+      "keywords": ["Python", "Bash", "Go", "Ruby", "JavaScript"]
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "German",
+      "fluency": "Professional working proficiency"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Infrastructure Automation Framework",
+      "description": "Developed comprehensive infrastructure automation framework",
+      "highlights": [
+        "Reduced infrastructure deployment time by 85%",
+        "Implemented by 20+ teams across organization",
+        "Open-sourced with 500+ GitHub stars"
+      ],
+      "keywords": ["Infrastructure as Code", "Automation", "DevOps"],
+      "url": "https://github.com/moconnor-devops/infra-automation"
+    }
+  ],
+  "certificates": [
+    {
+      "name": "AWS Solutions Architect Professional",
+      "issuer": "Amazon Web Services",
+      "date": "2022-03"
+    },
+    {
+      "name": "Certified Kubernetes Administrator",
+      "issuer": "Cloud Native Computing Foundation",
+      "date": "2021-08"
+    },
+    {
+      "name": "Google Cloud Professional DevOps Engineer",
+      "issuer": "Google Cloud",
+      "date": "2021-04"
+    }
+  ]
+}
