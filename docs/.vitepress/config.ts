@@ -7,6 +7,8 @@ export default defineConfig({
     "An Open-Source Resume/CV builder with AI assisted job matching, scoring and custom resume+cover letter creations.",
   base: "/jobblaster/",
   ignoreDeadLinks: true,
+  lastUpdated: true,
+  cleanUrls: true,
   head: [
     [
       "link",
