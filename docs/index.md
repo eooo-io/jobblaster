@@ -20,29 +20,29 @@ hero:
       link: https://github.com/eooo-io/jobblaster
 
 features:
-  - icon: 📝
+  - icon: <i class="fa-solid fa-file-lines feature-icon"></i>
     title: Smart Resume Builder
     details:
       Create professional resumes with AI-assisted content suggestions and
       multiple templates
-  - icon: 🎯
+  - icon: <i class="fa-solid fa-bullseye feature-icon"></i>
     title: Intelligent Job Matching
     details:
       Find jobs that match your skills and experience with our advanced matching
       algorithm
-  - icon: ✉️
+  - icon: <i class="fa-solid fa-envelope feature-icon"></i>
     title: Cover Letter Generator
     details:
       Generate customized cover letters using AI to match job requirements
-  - icon: 🔄
+  - icon: <i class="fa-solid fa-list-check feature-icon"></i>
     title: Application Tracking
     details: Keep track of your job applications and their status in one place
-  - icon: 🎨
+  - icon: <i class="fa-solid fa-palette feature-icon"></i>
     title: Multiple Templates
     details:
       Choose from a variety of professional templates for both resumes and cover
       letters
-  - icon: 🌐
+  - icon: <i class="fa-solid fa-globe feature-icon"></i>
     title: Multi-Language Support
     details:
       Create resumes in multiple languages and formats for international

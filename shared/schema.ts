@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -9,7 +10,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 // Session storage table for authentication
@@ -18,57 +19,89 @@ export const sessions = pgTable(
   {
     sid: varchar("sid").primaryKey(),
     sess: jsonb("sess").notNull(),
-    expire: timestamp("expire").notNull(),
+    expire: timestamp("expire", { mode: "date" }).notNull(),
   },
-  (table) => [index("IDX_session_expire").on(table.expire)]
+  (table) => ({
+    expireIdx: index("IDX_session_expire").on(table.expire),
+  })
 );
 
+// Users table
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
+  username: text("username").notNull(),
   password: text("password").notNull(),
   email: text("email"),
-  profilePicture: text("profile_picture"), // URL or base64 encoded image
-  dateOfBirth: text("date_of_birth").default(""), // Date of birth for German resume format
-  openaiApiKey: text("openai_api_key"), // User's personal OpenAI API key
-  // Job Connector API Keys
-  adzunaAppId: text("adzuna_app_id"), // Adzuna App ID
-  adzunaApiKey: text("adzuna_api_key"), // Adzuna API Key
-  // Future connector configurations
+  dateOfBirth: text("date_of_birth"),
+  profilePicture: text("profile_picture"),
+  openaiApiKey: text("openai_api_key"),
+  adzunaAppId: text("adzuna_app_id"),
+  adzunaApiKey: text("adzuna_api_key"),
   indeedApiKey: text("indeed_api_key"),
-  glassdoorApiKey: text("glassdoor_api_key"),
   linkedinApiKey: text("linkedin_api_key"),
-  // User roles and permissions
-  isAdmin: boolean("is_admin").default(false),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
+// Resumes table
 export const resumes = pgTable("resumes", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
   name: text("name").notNull(),
-  jsonData: jsonb("json_data").notNull(),
-  theme: text("theme").notNull().default("modern"),
-  isDefault: boolean("is_default").default(false),
-  filename: text("filename"), // Original filename when uploaded
-  createdAt: timestamp("created_at").defaultNow(),
+  theme: text("theme").notNull(),
+  userId: integer("user_id").references(() => users.id),
+  jsonData: jsonb("json_data"),
+  isDefault: boolean("is_default"),
+  filename: text("filename"),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
+// Jobs table
 export const jobPostings = pgTable("job_postings", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id").references(() => users.id),
   title: text("title").notNull(),
   company: text("company").notNull(),
   description: text("description").notNull(),
+  location: text("location"),
+  userId: integer("user_id").references(() => users.id),
   parsedData: jsonb("parsed_data"),
   techStack: text("tech_stack").array(),
   softSkills: text("soft_skills").array(),
   experienceYears: text("experience_years"),
-  location: text("location"),
   employmentType: text("employment_type"),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
+// Applications table
+export const applications = pgTable("applications", {
+  id: serial("id").primaryKey(),
+  status: text("status"),
+  location: text("location"),
+  company: text("company").notNull(),
+  jobTitle: text("job_title").notNull(),
+  userId: integer("user_id").references(() => users.id),
+  resumeId: integer("resume_id").references(() => resumes.id),
+  jobId: integer("job_id").references(() => jobPostings.id),
+  coverLetterId: integer("cover_letter_id").references(() => coverLetters.id),
+  notes: text("notes"),
+  followUpDate: timestamp("follow_up_date", { mode: "date" }),
+  salary: text("salary"),
+  contactInfo: text("contact_info"),
+  appliedAt: timestamp("applied_at", { mode: "date" }),
+  updatedAt: timestamp("updated_at", { mode: "date" }),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+// Cover Letters table
+export const coverLetters = pgTable("cover_letters", {
+  id: serial("id").primaryKey(),
+  content: text("content").notNull(),
+  resumeId: integer("resume_id").references(() => resumes.id),
+  jobId: integer("job_id").references(() => jobPostings.id),
+  tone: text("tone").notNull(),
+  focus: text("focus").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
+});
+
+// Match Scores table
 export const matchScores = pgTable("match_scores", {
   id: serial("id").primaryKey(),
   resumeId: integer("resume_id").references(() => resumes.id),
@@ -79,176 +112,181 @@ export const matchScores = pgTable("match_scores", {
   softSkillsScore: integer("soft_skills_score").notNull(),
   locationScore: integer("location_score").notNull(),
   recommendations: text("recommendations").array(),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
-export const coverLetters = pgTable("cover_letters", {
-  id: serial("id").primaryKey(),
-  resumeId: integer("resume_id").references(() => resumes.id),
-  jobId: integer("job_id").references(() => jobPostings.id),
-  content: text("content").notNull(),
-  tone: text("tone").notNull(),
-  focus: text("focus").notNull(),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
-export const applications = pgTable("applications", {
-  id: serial("id").primaryKey(),
-  jobTitle: varchar("job_title", { length: 255 }).notNull(),
-  shortDescription: text("short_description"),
-  fullText: text("full_text"),
-  company: varchar("company", { length: 255 }).notNull(),
-  listingUrl: varchar("listing_url", { length: 500 }),
-  appliedOn: varchar("applied_on", { length: 10 }),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-export const applicationNotes = pgTable("application_notes", {
-  id: serial("id").primaryKey(),
-  applicationId: integer("application_id")
-    .notNull()
-    .references(() => applications.id),
-  content: text("content").notNull(),
-  noteType: varchar("note_type", { length: 50 }).default("general"), // general, interview, follow_up, rejection, etc.
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
+// External API Logs table
 export const externalLogs = pgTable("external_logs", {
   id: serial("id").primaryKey(),
+  method: text("method").notNull(),
   userId: integer("user_id")
-    .notNull()
-    .references(() => users.id),
-  service: varchar("service", { length: 50 }).notNull(), // openai, adzuna, etc.
-  endpoint: varchar("endpoint", { length: 255 }).notNull(),
-  method: varchar("method", { length: 10 }).notNull(), // GET, POST, etc.
-  requestData: jsonb("request_data"), // Request payload
-  responseStatus: integer("response_status"), // HTTP status code
-  responseData: jsonb("response_data"), // Response data
-  responseTime: integer("response_time"), // Response time in milliseconds
+    .references(() => users.id)
+    .notNull(),
+  service: text("service").notNull(),
+  endpoint: text("endpoint").notNull(),
+  requestData: jsonb("request_data"),
+  responseStatus: integer("response_status"),
+  responseData: jsonb("response_data"),
+  responseTime: integer("response_time"),
   success: boolean("success").notNull(),
   errorMessage: text("error_message"),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
+// AI Templates table
 export const aiTemplates = pgTable("ai_templates", {
   id: serial("id").primaryKey(),
-  userId: integer("user_id")
-    .notNull()
-    .references(() => users.id),
-  name: varchar("name", { length: 100 }).notNull(),
-  description: varchar("description", { length: 500 }),
-  provider: varchar("provider", { length: 50 }).notNull(), // openai, anthropic, xai, etc.
-  category: varchar("category", { length: 50 }).notNull(), // job_analysis, resume_analysis, etc.
-  systemPrompt: text("system_prompt").notNull(),
-  extractionInstruction: text("extraction_instruction").notNull(),
-  outputFormat: jsonb("output_format").notNull(),
-  temperature: integer("temperature").notNull().default(20), // stored as integer * 100 for precision
-  maxTokens: integer("max_tokens").notNull().default(1024),
-  model: varchar("model", { length: 50 }), // gpt-4o, claude-3-5-sonnet, grok-1, etc.
-  isDefault: boolean("is_default").default(false),
-  isActive: boolean("is_active").default(true),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull(),
+  prompt: text("prompt").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
 
+// Template Assignments table
 export const templateAssignments = pgTable("template_assignments", {
   id: serial("id").primaryKey(),
   userId: integer("user_id")
-    .notNull()
-    .references(() => users.id),
-  category: varchar("category", { length: 50 }).notNull(), // job_analysis, resume_analysis, cover_letter, match_scoring, general
-  templateId: integer("template_id").references(() => aiTemplates.id),
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
+    .references(() => users.id)
+    .notNull(),
+  templateId: integer("template_id")
+    .references(() => aiTemplates.id)
+    .notNull(),
+  category: text("category").notNull(),
+  createdAt: timestamp("created_at", { mode: "date" }).defaultNow(),
 });
+
+// Relations
+export const usersRelations = relations(users, ({ many }) => ({
+  resumes: many(resumes),
+  jobPostings: many(jobPostings),
+  applications: many(applications),
+  externalLogs: many(externalLogs),
+  templateAssignments: many(templateAssignments),
+}));
+
+export const resumesRelations = relations(resumes, ({ one, many }) => ({
+  user: one(users, {
+    fields: [resumes.userId],
+    references: [users.id],
+  }),
+  matchScores: many(matchScores),
+  coverLetters: many(coverLetters),
+  applications: many(applications),
+}));
+
+export const jobPostingsRelations = relations(jobPostings, ({ one, many }) => ({
+  user: one(users, {
+    fields: [jobPostings.userId],
+    references: [users.id],
+  }),
+  matchScores: many(matchScores),
+  coverLetters: many(coverLetters),
+  applications: many(applications),
+}));
+
+export const matchScoresRelations = relations(matchScores, ({ one }) => ({
+  resume: one(resumes, {
+    fields: [matchScores.resumeId],
+    references: [resumes.id],
+  }),
+  job: one(jobPostings, {
+    fields: [matchScores.jobId],
+    references: [jobPostings.id],
+  }),
+}));
+
+export const coverLettersRelations = relations(coverLetters, ({ one, many }) => ({
+  resume: one(resumes, {
+    fields: [coverLetters.resumeId],
+    references: [resumes.id],
+  }),
+  job: one(jobPostings, {
+    fields: [coverLetters.jobId],
+    references: [jobPostings.id],
+  }),
+  applications: many(applications),
+}));
+
+export const applicationsRelations = relations(applications, ({ one }) => ({
+  user: one(users, {
+    fields: [applications.userId],
+    references: [users.id],
+  }),
+  resume: one(resumes, {
+    fields: [applications.resumeId],
+    references: [resumes.id],
+  }),
+  job: one(jobPostings, {
+    fields: [applications.jobId],
+    references: [jobPostings.id],
+  }),
+  coverLetter: one(coverLetters, {
+    fields: [applications.coverLetterId],
+    references: [coverLetters.id],
+  }),
+}));
+
+export const externalLogsRelations = relations(externalLogs, ({ one }) => ({
+  user: one(users, {
+    fields: [externalLogs.userId],
+    references: [users.id],
+  }),
+}));
+
+export const templateAssignmentsRelations = relations(templateAssignments, ({ one }) => ({
+  user: one(users, {
+    fields: [templateAssignments.userId],
+    references: [users.id],
+  }),
+  template: one(aiTemplates, {
+    fields: [templateAssignments.templateId],
+    references: [aiTemplates.id],
+  }),
+}));
 
 // Insert schemas
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
-
-export const insertResumeSchema = createInsertSchema(resumes).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertJobPostingSchema = createInsertSchema(jobPostings).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertMatchScoreSchema = createInsertSchema(matchScores).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertCoverLetterSchema = createInsertSchema(coverLetters).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertApplicationSchema = createInsertSchema(applications).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertApplicationNoteSchema = createInsertSchema(applicationNotes).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertExternalLogSchema = createInsertSchema(externalLogs).omit({
-  id: true,
-  createdAt: true,
-});
-
-export const insertAiTemplateSchema = createInsertSchema(aiTemplates).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-export const insertTemplateAssignmentSchema = createInsertSchema(templateAssignments).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-});
-
-// Types
+export const insertUserSchema = createInsertSchema(users);
+export const selectUserSchema = createSelectSchema(users);
+export type User = z.infer<typeof selectUserSchema>;
 export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
 
+export const insertResumeSchema = createInsertSchema(resumes);
+export const selectResumeSchema = createSelectSchema(resumes);
+export type Resume = z.infer<typeof selectResumeSchema>;
 export type InsertResume = z.infer<typeof insertResumeSchema>;
-export type Resume = typeof resumes.$inferSelect;
 
+export const insertJobPostingSchema = createInsertSchema(jobPostings);
+export const selectJobPostingSchema = createSelectSchema(jobPostings);
+export type JobPosting = z.infer<typeof selectJobPostingSchema>;
 export type InsertJobPosting = z.infer<typeof insertJobPostingSchema>;
-export type JobPosting = typeof jobPostings.$inferSelect;
 
+export const insertMatchScoreSchema = createInsertSchema(matchScores);
+export const selectMatchScoreSchema = createSelectSchema(matchScores);
+export type MatchScore = z.infer<typeof selectMatchScoreSchema>;
 export type InsertMatchScore = z.infer<typeof insertMatchScoreSchema>;
-export type MatchScore = typeof matchScores.$inferSelect;
 
+export const insertCoverLetterSchema = createInsertSchema(coverLetters);
+export const selectCoverLetterSchema = createSelectSchema(coverLetters);
+export type CoverLetter = z.infer<typeof selectCoverLetterSchema>;
 export type InsertCoverLetter = z.infer<typeof insertCoverLetterSchema>;
-export type CoverLetter = typeof coverLetters.$inferSelect;
 
+export const insertApplicationSchema = createInsertSchema(applications);
+export const selectApplicationSchema = createSelectSchema(applications);
+export type Application = z.infer<typeof selectApplicationSchema>;
 export type InsertApplication = z.infer<typeof insertApplicationSchema>;
-export type Application = typeof applications.$inferSelect;
 
-export type InsertApplicationNote = z.infer<typeof insertApplicationNoteSchema>;
-export type ApplicationNote = typeof applicationNotes.$inferSelect;
-
-export type InsertApplicationPackage = z.infer<typeof insertApplicationPackageSchema>;
-export type ApplicationPackage = typeof applicationPackages.$inferSelect;
-
+export const insertExternalLogSchema = createInsertSchema(externalLogs);
+export const selectExternalLogSchema = createSelectSchema(externalLogs);
+export type ExternalLog = z.infer<typeof selectExternalLogSchema>;
 export type InsertExternalLog = z.infer<typeof insertExternalLogSchema>;
-export type ExternalLog = typeof externalLogs.$inferSelect;
 
+export const insertAiTemplateSchema = createInsertSchema(aiTemplates);
+export const selectAiTemplateSchema = createSelectSchema(aiTemplates);
+export type AiTemplate = z.infer<typeof selectAiTemplateSchema>;
 export type InsertAiTemplate = z.infer<typeof insertAiTemplateSchema>;
-export type AiTemplate = typeof aiTemplates.$inferSelect;
 
+export const insertTemplateAssignmentSchema = createInsertSchema(templateAssignments);
+export const selectTemplateAssignmentSchema = createSelectSchema(templateAssignments);
+export type TemplateAssignment = z.infer<typeof selectTemplateAssignmentSchema>;
 export type InsertTemplateAssignment = z.infer<typeof insertTemplateAssignmentSchema>;
-export type TemplateAssignment = typeof templateAssignments.$inferSelect;

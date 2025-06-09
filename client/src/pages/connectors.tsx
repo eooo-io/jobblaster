@@ -1,485 +1,184 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle, XCircle, Zap, Globe, Brain, Loader2 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { ErrorModal } from "@/components/error-modal";
-import Sidebar from "@/components/sidebar";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { Switch } from "@/components/ui/switch";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import type { JobConnector } from "@shared/schema";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
-interface ConnectorSettings {
-  // OpenAI
-  openaiApiKey?: string;
-  
-  // Adzuna
-  adzunaAppId?: string;
-  adzunaApiKey?: string;
-  
-  // Anthropic (future)
-  anthropicApiKey?: string;
-  
-  // xAI (future)
-  xaiApiKey?: string;
-}
-
-interface TestResult {
-  success: boolean;
-  error?: string;
-}
-
-export default function Connectors() {
+export default function ConnectorsPage() {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [settings, setSettings] = useState<ConnectorSettings>({});
-  const [testResults, setTestResults] = useState<Record<string, TestResult>>({});
-  const [errorModal, setErrorModal] = useState<{ isOpen: boolean; error: any }>({
-    isOpen: false,
-    error: null,
+  const [newConnector, setNewConnector] = useState<Partial<JobConnector>>({
+    name: "",
+    url: "",
+    enabled: true,
+    credentials: {},
   });
 
-  // Fetch user profile for current settings
-  const { data: user, isLoading, error } = useQuery({
-    queryKey: ["/api/auth/user"],
+  const { data: connectors, refetch } = useQuery<JobConnector[]>({
+    queryKey: ["/api/connectors"],
+    queryFn: async () => {
+      const response = await apiRequest("GET", "/api/connectors");
+      return response.json();
+    },
   });
 
-  // Update settings when user data loads
-  useEffect(() => {
-    if (user) {
-      const newSettings = {
-        openaiApiKey: user.openaiApiKey || "",
-        adzunaAppId: user.adzunaAppId || "",
-        adzunaApiKey: user.adzunaApiKey || "",
-        anthropicApiKey: user.anthropicApiKey || "",
-        xaiApiKey: user.xaiApiKey || "",
-      };
-      
-      setSettings(newSettings);
-      
-      // Set connection status based on existing credentials
-      const results: Record<string, TestResult> = {};
-      if (user.openaiApiKey) results.openai = { success: true };
-      if (user.adzunaAppId && user.adzunaApiKey) results.adzuna = { success: true };
-      if (user.anthropicApiKey) results.anthropic = { success: true };
-      if (user.xaiApiKey) results.xai = { success: true };
-      setTestResults(results);
-    }
-  }, [user]);
-
-  const saveSettings = useMutation({
-    mutationFn: async (data: ConnectorSettings) => {
-      console.log("Saving settings:", data);
-      const response = await fetch("/api/update-profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      console.log("Response status:", response.status);
-      console.log("Response ok:", response.ok);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.log("Error response:", errorText);
-        throw new Error(`Failed to save settings: ${errorText}`);
-      }
-
-      const result = await response.json();
-      console.log("Success response:", result);
-      return result;
+  const createMutation = useMutation({
+    mutationFn: async (connector: Partial<JobConnector>) => {
+      const response = await apiRequest("POST", "/api/connectors", connector);
+      return response.json();
     },
     onSuccess: () => {
       toast({
-        title: "Settings saved",
-        description: "Your connector settings have been updated successfully.",
+        title: "Connector created",
+        description: "The job connector was created successfully.",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      refetch();
+      setNewConnector({
+        name: "",
+        url: "",
+        enabled: true,
+        credentials: {},
+      });
     },
-    onError: (error: any) => {
+    onError: () => {
       toast({
-        title: "Error saving settings",
-        description: error.message,
+        title: "Error",
+        description: "Failed to create job connector.",
         variant: "destructive",
       });
     },
   });
 
-  const testConnection = async (provider: string) => {
-    try {
-      let endpoint = "";
-      let payload = {};
-
-      switch (provider) {
-        case "openai":
-          endpoint = "/api/test-openai";
-          payload = { apiKey: settings.openaiApiKey };
-          break;
-        case "adzuna":
-          endpoint = "/api/test-adzuna";
-          payload = { 
-            appId: settings.adzunaAppId, 
-            apiKey: settings.adzunaApiKey 
-          };
-          break;
-        case "anthropic":
-          endpoint = "/api/test-anthropic";
-          payload = { apiKey: settings.anthropicApiKey };
-          break;
-        case "xai":
-          endpoint = "/api/test-xai";
-          payload = { apiKey: settings.xaiApiKey };
-          break;
-      }
-
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        setTestResults(prev => ({
-          ...prev,
-          [provider]: { success: true }
-        }));
-        toast({
-          title: "Connection successful",
-          description: `${provider.charAt(0).toUpperCase() + provider.slice(1)} API is working correctly.`,
-        });
-      } else {
-        setTestResults(prev => ({
-          ...prev,
-          [provider]: { success: false, error: result.message || "Connection failed" }
-        }));
-        setErrorModal({ isOpen: true, error: result });
-      }
-    } catch (error: any) {
-      setTestResults(prev => ({
-        ...prev,
-        [provider]: { success: false, error: error.message }
-      }));
+  const updateMutation = useMutation({
+    mutationFn: async (connector: JobConnector) => {
+      const response = await apiRequest("PUT", `/api/connectors/${connector.id}`, connector);
+      return response.json();
+    },
+    onSuccess: () => {
       toast({
-        title: "Connection failed",
-        description: error.message,
+        title: "Connector updated",
+        description: "The job connector was updated successfully.",
+      });
+      refetch();
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update job connector.",
         variant: "destructive",
       });
-    }
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/connectors/${id}`);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Connector deleted",
+        description: "The job connector was deleted successfully.",
+      });
+      refetch();
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to delete job connector.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    createMutation.mutate(newConnector);
   };
 
-  const handleSave = () => {
-    saveSettings.mutate(settings);
-  };
-
-  const handleInputChange = (field: keyof ConnectorSettings, value: string) => {
-    setSettings(prev => ({ ...prev, [field]: value }));
-    // Clear test result when input changes
-    const provider = field.replace(/ApiKey|AppId/, '').toLowerCase();
-    setTestResults(prev => {
-      const updated = { ...prev };
-      delete updated[provider];
-      return updated;
+  const handleToggle = (connector: JobConnector) => {
+    updateMutation.mutate({
+      ...connector,
+      enabled: !connector.enabled,
     });
   };
 
-  const getConnectionStatus = (provider: string) => {
-    const result = testResults[provider];
-    if (!result) return null;
-    
-    return result.success ? (
-      <div className="flex items-center space-x-2 text-green-600">
-        <CheckCircle className="w-4 h-4" />
-        <span className="text-sm font-medium">Connected</span>
-      </div>
-    ) : (
-      <div className="flex items-center space-x-2 text-red-600">
-        <XCircle className="w-4 h-4" />
-        <span className="text-sm font-medium">Not Connected</span>
-      </div>
-    );
-  };
-
   return (
-    <div className="flex h-screen overflow-hidden bg-slate-50 dark:bg-gray-950">
-      <Sidebar />
-      <main className="flex-1 flex flex-col overflow-hidden lg:ml-0 pt-16 lg:pt-0">
-        <div className="flex-1 overflow-y-auto p-6 max-w-4xl mx-auto w-full">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              API Connectors
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Configure your API connections for AI services and job search platforms.
-            </p>
-          </div>
+    <div className="container mx-auto py-8">
+      <h1 className="text-2xl font-bold mb-8">Job Connectors</h1>
 
-      <div className="space-y-6">
-        {/* AI Providers Section */}
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <Brain className="w-5 h-5 mr-2" />
-            AI Providers
-          </h2>
-          
-          <div className="grid gap-4 md:grid-cols-2">
-            {/* OpenAI */}
-            <Card>
-              <CardContent className="p-6 bg-[#1f2937]">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">AI</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
-                        OpenAI
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        GPT-4o for job analysis
-                      </p>
-                    </div>
-                  </div>
-                  {getConnectionStatus("openai")}
-                </div>
+      {/* Add New Connector */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>Add New Connector</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Name</label>
+              <Input
+                value={newConnector.name}
+                onChange={(e) => setNewConnector({ ...newConnector, name: e.target.value })}
+                placeholder="Enter connector name"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">URL</label>
+              <Input
+                value={newConnector.url}
+                onChange={(e) => setNewConnector({ ...newConnector, url: e.target.value })}
+                placeholder="Enter connector URL"
+                required
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={newConnector.enabled}
+                onCheckedChange={(checked) =>
+                  setNewConnector({ ...newConnector, enabled: checked })
+                }
+              />
+              <label className="text-sm font-medium">Enabled</label>
+            </div>
+            <Button type="submit" disabled={createMutation.isPending} className="w-full">
+              {createMutation.isPending ? "Creating..." : "Create Connector"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
 
-                <div className="space-y-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="openai-key">API Key</Label>
-                    <Input
-                      id="openai-key"
-                      type="password"
-                      value={settings.openaiApiKey || ""}
-                      onChange={(e) => handleInputChange("openaiApiKey", e.target.value)}
-                      placeholder="sk-..."
-                    />
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => testConnection("openai")}
-                    disabled={!settings.openaiApiKey}
-                    className="w-full"
-                  >
-                    Test Connection
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Anthropic */}
-            <Card className="opacity-60">
-              <CardContent className="p-6 bg-[#1f2937]">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-orange-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">A</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
-                        Anthropic
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Claude for advanced analysis
-                      </p>
-                    </div>
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    Coming Soon
-                  </Badge>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="anthropic-key">API Key</Label>
-                    <Input
-                      id="anthropic-key"
-                      type="password"
-                      value=""
-                      disabled
-                      placeholder="Coming soon..."
-                    />
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled
-                    className="w-full"
-                  >
-                    Test Connection
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* xAI */}
-            <Card className="opacity-60">
-              <CardContent className="p-6 bg-[#1f2937]">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">X</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
-                        xAI
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Grok for real-time insights
-                      </p>
-                    </div>
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    Coming Soon
-                  </Badge>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="xai-key">API Key</Label>
-                    <Input
-                      id="xai-key"
-                      type="password"
-                      value=""
-                      disabled
-                      placeholder="Coming soon..."
-                    />
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled
-                    className="w-full"
-                  >
-                    Test Connection
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Job Search Platforms Section */}
-        <div>
-          <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
-            <Globe className="w-5 h-5 mr-2" />
-            Job Search Platforms
-          </h2>
-          
-          <div className="grid gap-4 md:grid-cols-2">
-            {/* Adzuna */}
-            <Card>
-              <CardContent className="p-6 bg-[#1f2937]">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">Az</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
-                        Adzuna
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Job search and analysis
-                      </p>
-                    </div>
-                  </div>
-                  {getConnectionStatus("adzuna")}
-                </div>
-
-                <div className="space-y-3">
-                  <div className="space-y-2">
-                    <Label htmlFor="adzuna-app-id">App ID</Label>
-                    <Input
-                      id="adzuna-app-id"
-                      value={settings.adzunaAppId || ""}
-                      onChange={(e) => handleInputChange("adzunaAppId", e.target.value)}
-                      placeholder="Your Adzuna App ID"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="adzuna-api-key">API Key</Label>
-                    <Input
-                      id="adzuna-api-key"
-                      type="password"
-                      value={settings.adzunaApiKey || ""}
-                      onChange={(e) => handleInputChange("adzunaApiKey", e.target.value)}
-                      placeholder="Your Adzuna API Key"
-                    />
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => testConnection("adzuna")}
-                    disabled={!settings.adzunaAppId || !settings.adzunaApiKey}
-                    className="w-full"
-                  >
-                    Test Connection
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Future platforms */}
-            <Card className="opacity-60">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gray-600 rounded-lg flex items-center justify-center">
-                      <span className="text-white text-sm font-bold">+</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900 dark:text-white">
-                        More Platforms
-                      </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Indeed, Glassdoor, LinkedIn
-                      </p>
-                    </div>
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    Coming Soon
-                  </Badge>
-                </div>
-                <div className="text-center py-4">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    Additional job platforms will be available soon
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Save Button */}
-        <div className="flex justify-end pt-6 border-t border-slate-200 dark:border-gray-700">
-          <Button
-            size="lg"
-            className="bg-blue-600 hover:bg-blue-700"
-            onClick={handleSave}
-            disabled={saveSettings.isPending}
-          >
-            {saveSettings.isPending ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              "Save Settings"
-            )}
-          </Button>
-        </div>
+      {/* Existing Connectors */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {connectors?.map((connector) => (
+          <Card key={connector.id}>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>{connector.name}</span>
+                <Switch
+                  checked={connector.enabled}
+                  onCheckedChange={() => handleToggle(connector)}
+                />
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-gray-500 mb-4">{connector.url}</p>
+              <div className="flex justify-end space-x-2">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => deleteMutation.mutate(connector.id)}
+                  disabled={deleteMutation.isPending}
+                >
+                  Delete
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
-
-          <ErrorModal
-            isOpen={errorModal.isOpen}
-            onClose={() => setErrorModal({ isOpen: false, error: null })}
-            error={errorModal.error}
-          />
-        </div>
-      </main>
     </div>
   );
 }

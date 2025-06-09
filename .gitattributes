@@ -1,0 +1,57 @@
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
+
+# TypeScript
+*.ts linguist-detectable=true
+*.tsx linguist-detectable=true
+*.ts linguist-language=TypeScript
+*.tsx linguist-language=TypeScript
+
+# JavaScript
+*.js linguist-detectable=true
+*.jsx linguist-detectable=true
+*.js linguist-language=JavaScript
+*.jsx linguist-language=JavaScript
+
+# SQL
+*.sql linguist-detectable=true
+*.sql linguist-language=SQL
+
+# Docker
+Dockerfile* linguist-detectable=true
+docker-compose*.yml linguist-detectable=true
+*.dockerfile linguist-detectable=true
+
+# Documentation
+*.md linguist-documentation
+*.mdx linguist-documentation
+docs/* linguist-documentation
+
+# Configuration files
+*.json linguist-language=JSON
+*.yaml linguist-language=YAML
+*.yml linguist-language=YAML
+
+# Build output and dependencies
+dist/* linguist-generated
+build/* linguist-generated
+node_modules/* linguist-vendored
+
+# Test files
+*.test.ts linguist-detectable=true
+*.test.tsx linguist-detectable=true
+*.spec.ts linguist-detectable=true
+*.spec.tsx linguist-detectable=true
+
+# Assets and styles
+*.css linguist-language=CSS
+*.scss linguist-language=SCSS
+*.svg linguist-language=SVG
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.ttf binary

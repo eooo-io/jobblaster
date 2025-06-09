@@ -1,202 +1,86 @@
-import { useState, useEffect } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { RefreshCw, Lightbulb } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import type { Resume, JobPosting, MatchScore } from "@shared/schema";
+import type { MatchScore } from "@shared/schema";
+import { useState } from "react";
+
+type ScoreCategory = "technicalScore" | "experienceScore" | "softSkillsScore" | "locationScore";
 
 interface MatchScorerProps {
-  resume: Resume | null;
-  job: JobPosting | null;
+  initialScore?: MatchScore | null;
+  onScoreChange?: (score: MatchScore) => void;
 }
 
-export default function MatchScorer({ resume, job }: MatchScorerProps) {
-  const [matchScore, setMatchScore] = useState<MatchScore | null>(null);
-  const { toast } = useToast();
-
-  const { data: existingScore } = useQuery({
-    queryKey: ['/api/match-score', resume?.id, job?.id],
-    enabled: !!(resume?.id && job?.id),
-  });
-
-  useEffect(() => {
-    if (existingScore) {
-      setMatchScore(existingScore);
+export function MatchScorer({ initialScore = null, onScoreChange }: MatchScorerProps) {
+  const [score, setScore] = useState<MatchScore>(
+    initialScore ?? {
+      id: 0,
+      resumeId: null,
+      jobId: null,
+      overallScore: 0,
+      technicalScore: 0,
+      experienceScore: 0,
+      softSkillsScore: 0,
+      locationScore: 0,
+      recommendations: [],
+      createdAt: new Date(),
     }
-  }, [existingScore]);
+  );
 
-  const analyzeMutation = useMutation({
-    mutationFn: async () => {
-      if (!resume || !job) throw new Error("Resume and job are required");
-      
-      const response = await apiRequest('POST', '/api/match-score', {
-        resumeId: resume.id,
-        jobId: job.id,
-      });
-      return response.json();
-    },
-    onSuccess: (data) => {
-      setMatchScore(data);
-      toast({
-        title: "Match analysis complete",
-        description: "Your resume has been scored against the job requirements.",
-      });
-    },
-    onError: () => {
-      toast({
-        title: "Analysis failed",
-        description: "There was an error analyzing the match. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
+  const handleScoreChange = (category: ScoreCategory, value: number) => {
+    const newScore = {
+      ...score,
+      [category]: Math.max(0, Math.min(100, value)),
+    };
 
-  const handleAnalyze = () => {
-    if (!resume || !job) {
-      toast({
-        title: "Missing data",
-        description: "Please select both a resume and job posting to analyze the match.",
-        variant: "destructive",
-      });
-      return;
-    }
-    analyzeMutation.mutate();
+    // Calculate overall score as weighted average
+    const weights: Record<ScoreCategory, number> = {
+      technicalScore: 0.3,
+      experienceScore: 0.3,
+      softSkillsScore: 0.2,
+      locationScore: 0.2,
+    };
+
+    const weightedSum = Object.entries(weights).reduce((sum, [key, weight]) => {
+      return sum + newScore[key as ScoreCategory] * weight;
+    }, 0);
+
+    newScore.overallScore = Math.round(weightedSum);
+
+    setScore(newScore);
+    onScoreChange?.(newScore);
   };
 
-  const getScoreColor = (score: number) => {
-    if (score >= 80) return "bg-green-500";
-    if (score >= 60) return "bg-yellow-500";
-    return "bg-red-500";
-  };
-
-  const getScoreTextColor = (score: number) => {
-    if (score >= 80) return "text-green-600";
-    if (score >= 60) return "text-yellow-600";
-    return "text-red-600";
+  const scoreCategories: Record<ScoreCategory, string> = {
+    technicalScore: "Technical",
+    experienceScore: "Experience",
+    softSkillsScore: "Soft Skills",
+    locationScore: "Location",
   };
 
   return (
-    <div className="lg:col-span-1">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-slate-900">Match Score</h3>
-        <Button
-          onClick={handleAnalyze}
-          disabled={analyzeMutation.isPending || !resume || !job}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <RefreshCw className={`w-4 h-4 mr-1 ${analyzeMutation.isPending ? 'animate-spin' : ''}`} />
-          {analyzeMutation.isPending ? "Analyzing..." : "Analyze"}
-        </Button>
-      </div>
-
-      {matchScore ? (
-        <>
-          {/* Overall Score */}
-          <div className="bg-gradient-to-r from-green-50 to-green-25 border border-green-200 rounded-lg p-4 mb-4">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-slate-900">Overall Match</span>
-              <span className={`text-2xl font-bold ${getScoreTextColor(matchScore.overallScore)}`}>
-                {matchScore.overallScore}%
-              </span>
-            </div>
-            <Progress 
-              value={matchScore.overallScore} 
-              className="w-full h-2"
-            />
-          </div>
-
-          {/* Detailed Breakdown */}
-          <div className="space-y-3 mb-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-700">Technical Skills</span>
-              <div className="flex items-center space-x-2">
-                <Progress 
-                  value={matchScore.technicalScore} 
-                  className="w-16 h-1.5"
-                />
-                <span className="text-sm font-medium text-slate-900 w-8">
-                  {matchScore.technicalScore}%
-                </span>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-700">Experience Level</span>
-              <div className="flex items-center space-x-2">
-                <Progress 
-                  value={matchScore.experienceScore} 
-                  className="w-16 h-1.5"
-                />
-                <span className="text-sm font-medium text-slate-900 w-8">
-                  {matchScore.experienceScore}%
-                </span>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-700">Soft Skills</span>
-              <div className="flex items-center space-x-2">
-                <Progress 
-                  value={matchScore.softSkillsScore} 
-                  className="w-16 h-1.5"
-                />
-                <span className="text-sm font-medium text-slate-900 w-8">
-                  {matchScore.softSkillsScore}%
-                </span>
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-slate-700">Location Match</span>
-              <div className="flex items-center space-x-2">
-                <Progress 
-                  value={matchScore.locationScore} 
-                  className="w-16 h-1.5"
-                />
-                <span className="text-sm font-medium text-slate-900 w-8">
-                  {matchScore.locationScore}%
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Recommendations */}
-          {matchScore.recommendations && matchScore.recommendations.length > 0 && (
-            <div className="p-3 bg-blue-50 rounded-lg">
-              <h4 className="text-sm font-medium text-blue-900 mb-2 flex items-center">
-                <Lightbulb className="w-4 h-4 mr-1" />
-                Recommendations
-              </h4>
-              <ul className="text-xs text-blue-800 space-y-1">
-                {matchScore.recommendations.map((rec, index) => (
-                  <li key={index}>• {rec}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="text-center py-8">
-          <p className="text-slate-500 mb-4">
-            Select a resume and job posting, then click "Analyze" to see the match score.
-          </p>
-          <div className="bg-slate-100 rounded-lg p-4">
-            <div className="text-sm text-slate-600">
-              Match analysis will show:
-              <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>Overall compatibility score</li>
-                <li>Technical skills alignment</li>
-                <li>Experience level match</li>
-                <li>Soft skills evaluation</li>
-                <li>Personalized recommendations</li>
-              </ul>
-            </div>
-          </div>
+    <div className="space-y-4">
+      {(Object.entries(scoreCategories) as [ScoreCategory, string][]).map(([category, label]) => (
+        <div key={category} className="flex items-center gap-4">
+          <label className="min-w-[100px]">{label}</label>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={score[category]}
+            onChange={(e) => handleScoreChange(category, parseInt(e.target.value))}
+            className="flex-1"
+          />
+          <span className="min-w-[50px] text-right">{score[category]}%</span>
         </div>
-      )}
+      ))}
+      <div className="mt-6 flex items-center gap-4 font-semibold">
+        <span className="min-w-[100px]">Overall</span>
+        <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-blue-500 rounded-full"
+            style={{ width: `${score.overallScore}%` }}
+          />
+        </div>
+        <span className="min-w-[50px] text-right">{score.overallScore}%</span>
+      </div>
     </div>
   );
 }
